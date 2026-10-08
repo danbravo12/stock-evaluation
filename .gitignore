@@ -3,6 +3,7 @@
 
 # Live HTTP cache (fixtures/ IS committed)
 data/cache/
+data/ledger/
 
 # Python / OS
 __pycache__/

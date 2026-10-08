@@ -1,0 +1,40 @@
+{
+  "_notes": "Model profiles (ADR-040): one OpenAI-compatible endpoint per profile. Prices are USD per 1M tokens on the paid tier; free_tier limits are per project and model. Select with LLM_PROFILE in .env.",
+  "default_profile": "gemini-3.1-flash-lite",
+  "budget": {
+    "total_usd_cap": 4.0,
+    "per_company_usd_cap": 0.05,
+    "daily_safety_margin": 10,
+    "default_max_tokens": 4096,
+    "_note": "ADR-023: engine cap $4.00 under a $5 Google spend cap. Per-company cap is about 2.5x the estimated $0.018 per company. The margin keeps us below the free daily limit."
+  },
+  "profiles": {
+    "gemini-3.1-flash-lite": {
+      "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+      "model": "gemini-3.1-flash-lite",
+      "key_env": "GEMINI_API_KEY",
+      "price_in_per_m": 0.25,
+      "price_out_per_m": 1.5,
+      "free_tier": {"rpm": 15, "tpm": 250000, "rpd": 500},
+      "note": "Limits confirmed in AI Studio 2026-10-09 (free tier, project Dashboard-ui); prices from ai.google.dev pricing 2026-10-09. Model id confirmed 2026-10-09 via GET /v1beta/openai/models, which lists it as 'models/gemini-3.1-flash-lite' (a 'gemini-3.1-flash-lite-preview' also exists; the newer 'gemini-3.5-flash-lite' is not used, ADR-023 pins 3.1)."
+    },
+    "gemma-4-31b": {
+      "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+      "model": "gemma-4-31b-it",
+      "key_env": "GEMINI_API_KEY",
+      "price_in_per_m": null,
+      "price_out_per_m": null,
+      "free_tier": {"rpm": 30, "tpm": 16000, "rpd": 14400},
+      "note": "Config only, for the later model comparison (ADR-015). Limits from AI Studio 2026-10-09; no paid price configured, so notional cost is 0 and paid calls are refused. Model id as listed by /models on 2026-10-09 ('models/gemma-4-31b-it')."
+    },
+    "ollama-local": {
+      "base_url": "http://localhost:11434/v1",
+      "model": "gemma4:e4b",
+      "key_env": null,
+      "price_in_per_m": 0.0,
+      "price_out_per_m": 0.0,
+      "free_tier": null,
+      "note": "Config only: local smoke tests through Ollama's OpenAI-compatible API, unmetered. The model tag is a placeholder; check `ollama list` before use."
+    }
+  }
+}

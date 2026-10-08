@@ -144,3 +144,50 @@ class SearchHit(BaseModel):
     char_start: int
     char_end: int
     text: str
+
+
+# ---------- LLM calls and trace (ADR-038 to ADR-040, ADR-020) ----------
+class Usage(BaseModel):
+    prompt_tokens: int = 0
+    completion_tokens: int = 0  # includes thinking tokens when the provider reports them
+    total_tokens: int = 0
+    reasoning_tokens: int = 0  # informational: the thinking part of completion_tokens, when reported
+
+
+class ToolCall(BaseModel):
+    id: str
+    name: str
+    arguments: dict[str, Any]
+
+
+class LLMCall(BaseModel):
+    """One model call, in a provider-neutral shape, with its cost record."""
+
+    profile: str
+    model: str
+    request_hash: str
+    replayed: bool  # served from fixtures or cache: no network, no spend
+    paid: bool  # True only for a call billed beyond the free-tier quota
+    latency_s: float  # of the original call, also when replayed
+    usage: Usage
+    actual_cost_usd: float  # 0 on the free tier and for replays
+    notional_cost_usd: float  # tokens x paid price: what the call would cost on the paid tier
+    finish_reason: str | None = None
+    content: str | None = None
+    tool_calls: list[ToolCall] = Field(default_factory=list)
+    message: dict[str, Any] = Field(default_factory=dict)  # raw assistant message: append it to the history as is
+
+
+class TraceEvent(BaseModel):
+    run_id: str
+    step: int
+    agent: str
+    type: Literal["llm_call", "tool_call", "note"]
+    ts: str  # ISO 8601 UTC
+    input_summary: str = ""
+    output: Any = None
+    usage: Usage | None = None
+    latency_s: float | None = None
+    actual_cost_usd: float | None = None
+    notional_cost_usd: float | None = None
+    replayed: bool | None = None

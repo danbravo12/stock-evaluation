@@ -33,6 +33,10 @@ class Settings:
     cache_dir: Path
     # SEC fair-access policy: at most 10 requests/second. We stay well under.
     sec_min_interval_s: float = 0.15
+    # LLM settings (the API key itself is read from the environment at call time, never stored here)
+    llm_profile: str = "gemini-3.1-flash-lite"
+    paid_mode_enabled: bool = False
+    ledger_path: Path = REPO_ROOT / "data" / "ledger" / "usage.json"
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -41,4 +45,7 @@ class Settings:
             sec_user_agent=os.environ.get("SEC_USER_AGENT") or None,
             fixtures_dir=Path(os.environ.get("FIXTURES_DIR", REPO_ROOT / "fixtures")),
             cache_dir=Path(os.environ.get("CACHE_DIR", REPO_ROOT / "data" / "cache")),
+            llm_profile=os.environ.get("LLM_PROFILE") or "gemini-3.1-flash-lite",
+            paid_mode_enabled=os.environ.get("PAID_MODE_ENABLED", "").strip().lower() == "true",
+            ledger_path=Path(os.environ.get("LEDGER_PATH", REPO_ROOT / "data" / "ledger" / "usage.json")),
         )

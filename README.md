@@ -20,6 +20,15 @@ Python 3.10+. The only dependency is Pydantic (pinned in `requirements.txt`).
 
     .venv/bin/python scripts/sections_report.py     # writes docs/sections_report.md
 
+## LLM client modes (record / replay)
+
+Tests and development use `replay`: recorded model responses in `fixtures/llm/`, no network, no key needed. To record new ones (free tier, needs `GEMINI_API_KEY` in `.env`; the model profile comes from `config/models.json`, `LLM_PROFILE` in `.env`):
+
+    .venv/bin/python scripts/llm_smoke.py record    # ~4 requests: model id, JSON mode, tool calling
+    .venv/bin/python scripts/llm_smoke.py replay    # same calls offline, zero network
+
+Usage and spend are counted in `data/ledger/usage.json` (daily quota resets at midnight Pacific). Paid calls stay off unless `PAID_MODE_ENABLED=true` (ADR-039).
+
 ## Scorecard report (offline, from the fixtures)
 
     .venv/bin/python scripts/score_report.py        # writes docs/scorecard_report.md
