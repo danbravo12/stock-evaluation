@@ -3,6 +3,13 @@
 **Phase:** 1 — Build (data layer, normaliser and scorers done)
 **Last session:** 2026-10-08
 
+## How we work (agreed 2026-10-09)
+1. **Plan here:** design and decisions happen in the Claude project chat. For each build step, Claude writes one Claude Code prompt (scope, design rules, tests, verification, doc updates, commit message).
+2. **Build in Claude Code:** Daniel pastes the prompt into Claude Code on the Mac. Claude Code has internet (SEC, Gemini, Finnhub) and runs git. It builds, tests, updates `DECISIONS.md` / `STATUS.md` / `FILEMAP.md`, commits locally (no push unless asked) and writes a short report.
+3. **Review here:** Daniel pastes the report back into the chat. Claude reviews it (incl. spot checks against the fixtures), raises issues or decisions, syncs the docs to the project and writes the next prompt.
+- The local folder `~/Projects/StockEvaluation` is the master copy; project docs are synced copies.
+- Claude in the chat does not edit code in the folder directly (decided 2026-10-08); doc-only edits it makes are committed by Claude Code in the next step.
+
 ## Done
 - Brainstormed theme, modes, criteria approach and data sources.
 - Drafted process map (`PROCESS.md`) and decision log (`DECISIONS.md`, ADR-001 to ADR-010).
