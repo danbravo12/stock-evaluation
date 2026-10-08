@@ -197,6 +197,37 @@ Each entry: context → decision → trade-off. Status: **Accepted**, **Pending*
 **Decision:** When no listed D&A concept and no complete derived sum exists for a year, `Depreciation` alone is used, marked `derived` with a note "excludes amortisation (understates D&A)". Understating D&A lowers owner earnings, so the fallback errs on the conservative side, the same reasoning as using total capex as a proxy for maintenance capex (PROCESS §5, B4). Alphabet remains a gap for most years because it has no D&A or depreciation tags before 2021.
 **Trade-off:** Mixes slightly different definitions within one series; mitigated by the per-value flag and the coverage report. Gains: Tesla is scored on real data instead of a gap, without ever overstating owner earnings.
 
+### ADR-031 — Scoring windows and the as-of year
+**Status:** Accepted · 2026-10-08
+**Context:** Criteria are defined over "the last 10 years" (G4: 15), but companies report different numbers of years, and the normaliser reports gaps only after a series' first value.
+**Decision:** The as-of year is the latest fiscal year with net income. The window is the 10 fiscal years ending there (G4: 15). Fiscal years are keyed by the year of the period end date (a 52/53-week year ending in the first days of January counts in the year before). "Years on record" are window years with a net income value (ADR-012 correction); G3 and G4 judge those years and label a short record "N yrs on record", but a net income hole *after* the first record year is a data gap. Every other multi-year test (G5, B1, B3, B4) needs every window year; a missing year is a data gap that names the years, wherever the series starts. B1 also needs the opening equity of the first year. Percent met = met / decided (pass, partial pass, fail); data gaps, not meaningful and not applicable are counted separately (ADR-013).
+**Trade-off:** One missing year makes a test a gap instead of a judgement on nine years: stricter, but never a guess. Gains: one rule for all windows and gaps that tell the reader exactly which years are missing.
+
+### ADR-032 — Stock-split adjustment of per-share values
+**Status:** Accepted · 2026-10-08
+**Context:** EDGAR keeps older per-share figures on the share basis of the filing that reported them. Alphabet's 2016 EPS is 27.85 and its 2020 EPS 2.93, because of the 2022 20:1 split; Tesla mixes three bases (5:1 in 2020, 3:1 in 2022). Unadjusted, G5 (EPS growth) and G6/G7 would be wrong by large factors.
+**Decision:** `engine/splits.py` reads the split-ratio facts a company tagged (`StockholdersEquityNoteStockSplitConversionRatio` and `...Ratio1`) and keeps only splits that the normalised series confirms: some value was restated by the same ratio (or a product of consecutive ratios). Duke's 0.8708 merger exchange ratio has no such evidence and is rejected with a note; Alphabet's 2014 class C dividend likewise. EPS and dividends per share are divided, share counts multiplied, by the cumulative ratio of confirmed splits dated after the filing the value comes from. Each adjusted value records `split_factor` and `value_before_split`, and appears as `split_adjusted` in the scorers' flags. Split dates are approximate (the latest announcement/effective instant, else the earliest period end) because they are only compared with 10-K filing dates. Disagreement between ratio facts and restatements becomes a series note; nothing is guessed.
+**Trade-off:** A split that no 10-K ever restated would go unadjusted (and noted). Gains: all per-share history on today's basis with the evidence in the trace, no external split table to maintain.
+
+### ADR-033 — Sector class from the SIC code until GICS is available
+**Status:** Accepted · 2026-10-08
+**Context:** ADR-013's exceptions need to know whether a company is a bank, insurer or utility. The GICS sector from the S&P 500 snapshot (ADR-014) is not built yet; the SEC SIC code is in every `submissions.json`.
+**Decision:** `config/sector_rules.json` maps SIC ranges to bank (6021, 6022, 6029, 6035, 6036), insurer (6311-6411) and utility (4911, 4931, 4932, 4991), with a reason per rule; everything else is "other". The GICS sector will confirm or override this when the constituents snapshot is added.
+**Trade-off:** SIC codes are coarse and company-chosen (a few insurers or utilities will be classed "other"). Gains: no dependency on a source we do not have yet, and the rule is reviewable data.
+
+### ADR-034 — Edge-case rules in the scorers
+**Status:** Accepted · 2026-10-08
+**Decision:**
+- **G4:** per-share dividends decide a year when the fact exists (a reported zero means unpaid); cash dividends paid are used only when per-share data is missing; neither means unpaid. This follows ADR-012's correction, where a one-off cash payment such as Alphabet's $47M in 2015 is not a dividend. A pass is a `partial_pass`, labelled "partial (15 of 20 yrs)" when the record covers all 15 years, else "N yrs on record". The source that decided each year is in the result.
+- **G5:** a starting 3-year average EPS of zero or below is `not_meaningful` (averages shown, ratio withheld).
+- **G6, G7:** with no price they are data gaps ("price not available (Finnhub, ADR-007)"). With a price, average EPS or book value per share of zero or below is a fail (no positive earnings or assets behind the price). P/E uses the 3-year average EPS in both. Book value per share is equity divided by split-adjusted diluted shares: a proxy, since EDGAR has no standard shares-outstanding concept in the map.
+- **G2:** missing debt is a data gap, never "no debt". Utilities replace both tests with debt <= 2x equity.
+- **B1:** ROE uses the average of opening and closing equity; any non-positive equity in the window is `not_meaningful`.
+- **B2:** average net income of zero or below is a fail, with the figures shown.
+- **B3:** the 10-year and 3-year margins are simple averages of yearly operating margins.
+- **B4:** needs all 10 years of net income, D&A and capex, else a data gap listing the missing years. Years that use the depreciation-only fallback (ADR-030) are flagged.
+**Trade-off:** Some choices are conservative (a gap rather than a guess; a fail for non-positive earnings). Gains: every label can be explained from the figures in the result without further assumptions.
+
 ---
 
 ## Open questions

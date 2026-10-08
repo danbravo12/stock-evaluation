@@ -16,6 +16,10 @@ Python 3.10+. The only dependency is Pydantic (pinned in `requirements.txt`).
 
     .venv/bin/python scripts/coverage_report.py     # writes docs/coverage_report.md
 
+## Scorecard report (offline, from the fixtures)
+
+    .venv/bin/python scripts/score_report.py        # writes docs/scorecard_report.md
+
 ## Record EDGAR fixtures (once, needs internet)
 
     cp .env.example .env      # then set SEC_USER_AGENT

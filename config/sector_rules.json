@@ -1,0 +1,12 @@
+{
+  "_notes": "Sector class from the SEC SIC code in submissions.json (ADR-033). Drives the ADR-013 exceptions. The GICS sector from the S&P 500 snapshot (ADR-014) will confirm or override this later. Ranges are inclusive [low, high].",
+  "default": "other",
+  "rules": [
+    {"class": "bank", "sic_ranges": [[6021, 6022], [6029, 6029], [6035, 6036]],
+     "why": "Commercial banks and savings institutions: no classified balance sheet, operating income or capex."},
+    {"class": "insurer", "sic_ranges": [[6311, 6411]],
+     "why": "Life, accident, health, property-casualty and title insurers, and insurance agents: same reporting shape as banks."},
+    {"class": "utility", "sic_ranges": [[4911, 4911], [4931, 4932], [4991, 4991]],
+     "why": "Electric, combined electric-gas and cogeneration utilities: Graham's G2 variant (debt <= 2x equity)."}
+  ]
+}

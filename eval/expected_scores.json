@@ -1,0 +1,474 @@
+{
+  "KO": {
+    "as_of_year": 2025,
+    "sector_class": "other",
+    "criteria": {
+      "G1": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "revenue": 47940000000.0
+        }
+      },
+      "G2": {
+        "label": "fail",
+        "year_label": null,
+        "figures": {
+          "current_ratio": 1.459,
+          "long_term_debt": 42120000000.0,
+          "net_current_assets": 9763000000.0
+        }
+      },
+      "G3": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "years_on_record": 10,
+          "loss_years": []
+        }
+      },
+      "G4": {
+        "label": "partial_pass",
+        "year_label": "partial (15 of 20 yrs)",
+        "figures": {
+          "years_on_record": 15
+        }
+      },
+      "G5": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "avg_eps_start": 1.093,
+          "avg_eps_end": 2.657,
+          "ratio": 2.43
+        }
+      },
+      "G6": {
+        "label": "data_gap",
+        "year_label": null,
+        "figures": {}
+      },
+      "G7": {
+        "label": "data_gap",
+        "year_label": null,
+        "figures": {}
+      },
+      "B1": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "years_at_or_above_15pct": 9
+        }
+      },
+      "B2": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "long_term_debt": 42120000000.0,
+          "avg_net_income_3y": 11480000000.0,
+          "max_debt": 45940000000.0
+        }
+      },
+      "B3": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "avg_margin_10y": 0.2498,
+          "avg_margin_3y": 0.2489,
+          "ratio": 0.9963
+        }
+      },
+      "B4": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "years_positive": 10,
+          "avg_first_3y": 4261000000.0,
+          "avg_last_3y": 10560000000.0,
+          "years_with_depreciation_only": []
+        }
+      }
+    }
+  },
+  "JPM": {
+    "as_of_year": 2025,
+    "sector_class": "bank",
+    "criteria": {
+      "G1": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "revenue": 182400000000.0
+        }
+      },
+      "G2": {
+        "label": "not_applicable",
+        "year_label": null,
+        "figures": {}
+      },
+      "G3": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "years_on_record": 10,
+          "loss_years": []
+        }
+      },
+      "G4": {
+        "label": "partial_pass",
+        "year_label": "partial (15 of 20 yrs)",
+        "figures": {
+          "years_on_record": 15
+        }
+      },
+      "G5": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "avg_eps_start": 7.167,
+          "avg_eps_end": 18.67,
+          "ratio": 2.605
+        }
+      },
+      "G6": {
+        "label": "data_gap",
+        "year_label": null,
+        "figures": {}
+      },
+      "G7": {
+        "label": "data_gap",
+        "year_label": null,
+        "figures": {}
+      },
+      "B1": {
+        "label": "fail",
+        "year_label": null,
+        "figures": {
+          "years_at_or_above_15pct": 4
+        }
+      },
+      "B2": {
+        "label": "not_applicable",
+        "year_label": null,
+        "figures": {}
+      },
+      "B3": {
+        "label": "not_applicable",
+        "year_label": null,
+        "figures": {}
+      },
+      "B4": {
+        "label": "not_applicable",
+        "year_label": null,
+        "figures": {}
+      }
+    }
+  },
+  "GOOGL": {
+    "as_of_year": 2025,
+    "sector_class": "other",
+    "criteria": {
+      "G1": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "revenue": 402800000000.0
+        }
+      },
+      "G2": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "current_ratio": 2.005,
+          "long_term_debt": 46550000000.0,
+          "net_current_assets": 103300000000.0
+        }
+      },
+      "G3": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "years_on_record": 10,
+          "loss_years": []
+        }
+      },
+      "G4": {
+        "label": "fail",
+        "year_label": null,
+        "figures": {
+          "years_on_record": 13,
+          "unpaid_years": [
+            2013,
+            2014,
+            2016,
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023
+          ]
+        }
+      },
+      "G5": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "avg_eps_start": 1.492,
+          "avg_eps_end": 8.217,
+          "ratio": 5.505
+        }
+      },
+      "G6": {
+        "label": "data_gap",
+        "year_label": null,
+        "figures": {}
+      },
+      "G7": {
+        "label": "data_gap",
+        "year_label": null,
+        "figures": {}
+      },
+      "B1": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "years_at_or_above_15pct": 9
+        }
+      },
+      "B2": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "long_term_debt": 46550000000.0,
+          "avg_net_income_3y": 102000000000.0,
+          "max_debt": 408100000000.0
+        }
+      },
+      "B3": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "avg_margin_10y": 0.2623,
+          "avg_margin_3y": 0.3052,
+          "ratio": 1.164
+        }
+      },
+      "B4": {
+        "label": "data_gap",
+        "year_label": null,
+        "figures": {}
+      }
+    }
+  },
+  "TSLA": {
+    "as_of_year": 2025,
+    "sector_class": "other",
+    "criteria": {
+      "G1": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "revenue": 94830000000.0
+        }
+      },
+      "G2": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "current_ratio": 2.164,
+          "long_term_debt": 6584000000.0,
+          "net_current_assets": 36930000000.0
+        }
+      },
+      "G3": {
+        "label": "fail",
+        "year_label": null,
+        "figures": {
+          "years_on_record": 10,
+          "loss_years": [
+            2016,
+            2017,
+            2018,
+            2019
+          ]
+        }
+      },
+      "G4": {
+        "label": "fail",
+        "year_label": null,
+        "figures": {
+          "years_on_record": 15,
+          "unpaid_years": [
+            2011,
+            2012,
+            2013,
+            2014,
+            2015,
+            2016,
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025
+          ]
+        }
+      },
+      "G5": {
+        "label": "not_meaningful",
+        "year_label": null,
+        "figures": {
+          "avg_eps_start": -0.4936,
+          "avg_eps_end": 2.473,
+          "ratio": null
+        }
+      },
+      "G6": {
+        "label": "data_gap",
+        "year_label": null,
+        "figures": {}
+      },
+      "G7": {
+        "label": "data_gap",
+        "year_label": null,
+        "figures": {}
+      },
+      "B1": {
+        "label": "fail",
+        "year_label": null,
+        "figures": {
+          "years_at_or_above_15pct": 3
+        }
+      },
+      "B2": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "long_term_debt": 6584000000.0,
+          "avg_net_income_3y": 8627000000.0,
+          "max_debt": 34510000000.0
+        }
+      },
+      "B3": {
+        "label": "fail",
+        "year_label": null,
+        "figures": {
+          "avg_margin_10y": 0.03073,
+          "avg_margin_3y": 0.07008,
+          "ratio": 2.281
+        }
+      },
+      "B4": {
+        "label": "fail",
+        "year_label": null,
+        "figures": {
+          "years_positive": 4,
+          "avg_first_3y": -2662000000.0,
+          "avg_last_3y": 3198000000.0,
+          "years_with_depreciation_only": [
+            2022,
+            2023,
+            2024,
+            2025
+          ]
+        }
+      }
+    }
+  },
+  "DUK": {
+    "as_of_year": 2025,
+    "sector_class": "utility",
+    "criteria": {
+      "G1": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "revenue": 31740000000.0
+        }
+      },
+      "G2": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "long_term_debt": 80110000000.0,
+          "stockholders_equity": 51840000000.0,
+          "debt_to_equity": 1.545
+        }
+      },
+      "G3": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "years_on_record": 10,
+          "loss_years": []
+        }
+      },
+      "G4": {
+        "label": "partial_pass",
+        "year_label": "partial (15 of 20 yrs)",
+        "figures": {
+          "years_on_record": 15
+        }
+      },
+      "G5": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "avg_eps_start": 3.743,
+          "avg_eps_end": 5.187,
+          "ratio": 1.386
+        }
+      },
+      "G6": {
+        "label": "data_gap",
+        "year_label": null,
+        "figures": {}
+      },
+      "G7": {
+        "label": "data_gap",
+        "year_label": null,
+        "figures": {}
+      },
+      "B1": {
+        "label": "fail",
+        "year_label": null,
+        "figures": {
+          "years_at_or_above_15pct": 0
+        }
+      },
+      "B2": {
+        "label": "fail",
+        "year_label": null,
+        "figures": {
+          "long_term_debt": 80110000000.0,
+          "avg_net_income_3y": 4111000000.0,
+          "max_debt": 16440000000.0
+        }
+      },
+      "B3": {
+        "label": "pass",
+        "year_label": null,
+        "figures": {
+          "avg_margin_10y": 0.2312,
+          "avg_margin_3y": 0.2607,
+          "ratio": 1.128
+        }
+      },
+      "B4": {
+        "label": "fail",
+        "year_label": null,
+        "figures": {
+          "years_positive": 0,
+          "avg_first_3y": -1614000000.0,
+          "avg_last_3y": -2123000000.0,
+          "years_with_depreciation_only": []
+        }
+      }
+    }
+  }
+}
