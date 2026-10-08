@@ -1,0 +1,81 @@
+{
+  "_notes": "One entry per measure: unit, period type and an ordered priority list of XBRL concepts. The first concept with a value for a fiscal year wins, year by year. An object {\"sum\": [...]} is an explicit derived value (all parts must exist). Reviewed against the 5 fixtures; see docs/coverage_report.md.",
+  "measures": {
+    "revenue": {
+      "unit": "USD", "period": "duration",
+      "concepts": [
+        "us-gaap:Revenues",
+        "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+        "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax",
+        "us-gaap:SalesRevenueNet",
+        "us-gaap:RegulatedAndUnregulatedOperatingRevenue"
+      ],
+      "_notes": "Companies switch tags over time (GOOGL, TSLA, DUK). Banks tag total net revenue as Revenues (JPM)."
+    },
+    "net_income": {
+      "unit": "USD", "period": "duration",
+      "concepts": ["us-gaap:NetIncomeLoss", "us-gaap:ProfitLoss", "us-gaap:NetIncomeLossAvailableToCommonStockholdersBasic"],
+      "_notes": "NetIncomeLoss is attributable to the parent; ProfitLoss includes noncontrolling interests, so it is only a fallback."
+    },
+    "eps_diluted": {
+      "unit": "USD/shares", "period": "duration",
+      "concepts": ["us-gaap:EarningsPerShareDiluted", "us-gaap:EarningsPerShareBasicAndDiluted"],
+      "_notes": "TSLA used BasicAndDiluted in its loss-making years."
+    },
+    "current_assets": {
+      "unit": "USD", "period": "instant",
+      "concepts": ["us-gaap:AssetsCurrent"],
+      "_notes": "Banks do not report a classified balance sheet, so JPM is a gap."
+    },
+    "current_liabilities": {
+      "unit": "USD", "period": "instant",
+      "concepts": ["us-gaap:LiabilitiesCurrent"],
+      "_notes": "As current_assets."
+    },
+    "long_term_debt": {
+      "unit": "USD", "period": "instant",
+      "concepts": ["us-gaap:LongTermDebtNoncurrent", "us-gaap:LongTermDebtAndCapitalLeaseObligations", "us-gaap:LongTermDebt"],
+      "_notes": "Non-current portion first (Graham's test is on long-term debt). LongTermDebt includes the current portion, so it is a last resort."
+    },
+    "stockholders_equity": {
+      "unit": "USD", "period": "instant",
+      "concepts": ["us-gaap:StockholdersEquity", "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest"],
+      "_notes": "Parent shareholders' equity first, to match parent net income in ROE."
+    },
+    "operating_income": {
+      "unit": "USD", "period": "duration",
+      "concepts": ["us-gaap:OperatingIncomeLoss"],
+      "_notes": "Banks do not report operating income (JPM is a gap)."
+    },
+    "depreciation_amortization": {
+      "unit": "USD", "period": "duration",
+      "concepts": [
+        "us-gaap:DepreciationDepletionAndAmortization",
+        "us-gaap:DepreciationAndAmortization",
+        "us-gaap:DepreciationAmortizationAndAccretionNet",
+        {"sum": ["us-gaap:Depreciation", "us-gaap:AmortizationOfIntangibleAssets"]}
+      ],
+      "_notes": "Alphabet tags total D&A with a company extension that companyfacts omits, so it is mostly a gap. Depreciation alone is never used: it would understate D&A."
+    },
+    "capex": {
+      "unit": "USD", "period": "duration",
+      "concepts": ["us-gaap:PaymentsToAcquirePropertyPlantAndEquipment", "us-gaap:PaymentsToAcquireProductiveAssets"],
+      "_notes": "Cash outflow, reported as a positive number."
+    },
+    "dividends_paid": {
+      "unit": "USD", "period": "duration",
+      "concepts": ["us-gaap:PaymentsOfDividendsCommonStock", "us-gaap:PaymentsOfDividends"],
+      "_notes": "Cash paid on common stock; PaymentsOfDividends is the generic tag KO, JPM and DUK use."
+    },
+    "dividends_per_share": {
+      "unit": "USD/shares", "period": "duration",
+      "concepts": ["us-gaap:CommonStockDividendsPerShareDeclared", "us-gaap:CommonStockDividendsPerShareCashPaid"],
+      "_notes": "Declared first; KO only reports CashPaid."
+    },
+    "diluted_shares": {
+      "unit": "shares", "period": "duration",
+      "concepts": ["us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding"],
+      "_notes": "Weighted average over the year."
+    }
+  }
+}

@@ -4,14 +4,22 @@
 
 Status: early build. See `STATUS.md`, design in `ARCHITECTURE.md`, decisions in `DECISIONS.md`, workflow in `PROCESS.md`.
 
-## Run the tests (offline, standard library only)
+## Set up and run the tests (offline)
 
-    python3 -m unittest -v
+Python 3.10+. The only dependency is Pydantic (pinned in `requirements.txt`).
+
+    python3 -m venv .venv
+    .venv/bin/pip install -r requirements.txt
+    .venv/bin/python -m unittest -v
+
+## Fact normaliser coverage report (offline, from the fixtures)
+
+    .venv/bin/python scripts/coverage_report.py     # writes docs/coverage_report.md
 
 ## Record EDGAR fixtures (once, needs internet)
 
     cp .env.example .env      # then set SEC_USER_AGENT
-    python3 scripts/record_fixtures.py
+    .venv/bin/python scripts/record_fixtures.py
 
 Fixtures for the test tickers (KO, JPM, GOOGL, TSLA, DUK) are written to `fixtures/` with a `MANIFEST.json`. Development and tests then run in replay mode with no network calls.
 

@@ -165,6 +165,30 @@ Each entry: context → decision → trade-off. Status: **Accepted**, **Pending*
 **Decision:** A single `ResponseStore` saves each raw response as gzip (fixed mtime, so identical content gives identical bytes) plus a `.meta.json` with URL, fetch time, SHA-256, size and content type. It backs both the git-ignored HTTP cache (`data/cache/`) and the committed `fixtures/`. `EdgarClient` has three modes: `replay` (fixtures only, a miss raises, never touches the network; the default for tests and development), `live` (cache, fetch on miss) and `record` (always fetch, write fixtures). Reads verify the checksum and fail on mismatch. Meta files record the URL only, never request headers. Standard library only; transport, sleep and clock are injectable so every test runs offline. Throttle is 0.15 s between requests (~6/s, under SEC's 10/s limit); retries 429/5xx/connection errors at 1, 2 and 4 s (honouring `Retry-After`); 403 and 404 fail immediately.
 **Trade-off:** Fixtures are a frozen snapshot (latest 10-K and facts as of 2026-10-08) and go stale until re-recorded. Gains: reproducible tests, provenance (URL + hash) for every figure, no personal details in git, ~4 MB of repo for five companies despite 16 MB raw filings.
 
+### ADR-026 — Annual period selection and fiscal-year labelling
+**Status:** Accepted · 2026-10-08
+**Context:** EDGAR company facts mix annual, quarterly and year-to-date figures from 10-K, 10-Q and 8-K filings. Each fact carries `fy`/`fp` fields, but they describe the *filing*, not the period: the prior-year comparative inside a FY2025 10-K also says `fy=2025`.
+**Decision:** Keep only facts from form 10-K or 10-K/A. Duration facts must span 350–380 days (covers 52/53-week years); balance-sheet (instant) facts must fall within 7 days of the fiscal year end from `submissions.json` (`fiscalYearEnd`, MMDD). Each value is labelled by its period **end date**; `fy` and `fp` are never used (a test proves a comparative lands in the right year). All available years are kept; each scorer picks its own 10- or 15-year window.
+**Trade-off:** Ignores 10-Q-only data (the latest quarter) and transition periods, so the series is annual and slightly behind. Gains: one unambiguous year label that cannot be shifted by how a company files comparatives.
+
+### ADR-027 — Restatements: latest filed value, flagged, original kept
+**Status:** Accepted · 2026-10-08
+**Context:** The same period appears in several 10-Ks (as a comparative), and companies sometimes restate or recast it.
+**Decision:** Use the value from the most recently filed 10-K for that period. If it differs from the earliest filed value by more than 0.5%, set `restated=true` and keep the original in `original_value`. Both values keep their accession, so either can be traced.
+**Trade-off:** Scores use today's best-known number, not what investors saw at the time (no point-in-time view). Gains: consistent series, and restatements are visible instead of silent.
+
+### ADR-028 — Concept map as reviewable config; per-year fallback; explicit derived values; never guess
+**Status:** Accepted · 2026-10-08
+**Context:** Companies tag the same measure with different XBRL concepts and change tags over time (GOOGL, TSLA and DUK all do). Hard-coding this in Python hides the judgement calls.
+**Decision:** `config/concept_map.json` lists, per measure, the unit, period type and an ordered priority list of concepts, with a short reason per measure. For each fiscal year the first concept with a value wins, and the concept used is recorded on every value. If another listed concept disagrees by more than 1%, a note is added (no failure). Sums (e.g. D&A = depreciation + amortisation of intangibles) exist only where the map says so, need every part, and are marked `derived` with their source concepts. A measure/year with no match becomes a `Gap` with a reason (no listed concept reported, only non-annual data, unit mismatch). The normaliser reports gaps; whether a gap matters (e.g. a bank has no current assets, ADR-013) is the scorers' decision.
+**Trade-off:** The map needs a human review per new company type, and fallback tags can mean slightly different things (e.g. net income including noncontrolling interests); the disagreement notes and the coverage report (`docs/coverage_report.md`) make that visible. Gains: no silent substitutions, and the judgement calls are in one reviewable file.
+
+### ADR-029 — Pydantic v2 as the first dependency
+**Status:** Accepted · 2026-10-08
+**Context:** ADR-020 requires typed hand-off contracts validated before anything is written. Everything so far was standard library only.
+**Decision:** Add Pydantic v2 (pinned exactly in `requirements.txt`, installed in a git-ignored `.venv`) for the contracts in `engine/contracts.py`. Everything else stays standard library.
+**Trade-off:** One dependency and a venv step before running tests. Gains: validated, self-documenting contracts and JSON (de)serialisation with almost no code, reused by the results schema and trace replay.
+
 ---
 
 ## Open questions
