@@ -19,18 +19,20 @@
 - Built the deterministic scorers G1–G7 and B1–B4 with stock-split adjustment (`engine/splits.py`, `engine/score/`, `config/sector_rules.json`); results are structured facts with the provenance of every input. ADR-031 to ADR-034. `docs/scorecard_report.md` shows all 5 test companies. G6 and G7 are data gaps until a price is available. Results reviewed and frozen in `eval/expected_scores.json` (guard test); known weaknesses listed in `docs/evaluation_notes.md`.
 - Gemini API key created (2026-10-09). Free-tier limits confirmed in AI Studio: Gemini 3.1 Flash-Lite 15 RPM, 250K TPM, 500 requests/day, enough for ~40–80 companies/day (ADR-015, ADR-023).
 
+- Built the 10-K section extractor and keyword retriever (`engine/filing_text.py`, `engine/sections.py`, `engine/retrieve.py`, `config/search_terms.json`): Items 1, 1A and 7 found in all 5 recorded 10-Ks (JPM's Item 7 via the title fallback), passages with exact citation offsets, BM25 `search` / `get_passage`. ADR-035 to ADR-037. `docs/sections_report.md` previews what the agent will see; the search is a mixed first baseline (see its ADR-037 trade-off).
+
 ## Waiting on
 - Finnhub: written permission to display price and analyst data publicly. Email deferred (2026-10-08): send once first platform results exist, so the request can show what will be displayed. Must be sent and answered before publishing.
   - OK to use Finnhub for development and testing now.
   - **Publish blocker:** no Finnhub data on any public URL until a written reply is received. If refused, apply the ADR-007 fallback before publishing.
 
 ## Next
-1. 10-K section extraction (Items 1, 1A, 7) and the keyword retriever (ADR-022).
-2. Confirm `GEMINI_API_KEY` is in `.env` (key from fwdanielbravo@gmail.com, project "Dashboard-ui"); never in chat or git.
+1. LLM client + cost meter + budget guard (ADR-015, ADR-023). Confirm `GEMINI_API_KEY` is in `.env` (key from fwdanielbravo@gmail.com, project "Dashboard-ui"); never in chat or git.
+2. Qualitative agent: tool loop over `search` / `get_passage`, citations required (ADR-018).
 3. Send Finnhub permission email once first results exist (publish blocker).
 4. Later, before any paid run (ADR-023): measure tokens per company on the 5 test tickers; set the Google project spend cap to $5 *before* enabling billing (card on file required); only then switch `mode: paid`.
 5. When the agents exist: compare Gemini 3.1 Flash-Lite with hosted Gemma 4 31B (free, 14,400 requests/day) on the evaluation harness (ADR-015).
-6. **Before the full S&P 500 run:** review the `SalesRevenueGoodsNet` risk (it is the last revenue fallback; for some companies it is a component such as Tesla's automotive sales, so it could fill a missing year with a partial figure).
+6. **Before the full S&P 500 run:** review the `SalesRevenueGoodsNet` risk (it is the last revenue fallback; for some companies it is a component such as Tesla's automotive sales, so it could fill a missing year with a partial figure). Also run the section extractor over a wider sample of 10-K layouts than the five fixtures.
 
 ## Notes carried forward (normaliser and scorers)
 - GOOGL has no D&A tag (total D&A is a company-extension tag missing from companyfacts) and `Depreciation` only from 2021, so even with the ADR-030 fallback B4 stays a data gap for most of its 10-year window.

@@ -1,0 +1,25 @@
+{
+  "_notes": "Starting queries per qualitative Buffett criterion (ADR-022): which 10-K items to search first and what to ask. The agent may rephrase when a search returns nothing. Reviewed against the fixtures with docs/sections_report.md; not tuned to make particular companies look good.",
+  "criteria": {
+    "understandable_business": {
+      "items": ["1"],
+      "queries": ["principal products services", "how we generate revenue", "segments", "customers", "business model"],
+      "why": "Item 1 describes what the company sells, to whom and how it earns money; that is what 'understandable' needs."
+    },
+    "durable_competitive_advantage": {
+      "items": ["1", "1A"],
+      "queries": ["competition competitive", "brand", "market share", "pricing power price increases", "switching costs", "patents intellectual property", "scale cost advantage", "network"],
+      "why": "Item 1 states the company's own view of its position; Item 1A lists the ways competitors could erode it."
+    },
+    "candid_management": {
+      "items": ["7", "1A"],
+      "queries": ["challenges", "did not meet", "decline decreased", "impairment", "material weakness", "we expect headwinds", "risks uncertainties"],
+      "why": "Candour shows where management discusses setbacks and uncertainty in its own words (MD&A) and in the risk factors."
+    },
+    "rational_capital_allocation": {
+      "items": ["7"],
+      "queries": ["share repurchases buyback", "dividends", "acquisitions", "capital expenditures", "return on invested capital", "debt reduction"],
+      "why": "MD&A (liquidity and capital resources) reports what was done with cash: buybacks, dividends, deals, capex and debt."
+    }
+  }
+}

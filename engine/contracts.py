@@ -106,3 +106,41 @@ class ScoreSet(BaseModel):
     results: list[CriterionResult]
     summary: Summary
     inputs: list[InputRef]  # every distinct input used, once
+
+
+# ---------- 10-K sections, passages and search (ADR-035 to ADR-037) ----------
+class FilingSection(BaseModel):
+    """Where one item of a 10-K sits in the normalised text, or why it was not found."""
+
+    item: str  # "1", "1A", "7"
+    status: Literal["found", "not_found"]
+    method: Literal["item_heading", "title_fallback"] | None = None
+    char_start: int | None = None
+    char_end: int | None = None
+    length: int = 0
+    reason: str | None = None  # why not_found
+    accession: str
+    sha256: str  # of the source document (not of the normalised text)
+
+
+class Passage(BaseModel):
+    """A citable chunk: document_text[char_start:char_end] == text, exactly."""
+
+    passage_id: str  # "{accession}:{item}:{n}"
+    accession: str
+    item: str
+    n: int
+    char_start: int
+    char_end: int
+    words: int
+    text: str
+
+
+class SearchHit(BaseModel):
+    passage_id: str
+    item: str
+    score: float
+    matched_terms: list[str]
+    char_start: int
+    char_end: int
+    text: str
