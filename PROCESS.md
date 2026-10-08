@@ -90,8 +90,8 @@ flowchart TD
 |---|---|---|---|
 | B1 | Return on equity | ROE ≥ 15% in ≥ 7 of last 10 years | Negative/near-zero equity → "not meaningful". |
 | B2 | Conservative debt | Long-term debt ≤ 4× avg net income of last 3 years | Banks/insurers: not applicable. |
-| B3 | Stable margins | Operating margin > 0 every year **and** last-3-yr avg ≥ 90% of 10-yr avg | Tests consistency, not level, so sectors compare fairly. |
-| B4 | Owner earnings | Net income + D&A − capex > 0 in ≥ 8 of 10 years **and** last-3-yr avg > first-3-yr avg | Total capex used as conservative proxy for maintenance capex. |
+| B3 | Stable margins | Operating margin > 0 every year **and** last-3-yr avg ≥ 90% of 10-yr avg | Tests consistency, not level, so sectors compare fairly. Banks/insurers: not applicable. |
+| B4 | Owner earnings | Net income + D&A − capex > 0 in ≥ 8 of 10 years **and** last-3-yr avg > first-3-yr avg | Total capex used as conservative proxy for maintenance capex. Banks/insurers: not applicable. |
 
 **Buffett — qualitative (4, LLM with citations).** Understandable business · Durable competitive advantage · Candid management · Rational capital allocation. Each: "evidence found" / "evidence weak" / "insufficient evidence", with a cited 10-K passage.
 

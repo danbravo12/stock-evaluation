@@ -79,6 +79,7 @@ Each entry: context → decision → trade-off. Status: **Accepted**, **Pending*
 **Context:** Some criteria are meaningless for certain companies.
 **Decision:** Banks/insurers: G2 and B2 "not applicable". Utilities: G2 uses Graham's utility rule (debt ≤ 2× equity). Negative or near-zero equity: B1 "not meaningful". Criteria ranking uses % of applicable criteria met; data gaps reported separately.
 **Trade-off:** Scorecard denominators vary by company; avoids penalising companies for tests that don't fit them.
+**Amended 2026-10-08:** banks and insurers also get **B3 (stable margins)** and **B4 (owner earnings)** as "not applicable". The recorded JPM fixture has no operating income, D&A or capex tags, and both tests assume an industrial income statement. Bank-specific substitutes (e.g. pre-tax margin) were rejected: they would be the tool's own invented rules, not Graham's or Buffett's, and add scope. Banks and insurers are therefore scored on fewer applicable criteria; the varying denominator already handles this, and the scorecard states which tests were skipped and why.
 
 ### ADR-014 — S&P 500 constituents from a Wikipedia snapshot
 **Status:** Accepted · 2026-10-07

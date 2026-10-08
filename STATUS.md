@@ -27,7 +27,7 @@
 
 ## Notes for the normaliser (from the fixtures)
 - Revenue is tagged differently per company: KO `Revenues`; JPM `Revenues` plus `InterestAndDividendIncomeOperating`; GOOGL and TSLA split across `Revenues` and `RevenueFromContractWithCustomerExcludingAssessedTax` (GOOGL's latter stops at FY2024); DUK has four revenue tags.
-- JPM (bank) has no current assets/liabilities, operating income, D&A or PP&E capex tags (consistent with ADR-013 exceptions; B3 and B4 need a decision for banks).
+- JPM (bank) has no current assets/liabilities, operating income, D&A or PP&E capex tags (consistent with ADR-013 exceptions). Decided 2026-10-08: B3 and B4 are "not applicable" for banks and insurers (ADR-013 amendment).
 - GOOGL has no `DepreciationDepletionAndAmortization` or `DepreciationAndAmortization` tag; B4 needs another source or a data gap. KO has `DepreciationDepletionAndAmortization` only.
 - No company uses `PaymentsOfDividendsCommonStock`; TSLA has no dividend tags at all (expected, G4 fail); GOOGL has no `CommonStockDividendsPerShareCashPaid` (short dividend record).
 - DUK's 10-K is 16.1 MB of HTML (0.7 MB stored); the section extractor must cope with that size.
