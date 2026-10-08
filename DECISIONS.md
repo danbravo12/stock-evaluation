@@ -95,6 +95,8 @@ Each entry: context → decision → trade-off. Status: **Accepted**, **Pending*
 **Decision:** Development uses recorded fixtures plus Gemma 4 E2B/E4B via Ollama for smoke tests. Analysis runs use Gemini Flash-Lite on the free tier (no card; ~500 requests/day reported, large context). Model is one config setting (OpenAI-compatible endpoint, model name, key env var). Fallback order, decided by evaluation results: Gemini Flash (same key) → Claude Haiku 4.5 (paid, < $1 for featured set, prepaid credits with auto-reload off).
 **Amended 2026-10-08 (ADR-023):** the run model is pinned to **Gemini 3.1 Flash-Lite** for every company (free and paid runs), so results across the index come from one model. Paid use of it is governed by ADR-023.
 **Trade-off:** Free-tier limits are unpublished and may change; free-tier prompts may be used by Google (acceptable — inputs are public SEC filings). The lightest model tier must prove citation accuracy in the evaluation harness. Comparing the small local and cloud models on the same harness is itself an evaluation result.
+**Confirmed 2026-10-09 (AI Studio, free tier, project "Dashboard-ui"):** Gemini 3.1 Flash-Lite = 15 requests/min, 250K tokens/min, **500 requests/day**. Paid: $0.25 / $1.50 per 1M input/output tokens; Batch $0.125 / $0.75 (ai.google.dev pricing page). Free-tier prompts may be used by Google to improve products; paid-tier prompts are not. Gemini 2.5 Flash-Lite free tier is only 20 requests/day, so it is not a free fallback. Hosted Gemma 4 31B (30 RPM, 16K TPM, 14,400 RPD) is a free candidate to compare on the evaluation harness, not adopted.
+
 
 ### ADR-016 — Static website + engine run in batches on the laptop
 **Status:** Accepted · 2026-10-07
