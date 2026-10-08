@@ -105,26 +105,30 @@ def _derived_values(parts: list[dict[date, AnnualValue]], concepts: list[str]) -
 
 
 # ---------- one measure ----------
-def _candidates(companyfacts: dict, spec: dict, fye_mmdd: str) -> list[dict[date, AnnualValue]]:
-    """One end-date -> value mapping per entry of the priority list, in priority order."""
+def _candidates(companyfacts: dict, spec: dict, fye_mmdd: str) -> list[tuple[str | None, dict[date, AnnualValue]]]:
+    """One (note, end-date -> value) pair per entry of the priority list, in priority order.
+    A {"sum": [...]} entry is a derived value; its optional "note" is added to the series
+    whenever that entry supplies a year (a one-concept sum is a flagged last resort)."""
     result = []
     for entry in spec["concepts"]:
         if isinstance(entry, dict):
             parts = [_annual_values(companyfacts, c, spec, fye_mmdd) for c in entry["sum"]]
-            result.append(_derived_values(parts, entry["sum"]))
+            result.append((entry.get("note"), _derived_values(parts, entry["sum"])))
         else:
-            result.append(_annual_values(companyfacts, entry, spec, fye_mmdd))
+            result.append((None, _annual_values(companyfacts, entry, spec, fye_mmdd)))
     return result
 
 
-def _pick_per_year(measure: str, candidates: list[dict[date, AnnualValue]]) -> tuple[list[AnnualValue], list[str]]:
+def _pick_per_year(measure: str, candidates: list[tuple[str | None, dict[date, AnnualValue]]]) -> tuple[list[AnnualValue], list[str]]:
     """Per fiscal year, take the first concept in priority order that has a value."""
     values, notes = [], []
-    for end in sorted(set().union(*candidates)):
-        have = [c[end] for c in candidates if end in c]
-        chosen = have[0]
+    for end in sorted(set().union(*(c for _, c in candidates))):
+        have = [(note, c[end]) for note, c in candidates if end in c]
+        (note, chosen), others = have[0], [v for _, v in have[1:]]
         values.append(chosen)
-        for other in have[1:]:
+        if note:
+            notes.append(f"{end}: {measure} uses {chosen.concept} alone, {note}")
+        for other in others:
             if _differs(chosen.value, other.value, DISAGREE_TOLERANCE):
                 notes.append(f"{end}: {measure} {chosen.concept}={chosen.value:g} used; "
                              f"{other.concept}={other.value:g} differs by more than 1%")

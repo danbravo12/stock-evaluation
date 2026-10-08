@@ -8,9 +8,10 @@
         "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
         "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax",
         "us-gaap:SalesRevenueNet",
-        "us-gaap:RegulatedAndUnregulatedOperatingRevenue"
+        "us-gaap:RegulatedAndUnregulatedOperatingRevenue",
+        "us-gaap:SalesRevenueGoodsNet"
       ],
-      "_notes": "Companies switch tags over time (GOOGL, TSLA, DUK). Banks tag total net revenue as Revenues (JPM)."
+      "_notes": "Companies switch tags over time (GOOGL, TSLA, DUK). Banks tag total net revenue as Revenues (JPM). SalesRevenueGoodsNet is last so it only fills years nothing else covers (KO 2007-2017)."
     },
     "net_income": {
       "unit": "USD", "period": "duration",
@@ -53,9 +54,10 @@
         "us-gaap:DepreciationDepletionAndAmortization",
         "us-gaap:DepreciationAndAmortization",
         "us-gaap:DepreciationAmortizationAndAccretionNet",
-        {"sum": ["us-gaap:Depreciation", "us-gaap:AmortizationOfIntangibleAssets"]}
+        {"sum": ["us-gaap:Depreciation", "us-gaap:AmortizationOfIntangibleAssets"]},
+        {"sum": ["us-gaap:Depreciation"], "note": "excludes amortisation (understates D&A)"}
       ],
-      "_notes": "Alphabet tags total D&A with a company extension that companyfacts omits, so it is mostly a gap. Depreciation alone is never used: it would understate D&A."
+      "_notes": "Alphabet tags total D&A with a company extension that companyfacts omits, so it is mostly a gap. Last resort (ADR-030): Depreciation alone, flagged derived with a note, used only when nothing else covers the year; it understates D&A, which errs conservative for owner earnings."
     },
     "capex": {
       "unit": "USD", "period": "duration",
@@ -64,8 +66,8 @@
     },
     "dividends_paid": {
       "unit": "USD", "period": "duration",
-      "concepts": ["us-gaap:PaymentsOfDividendsCommonStock", "us-gaap:PaymentsOfDividends"],
-      "_notes": "Cash paid on common stock; PaymentsOfDividends is the generic tag KO, JPM and DUK use."
+      "concepts": ["us-gaap:PaymentsOfDividendsCommonStock", "us-gaap:PaymentsOfDividends", "us-gaap:PaymentsOfOrdinaryDividends"],
+      "_notes": "Cash paid on common stock; PaymentsOfDividends is the generic tag KO, JPM and DUK use. DUK switched to PaymentsOfOrdinaryDividends in 2021."
     },
     "dividends_per_share": {
       "unit": "USD/shares", "period": "duration",

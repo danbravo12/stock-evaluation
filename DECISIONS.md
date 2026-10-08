@@ -73,6 +73,8 @@ Each entry: context → decision → trade-off. Status: **Accepted**, **Pending*
 **Context:** Graham requires 20 years of uninterrupted dividends; EDGAR structured data covers ~15–17 years.
 **Decision:** Test a fixed 15-year window. A pass is always labelled "partial (15 of 20 yrs)". Companies with a shorter record (recent listings, spin-offs) pass if they paid a dividend every year on record, labelled "N yrs on record". No dividend in any year = fail.
 **Trade-off:** Lenient for short-record companies; transparency comes from the label rather than a stricter rule.
+**Amended 2026-10-08 (correction):** "years on record" means years for which the company has annual financial data in EDGAR (its net income series), **not** years with dividend data. As first written, a company that is long listed but only recently started paying (Alphabet: financials from 2013, dividends from 2024) would have passed as "2 yrs on record". A year counts as paid only if dividends per share is above zero; if per-share data is missing for a year, dividends paid above zero is used instead, and the source is shown. Zero-valued dividend facts (Alphabet reports $0 in several years) count as not paid. A one-off non-dividend payment can still show up in the cash-paid tag (Alphabet, $47M in 2015), which is why per-share data takes priority.
+
 
 ### ADR-013 — Sector exceptions and ranking basis
 **Status:** Accepted · 2026-10-07
@@ -188,6 +190,12 @@ Each entry: context → decision → trade-off. Status: **Accepted**, **Pending*
 **Context:** ADR-020 requires typed hand-off contracts validated before anything is written. Everything so far was standard library only.
 **Decision:** Add Pydantic v2 (pinned exactly in `requirements.txt`, installed in a git-ignored `.venv`) for the contracts in `engine/contracts.py`. Everything else stays standard library.
 **Trade-off:** One dependency and a venv step before running tests. Gains: validated, self-documenting contracts and JSON (de)serialisation with almost no code, reused by the results schema and trace replay.
+
+### ADR-030 — Depreciation alone as a flagged, conservative D&A fallback
+**Status:** Accepted · 2026-10-08
+**Context:** B4 owner earnings = net income + D&A − capex. Some companies stop tagging amortisation: Tesla reports only `Depreciation` from 2022, so the derived sum (ADR-028) is incomplete and B4 became a data gap for its four latest years.
+**Decision:** When no listed D&A concept and no complete derived sum exists for a year, `Depreciation` alone is used, marked `derived` with a note "excludes amortisation (understates D&A)". Understating D&A lowers owner earnings, so the fallback errs on the conservative side, the same reasoning as using total capex as a proxy for maintenance capex (PROCESS §5, B4). Alphabet remains a gap for most years because it has no D&A or depreciation tags before 2021.
+**Trade-off:** Mixes slightly different definitions within one series; mitigated by the per-value flag and the coverage report. Gains: Tesla is scored on real data instead of a gap, without ever overstating owner earnings.
 
 ---
 

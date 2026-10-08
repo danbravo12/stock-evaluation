@@ -130,6 +130,60 @@ class TestConceptFallback(unittest.TestCase):
         self.assertEqual((v.value, v.derived, v.source_concepts), (10, True, ["us-gaap:Dep", "us-gaap:Amort"]))
 
 
+class TestLastResortFallback(unittest.TestCase):
+    SPEC = {"unit": "USD", "period": "duration", "concepts": [
+        "us-gaap:Total",
+        {"sum": ["us-gaap:Dep", "us-gaap:Amort"]},
+        {"sum": ["us-gaap:Dep"], "note": "excludes amortisation (understates D&A)"},
+    ]}
+
+    @staticmethod
+    def year(y, v):
+        return fact(f"{y}-12-31", v, f"a-{y}", f"{y + 1}-02-01", start=f"{y}-01-01")
+
+    def test_used_only_when_nothing_better_exists_and_is_flagged(self):
+        y = self.year
+        cf = facts({
+            "Total": {"USD": [y(2020, 100)]},                           # 2020: direct concept
+            "Dep": {"USD": [y(2020, 7), y(2021, 8), y(2022, 9)]},
+            "Amort": {"USD": [y(2021, 2)]},                             # 2021: complete sum; 2022: Dep alone
+        })
+        s = run(cf, self.SPEC)
+        got = {v.fiscal_year_end.year: (v.value, v.derived, v.concept) for v in s.values}
+        self.assertEqual(got, {2020: (100, False, "Total"), 2021: (10, True, "Dep+Amort"), 2022: (9, True, "Dep")})
+        self.assertEqual(s.values[-1].source_concepts, ["us-gaap:Dep"])
+        self.assertEqual(len(s.notes), 3)  # two disagreements (2020, 2021) and the last-resort note (2022)
+        self.assertTrue(any("2022-12-31" in n and "understates D&A" in n for n in s.notes))
+
+    def test_nothing_else_means_a_gap_not_a_guess(self):
+        spec = {"unit": "USD", "period": "duration", "concepts": ["us-gaap:Total"]}
+        self.assertEqual(run(facts({"Dep": {"USD": [self.year(2022, 9)]}}), spec).values, [])
+
+
+class TestConceptMapTags(unittest.TestCase):
+    """The tags added after the first coverage report (KO and DUK)."""
+
+    @classmethod
+    def setUpClass(cls):
+        from engine.normalise import load_concept_map
+        cls.cmap = load_concept_map()["measures"]
+
+    def test_older_ko_revenue_tag_only_fills_uncovered_years(self):
+        y = TestLastResortFallback.year
+        cf = facts({"Revenues": {"USD": [y(2016, 10), y(2017, 11)]},
+                    "SalesRevenueGoodsNet": {"USD": [y(2008, 5), y(2016, 10), y(2017, 11)]}})
+        s = run(cf, self.cmap["revenue"])
+        self.assertEqual([(v.fiscal_year_end.year, v.concept) for v in s.values],
+                         [(2008, "SalesRevenueGoodsNet"), (2016, "Revenues"), (2017, "Revenues")])
+
+    def test_dividends_paid_switches_to_ordinary_dividends(self):
+        y = TestLastResortFallback.year
+        cf = facts({"PaymentsOfDividends": {"USD": [y(2020, 3)]}, "PaymentsOfOrdinaryDividends": {"USD": [y(2020, 3), y(2021, 4)]}})
+        s = run(cf, self.cmap["dividends_paid"])
+        self.assertEqual([(v.fiscal_year_end.year, v.concept) for v in s.values],
+                         [(2020, "PaymentsOfDividends"), (2021, "PaymentsOfOrdinaryDividends")])
+
+
 class TestGaps(unittest.TestCase):
     def test_missing_measure_and_missing_year(self):
         cmap = {"measures": {

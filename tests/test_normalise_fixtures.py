@@ -32,6 +32,25 @@ class TestFixtures(unittest.TestCase):
             self.assertEqual(s.values, [])
             self.assertIsNone(s.gaps[0].fiscal_year_end)
 
+    def test_ko_revenue_reaches_back_to_2007_or_2008(self):
+        self.assertLessEqual(self.facts["KO"].series["revenue"].values[0].fiscal_year_end.year, 2008)
+
+    def test_tesla_depreciation_falls_back_to_flagged_depreciation_alone(self):
+        s = self.facts["TSLA"].series["depreciation_amortization"]
+        recent = {v.fiscal_year_end.year: v for v in s.values if v.fiscal_year_end.year >= 2022}
+        self.assertEqual(sorted(recent), [2022, 2023, 2024, 2025])
+        self.assertTrue(all(v.derived and v.source_concepts == ["us-gaap:Depreciation"] for v in recent.values()))
+        self.assertTrue(any("understates D&A" in n for n in s.notes))
+
+    def test_alphabet_depreciation_is_still_mostly_a_gap(self):
+        s = self.facts["GOOGL"].series["depreciation_amortization"]
+        self.assertTrue(all(v.fiscal_year_end.year >= 2021 for v in s.values))
+        self.assertLessEqual(len(s.values), 5)  # nothing before 2021, so 2013–2020 stay uncovered
+
+    def test_duke_dividends_paid_covers_recent_years(self):
+        years = {v.fiscal_year_end.year for v in self.facts["DUK"].series["dividends_paid"].values}
+        self.assertTrue({2023, 2024, 2025} <= years)
+
     def test_every_value_has_provenance(self):
         for t, nf in self.facts.items():
             for s in nf.series.values():

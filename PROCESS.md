@@ -79,7 +79,7 @@ flowchart TD
 | G1 | Size | Revenue ≥ $1B | Graham's $100M (1972) ≈ $800M today, rounded up. Nearly all S&P 500 pass; kept for completeness. |
 | G2 | Financial strength | Current ratio ≥ 2 **and** long-term debt ≤ net current assets | Utilities: Graham's variant, debt ≤ 2× equity. Banks/insurers: not applicable. |
 | G3 | Earnings stability | Positive net income in each of the last 10 years | |
-| G4 | Dividend record | Dividend paid in every year of a 15-year window | Graham asked for 20; EDGAR cannot cover that. Always labelled "partial (15 of 20 yrs)". Shorter record (e.g. recent listing/spin-off): pass if paid every year on record, labelled "N yrs on record". |
+| G4 | Dividend record | Dividend paid in every year of a 15-year window | Graham asked for 20; EDGAR cannot cover that. Always labelled "partial (15 of 20 yrs)". Shorter record (e.g. recent listing/spin-off): pass if paid every year on record, labelled "N yrs on record". "On record" = years with annual financial data, not years with dividend data; a year counts only if dividends per share > 0 (ADR-012 amendment). |
 | G5 | Earnings growth | 3-yr avg diluted EPS (end) ≥ 1.33× 3-yr avg diluted EPS (start of 10-yr window) | Per-share, so share issuance doesn't count as growth. |
 | G6 | Moderate P/E | Price ≤ 15× avg EPS of last 3 years | Needs price (Finnhub). |
 | G7 | Price vs assets | P/E × P/B ≤ 22.5 | Needs price (Finnhub). |

@@ -28,7 +28,10 @@
 4. Later, before any paid run (ADR-023): measure tokens per company on the 5 test tickers; set the Google project spend cap to $5 *before* enabling billing (card on file required); only then switch `mode: paid`.
 
 ## Notes for the scorers (from the normaliser's coverage report)
-- GOOGL has no D&A at all (total D&A is a company-extension tag missing from companyfacts; `Depreciation` alone is never used), so B4 is a data gap for it. TSLA D&A is missing 2022–2025; DUK dividends paid stops after 2022. Gaps are explicit in the series.
+- GOOGL has no D&A tag (total D&A is a company-extension tag missing from companyfacts) and `Depreciation` only from 2021, so even with the ADR-030 fallback B4 stays a data gap for most of its 10-year window.
+- **Decided 2026-10-08:** G4 counts "years on record" from the net income series and a year as paid only if dividends per share > 0 (fallback: dividends paid > 0); zeros count as not paid (ADR-012 amendment). Depreciation alone is a flagged conservative D&A fallback (ADR-030).
+- **Concept map fixes pending:** add `SalesRevenueGoodsNet` (KO revenue 2007–2017) and `PaymentsOfOrdinaryDividends` (DUK dividends 2021–2025).
+- **Known limitation:** mixing different revenue tags across years (DUK) can shift margins by up to ~9% between years; report it in the evaluation rather than hide it.
 - GOOGL history is shorter: revenue/net income from 2013, dividends only 2024–2025, diluted shares 2022–2025, EPS missing 2015. KO revenue starts 2016 (10 values).
 - JPM long-term debt exists only for 2008–2013 (bank; B2 is already not applicable). JPM `Revenues` is total net revenue.
 - Revenue tags switch within a company (DUK uses four); the concept used is recorded per value. Fallback concepts can mean slightly different things (e.g. `ProfitLoss` includes minorities), which produces "differs by more than 1%" notes.
