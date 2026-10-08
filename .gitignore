@@ -1,0 +1,11 @@
+# Secrets and personal details — never commit
+.env
+
+# Live HTTP cache (fixtures/ IS committed)
+data/cache/
+
+# Python / OS
+__pycache__/
+*.pyc
+.venv/
+.DS_Store

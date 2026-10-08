@@ -1,0 +1,87 @@
+{
+  "recorded_at": "2026-10-08T03:20:08+00:00",
+  "source": "U.S. Securities and Exchange Commission, EDGAR (public domain)",
+  "companies": [
+    {
+      "ticker": "KO",
+      "cik": "0000021344",
+      "name": "COCA COLA CO",
+      "sic_description": "Beverages",
+      "fiscal_year_end": "1231",
+      "xbrl_concepts": 726,
+      "latest_10k": {
+        "accession": "0001628280-26-010047",
+        "filing_date": "2026-02-20",
+        "report_date": "2025-12-31",
+        "primary_document": "ko-20251231.htm",
+        "url": "https://www.sec.gov/Archives/edgar/data/21344/000162828026010047/ko-20251231.htm",
+        "sha256": "b44db9ae27432d60fdf60bca73293add64e9f799b7f49cd7acb040ee33e4d079"
+      }
+    },
+    {
+      "ticker": "JPM",
+      "cik": "0000019617",
+      "name": "JPMORGAN CHASE & CO",
+      "sic_description": "National Commercial Banks",
+      "fiscal_year_end": "1231",
+      "xbrl_concepts": 936,
+      "latest_10k": {
+        "accession": "0001628280-26-008131",
+        "filing_date": "2026-02-13",
+        "report_date": "2025-12-31",
+        "primary_document": "jpm-20251231.htm",
+        "url": "https://www.sec.gov/Archives/edgar/data/19617/000162828026008131/jpm-20251231.htm",
+        "sha256": "e13aa3a3fa3dbce0ebcf42d34d867aa987405ad46a7f8cbbd7be0d8daddbabec"
+      }
+    },
+    {
+      "ticker": "GOOGL",
+      "cik": "0001652044",
+      "name": "Alphabet Inc.",
+      "sic_description": "Services-Computer Programming, Data Processing, Etc.",
+      "fiscal_year_end": "1231",
+      "xbrl_concepts": 557,
+      "latest_10k": {
+        "accession": "0001652044-26-000018",
+        "filing_date": "2026-02-05",
+        "report_date": "2025-12-31",
+        "primary_document": "goog-20251231.htm",
+        "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+        "sha256": "f3238608dc0b6ee1c579ba3b282a3b6405136512cff16eebaa22e702e10497f4"
+      }
+    },
+    {
+      "ticker": "TSLA",
+      "cik": "0001318605",
+      "name": "Tesla, Inc.",
+      "sic_description": "Motor Vehicles & Passenger Car Bodies",
+      "fiscal_year_end": "1231",
+      "xbrl_concepts": 649,
+      "latest_10k": {
+        "accession": "0001628280-26-003952",
+        "filing_date": "2026-01-29",
+        "report_date": "2025-12-31",
+        "primary_document": "tsla-20251231.htm",
+        "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026003952/tsla-20251231.htm",
+        "sha256": "760b953b0bb39d4887fcc0b9f79c0c550c4135c0c10526afd1c7db129a363f65"
+      }
+    },
+    {
+      "ticker": "DUK",
+      "cik": "0001326160",
+      "name": "Duke Energy CORP",
+      "sic_description": "Electric & Other Services Combined",
+      "fiscal_year_end": "1231",
+      "xbrl_concepts": 920,
+      "latest_10k": {
+        "accession": "0001326160-26-000014",
+        "filing_date": "2026-02-26",
+        "report_date": "2025-12-31",
+        "primary_document": "duk-20251231.htm",
+        "url": "https://www.sec.gov/Archives/edgar/data/1326160/000132616026000014/duk-20251231.htm",
+        "sha256": "741ff2f50e33a4198fd6f7392a0df1fa268fc34557284c63110aeadc482c2d5d"
+      }
+    }
+  ],
+  "requests_made": 26
+}
