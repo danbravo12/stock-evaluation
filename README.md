@@ -34,6 +34,15 @@ Usage and spend are counted in `data/ledger/usage.json` (daily quota resets at m
     .venv/bin/python scripts/qualitative_report.py replay   # offline, writes docs/qualitative_report.md (research output, not financial advice)
     .venv/bin/python scripts/qualitative_report.py record   # free tier only: re-records the ~35 requests (needed after any prompt or rubric change)
 
+## Run the engine (ADR-056)
+
+    .venv/bin/python -m engine.cli analyse KO                    # one company, offline (replay), writes results/0000021344.json and its trace
+    .venv/bin/python -m engine.cli analyse MET --mode live       # live: SEC + Gemini free tier (needs SEC_USER_AGENT and GEMINI_API_KEY in .env)
+    .venv/bin/python -m engine.cli batch --universe --limit 40   # resumable; stops cleanly at the daily quota, run it again after midnight Pacific
+    .venv/bin/python -m engine.cli status                        # writes PROGRESS.md
+    .venv/bin/python -m engine.cli schema                        # writes schema/result.schema.json
+    .venv/bin/python scripts/snapshot_universe.py                # S&P 500 snapshot (once, a quarter)
+
 ## Explainer + Critic report and the qualitative gold set
 
     .venv/bin/python scripts/review_report.py replay    # offline, writes docs/critic_report.md (research output, not financial advice)

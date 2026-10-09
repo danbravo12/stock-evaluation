@@ -336,3 +336,54 @@ class ReviewResult(BaseModel):
     explanations: Explanations
     qual: QualFindings
     critic: CriticReport
+
+
+# ---------- planner and data bundle (ADR-018, ADR-020, ADR-053) ----------
+class SkippedStep(BaseModel):
+    step: str
+    reason: str
+
+
+class NotApplicable(BaseModel):
+    id: str
+    reason: str
+
+
+class RunPlan(BaseModel):
+    """What will run for one ticker and why (rule-based, ADR-018). An out-of-scope ticker gets a plan and nothing else."""
+
+    ticker: str
+    cik: str | None = None
+    name: str | None = None
+    gics_sector: str | None = None
+    sector_class: str | None = None  # bank / insurer / utility / other (ADR-033)
+    in_scope: bool
+    out_of_scope_reason: str | None = None
+    universe_snapshot: str | None = None
+    steps: list[str] = Field(default_factory=list)
+    skipped: list[SkippedStep] = Field(default_factory=list)
+    applicable: list[str] = Field(default_factory=list)  # criterion ids that will be scored
+    not_applicable: list[NotApplicable] = Field(default_factory=list)  # decided by the sector rules before scoring
+    notes: list[str] = Field(default_factory=list)
+
+
+class FilingInfo(BaseModel):
+    accession: str
+    form: str
+    filing_date: str
+    report_date: str
+    url: str
+
+
+class DataBundle(BaseModel):
+    """What the fetch step collected for one company. The normalised facts travel with it in memory but are not serialised."""
+
+    cik: str
+    ticker: str
+    entity_name: str
+    sic: str | None = None
+    filing: FilingInfo
+    price: float | None = None
+    gaps: list[str] = Field(default_factory=list)
+    as_of: dict[str, str] = Field(default_factory=dict)  # per source: what date the data is from
+    facts: NormalisedFacts | None = Field(default=None, exclude=True)

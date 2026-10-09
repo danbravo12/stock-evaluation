@@ -1,6 +1,6 @@
 # Status
 
-**Phase:** 1 — Build (data layer, normaliser, scorers, retriever, LLM layer, qualitative agent, Explainer and Critic done)
+**Phase:** 1 — Build (data layer, normaliser, scorers, retriever, LLM layer, qualitative agent, Explainer, Critic, universe, orchestrator, reporter and CLI done)
 **Last session:** 2026-10-10
 
 ## How we work (agreed 2026-10-09)
@@ -37,24 +37,24 @@
 
 - **Critic repair (ADR-052, 2026-10-10):** the single retry is replaced by two repair paths: a rationale rewrite (one call, sees only the quotes) for rationale-only failures and a constrained retry (3 turns: cite something new or lower the verdict) for verdict failures; a failed repair keeps the original with a warning. The Critic's one model call also checks each explanation's meaning. Rubric for capital allocation clarified, agent re-recorded (no verdict moved). Result on the gold set: gold errors caught 3/3, first-pass flags on correct findings 6 → 2, repairs passed 5 of 5, repair calls per company 3.8 → 1.2, agreement 17/20 → 17/20 (JPM and DUK capital allocation are now arguable under the clarified rubric, see `docs/evaluation_notes.md` item 14). Engine budget cap raised to $6.00 (ADR-023 amended, approved by Daniel 2026-10-10).
 
+- **Orchestrator, Planner, Reporter and CLI (ADR-053 to ADR-056, 2026-10-10):** the S&P 500 snapshot (503 rows, 500 CIKs, 3 dual classes, validated against SEC's ticker file; `data/universe/`, `fixtures/universe/`), `engine/planner.py` (`RunPlan`, `DataBundle`), `engine/orchestrator.py` (`analyse`: plan → fetch → score → qualitative → explain and verify → report, timed and traced, failing steps degrade and dependants skip), `engine/report.py` (`Result` schema 1.0, Finnhub publish gate, `schema/result.schema.json`), `engine/batch.py` + `engine/cli.py` (`analyse`, `batch`, `status`, `schema`; company ledger; resumable; `PROGRESS.md`). `results/` holds the 5 test-ticker results (54 to 71 KB each) and traces. End to end on the 5 test tickers: mean 10.4 model calls, notional $0.0096 per company, actual $0. First live run on unseen companies (MET insurer, PLD REIT, 23 requests, not committed) found and fixed a live-mode bug and listed data issues in `docs/evaluation_notes.md` items 15 and 16 (notably PLD's G4 is a false fail). 
+
 ## Waiting on
 - Finnhub: written permission to display price and analyst data publicly. Email deferred (2026-10-08): send once first platform results exist, so the request can show what will be displayed. Must be sent and answered before publishing.
   - OK to use Finnhub for development and testing now.
   - **Publish blocker:** no Finnhub data on any public URL until a written reply is received. If refused, apply the ADR-007 fallback before publishing.
 
 ## Next
-1. Orchestrator + Reporter (ADR-018, ADR-020). `explain_and_verify` is the review step it calls; the orchestrator must treat `QuotaReached` / `BudgetExceeded` as "company not done" and resume from the ledger (ADR-044), and the Reporter must show `warning` items and the Critic's detail, plus "not assessed" reasons.
-2. Retrieval evaluation set (small): 20–30 questions on the 5 test tickers labelled with their correct passages; report BM25 recall@5. If it shows missed evidence, that is ADR-022's trigger for hybrid retrieval in v1; the same set is the seed for V2-3.
-3. Rationale overreach at the source (`docs/evaluation_notes.md` items 9 and 12): the Critic sees it in about half of the found/weak findings but one retry does not remove it. Options: ask for shorter rationales built only from cited sentences, a stricter output format, or a stronger model.
-4. Send Finnhub permission email once first results exist (publish blocker).
-5. Later, before any paid run (ADR-023): the full per-company cost is now measured (about 10.4 calls and 25k input + 2.3k output tokens, notional $0.010, see `docs/critic_report.md` and `docs/qualitative_report.md`; roughly $5 for the whole S&P 500, under the $6 engine cap); set the Google project spend cap to **$7** in AI Studio *before* enabling billing (card on file required; engine cap $6.00, ADR-023 amended 2026-10-10, approved by Daniel); only then switch `mode: paid`.
-6. Compare Gemini 3.1 Flash-Lite with hosted Gemma 4 31B (free, 14,400 requests/day) on the evaluation harness (ADR-015), including Gemma as the **Critic** on the same gold set (ADR-051: shared blind spots).
-7. **Before the full S&P 500 run:** review the `SalesRevenueGoodsNet` risk (it is the last revenue fallback; for some companies it is a component such as Tesla's automotive sales, so it could fill a missing year with a partial figure). Also run the section extractor over a wider sample of 10-K layouts than the five fixtures.
+1. Rankings builder and the static site (ADR-004, ADR-016): `rankings.json` (criteria ranking and analyst ranking, side by side, no commentary), discovery, company and trace-replay pages reading `results/*.json` and `schema/result.schema.json`; coverage line from `PROGRESS.md`.
+2. Finnhub: price and analyst counts (ADR-007), which fills G6 and G7 and the analyst ranking; send the permission email now that first results exist (publish blocker, see Waiting on).
+3. Evaluation harness: threshold sensitivity (ADR-011), failure cases, retrieval evaluation set (20–30 labelled questions, BM25 recall@5; ADR-022's trigger for hybrid retrieval), Gemma 4 31B as model and as Critic on the gold set (ADR-015, ADR-051).
+4. Before the full S&P 500 run, decide: (a) which classification the ADR-013 exceptions follow, and what to do with managed care, REITs and the 35 other financials (`docs/universe_report.md`, notes 15 and 16); (b) a plausibility check on G4 (PLD) and the `SalesRevenueGoodsNet` risk; (c) run the section extractor over a wider sample of 10-K layouts; (d) rationale overreach at the source (notes 9, 12, 14).
+5. Before any paid run (ADR-023, amended 2026-10-10): set the Google project spend cap to **$7** in AI Studio *before* enabling billing (card on file required; engine cap $6.00, approved by Daniel); then switch `mode: paid`. Measured: about 10.4 calls and $0.010 notional per company, roughly $5 for the whole index; the free tier alone needs about 11 days of quota (`PROGRESS.md`).
 
 ## Later (v2, only after v1 ships)
 1. Read-only MCP server over the published results JSON (`DECISIONS.md` V2-1). First v2 item: $0, reuses the v1 results schema.
-2. Cross-provider model comparison on Amazon Bedrock (V2-2), after the free Gemini vs Gemma comparison (Next #6). Decide the separate Bedrock allowance before building.
-3. Cross-company "Ask the filings": hybrid BM25 + vector retrieval over S&P 500 10-K passages (V2-3), also exposed as an MCP tool. Depends on the retrieval evaluation set (Next #2).
+2. Cross-provider model comparison on Amazon Bedrock (V2-2), after the free Gemini vs Gemma comparison (Next #3). Decide the separate Bedrock allowance before building.
+3. Cross-company "Ask the filings": hybrid BM25 + vector retrieval over S&P 500 10-K passages (V2-3), also exposed as an MCP tool. Depends on the retrieval evaluation set (Next #3).
 
 ## Notes carried forward (normaliser and scorers)
 - GOOGL has no D&A tag (total D&A is a company-extension tag missing from companyfacts) and `Depreciation` only from 2021, so even with the ADR-030 fallback B4 stays a data gap for most of its 10-year window.
@@ -91,3 +91,9 @@
 - **Design choice:** Make the unsafe things impossible rather than unlikely. The model *points* at filing sentences and *names* figures with placeholders; code builds the quotes (exact offsets) and writes the numbers. A rules-first Critic then re-verifies everything it can without a model (placeholders, stray digits, quotes against the re-loaded 10-K and its hash, banned language) and uses one narrow model check only for "does this quote support this verdict". Failures go back to their owner once, then show as warnings; the Critic never rewrites. A small human-reviewed gold set (20 labels) turns "the Critic works" into numbers.
 - **Trade-off:** Stiffer prose and a few mechanical limits (sentence boundaries decide the quote; one reviewer, 20 labels; same model as the agents; the Critic never looks at "insufficient evidence", so it cannot find false negatives).
 - **Result:** 0 mechanical citation failures (5 of 20 before sentence pointers); 0 wrong figures or stray numbers in 55 explanations; Critic caught 3/3 gold-set disagreements and 3/3 injected faults but also flagged 6 of 13 correct findings (5 real rationale overreach), and routed retries did not improve agreement (17/20 → 17/20); about 13.6 model calls and $0.012 notional per company, $0 actual on the free tier; 244 offline tests.
+
+## Milestone 2b summary (interview-ready): the engine end to end
+- **Problem:** Parts that each work are not a product: someone has to decide what runs for which company, survive one bad filing among 500, stop cleanly when the free quota runs out, and hand the website one trustworthy file per company.
+- **Design choice:** A rule-based planner and orchestrator over typed hand-offs; every step timed and traced; failures degrade with a named reason instead of aborting; quota and budget errors are the only ones that stop a batch, and the batch resumes from a per-company ledger. One versioned `Result` per company, validated against an exported JSON Schema, with the Finnhub publish gate enforced in code; replay writes byte-identical files.
+- **Trade-off:** A local JSON ledger and committed sample results rather than a database or a CI-built site; a SIC-based sector class kept despite 12 disagreements with GICS (documented, not hidden).
+- **Result:** 500-company S&P 500 snapshot validated; the 5 test companies analysed end to end offline (54 to 71 KB per result, 10.4 model calls and $0.0096 notional each, $0 actual); two unseen companies run live, which found a real bug and four data issues; 34 new tests (287 in all) for the universe, planner, orchestrator, batch, schema and gate.

@@ -1,0 +1,4 @@
+{
+  "_notes": "ADR-053: one analysis per CIK. Where the index lists two share classes of one company the primary symbol is named here: the class-A share that Wikipedia's constituents table lists first. A duplicated CIK without exactly one primary symbol fails validation.",
+  "primary_symbols": ["GOOGL", "FOXA", "NWSA"]
+}

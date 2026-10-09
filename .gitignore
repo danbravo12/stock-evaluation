@@ -10,3 +10,11 @@ __pycache__/
 *.pyc
 .venv/
 .DS_Store
+
+# Analysis results: only the 5 test-ticker results and traces are committed (site sample data, ADR-054)
+results/*
+!results/0000021344.*
+!results/0000019617.*
+!results/0001652044.*
+!results/0001318605.*
+!results/0001326160.*

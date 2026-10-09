@@ -214,5 +214,28 @@ class TestOutput(unittest.TestCase):
         self.assertEqual((again.cik, again.companyfacts_sha256), ("0000021344", "abc"))
 
 
+class TestNormaliseFromStoreLiveOrder(unittest.TestCase):
+    def test_the_store_is_read_only_after_the_first_fetch(self):
+        """Found by the first live run (MET): in live mode the store has nothing until companyfacts() has fetched it."""
+        from types import SimpleNamespace
+        from unittest import mock
+        from engine.normalise import normalise_from_store
+
+        class LiveLike:
+            def __init__(self):
+                self.fetched = False
+                self.store = SimpleNamespace(get=lambda key: SimpleNamespace(fetched_at="2026-01-01T00:00:00+00:00", sha256="x") if self.fetched else None)
+
+            def companyfacts(self, cik):
+                self.fetched = True
+                return {"facts": {}}
+
+            def submissions(self, cik):
+                return {}
+        with mock.patch("engine.normalise.normalise", side_effect=lambda facts, sub, cmap, meta: meta):
+            self.assertEqual(normalise_from_store(LiveLike(), "1")["sha256"], "x")
+
+
 if __name__ == "__main__":
     unittest.main()
+

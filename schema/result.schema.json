@@ -1,0 +1,1532 @@
+{
+ "$defs": {
+  "AgentCost": {
+   "properties": {
+    "actual_cost_usd": {
+     "default": 0.0,
+     "title": "Actual Cost Usd",
+     "type": "number"
+    },
+    "calls": {
+     "default": 0,
+     "title": "Calls",
+     "type": "integer"
+    },
+    "input_tokens": {
+     "default": 0,
+     "title": "Input Tokens",
+     "type": "integer"
+    },
+    "notional_cost_usd": {
+     "default": 0.0,
+     "title": "Notional Cost Usd",
+     "type": "number"
+    },
+    "output_tokens": {
+     "default": 0,
+     "title": "Output Tokens",
+     "type": "integer"
+    }
+   },
+   "title": "AgentCost",
+   "type": "object"
+  },
+  "AnnualSeries": {
+   "properties": {
+    "gaps": {
+     "items": {
+      "$ref": "#/$defs/Gap"
+     },
+     "title": "Gaps",
+     "type": "array"
+    },
+    "measure": {
+     "title": "Measure",
+     "type": "string"
+    },
+    "notes": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Notes",
+     "type": "array"
+    },
+    "unit": {
+     "title": "Unit",
+     "type": "string"
+    },
+    "values": {
+     "items": {
+      "$ref": "#/$defs/AnnualValue"
+     },
+     "title": "Values",
+     "type": "array"
+    }
+   },
+   "required": [
+    "measure",
+    "unit",
+    "values",
+    "gaps"
+   ],
+   "title": "AnnualSeries",
+   "type": "object"
+  },
+  "AnnualValue": {
+   "description": "One figure for one fiscal year, with where it came from.",
+   "properties": {
+    "accession": {
+     "title": "Accession",
+     "type": "string"
+    },
+    "concept": {
+     "title": "Concept",
+     "type": "string"
+    },
+    "derived": {
+     "default": false,
+     "title": "Derived",
+     "type": "boolean"
+    },
+    "filed": {
+     "format": "date",
+     "title": "Filed",
+     "type": "string"
+    },
+    "fiscal_year_end": {
+     "format": "date",
+     "title": "Fiscal Year End",
+     "type": "string"
+    },
+    "form": {
+     "title": "Form",
+     "type": "string"
+    },
+    "original_value": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Original Value"
+    },
+    "period_start": {
+     "anyOf": [
+      {
+       "format": "date",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Period Start"
+    },
+    "restated": {
+     "default": false,
+     "title": "Restated",
+     "type": "boolean"
+    },
+    "source_concepts": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Source Concepts",
+     "type": "array"
+    },
+    "source_url": {
+     "title": "Source Url",
+     "type": "string"
+    },
+    "split_factor": {
+     "default": 1.0,
+     "title": "Split Factor",
+     "type": "number"
+    },
+    "taxonomy": {
+     "title": "Taxonomy",
+     "type": "string"
+    },
+    "unit": {
+     "title": "Unit",
+     "type": "string"
+    },
+    "value": {
+     "title": "Value",
+     "type": "number"
+    },
+    "value_before_split": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Value Before Split"
+    }
+   },
+   "required": [
+    "fiscal_year_end",
+    "value",
+    "unit",
+    "concept",
+    "taxonomy",
+    "accession",
+    "form",
+    "filed",
+    "source_url"
+   ],
+   "title": "AnnualValue",
+   "type": "object"
+  },
+  "CheckResult": {
+   "properties": {
+    "attempt": {
+     "title": "Attempt",
+     "type": "integer"
+    },
+    "check": {
+     "title": "Check",
+     "type": "string"
+    },
+    "claims": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Claims",
+     "type": "array"
+    },
+    "detail": {
+     "default": "",
+     "title": "Detail",
+     "type": "string"
+    },
+    "item": {
+     "title": "Item",
+     "type": "string"
+    },
+    "kind": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Kind"
+    },
+    "owner": {
+     "enum": [
+      "explainer",
+      "qualitative"
+     ],
+     "title": "Owner",
+     "type": "string"
+    },
+    "status": {
+     "enum": [
+      "pass",
+      "fail"
+     ],
+     "title": "Status",
+     "type": "string"
+    }
+   },
+   "required": [
+    "check",
+    "item",
+    "status",
+    "owner",
+    "attempt"
+   ],
+   "title": "CheckResult",
+   "type": "object"
+  },
+  "Citation": {
+   "description": "A cited span of a passage, by sentence pointer: normalised_document_text[char_start:char_end] == quote, exactly (ADR-035, ADR-042).\n\nThe model gives passage_id and sentence numbers; code builds the quote and the offsets, so they cannot mismatch (ADR-046).",
+   "properties": {
+    "accession": {
+     "title": "Accession",
+     "type": "string"
+    },
+    "char_end": {
+     "title": "Char End",
+     "type": "integer"
+    },
+    "char_start": {
+     "title": "Char Start",
+     "type": "integer"
+    },
+    "item": {
+     "title": "Item",
+     "type": "string"
+    },
+    "passage_id": {
+     "title": "Passage Id",
+     "type": "string"
+    },
+    "quote": {
+     "title": "Quote",
+     "type": "string"
+    },
+    "sentences": {
+     "items": {
+      "type": "integer"
+     },
+     "title": "Sentences",
+     "type": "array"
+    }
+   },
+   "required": [
+    "passage_id",
+    "accession",
+    "item",
+    "char_start",
+    "char_end",
+    "quote",
+    "sentences"
+   ],
+   "title": "Citation",
+   "type": "object"
+  },
+  "Cost": {
+   "properties": {
+    "actual_cost_usd": {
+     "default": 0.0,
+     "title": "Actual Cost Usd",
+     "type": "number"
+    },
+    "by_agent": {
+     "additionalProperties": {
+      "$ref": "#/$defs/AgentCost"
+     },
+     "title": "By Agent",
+     "type": "object"
+    },
+    "input_tokens": {
+     "default": 0,
+     "title": "Input Tokens",
+     "type": "integer"
+    },
+    "llm_calls": {
+     "default": 0,
+     "title": "Llm Calls",
+     "type": "integer"
+    },
+    "notional_cost_usd": {
+     "default": 0.0,
+     "title": "Notional Cost Usd",
+     "type": "number"
+    },
+    "output_tokens": {
+     "default": 0,
+     "title": "Output Tokens",
+     "type": "integer"
+    }
+   },
+   "title": "Cost",
+   "type": "object"
+  },
+  "CriticReport": {
+   "description": "The Critic gates, it does not author: it never changes a verdict or a sentence itself (ADR-049).",
+   "properties": {
+    "actual_cost_usd": {
+     "default": 0.0,
+     "title": "Actual Cost Usd",
+     "type": "number"
+    },
+    "checks": {
+     "items": {
+      "$ref": "#/$defs/CheckResult"
+     },
+     "title": "Checks",
+     "type": "array"
+    },
+    "cik": {
+     "title": "Cik",
+     "type": "string"
+    },
+    "final": {
+     "additionalProperties": {
+      "enum": [
+       "passed",
+       "passed_after_retry",
+       "warning"
+      ],
+      "type": "string"
+     },
+     "title": "Final",
+     "type": "object"
+    },
+    "llm_calls": {
+     "default": 0,
+     "title": "Llm Calls",
+     "type": "integer"
+    },
+    "notional_cost_usd": {
+     "default": 0.0,
+     "title": "Notional Cost Usd",
+     "type": "number"
+    },
+    "repairs": {
+     "items": {
+      "$ref": "#/$defs/Repair"
+     },
+     "title": "Repairs",
+     "type": "array"
+    },
+    "ticker": {
+     "title": "Ticker",
+     "type": "string"
+    },
+    "usage": {
+     "$ref": "#/$defs/Usage"
+    }
+   },
+   "required": [
+    "cik",
+    "ticker",
+    "checks",
+    "final"
+   ],
+   "title": "CriticReport",
+   "type": "object"
+  },
+  "DataBundle": {
+   "description": "What the fetch step collected for one company. The normalised facts travel with it in memory but are not serialised.",
+   "properties": {
+    "as_of": {
+     "additionalProperties": {
+      "type": "string"
+     },
+     "title": "As Of",
+     "type": "object"
+    },
+    "cik": {
+     "title": "Cik",
+     "type": "string"
+    },
+    "entity_name": {
+     "title": "Entity Name",
+     "type": "string"
+    },
+    "facts": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/NormalisedFacts"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "filing": {
+     "$ref": "#/$defs/FilingInfo"
+    },
+    "gaps": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Gaps",
+     "type": "array"
+    },
+    "price": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Price"
+    },
+    "sic": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Sic"
+    },
+    "ticker": {
+     "title": "Ticker",
+     "type": "string"
+    }
+   },
+   "required": [
+    "cik",
+    "ticker",
+    "entity_name",
+    "filing"
+   ],
+   "title": "DataBundle",
+   "type": "object"
+  },
+  "Explanation": {
+   "description": "Plain-English line for one numeric criterion. The model writes `raw` with {placeholders}; code renders `text` (ADR-048).",
+   "properties": {
+    "criterion": {
+     "title": "Criterion",
+     "type": "string"
+    },
+    "placeholders_used": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Placeholders Used",
+     "type": "array"
+    },
+    "raw": {
+     "title": "Raw",
+     "type": "string"
+    },
+    "templated": {
+     "default": false,
+     "title": "Templated",
+     "type": "boolean"
+    },
+    "text": {
+     "title": "Text",
+     "type": "string"
+    }
+   },
+   "required": [
+    "criterion",
+    "raw",
+    "text"
+   ],
+   "title": "Explanation",
+   "type": "object"
+  },
+  "FilingInfo": {
+   "properties": {
+    "accession": {
+     "title": "Accession",
+     "type": "string"
+    },
+    "filing_date": {
+     "title": "Filing Date",
+     "type": "string"
+    },
+    "form": {
+     "title": "Form",
+     "type": "string"
+    },
+    "report_date": {
+     "title": "Report Date",
+     "type": "string"
+    },
+    "url": {
+     "title": "Url",
+     "type": "string"
+    }
+   },
+   "required": [
+    "accession",
+    "form",
+    "filing_date",
+    "report_date",
+    "url"
+   ],
+   "title": "FilingInfo",
+   "type": "object"
+  },
+  "Gap": {
+   "properties": {
+    "fiscal_year_end": {
+     "anyOf": [
+      {
+       "format": "date",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Fiscal Year End"
+    },
+    "reason": {
+     "title": "Reason",
+     "type": "string"
+    }
+   },
+   "required": [
+    "fiscal_year_end",
+    "reason"
+   ],
+   "title": "Gap",
+   "type": "object"
+  },
+  "InputRef": {
+   "description": "One input value a criterion used, with its provenance.",
+   "properties": {
+    "accession": {
+     "title": "Accession",
+     "type": "string"
+    },
+    "concept": {
+     "title": "Concept",
+     "type": "string"
+    },
+    "fiscal_year": {
+     "title": "Fiscal Year",
+     "type": "integer"
+    },
+    "fiscal_year_end": {
+     "format": "date",
+     "title": "Fiscal Year End",
+     "type": "string"
+    },
+    "flags": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Flags",
+     "type": "array"
+    },
+    "measure": {
+     "title": "Measure",
+     "type": "string"
+    },
+    "source_url": {
+     "title": "Source Url",
+     "type": "string"
+    },
+    "unit": {
+     "title": "Unit",
+     "type": "string"
+    },
+    "value": {
+     "title": "Value",
+     "type": "number"
+    }
+   },
+   "required": [
+    "measure",
+    "fiscal_year",
+    "fiscal_year_end",
+    "value",
+    "unit",
+    "concept",
+    "accession",
+    "source_url"
+   ],
+   "title": "InputRef",
+   "type": "object"
+  },
+  "NormalisedFacts": {
+   "properties": {
+    "cik": {
+     "title": "Cik",
+     "type": "string"
+    },
+    "companyfacts_fetched_at": {
+     "title": "Companyfacts Fetched At",
+     "type": "string"
+    },
+    "companyfacts_sha256": {
+     "title": "Companyfacts Sha256",
+     "type": "string"
+    },
+    "entity_name": {
+     "title": "Entity Name",
+     "type": "string"
+    },
+    "fiscal_year_end_mmdd": {
+     "title": "Fiscal Year End Mmdd",
+     "type": "string"
+    },
+    "series": {
+     "additionalProperties": {
+      "$ref": "#/$defs/AnnualSeries"
+     },
+     "title": "Series",
+     "type": "object"
+    },
+    "source": {
+     "default": "U.S. Securities and Exchange Commission, EDGAR (public domain)",
+     "title": "Source",
+     "type": "string"
+    }
+   },
+   "required": [
+    "cik",
+    "entity_name",
+    "fiscal_year_end_mmdd",
+    "series",
+    "companyfacts_fetched_at",
+    "companyfacts_sha256"
+   ],
+   "title": "NormalisedFacts",
+   "type": "object"
+  },
+  "NotApplicable": {
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "reason": {
+     "title": "Reason",
+     "type": "string"
+    }
+   },
+   "required": [
+    "id",
+    "reason"
+   ],
+   "title": "NotApplicable",
+   "type": "object"
+  },
+  "QualFinding": {
+   "properties": {
+    "actual_cost_usd": {
+     "default": 0.0,
+     "title": "Actual Cost Usd",
+     "type": "number"
+    },
+    "citations": {
+     "items": {
+      "$ref": "#/$defs/Citation"
+     },
+     "title": "Citations",
+     "type": "array"
+    },
+    "criterion": {
+     "enum": [
+      "understandable_business",
+      "durable_competitive_advantage",
+      "candid_management",
+      "rational_capital_allocation"
+     ],
+     "title": "Criterion",
+     "type": "string"
+    },
+    "llm_calls": {
+     "default": 0,
+     "title": "Llm Calls",
+     "type": "integer"
+    },
+    "notional_cost_usd": {
+     "default": 0.0,
+     "title": "Notional Cost Usd",
+     "type": "number"
+    },
+    "rationale": {
+     "title": "Rationale",
+     "type": "string"
+    },
+    "searches": {
+     "items": {
+      "$ref": "#/$defs/SearchRecord"
+     },
+     "title": "Searches",
+     "type": "array"
+    },
+    "stop_reason": {
+     "enum": [
+      "submitted",
+      "turn_cap",
+      "invalid_citation",
+      "section_missing",
+      "llm_output_error"
+     ],
+     "title": "Stop Reason",
+     "type": "string"
+    },
+    "tool_calls": {
+     "default": 0,
+     "title": "Tool Calls",
+     "type": "integer"
+    },
+    "usage": {
+     "$ref": "#/$defs/Usage"
+    },
+    "verdict": {
+     "enum": [
+      "evidence found",
+      "evidence weak",
+      "insufficient evidence",
+      "not assessed"
+     ],
+     "title": "Verdict",
+     "type": "string"
+    }
+   },
+   "required": [
+    "criterion",
+    "verdict",
+    "rationale",
+    "stop_reason"
+   ],
+   "title": "QualFinding",
+   "type": "object"
+  },
+  "QualItem": {
+   "properties": {
+    "critic_status": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Critic Status"
+    },
+    "finding": {
+     "$ref": "#/$defs/QualFinding"
+    }
+   },
+   "required": [
+    "finding"
+   ],
+   "title": "QualItem",
+   "type": "object"
+  },
+  "Repair": {
+   "description": "One routed repair attempt (ADR-052).",
+   "properties": {
+    "detail": {
+     "default": "",
+     "title": "Detail",
+     "type": "string"
+    },
+    "item": {
+     "title": "Item",
+     "type": "string"
+    },
+    "llm_calls": {
+     "default": 0,
+     "title": "Llm Calls",
+     "type": "integer"
+    },
+    "outcome": {
+     "enum": [
+      "accepted",
+      "rejected_by_recheck",
+      "not_submitted",
+      "no_change",
+      "invalid_rewrite"
+     ],
+     "title": "Outcome",
+     "type": "string"
+    },
+    "path": {
+     "enum": [
+      "explanation_retry",
+      "rationale_rewrite",
+      "constrained_retry"
+     ],
+     "title": "Path",
+     "type": "string"
+    }
+   },
+   "required": [
+    "item",
+    "path",
+    "outcome"
+   ],
+   "title": "Repair",
+   "type": "object"
+  },
+  "ResultWarning": {
+   "properties": {
+    "message": {
+     "title": "Message",
+     "type": "string"
+    },
+    "where": {
+     "title": "Where",
+     "type": "string"
+    }
+   },
+   "required": [
+    "where",
+    "message"
+   ],
+   "title": "ResultWarning",
+   "type": "object"
+  },
+  "RunInfo": {
+   "properties": {
+    "engine_commit": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Engine Commit"
+    },
+    "generated_at": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Generated At"
+    },
+    "mode": {
+     "enum": [
+      "replay",
+      "live",
+      "record"
+     ],
+     "title": "Mode",
+     "type": "string"
+    },
+    "model_profile": {
+     "title": "Model Profile",
+     "type": "string"
+    },
+    "run_id": {
+     "title": "Run Id",
+     "type": "string"
+    },
+    "timings": {
+     "additionalProperties": {
+      "type": "number"
+     },
+     "title": "Timings",
+     "type": "object"
+    }
+   },
+   "required": [
+    "run_id",
+    "model_profile",
+    "mode"
+   ],
+   "title": "RunInfo",
+   "type": "object"
+  },
+  "RunPlan": {
+   "description": "What will run for one ticker and why (rule-based, ADR-018). An out-of-scope ticker gets a plan and nothing else.",
+   "properties": {
+    "applicable": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Applicable",
+     "type": "array"
+    },
+    "cik": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Cik"
+    },
+    "gics_sector": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Gics Sector"
+    },
+    "in_scope": {
+     "title": "In Scope",
+     "type": "boolean"
+    },
+    "name": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Name"
+    },
+    "not_applicable": {
+     "items": {
+      "$ref": "#/$defs/NotApplicable"
+     },
+     "title": "Not Applicable",
+     "type": "array"
+    },
+    "notes": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Notes",
+     "type": "array"
+    },
+    "out_of_scope_reason": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Out Of Scope Reason"
+    },
+    "sector_class": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Sector Class"
+    },
+    "skipped": {
+     "items": {
+      "$ref": "#/$defs/SkippedStep"
+     },
+     "title": "Skipped",
+     "type": "array"
+    },
+    "steps": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Steps",
+     "type": "array"
+    },
+    "ticker": {
+     "title": "Ticker",
+     "type": "string"
+    },
+    "universe_snapshot": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Universe Snapshot"
+    }
+   },
+   "required": [
+    "ticker",
+    "in_scope"
+   ],
+   "title": "RunPlan",
+   "type": "object"
+  },
+  "Scorecard": {
+   "properties": {
+    "as_of_year": {
+     "title": "As Of Year",
+     "type": "integer"
+    },
+    "criteria": {
+     "items": {
+      "$ref": "#/$defs/ScoredCriterion"
+     },
+     "title": "Criteria",
+     "type": "array"
+    },
+    "inputs": {
+     "items": {
+      "$ref": "#/$defs/InputRef"
+     },
+     "title": "Inputs",
+     "type": "array"
+    },
+    "sector_class": {
+     "title": "Sector Class",
+     "type": "string"
+    },
+    "summary": {
+     "$ref": "#/$defs/Summary"
+    }
+   },
+   "required": [
+    "as_of_year",
+    "sector_class",
+    "summary",
+    "criteria",
+    "inputs"
+   ],
+   "title": "Scorecard",
+   "type": "object"
+  },
+  "ScoredCriterion": {
+   "properties": {
+    "by_year": {
+     "additionalProperties": true,
+     "title": "By Year",
+     "type": "object"
+    },
+    "critic_status": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Critic Status"
+    },
+    "explanation": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/Explanation"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "figures": {
+     "additionalProperties": true,
+     "title": "Figures",
+     "type": "object"
+    },
+    "flags": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Flags",
+     "type": "array"
+    },
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "input_keys": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Input Keys",
+     "type": "array"
+    },
+    "label": {
+     "title": "Label",
+     "type": "string"
+    },
+    "name": {
+     "title": "Name",
+     "type": "string"
+    },
+    "reason": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Reason"
+    },
+    "threshold": {
+     "title": "Threshold",
+     "type": "string"
+    },
+    "year_label": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Year Label"
+    },
+    "years": {
+     "items": {
+      "type": "integer"
+     },
+     "title": "Years",
+     "type": "array"
+    }
+   },
+   "required": [
+    "id",
+    "name",
+    "label",
+    "threshold"
+   ],
+   "title": "ScoredCriterion",
+   "type": "object"
+  },
+  "SearchRecord": {
+   "description": "One retrieval the agent ran: the seeded search (decided in code) or one the model asked for.",
+   "properties": {
+    "items": {
+     "anyOf": [
+      {
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Items"
+    },
+    "passage_ids": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Passage Ids",
+     "type": "array"
+    },
+    "queries": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Queries",
+     "type": "array"
+    },
+    "seeded": {
+     "default": false,
+     "title": "Seeded",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "queries"
+   ],
+   "title": "SearchRecord",
+   "type": "object"
+  },
+  "SkippedStep": {
+   "properties": {
+    "reason": {
+     "title": "Reason",
+     "type": "string"
+    },
+    "step": {
+     "title": "Step",
+     "type": "string"
+    }
+   },
+   "required": [
+    "step",
+    "reason"
+   ],
+   "title": "SkippedStep",
+   "type": "object"
+  },
+  "Source": {
+   "properties": {
+    "as_of": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "As Of"
+    },
+    "kind": {
+     "title": "Kind",
+     "type": "string"
+    },
+    "label": {
+     "title": "Label",
+     "type": "string"
+    },
+    "url": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Url"
+    }
+   },
+   "required": [
+    "kind",
+    "label"
+   ],
+   "title": "Source",
+   "type": "object"
+  },
+  "StepRecord": {
+   "properties": {
+    "reason": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Reason"
+    },
+    "seconds": {
+     "default": 0.0,
+     "title": "Seconds",
+     "type": "number"
+    },
+    "status": {
+     "enum": [
+      "done",
+      "failed",
+      "skipped"
+     ],
+     "title": "Status",
+     "type": "string"
+    },
+    "step": {
+     "title": "Step",
+     "type": "string"
+    }
+   },
+   "required": [
+    "step",
+    "status"
+   ],
+   "title": "StepRecord",
+   "type": "object"
+  },
+  "Summary": {
+   "properties": {
+    "buffett_applicable": {
+     "title": "Buffett Applicable",
+     "type": "integer"
+    },
+    "buffett_met": {
+     "title": "Buffett Met",
+     "type": "integer"
+    },
+    "data_gaps": {
+     "title": "Data Gaps",
+     "type": "integer"
+    },
+    "graham_applicable": {
+     "title": "Graham Applicable",
+     "type": "integer"
+    },
+    "graham_met": {
+     "title": "Graham Met",
+     "type": "integer"
+    },
+    "not_applicable": {
+     "title": "Not Applicable",
+     "type": "integer"
+    },
+    "not_meaningful": {
+     "title": "Not Meaningful",
+     "type": "integer"
+    },
+    "percent_met": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Percent Met"
+    }
+   },
+   "required": [
+    "graham_met",
+    "graham_applicable",
+    "buffett_met",
+    "buffett_applicable",
+    "data_gaps",
+    "not_meaningful",
+    "not_applicable",
+    "percent_met"
+   ],
+   "title": "Summary",
+   "type": "object"
+  },
+  "Usage": {
+   "properties": {
+    "completion_tokens": {
+     "default": 0,
+     "title": "Completion Tokens",
+     "type": "integer"
+    },
+    "prompt_tokens": {
+     "default": 0,
+     "title": "Prompt Tokens",
+     "type": "integer"
+    },
+    "reasoning_tokens": {
+     "default": 0,
+     "title": "Reasoning Tokens",
+     "type": "integer"
+    },
+    "total_tokens": {
+     "default": 0,
+     "title": "Total Tokens",
+     "type": "integer"
+    }
+   },
+   "title": "Usage",
+   "type": "object"
+  }
+ },
+ "properties": {
+  "attribution": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Attribution",
+   "type": "array"
+  },
+  "cost": {
+   "$ref": "#/$defs/Cost"
+  },
+  "critic": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/CriticReport"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "data": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/DataBundle"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "disclaimer": {
+   "default": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
+   "title": "Disclaimer",
+   "type": "string"
+  },
+  "plan": {
+   "$ref": "#/$defs/RunPlan"
+  },
+  "qualitative": {
+   "items": {
+    "$ref": "#/$defs/QualItem"
+   },
+   "title": "Qualitative",
+   "type": "array"
+  },
+  "run": {
+   "$ref": "#/$defs/RunInfo"
+  },
+  "schema_version": {
+   "default": "1.0",
+   "title": "Schema Version",
+   "type": "string"
+  },
+  "scorecard": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/Scorecard"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "sources": {
+   "items": {
+    "$ref": "#/$defs/Source"
+   },
+   "title": "Sources",
+   "type": "array"
+  },
+  "steps": {
+   "items": {
+    "$ref": "#/$defs/StepRecord"
+   },
+   "title": "Steps",
+   "type": "array"
+  },
+  "trace_path": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Trace Path"
+  },
+  "warnings": {
+   "items": {
+    "$ref": "#/$defs/ResultWarning"
+   },
+   "title": "Warnings",
+   "type": "array"
+  }
+ },
+ "required": [
+  "run",
+  "plan"
+ ],
+ "title": "Result",
+ "type": "object"
+}

@@ -52,6 +52,9 @@ def avg(values) -> float:
     return sum(values) / len(values)
 
 
+FINANCIAL_CLASSES = ("bank", "insurer")  # ADR-013: G2, B2, B3 and B4 do not apply
+
+
 def sector_class(sic: int | str | None, rules: dict) -> str:
     if sic:
         for rule in rules["rules"]:

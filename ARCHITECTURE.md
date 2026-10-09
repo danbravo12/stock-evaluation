@@ -1,5 +1,7 @@
 # Architecture — Graham & Buffett Equity Research Tool (v1)
 
+> **Built so far (2026-10-10):** everything on the laptop side of §1 except Finnhub and the static site: universe, planner, fetcher, normaliser, scorers, retriever, qualitative agent, Explainer, Critic, orchestrator, reporter, batch ledger and CLI. Next: rankings builder and site, Finnhub.
+
 > Research and analysis tool. **Not financial advice.**
 > Version: v1 draft · 2026-10-08 · Consistent with ADR-001 to ADR-023 (ADR-018 to ADR-023 introduced with this view, see §7).
 
@@ -163,8 +165,8 @@ Each arrow carries a typed object (Pydantic models). These are what the trace re
 
 | Component | Type | Responsibility | Failure behaviour |
 |---|---|---|---|
-| Universe loader | Python | Load dated constituents CSV, validate against SEC ticker file, dedupe share classes, normalise tickers (ADR-014) | Refuse to run on validation failure |
-| Orchestrator + Planner | Python (rules) | Scope check; build `RunPlan` from sector rules (ADR-013) and data availability; drive steps; route critic failures | Skips steps it can't run and records why |
+| Universe loader | Python (`engine/universe.py`, built: 503-row snapshot, 500 CIKs, ADR-053) | Load dated constituents CSV, validate against SEC ticker file, dedupe share classes, normalise tickers (ADR-014) | Refuse to run on validation failure |
+| Orchestrator + Planner | Python (rules; `engine/planner.py`, `engine/orchestrator.py`, built) | Scope check; build `RunPlan` from sector rules (ADR-013) and data availability; drive steps; route critic failures | Skips steps it can't run and records why |
 | Data fetcher | Tools | `edgar_facts`, `edgar_filing`, `finnhub_quote`, `finnhub_recs`, all through the cache. SEC fair-access rules: declared User-Agent, ≤ 10 req/s | Missing field → `gaps[]`; never guesses |
 | HTTP cache / fixtures | Storage | Content-addressed cache of raw responses; fixtures are a frozen copy for the 5 test tickers (ADR-024) | Cache hit = no network |
 | Fact normaliser | Python | Map XBRL concepts to one annual series per measure (e.g. several revenue tags → `revenue`), fiscal-year alignment | Unmapped concept → data gap with the tags tried |
@@ -173,11 +175,11 @@ Each arrow carries a typed object (Pydantic models). These are what the trace re
 | Qualitative agent | LLM + tools (`engine/agents/qualitative.py`) | Four independent loops (one per Buffett qualitative criterion): seeded search in code, then `search` / `get_passage` / `submit_finding`, max 4 turns; passages shown as numbered sentences and cited by pointer, so quote and offsets are built by code and checked against the passages retrieved in the loop (ADR-041 to ADR-047) | No valid citation → "not assessed" with a stop reason (`turn_cap`, `invalid_citation`, `section_missing`, `llm_output_error`); quota and budget errors propagate (ADR-044) |
 | Explainer | LLM (`engine/agents/explainer.py`) | One line per pass/fail/partial/not-meaningful criterion, one call per company; writes `{placeholders}`, code renders the figures from the ScoreSet with `config/figure_formats.json`; n/a and data-gap results get a templated line (ADR-048) | Critic rule R1 flags a bad placeholder, a stray numeral or a text that is not the rendering; one retry, then a warning |
 | Critic | Rules first, then LLM (`engine/agents/critic.py`, `review.py`) | R1 explanations structurally valid and reproducible from the ScoreSet; R2 citations re-verified against the re-loaded 10-K (sha256, offsets, passage and section bounds); R3 banned language (`config/banned_phrases.json`); L1 one model call per company: does each found/weak quote support its verdict and does the rationale add nothing (ADR-019, ADR-049) | Failed items only go to their owner once and are re-checked; still failing: kept with a visible warning. The Critic never rewrites a verdict or a sentence. Does not review "insufficient evidence" / "not assessed" |
-| Reporter | Template | Assemble `Result` JSON with scorecard, sources, dates, trace, cost, disclaimer | Schema validation before write |
+| Reporter | Template (`engine/report.py`, built: `Result` schema 1.0, Finnhub publish gate, `schema/result.schema.json`) | Assemble `Result` JSON with scorecard, sources, dates, trace, cost, disclaimer | Schema validation before write |
 | Rankings builder | Python | Build `rankings.json`: criteria ranking (% applicable met) and analyst ranking, side by side, no linking (ADR-004) | Companies with gaps shown with gap count |
 | LLM client | Adapter | OpenAI-compatible endpoint + model name + key env var in one config (ADR-015) | Backoff on rate limit; fallback model per config |
 | Cost meter + budget guard | Python | Count tokens, calls and $ per company, per day and in total; check projected cost before every call against the free-tier daily quota and the paid cap (ADR-023) | Stops the batch cleanly; resumes from the ledger |
-| Run ledger + `status` | Python | One row per company (status, model, calls, tokens, actual and notional $); writes `PROGRESS.md` and the site coverage line | — |
+| Run ledger + `status` | Python (`engine/batch.py`, `engine/cli.py`, built: `data/ledger/companies.json`, `PROGRESS.md`) | One row per company (status, model, calls, tokens, actual and notional $); writes `PROGRESS.md` and the site coverage line | — |
 | Trace recorder | Python | Record every step's input/output contract, timings and critic findings | — |
 | Evaluation harness | Python | Same engine against fixtures: expected checks, failure cases, ±20% threshold sensitivity (ADR-011), model comparison (ADR-015) | Report what the tool gets wrong |
 | Static site | HTML/JS | Discovery page, company page, trace replay, "data as of" banner, disclaimer | Shows whatever the JSON says, including warnings |
@@ -194,7 +196,7 @@ Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). The qualitative 
 | Explainer | 1 (measured) | All numeric criteria in one call; 0 retries needed on the 5 test companies |
 | Critic (LLM part) | 1.6 (measured: 1 check, which also reviews the explanations, plus a re-check when something is sent back) | Rule checks cost nothing |
 | Repairs (rationale rewrites 1 call, constrained retries up to 3 turns) | 1.2 (measured: 5 repairs over 5 companies) | Only failed items, once (ADR-052) |
-| **Total** | **~10.4 (measured)** | About 25k input + 2.3k output tokens, notional $0.010 per company (`docs/critic_report.md`) |
+| **Total** | **~10.4 (measured)** | About 25k input + 2.3k output tokens, notional $0.0096 per company; measured end to end by the orchestrator on the 5 test tickers (`PROGRESS.md`); live runs on MET and PLD: 14 and 9 calls |
 
 | Mode | Cost per company | Full S&P 500 | Time |
 |---|---|---|---|

@@ -1,0 +1,7 @@
+{
+  "url": "https://en.wikipedia.org/w/api.php?action=parse&page=List_of_S%26P_500_companies&prop=text&format=json&formatversion=2",
+  "fetched_at": "2026-10-09T14:12:20+00:00",
+  "sha256": "343497d03f7077eb5b9230523b9411628ce4bf9e5d17fad68e3d5efd125ae1b1",
+  "bytes": 300820,
+  "content_type": "application/json"
+}

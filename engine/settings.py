@@ -37,6 +37,8 @@ class Settings:
     llm_profile: str = "gemini-3.1-flash-lite"
     paid_mode_enabled: bool = False
     ledger_path: Path = REPO_ROOT / "data" / "ledger" / "usage.json"
+    results_dir: Path = REPO_ROOT / "results"
+    finnhub_public_ok: bool = False  # ADR-021: Finnhub-sourced fields may appear in published results only when true
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -48,4 +50,6 @@ class Settings:
             llm_profile=os.environ.get("LLM_PROFILE") or "gemini-3.1-flash-lite",
             paid_mode_enabled=os.environ.get("PAID_MODE_ENABLED", "").strip().lower() == "true",
             ledger_path=Path(os.environ.get("LEDGER_PATH", REPO_ROOT / "data" / "ledger" / "usage.json")),
+            results_dir=Path(os.environ.get("RESULTS_DIR", REPO_ROOT / "results")),
+            finnhub_public_ok=os.environ.get("FINNHUB_PUBLIC_OK", "").strip().lower() == "true",
         )
