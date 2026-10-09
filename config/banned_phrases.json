@@ -1,0 +1,25 @@
+{
+  "_notes": "Advice and valuation language the Critic's rule R3 forbids in explanations and rationales (ADR-003, ADR-019, ADR-049). Case-insensitive regex with word boundaries, one reason each. `allow` patterns are blanked out before matching, so ordinary corporate vocabulary ('share buyback') is not flagged. Bare buy/sell/hold are only banned as advice (modal, rating or object forms), because filings legitimately say customers buy and the company sells.",
+  "phrases": [
+    {"id": "advice_modal", "pattern": "\\b(?:should|would|could|might|worth|rated|strong|recommend(?:ed)?(?:\\s+to)?)\\s+(?:buy|buying|sell|selling|hold|holding)\\b", "reason": "buy/sell/hold as a recommendation"},
+    {"id": "advice_rating", "pattern": "\\b(?:buy|sell|hold)\\s+(?:rating|recommendation|signal)\\b", "reason": "a buy/sell/hold rating"},
+    {"id": "advice_object", "pattern": "\\b(?:buy|sell|hold)\\s+(?:this|the|its|these)\\s+(?:stock|shares?|company)\\b", "reason": "an instruction to trade a stock"},
+    {"id": "advice_start", "pattern": "^\\s*(?:buy|sell|hold)\\b", "reason": "a sentence that starts with a trade instruction"},
+    {"id": "undervalued", "pattern": "\\bundervalued\\b", "reason": "valuation opinion"},
+    {"id": "overvalued", "pattern": "\\bovervalued\\b", "reason": "valuation opinion"},
+    {"id": "attractive_valuation", "pattern": "\\battractive(?:ly)?\\s+(?:valuation|valued|priced|price)\\b", "reason": "valuation opinion"},
+    {"id": "bargain", "pattern": "\\bbargains?\\b", "reason": "valuation opinion"},
+    {"id": "recommend", "pattern": "\\brecommend(?:s|ed|ing|ation|ations)?\\b", "reason": "a recommendation"},
+    {"id": "price_target", "pattern": "\\bprice\\s+targets?\\b", "reason": "a price target"},
+    {"id": "investors_should", "pattern": "\\binvestors?\\s+(?:should|must|ought)\\b", "reason": "advice to investors"},
+    {"id": "opportunity_to_invest", "pattern": "\\bopportunit(?:y|ies)\\s+to\\s+invest\\b", "reason": "a call to invest"},
+    {"id": "outperform", "pattern": "\\b(?:out|under)perform(?:s|ed|ing|er)?\\b", "reason": "a rating-style forecast"},
+    {"id": "upside", "pattern": "\\bupside\\b", "reason": "price-upside language"}
+  ],
+  "allow": [
+    "\\b(?:share|stock)\\s+(?:buybacks?|repurchases?)\\b",
+    "\\bcollective\\s+bargaining\\b",
+    "\\bholding\\s+compan(?:y|ies)\\b",
+    "\\bon\\s+hold\\b"
+  ]
+}

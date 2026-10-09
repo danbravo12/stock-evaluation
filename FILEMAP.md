@@ -1,7 +1,7 @@
 # File Map
 
 What every file in this repo is for, and where planned files will go.
-Updated 2026-10-09 · after the qualitative agent v1.1 commit. **Rule:** update this file in the same commit as any file you add, move or delete.
+Updated 2026-10-09 · after the Explainer and Critic commit. **Rule:** update this file in the same commit as any file you add, move or delete.
 
 Status: **Built** = exists and tested · **Planned** = designed in `ARCHITECTURE.md`, not yet created.
 
@@ -32,7 +32,7 @@ StockEvaluation/
 |---|---|---|
 | `README.md` | Front door for a stranger: what the tool is, the not-financial-advice disclaimer, how to run tests and record fixtures. Will grow into the full README for v1. | Built (stub) |
 | `STATUS.md` | Where the project is: done, waiting on, next steps, notes for the next build step, milestone summaries. | Built |
-| `DECISIONS.md` | ADR log: every key decision with context, decision and trade-off (ADR-001 to ADR-047). | Built |
+| `DECISIONS.md` | ADR log: every key decision with context, decision and trade-off (ADR-001 to ADR-051). | Built |
 | `PROCESS.md` | The research workflow being automated: inputs, steps, decision points, criteria tables (G1–G7, B1–B4, four qualitative Buffett criteria), failure handling. | Built |
 | `ARCHITECTURE.md` | System view, agent hand-off sequence, component catalogue, run economics. | Built |
 | `FILEMAP.md` | This file. | Built |
@@ -48,6 +48,8 @@ StockEvaluation/
 | `config/concept_map.json` | Per measure: unit, period type, ordered XBRL concepts (with explicit derived sums) and a short reason. Read by the normaliser; reviewable without reading code (ADR-028). | Built |
 | `config/sector_rules.json` | SIC code ranges → bank / insurer / utility / other, with a reason per rule; will be confirmed by GICS later (ADR-033). | Built |
 | `config/models.json` | Model profiles (base URL, model id, key variable, prices, free-tier limits, source note) and the budget caps (ADR-039, ADR-040). | Built |
+| `config/figure_formats.json` | Figure key → display format for the Explainer's placeholders (usd_billions, usd_millions, ratio_2dp, percent_1dp, count, per_share_usd, years); a test checks every key the scorers produce (ADR-048). | Built |
+| `config/banned_phrases.json` | Advice and valuation phrases the Critic's R3 forbids (regex, reason each) and an allowlist for ordinary vocabulary such as "share buyback" (ADR-049). | Built |
 | `config/search_terms.json` | Per qualitative Buffett criterion: items to search first, starting queries and why (ADR-037), plus the rubric: `question`, `found_means`, `weak_means`, `insufficient_means` (ADR-043). | Built |
 | `config/test_tickers.json` | The five test companies (KO, JPM, GOOGL, TSLA, DUK). Used by the record script now and the evaluation harness later. Rationale per ticker: ADR-024. | Built |
 
@@ -75,6 +77,9 @@ The engine is a library, so the batch command, the tests and the future live app
 | `engine/llm/cost.py` | Notional and actual cost from usage and profile prices; cost projection before a call. | Built |
 | `engine/trace.py` | `TraceRecorder`: one JSONL event per LLM call, tool call or note (ADR-020). | Built |
 | `engine/sentences.py` | Deterministic sentence segmentation with exact document offsets (newlines, bullets, sentence ends, abbreviations, long-sentence cuts); stored on every `Passage` (ADR-046). | Built |
+| `engine/agents/explainer.py` | The Explainer: `explain(scoreset, llm, trace, only=, feedback=)` makes one call per company for pass/fail/partial/not-meaningful criteria, with `{placeholders}` rendered by code from `figures` (`render`, `format_value`); templated lines for n/a and data gaps (ADR-048). | Built |
+| `engine/agents/critic.py` | The Critic's checks: pure functions `check_explanation` (R1), `check_citations` (R2, independent of the agent's checker), `banned_hits` (R3), `llm_check` (L1), and the `Critic` class that runs them against the re-loaded 10-K (ADR-049). | Built |
+| `engine/agents/review.py` | `explain_and_verify(scoreset, qual, ...)`: Explainer, Critic, one routed retry per failed item to its owner, re-check, warnings; returns `ReviewResult` (explanations, qualitative findings, `CriticReport`). No orchestrator yet. | Built |
 | `engine/agents/__init__.py` | Package for the LLM agents. | Built |
 | `engine/agents/qualitative.py` | The Buffett qualitative agent: `assess_qualitative(cik, ticker, retriever, llm, trace)` runs one tool loop per criterion (seeded search, `search` / `get_passage` / `submit_finding`, 4-turn cap). Passages are shown as numbered sentences and cited by pointer; code builds the quote and exact offsets; "not assessed" is assigned from the stop reason (ADR-041 to ADR-047). | Built |
 | `engine/fetch/__init__.py` | Marks `fetch` as a package. | Built |
@@ -89,6 +94,7 @@ The engine is a library, so the batch command, the tests and the future live app
 | `scripts/llm_smoke.py` | Smoke test of the LLM client: model id check, JSON mode, tool calling with a round trip. `record` (live, ~4 free requests) or `replay` (offline). | Built |
 | `scripts/sections_report.py` | Extracts sections from the 5 fixtures and writes `docs/sections_report.md` (status, opening text, top passages per criterion). | Built |
 | `scripts/qualitative_report.py` | Runs the qualitative agent on the 5 test tickers and writes `docs/qualitative_report.md`. `record` (live, free tier only, refuses in paid mode) or `replay` (offline, identical report); optional ticker arguments. Also writes the trace and the list of fixture hashes used (git-ignored, under `data/cache/trace/`). | Built |
+| `scripts/review_report.py` | Runs Explainer + Critic on the 5 tickers against the recorded qualitative run, injects 3 faults into the model check, and writes `docs/critic_report.md` (explanations, every check, retries, gold-set table, Critic scorecard, cost). `record` (free tier only) or `replay` (offline, identical). | Built |
 | `scripts/qualitative_variability.py` | Runs the 5 tickers N extra times live with the response store bypassed (`use_store=False`), compares with the recorded run and writes `docs/qualitative_variability.md`. Free tier only; stops if today's ledger count would pass 400. | Built |
 | `scripts/score_report.py` | Scores the 5 fixtures (replay) and writes `docs/scorecard_report.md`. | Built |
 | `scripts/coverage_report.py` | Runs the normaliser on the 5 fixtures (replay) and writes `docs/coverage_report.md`. | Built |
@@ -100,6 +106,7 @@ The engine is a library, so the batch command, the tests and the future live app
 | `docs/scorecard_report.md` | Summary table and, per company, every criterion's result, figures, threshold, years, flags and source filings. | Built |
 | `docs/sections_report.md` | Per company and item: status, method, length, opening text; then the top 3 passages per qualitative criterion. Preview of what the agent sees. | Built |
 | `docs/qualitative_report.md` | Per company and criterion: verdict, rationale, quoted text with accession, item, passage and offsets, searches made, stop reason, calls, tokens and notional cost; summary table and calls and tokens per company. Verdicts are not frozen: they are reviewed by hand. | Built |
+| `docs/critic_report.md` | Per company: rendered explanations, every Critic check with attempt and detail, retries and final statuses; then the gold-set table, the Critic scorecard (caught / false alarms / agreement after retry), fault injection and cost per company. | Built |
 | `docs/qualitative_variability.md` | Per company and criterion: verdicts of the recorded run and two live repeat runs, agreement, whether the cited passage changed; overall "identical in X of 20"; calls and tokens per run. Live result, not replayable. | Built |
 | `docs/evaluation_notes.md` | Known weaknesses of the tool, one short item each (what, why, impact, planned handling). Start of the evaluation write-up. | Built |
 | `docs/coverage_report.md` | Measure × company matrix of years covered, concepts used, restatements, gaps and notes. Evaluation evidence for the README. | Built |
@@ -113,6 +120,10 @@ The engine is a library, so the batch command, the tests and the future live app
 | `tests/test_score.py` | Synthetic-series tests per criterion: edges, labels, sector exceptions, never-assume-zero, G5 negative base, B4 missing years, G6/G7 with a price. | Built |
 | `tests/test_splits.py` | Split adjustment on synthetic cases and the GOOGL, TSLA, KO and DUK fixtures. | Built |
 | `tests/test_llm.py` | 34 offline tests with a fake transport and injected clock: request hashing, record/replay, cost maths, pacing, Pacific-midnight reset, quota and caps, 429/400/5xx handling, JSON repair, tool calls, trace, key-secrecy scans. | Built |
+| `tests/stubs.py` | `StubLLM`: a scripted model client for Explainer and Critic tests. | Built |
+| `tests/test_explainer.py` | Formats, placeholder rendering, every fixture figure key has a format, None figures withheld, templated lines, one call per company, retry with feedback. | Built |
+| `tests/test_critic.py` | Rule faults (wrong placeholder, stray number, altered quote, span outside the passage, wrong sha, banned phrase, "share buyback" not flagged), the model check's inputs, routing to owners, one retry then warning, never alters a verdict, cost totals, trace order. | Built |
+| `tests/test_critic_fixtures.py` | Replay of the recorded review on the 5 companies: structure, R2 on real findings, 3 injected faults flagged, gold-set disagreements caught, no network. | Built |
 | `tests/test_expected_qualitative.py` | Guard: replayed agent verdicts equal the recorded ones; agreement 17/20 with every disagreement over-generous. | Built |
 | `tests/test_sentences.py` | Segmentation rules on synthetic text (bullets, newlines, abbreviations, decimals, long-sentence cuts, nothing lost) and exact round trip of every passage of the 5 recorded filings. | Built |
 | `tests/test_qualitative.py` | 29 offline tests of the agent with scripted model replies through the real client (fake transport) on a synthetic 10-K: seeded search, search / get_passage / submit, unchanged assistant messages and tool-call ids, turn cap and last-turn tools, pointer citations (exact quote from sentence numbers, out-of-range, last before first, over 3 sentences, over 120 words, never-retrieved passage, one correction then `invalid_citation`, one extra turn), verdict per stop reason, malformed arguments, section_missing, quota and budget propagation, totals and trace order. | Built |
@@ -127,7 +138,7 @@ The engine is a library, so the batch command, the tests and the future live app
 
 ## Recorded model responses (`fixtures/llm/`)
 
-Committed, so LLM-using tests replay offline. The three smoke-test calls (JSON mode, tool request, answer after the tool result) and the 35 requests the qualitative report replays (5 companies, 4 criteria), gzip + `.meta.json` like the SEC fixtures; each file holds the request, the provider's response and the original latency, never the API key.
+Committed, so LLM-using tests replay offline. The three smoke-test calls (JSON mode, tool request, answer after the tool result), the 35 requests the qualitative report replays (5 companies, 4 criteria) and the 36 the review report adds (Explainer, Critic, retries, 3 fault cases), gzip + `.meta.json` like the SEC fixtures; each file holds the request, the provider's response and the original latency, never the API key.
 
 ## Evaluation (`eval/`)
 

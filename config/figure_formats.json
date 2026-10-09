@@ -1,0 +1,26 @@
+{
+  "_notes": "How the Explainer's {placeholders} are rendered (ADR-048). The model never writes a figure: it writes {key} and code renders the value from the criterion's `figures` with the format named here. Every figure key the scorers can produce must be listed (a test enumerates them over the 5 fixtures). Formats: usd_billions, usd_millions, ratio_2dp, percent_1dp, count, per_share_usd, years.",
+  "formats": {
+    "revenue": "usd_billions",
+    "current_ratio": "ratio_2dp",
+    "debt_to_equity": "ratio_2dp",
+    "long_term_debt": "usd_billions",
+    "net_current_assets": "usd_billions",
+    "stockholders_equity": "usd_billions",
+    "years_on_record": "count",
+    "loss_years": "years",
+    "unpaid_years": "years",
+    "avg_eps_start": "per_share_usd",
+    "avg_eps_end": "per_share_usd",
+    "ratio": "ratio_2dp",
+    "years_at_or_above_15pct": "count",
+    "avg_net_income_3y": "usd_billions",
+    "max_debt": "usd_billions",
+    "avg_margin_10y": "percent_1dp",
+    "avg_margin_3y": "percent_1dp",
+    "avg_first_3y": "usd_billions",
+    "avg_last_3y": "usd_billions",
+    "years_positive": "count",
+    "years_with_depreciation_only": "years"
+  }
+}

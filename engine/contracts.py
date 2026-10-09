@@ -271,3 +271,55 @@ class QualFindings(BaseModel):
         if [f.criterion for f in self.findings] != list(QUAL_CRITERIA):
             raise ValueError(f"findings must be exactly {list(QUAL_CRITERIA)} in that order")
         return self
+
+
+# ---------- Explainer and Critic (ADR-019, ADR-048 to ADR-051) ----------
+class Explanation(BaseModel):
+    """Plain-English line for one numeric criterion. The model writes `raw` with {placeholders}; code renders `text` (ADR-048)."""
+
+    criterion: str  # G1..G7, B1..B4
+    raw: str
+    text: str
+    placeholders_used: list[str] = Field(default_factory=list)
+    templated: bool = False  # not_applicable / data_gap: built from the result's reason, no model
+
+
+class Explanations(BaseModel):
+    cik: str
+    ticker: str
+    items: list[Explanation]  # ScoreSet order
+    llm_calls: int = 0
+    usage: Usage = Field(default_factory=Usage)
+    actual_cost_usd: float = 0.0
+    notional_cost_usd: float = 0.0
+
+
+CheckOwner = Literal["explainer", "qualitative"]
+
+
+class CheckResult(BaseModel):
+    check: str  # R1 explanations, R2 citations, R3 banned language, L1 does the quote support the verdict
+    item: str  # criterion id (G1..B4) or qualitative criterion name
+    status: Literal["pass", "fail"]
+    detail: str = ""
+    owner: CheckOwner
+    attempt: int  # 0 = first check, 1 = re-check after the retry
+
+
+class CriticReport(BaseModel):
+    """The Critic gates, it does not author: it never changes a verdict or a sentence itself (ADR-049)."""
+
+    cik: str
+    ticker: str
+    checks: list[CheckResult]
+    final: dict[str, Literal["passed", "passed_after_retry", "warning"]]  # per item
+    llm_calls: int = 0
+    usage: Usage = Field(default_factory=Usage)
+    actual_cost_usd: float = 0.0
+    notional_cost_usd: float = 0.0
+
+
+class ReviewResult(BaseModel):
+    explanations: Explanations
+    qual: QualFindings
+    critic: CriticReport

@@ -34,6 +34,11 @@ Usage and spend are counted in `data/ledger/usage.json` (daily quota resets at m
     .venv/bin/python scripts/qualitative_report.py replay   # offline, writes docs/qualitative_report.md (research output, not financial advice)
     .venv/bin/python scripts/qualitative_report.py record   # free tier only: re-records the ~35 requests (needed after any prompt or rubric change)
 
+## Explainer + Critic report and the qualitative gold set
+
+    .venv/bin/python scripts/review_report.py replay    # offline, writes docs/critic_report.md (research output, not financial advice)
+    .venv/bin/python -m eval.qualitative_agreement      # agent vs the human-reviewed gold set (17/20)
+
 ## Scorecard report (offline, from the fixtures)
 
     .venv/bin/python scripts/score_report.py        # writes docs/scorecard_report.md

@@ -171,8 +171,8 @@ Each arrow carries a typed object (Pydantic models). These are what the trace re
 | Scorers | Python, pure functions | G1–G7, B1–B4 exactly as `PROCESS.md` §5 | Labels: pass · fail · partial · n/a · not meaningful · data gap |
 | Filing retriever | Python | Extract 10-K Items 1, 1A, 7; chunk; keyword/BM25 search (no embeddings, $0, ADR-022) | Section not found → returned as "not found", agent records it |
 | Qualitative agent | LLM + tools (`engine/agents/qualitative.py`) | Four independent loops (one per Buffett qualitative criterion): seeded search in code, then `search` / `get_passage` / `submit_finding`, max 4 turns; passages shown as numbered sentences and cited by pointer, so quote and offsets are built by code and checked against the passages retrieved in the loop (ADR-041 to ADR-047) | No valid citation → "not assessed" with a stop reason (`turn_cap`, `invalid_citation`, `section_missing`, `llm_output_error`); quota and budget errors propagate (ADR-044) |
-| Explainer | LLM | One line per numeric criterion; restates script figures only | Critic catches any mismatch |
-| Critic | Rules first, then LLM | (1) figures match `ScoreSet`, (2) quotes exist verbatim in the cached filing, (3) no advice language, (4) quote supports verdict (ADR-010) | One retry per failed item, then visible warning |
+| Explainer | LLM (`engine/agents/explainer.py`) | One line per pass/fail/partial/not-meaningful criterion, one call per company; writes `{placeholders}`, code renders the figures from the ScoreSet with `config/figure_formats.json`; n/a and data-gap results get a templated line (ADR-048) | Critic rule R1 flags a bad placeholder, a stray numeral or a text that is not the rendering; one retry, then a warning |
+| Critic | Rules first, then LLM (`engine/agents/critic.py`, `review.py`) | R1 explanations structurally valid and reproducible from the ScoreSet; R2 citations re-verified against the re-loaded 10-K (sha256, offsets, passage and section bounds); R3 banned language (`config/banned_phrases.json`); L1 one model call per company: does each found/weak quote support its verdict and does the rationale add nothing (ADR-019, ADR-049) | Failed items only go to their owner once and are re-checked; still failing: kept with a visible warning. The Critic never rewrites a verdict or a sentence. Does not review "insufficient evidence" / "not assessed" |
 | Reporter | Template | Assemble `Result` JSON with scorecard, sources, dates, trace, cost, disclaimer | Schema validation before write |
 | Rankings builder | Python | Build `rankings.json`: criteria ranking (% applicable met) and analyst ranking, side by side, no linking (ADR-004) | Companies with gaps shown with gap count |
 | LLM client | Adapter | OpenAI-compatible endpoint + model name + key env var in one config (ADR-015) | Backoff on rate limit; fallback model per config |
@@ -186,21 +186,21 @@ Each arrow carries a typed object (Pydantic models). These are what the trace re
 
 ## 4. Run economics
 
-Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). The qualitative agent is measured on the 5 test tickers (2026-10-09); the Explainer and Critic are still estimates.
+Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). The qualitative agent is measured on the 5 test tickers (2026-10-09); the Explainer and Critic are measured on the same five (2026-10-10).
 
 | Step | LLM calls per company | Notes |
 |---|---|---|
 | Qualitative agent | 5–9 (mean 7.0, measured) | One loop per criterion, seeded first search; tool calls to the retriever are local and free. Measured on the 5 test tickers: mean 18.8k input + 0.94k output tokens, notional $0.0061 per company (`docs/qualitative_report.md`) |
-| Explainer | 1 | All numeric criteria in one call |
-| Critic (LLM part) | 1 | Rule checks cost nothing |
-| Retries | 0–2 | Only failed items |
-| **Total** | **~7–13** | Qualitative part measured (~19k tokens); Explainer and Critic still estimates, ~40k input / ~5k output in all |
+| Explainer | 1 (measured) | All numeric criteria in one call; 0 retries needed on the 5 test companies |
+| Critic (LLM part) | 1.8 (measured: 1 check plus a re-check when something is sent back) | Rule checks cost nothing |
+| Retries (qualitative loops sent back) | 3.8 (measured: 9 items over 5 companies, about 2 calls each) | Only failed items, once |
+| **Total** | **~13.6 (measured)** | About 34k input + 2.4k output tokens, notional $0.012 per company (`docs/critic_report.md`) |
 
 | Mode | Cost per company | Full S&P 500 | Time |
 |---|---|---|---|
 | Free tier | $0.00 | $0.00 | ~1–2 weeks of daily quota (limit to confirm in AI Studio) |
-| Paid, standard ($0.25 / $1.50 per M tokens) | ~$0.018 | ~$9 (over cap) | Hours |
-| Paid, Batch API (half price) | ~$0.009 | ~$4.40 | Deferred: not v1 (ADR-023 §7) |
+| Paid, standard ($0.25 / $1.50 per M tokens) | ~$0.012 (measured) | ~$6 (over the $4 cap) | Hours |
+| Paid, Batch API (half price) | ~$0.006 | ~$3 | Deferred: not v1 (ADR-023 §7) |
 | **v1 plan: hybrid** | free first, paid up to $4 | ≤ $4 paid | Days, not weeks |
 
 - **Budget:** engine cap $4.00, Google project spend cap $5 (ADR-023). Paid mode is locked until the evaluation harness passes.
@@ -208,13 +208,13 @@ Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). The qualitative 
 
 ---|---|---|
 | Qualitative agent | 5–9 (mean 7.0, measured) | One loop per criterion, seeded first search; tool calls to the retriever are local and free. Measured on the 5 test tickers: mean 18.8k input + 0.94k output tokens, notional $0.0061 per company (`docs/qualitative_report.md`) |
-| Explainer | 1 | All numeric criteria in one call |
-| Critic (LLM part) | 1 | Rule checks cost nothing |
-| Retries | 0–2 | Only failed items |
-| **Total** | **~7–13** | |
+| Explainer | 1 (measured) | All numeric criteria in one call; 0 retries needed on the 5 test companies |
+| Critic (LLM part) | 1.8 (measured: 1 check plus a re-check when something is sent back) | Rule checks cost nothing |
+| Retries (qualitative loops sent back) | 3.8 (measured: 9 items over 5 companies, about 2 calls each) | Only failed items, once |
+| **Total** | **~13.6 (measured)** | |
 
 - **Actual cost:** $0.00 per analysis on the Gemini Flash-Lite free tier.
-- **Throughput:** at ~500 requests/day (reported, not published), roughly 35–60 companies per day (about 9 requests each with a measured 7 for the qualitative agent), so the full S&P 500 in about 1–2 weeks. The numeric scorecard for all ~500 companies needs no LLM and runs in minutes.
+- **Throughput:** at ~500 requests/day (reported, not published), roughly 35 companies per day (about 13.6 requests each, measured: 7.0 qualitative, 1.0 Explainer, 1.8 Critic, 3.8 qualitative retries), so the full S&P 500 in about 1–2 weeks. The numeric scorecard for all ~500 companies needs no LLM and runs in minutes.
 - **Demo shows both:** "actual $0.00 (free tier) · notional $0.00x at paid rates", where the notional figure is token counts × the published paid price, recorded at run time.
 
 ---
@@ -241,7 +241,7 @@ Price charts and Alpaca (ADR-008) · non-S&P 500 tickers (ADR-002) · live mode 
 Accepted 2026-10-08, logged in `DECISIONS.md`:
 
 - **ADR-018** Planner is rule-based; the agentic loop lives in the qualitative agent.
-- **ADR-019** Critic runs rule checks first, LLM only for "does the quote support the verdict".
+- **ADR-019** Critic runs rule checks first, LLM only for "does the quote support the verdict" (amended by ADR-048 to ADR-051: placeholders, routing, gold set, same model).
 - **ADR-020** Typed hand-off contracts and a versioned results schema.
 - **ADR-021** Finnhub publish gate enforced in the publish step.
 - **ADR-022** Keyword search over the three 10-K sections; no embeddings or vector store in v1.

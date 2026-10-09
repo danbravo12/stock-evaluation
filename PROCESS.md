@@ -66,8 +66,8 @@ flowchart TD
 | Graham criteria | Python script | Deterministic | Pass / fail / data gap per criterion |
 | Buffett quantitative | Python script | Deterministic | Pass / fail / data gap per criterion |
 | Buffett qualitative | Buffett agent | LLM + filing retrieval | Judgement must cite 10-K sentences by pointer; otherwise "insufficient evidence" (not shown) or "not assessed" (could not judge) |
-| Explain | Explainer | LLM | Describes what the figure means; no investment opinion |
-| Verify | Critic | Rule checks first, then LLM (ADR-019) | Figures match script output? Citations present? Advice-style wording? |
+| Explain | Explainer | LLM | Describes what the figure means with placeholders that code fills in (ADR-048); no investment opinion |
+| Verify | Critic | Rule checks first (explanations reproducible from the ScoreSet, citations re-verified against the stored 10-K, banned language), then one model check on found/weak findings (ADR-019, ADR-049) | Failed items go back to their owner once, then show a warning; the Critic never rewrites |
 | Report | Reporter | Template | Assemble scorecard, sources, dates, trace, run cost |
 
 ## 5. Criteria (accepted — see ADR-011 to ADR-013)

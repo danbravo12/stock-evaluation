@@ -136,8 +136,9 @@ class _Run:
 
 class _CriterionLoop:
     def __init__(self, name: str, spec: dict, cik: str, ticker: str, retriever: Retriever, idx: FilingIndex, accession: str,
-                 llm, trace: TraceRecorder, max_turns: int):
+                 llm, trace: TraceRecorder, max_turns: int, feedback: str | None = None):
         self.name, self.spec, self.cik, self.ticker = name, spec, cik, ticker
+        self.feedback = feedback  # a Critic message about the previous attempt (ADR-049)
         self.retriever, self.idx, self.accession, self.llm, self.trace = retriever, idx, accession, llm, trace
         self.max_turns, self.agent = max_turns, f"qualitative/{name}"
         self.run = _Run()
@@ -220,6 +221,9 @@ class _CriterionLoop:
                  f"You have up to {self.max_turns} turns, including this one."]
         if s.get("rationale_note"):
             lines.append(s["rationale_note"])
+        if self.feedback:
+            lines.append("A reviewer checked your previous attempt at this criterion and rejected it: " + self.feedback
+                         + " Judge again from the passages; keep a verdict only if the cited sentences support it, and add nothing the cited sentences do not show.")
         if missing:
             lines.append("Not available in this filing: " + "; ".join(f"Item {i} ({r})" for i, r in missing.items()) + ".")
         lines.append(f"\nA starting search of Item(s) {', '.join(s['items'])} has already been run for you ({len(hits)} passages). Use search for more.\n")
@@ -331,8 +335,21 @@ def assess_qualitative(cik: str | int, ticker: str, retriever: Retriever, llm, t
     idx = retriever.index(cik)
     accession = next(iter(idx.sections.values())).accession
     findings = [_CriterionLoop(name, spec[name], cik, ticker, retriever, idx, accession, llm, trace, max_turns).execute() for name in QUAL_CRITERIA]
-    totals = QualTotals(llm_calls=sum(f.llm_calls for f in findings), tool_calls=sum(f.tool_calls for f in findings),
-                        usage=Usage(prompt_tokens=sum(f.usage.prompt_tokens for f in findings), completion_tokens=sum(f.usage.completion_tokens for f in findings),
-                                    total_tokens=sum(f.usage.total_tokens for f in findings), reasoning_tokens=sum(f.usage.reasoning_tokens for f in findings)),
-                        actual_cost_usd=sum(f.actual_cost_usd for f in findings), notional_cost_usd=sum(f.notional_cost_usd for f in findings))
-    return QualFindings(cik=cik, ticker=ticker, accession=accession, findings=findings, totals=totals)
+    return QualFindings(cik=cik, ticker=ticker, accession=accession, findings=findings, totals=qual_totals(findings))
+
+
+def qual_totals(findings: list[QualFinding]) -> QualTotals:
+    return QualTotals(llm_calls=sum(f.llm_calls for f in findings), tool_calls=sum(f.tool_calls for f in findings),
+                      usage=Usage(prompt_tokens=sum(f.usage.prompt_tokens for f in findings), completion_tokens=sum(f.usage.completion_tokens for f in findings),
+                                  total_tokens=sum(f.usage.total_tokens for f in findings), reasoning_tokens=sum(f.usage.reasoning_tokens for f in findings)),
+                      actual_cost_usd=sum(f.actual_cost_usd for f in findings), notional_cost_usd=sum(f.notional_cost_usd for f in findings))
+
+
+def reassess_criterion(cik: str | int, ticker: str, retriever: Retriever, llm, trace: TraceRecorder, criterion: str, *, feedback: str,
+                       max_turns: int = 4, criteria: dict | None = None) -> QualFinding:
+    """Run one criterion's loop again with the Critic's message in the first user message (a routed retry, ADR-049)."""
+    cik = cik10(cik)
+    idx = retriever.index(cik)
+    accession = next(iter(idx.sections.values())).accession
+    spec = criteria or load_criteria()
+    return _CriterionLoop(criterion, spec[criterion], cik, ticker, retriever, idx, accession, llm, trace, max_turns, feedback).execute()

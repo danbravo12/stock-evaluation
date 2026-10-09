@@ -26,11 +26,11 @@ def load_gold() -> dict:
     return json.loads(GOLD_PATH.read_text(encoding="utf-8"))
 
 
-def replay_findings(tickers: list[str] | None = None) -> dict[str, QualFindings]:
+def replay_findings(tickers: list[str] | None = None, retriever: Retriever | None = None, llm: LLMClient | None = None) -> dict[str, QualFindings]:
     """The recorded agent run, replayed from the fixtures (no network)."""
     settings = Settings.from_env()
-    retriever = Retriever(EdgarClient("replay", settings))
-    llm = LLMClient("replay", settings)
+    retriever = retriever or Retriever(EdgarClient("replay", settings))
+    llm = llm or LLMClient("replay", settings)
     tickers = tickers or json.loads((REPO_ROOT / "config" / "test_tickers.json").read_text())["tickers"]
     return {t: assess_qualitative(retriever.client.lookup_cik(t)[0], t, retriever, llm, TraceRecorder("gold")) for t in tickers}
 
