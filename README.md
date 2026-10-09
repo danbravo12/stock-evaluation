@@ -29,6 +29,11 @@ Tests and development use `replay`: recorded model responses in `fixtures/llm/`,
 
 Usage and spend are counted in `data/ledger/usage.json` (daily quota resets at midnight Pacific). Paid calls stay off unless `PAID_MODE_ENABLED=true` (ADR-039).
 
+## Qualitative agent report
+
+    .venv/bin/python scripts/qualitative_report.py replay   # offline, writes docs/qualitative_report.md (research output, not financial advice)
+    .venv/bin/python scripts/qualitative_report.py record   # free tier only: re-records the ~35 requests (needed after any prompt or rubric change)
+
 ## Scorecard report (offline, from the fixtures)
 
     .venv/bin/python scripts/score_report.py        # writes docs/scorecard_report.md

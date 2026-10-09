@@ -1,7 +1,7 @@
 # Status
 
-**Phase:** 1 — Build (data layer, normaliser and scorers done)
-**Last session:** 2026-10-08
+**Phase:** 1 — Build (data layer, normaliser, scorers, retriever, LLM layer and qualitative agent done)
+**Last session:** 2026-10-09
 
 ## How we work (agreed 2026-10-09)
 1. **Plan here:** design and decisions happen in the Claude project chat. For each build step, Claude writes one Claude Code prompt (scope, design rules, tests, verification, doc updates, commit message).
@@ -30,19 +30,26 @@
 
 - Built the LLM layer (`engine/llm/`, `engine/trace.py`, `config/models.json`): provider-agnostic client over OpenAI-compatible HTTP with record/replay, cost meter (actual and notional), budget guard with a Pacific-day ledger, `complete_json`, tool calling and a JSONL trace recorder. ADR-038 to ADR-040. Verified live on the free tier (model id, JSON mode, tool calling with the tool-result round trip; 4 requests, $0.00) and replayed offline with zero network calls; the smoke fixtures are in `fixtures/llm/`.
 
+- Built the Buffett qualitative agent (`engine/agents/qualitative.py`, rubric in `config/search_terms.json`, contracts `Citation` / `QualFinding` / `QualFindings`): one tool loop per criterion with a seeded first search in code, `search` / `get_passage` / `submit_finding`, a 4-turn cap, and a citation self-check that computes exact offsets (ADR-041 to ADR-045). Recorded for the 5 test tickers on the free tier (35 requests kept; 113 used in all over three prompt revisions; actual spend $0.00, notional $0.032): `docs/qualitative_report.md`. Measured per company: mean 7.0 model calls, 17.8k input + 1.3k output tokens, notional $0.0064. 182 offline tests pass. **Verdicts are not frozen: Daniel reviews them first** (doubts and limits in `docs/evaluation_notes.md` items 7–11).
+
 ## Waiting on
 - Finnhub: written permission to display price and analyst data publicly. Email deferred (2026-10-08): send once first platform results exist, so the request can show what will be displayed. Must be sent and answered before publishing.
   - OK to use Finnhub for development and testing now.
   - **Publish blocker:** no Finnhub data on any public URL until a written reply is received. If refused, apply the ADR-007 fallback before publishing.
 
 ## Next
-1. Qualitative agent: tool loop over `search` / `get_passage` with citations required (ADR-018), including an index-on-first-use wrapper so `get_passage` works without a prior `search`. Gemini returns `extra_content` (thought signatures) on tool calls: append `LLMCall.message` to the history unchanged.
-2. Explainer + Critic (ADR-010, ADR-019).
-3. Orchestrator + Reporter (ADR-018, ADR-020).
+1. Explainer + Critic (ADR-010, ADR-019). The Critic re-checks every qualitative quote independently of the agent's own check (ADR-042), and the qualitative rubric review (`docs/evaluation_notes.md` items 7–11) should settle before verdicts are frozen in `eval/`.
+2. Retrieval evaluation set (small, after the qualitative agent): 20–30 questions on the 5 test tickers labelled with their correct passages; report BM25 recall@5. If it shows missed evidence, that is ADR-022's trigger for hybrid retrieval in v1; the same set later measures V2-3.
+3. Orchestrator + Reporter (ADR-018, ADR-020). The agent returns `QualFindings` with per-company totals; the orchestrator must treat `QuotaReached` / `BudgetExceeded` as "company not done" and resume from the ledger (ADR-044).
 4. Send Finnhub permission email once first results exist (publish blocker).
-5. Later, before any paid run (ADR-023): measure tokens per company on the 5 test tickers; set the Google project spend cap to $5 *before* enabling billing (card on file required); only then switch `mode: paid`.
+5. Later, before any paid run (ADR-023): the qualitative part is measured (mean 19.1k tokens per company, see `docs/qualitative_report.md`); measure the Explainer and Critic on the 5 test tickers; set the Google project spend cap to $5 *before* enabling billing (card on file required); only then switch `mode: paid`.
 6. When the agents exist: compare Gemini 3.1 Flash-Lite with hosted Gemma 4 31B (free, 14,400 requests/day) on the evaluation harness (ADR-015).
 7. **Before the full S&P 500 run:** review the `SalesRevenueGoodsNet` risk (it is the last revenue fallback; for some companies it is a component such as Tesla's automotive sales, so it could fill a missing year with a partial figure). Also run the section extractor over a wider sample of 10-K layouts than the five fixtures.
+
+## Later (v2, only after v1 ships)
+1. Read-only MCP server over the published results JSON (`DECISIONS.md` V2-1). First v2 item: $0, reuses the v1 results schema.
+2. Cross-provider model comparison on Amazon Bedrock (V2-2), after the free Gemini vs Gemma comparison (Next #6). Decide the separate Bedrock allowance before building.
+3. Cross-company "Ask the filings": hybrid BM25 + vector retrieval over S&P 500 10-K passages (V2-3), also exposed as an MCP tool. Depends on the retrieval evaluation set (Next #2).
 
 ## Notes carried forward (normaliser and scorers)
 - GOOGL has no D&A tag (total D&A is a company-extension tag missing from companyfacts) and `Depreciation` only from 2021, so even with the ADR-030 fallback B4 stays a data gap for most of its 10-year window.
@@ -53,6 +60,13 @@
 - Revenue tags switch within a company (DUK uses four); the concept used is recorded per value. Fallback concepts can mean slightly different things (e.g. `ProfitLoss` includes minorities), which produces "differs by more than 1%" notes.
 - Restated values are flagged (`restated`, `original_value`); the latest filed value is used.
 - DUK's 10-K is 16.1 MB of HTML (0.7 MB stored); the section extractor must cope with that size.
+
+## Notes carried forward (qualitative agent)
+- Recorded with the free tier only (`PAID_MODE_ENABLED` unset). The replay report is byte-identical across runs; `fixtures/llm/` holds exactly what `scripts/qualitative_report.py replay` uses, plus the three smoke fixtures. Changing the system prompt, tool schemas, rubric text or `search_terms.json` queries changes request hashes: re-record (about 35 requests) and prune orphaned fixtures (list of used hashes: `data/cache/trace/qualitative_used_hashes.txt`).
+- Tool-using loops on a small model are fragile in one place: quotes. 5 of 20 findings ended `invalid_citation` (KO and DUK capital allocation; Alphabet three of four criteria), mostly spliced sentences. Quota use: 7 requests per company, so about 55 companies a day on the free tier for this agent alone.
+- `get_passage` was never called by the model (search results carry full passage text); it stays as a tool for models that ask for it.
+- Run-to-run variability is not measured: three recordings with small prompt changes moved several verdicts (e.g. Duke capital allocation found → insufficient).
+- Seeded search + `llm` and `trace` should share one `TraceRecorder`, so model calls and tool calls interleave (the script does).
 
 ## Milestone 0 summary (interview-ready)
 - **Problem:** Value-investing analysis is slow, inconsistent and poorly sourced; analyst views and fundamentals are rarely seen side by side.

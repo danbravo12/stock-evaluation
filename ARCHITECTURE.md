@@ -170,7 +170,7 @@ Each arrow carries a typed object (Pydantic models). These are what the trace re
 | Fact normaliser | Python | Map XBRL concepts to one annual series per measure (e.g. several revenue tags → `revenue`), fiscal-year alignment | Unmapped concept → data gap with the tags tried |
 | Scorers | Python, pure functions | G1–G7, B1–B4 exactly as `PROCESS.md` §5 | Labels: pass · fail · partial · n/a · not meaningful · data gap |
 | Filing retriever | Python | Extract 10-K Items 1, 1A, 7; chunk; keyword/BM25 search (no embeddings, $0, ADR-022) | Section not found → returned as "not found", agent records it |
-| Qualitative agent | LLM + tools | Four Buffett qualitative criteria; must quote and cite | No citation → "insufficient evidence" |
+| Qualitative agent | LLM + tools (`engine/agents/qualitative.py`) | Four independent loops (one per Buffett qualitative criterion): seeded search in code, then `search` / `get_passage` / `submit_finding`, max 4 turns; every quote checked in code against passages retrieved in the loop, with exact offsets (ADR-041 to ADR-045) | No valid citation → "insufficient evidence" with a stop reason (`turn_cap`, `invalid_citation`, `section_missing`, `llm_output_error`); quota and budget errors propagate (ADR-044) |
 | Explainer | LLM | One line per numeric criterion; restates script figures only | Critic catches any mismatch |
 | Critic | Rules first, then LLM | (1) figures match `ScoreSet`, (2) quotes exist verbatim in the cached filing, (3) no advice language, (4) quote supports verdict (ADR-010) | One retry per failed item, then visible warning |
 | Reporter | Template | Assemble `Result` JSON with scorecard, sources, dates, trace, cost, disclaimer | Schema validation before write |
@@ -186,15 +186,15 @@ Each arrow carries a typed object (Pydantic models). These are what the trace re
 
 ## 4. Run economics
 
-Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). Token counts are estimates until measured on the 5 test tickers.
+Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). The qualitative agent is measured on the 5 test tickers (2026-10-09); the Explainer and Critic are still estimates.
 
 | Step | LLM calls per company | Notes |
 |---|---|---|
-| Qualitative agent | ~4–8 | One loop per criterion; tool calls to the retriever are local and free |
+| Qualitative agent | 5–9 (mean 7.0, measured) | One loop per criterion, seeded first search; tool calls to the retriever are local and free. Measured on the 5 test tickers: mean 17.8k input + 1.3k output tokens, notional $0.0064 per company (`docs/qualitative_report.md`) |
 | Explainer | 1 | All numeric criteria in one call |
 | Critic (LLM part) | 1 | Rule checks cost nothing |
 | Retries | 0–2 | Only failed items |
-| **Total** | **~6–12** | ~40k input / ~5k output tokens (estimate) |
+| **Total** | **~7–13** | Qualitative part measured (~19k tokens); Explainer and Critic still estimates, ~40k input / ~5k output in all |
 
 | Mode | Cost per company | Full S&P 500 | Time |
 |---|---|---|---|
@@ -207,14 +207,14 @@ Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). Token counts are
 - **Demo shows both:** "actual $0.00x (free tier + paid) · notional $0.0xx at paid rates", from the ledger, recorded at run time.
 
 ---|---|---|
-| Qualitative agent | ~4–8 | One loop per criterion; tool calls to the retriever are local and free |
+| Qualitative agent | 5–9 (mean 7.0, measured) | One loop per criterion, seeded first search; tool calls to the retriever are local and free. Measured on the 5 test tickers: mean 17.8k input + 1.3k output tokens, notional $0.0064 per company (`docs/qualitative_report.md`) |
 | Explainer | 1 | All numeric criteria in one call |
 | Critic (LLM part) | 1 | Rule checks cost nothing |
 | Retries | 0–2 | Only failed items |
-| **Total** | **~6–12** | |
+| **Total** | **~7–13** | |
 
 - **Actual cost:** $0.00 per analysis on the Gemini Flash-Lite free tier.
-- **Throughput:** at ~500 requests/day (reported, not published), roughly 40–80 companies per day, so the full S&P 500 in about 1–2 weeks. The numeric scorecard for all ~500 companies needs no LLM and runs in minutes.
+- **Throughput:** at ~500 requests/day (reported, not published), roughly 35–60 companies per day (about 9 requests each with a measured 7 for the qualitative agent), so the full S&P 500 in about 1–2 weeks. The numeric scorecard for all ~500 companies needs no LLM and runs in minutes.
 - **Demo shows both:** "actual $0.00 (free tier) · notional $0.00x at paid rates", where the notional figure is token counts × the published paid price, recorded at run time.
 
 ---

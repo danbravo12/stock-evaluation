@@ -4,7 +4,7 @@ from __future__ import annotations
 from datetime import date
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 SEC_SOURCE = "U.S. Securities and Exchange Commission, EDGAR (public domain)"
 
@@ -191,3 +191,75 @@ class TraceEvent(BaseModel):
     actual_cost_usd: float | None = None
     notional_cost_usd: float | None = None
     replayed: bool | None = None
+
+
+# ---------- qualitative agent (ADR-018, ADR-041 to ADR-045) ----------
+QUAL_CRITERIA = ("understandable_business", "durable_competitive_advantage", "candid_management", "rational_capital_allocation")
+Verdict = Literal["evidence found", "evidence weak", "insufficient evidence"]
+StopReason = Literal["submitted", "turn_cap", "invalid_citation", "section_missing", "llm_output_error"]
+
+
+class Citation(BaseModel):
+    """A verified quote: normalised_document_text[char_start:char_end] == quote, exactly (ADR-035, ADR-042)."""
+
+    passage_id: str
+    accession: str
+    item: str
+    char_start: int
+    char_end: int
+    quote: str
+
+
+class SearchRecord(BaseModel):
+    """One retrieval the agent ran: the seeded search (decided in code) or one the model asked for."""
+
+    queries: list[str]
+    items: list[str] | None = None
+    seeded: bool = False
+    passage_ids: list[str] = Field(default_factory=list)
+
+
+class QualFinding(BaseModel):
+    criterion: Literal[QUAL_CRITERIA]  # type: ignore[valid-type]
+    verdict: Verdict
+    rationale: str  # at most two sentences, about the filing only
+    citations: list[Citation] = Field(default_factory=list)  # 0-2; at least 1 unless the verdict is "insufficient evidence"
+    searches: list[SearchRecord] = Field(default_factory=list)
+    llm_calls: int = 0
+    tool_calls: int = 0  # every tool call executed, including the seeded search
+    stop_reason: StopReason
+    usage: Usage = Field(default_factory=Usage)
+    actual_cost_usd: float = 0.0
+    notional_cost_usd: float = 0.0
+
+    @model_validator(mode="after")
+    def _cited_or_insufficient(self):
+        if len(self.citations) > 2:
+            raise ValueError("at most 2 citations")
+        if self.verdict != "insufficient evidence" and not self.citations:
+            raise ValueError(f"verdict {self.verdict!r} needs at least one citation")
+        if self.stop_reason != "submitted" and self.verdict != "insufficient evidence":
+            raise ValueError(f"stop_reason {self.stop_reason!r} can only end in 'insufficient evidence'")
+        return self
+
+
+class QualTotals(BaseModel):
+    llm_calls: int = 0
+    tool_calls: int = 0
+    usage: Usage = Field(default_factory=Usage)
+    actual_cost_usd: float = 0.0
+    notional_cost_usd: float = 0.0
+
+
+class QualFindings(BaseModel):
+    cik: str
+    ticker: str
+    accession: str  # the 10-K every citation refers to
+    findings: list[QualFinding]  # exactly four, in config order
+    totals: QualTotals
+
+    @model_validator(mode="after")
+    def _four_in_order(self):
+        if [f.criterion for f in self.findings] != list(QUAL_CRITERIA):
+            raise ValueError(f"findings must be exactly {list(QUAL_CRITERIA)} in that order")
+        return self
