@@ -65,7 +65,7 @@ flowchart TD
 | Fetch data | Data fetcher | Tools (APIs + cache) | Is data complete and current? Flag rather than guess |
 | Graham criteria | Python script | Deterministic | Pass / fail / data gap per criterion |
 | Buffett quantitative | Python script | Deterministic | Pass / fail / data gap per criterion |
-| Buffett qualitative | Buffett agent | LLM + filing retrieval | Judgement must cite a 10-K passage, else "insufficient evidence" |
+| Buffett qualitative | Buffett agent | LLM + filing retrieval | Judgement must cite 10-K sentences by pointer; otherwise "insufficient evidence" (not shown) or "not assessed" (could not judge) |
 | Explain | Explainer | LLM | Describes what the figure means; no investment opinion |
 | Verify | Critic | Rule checks first, then LLM (ADR-019) | Figures match script output? Citations present? Advice-style wording? |
 | Report | Reporter | Template | Assemble scorecard, sources, dates, trace, run cost |
@@ -93,7 +93,7 @@ flowchart TD
 | B3 | Stable margins | Operating margin > 0 every year **and** last-3-yr avg ≥ 90% of 10-yr avg | Tests consistency, not level, so sectors compare fairly. Banks/insurers: not applicable. |
 | B4 | Owner earnings | Net income + D&A − capex > 0 in ≥ 8 of 10 years **and** last-3-yr avg > first-3-yr avg | Total capex used as conservative proxy for maintenance capex. Banks/insurers: not applicable. |
 
-**Buffett — qualitative (4, LLM with citations).** Understandable business · Durable competitive advantage · Candid management · Rational capital allocation. Each: "evidence found" / "evidence weak" / "insufficient evidence", with a cited 10-K passage.
+**Buffett — qualitative (4, LLM with citations).** Understandable business · Durable competitive advantage · Candid management · Rational capital allocation. Each: "evidence found" / "evidence weak" / "insufficient evidence" (the filing, as retrieved, does not show it, or argues against it), each with 1–2 cited 10-K sentences (except "insufficient evidence"), or "not assessed" when the system could not judge (section not found, turn cap, invalid citation pointers, malformed model output). "Not assessed" says nothing about the filing. Rubric: `config/search_terms.json` (ADR-043, ADR-047).
 
 **Result labels:** pass · fail · partial-data pass · not applicable · not meaningful · data gap. Ranking uses % of applicable criteria met; data gaps shown separately.
 
@@ -113,7 +113,7 @@ flowchart TD
 | Missing EDGAR field | Criterion marked "data gap", reason shown |
 | History shorter than required | Pass/fail on available years, labelled with years covered (e.g. G4 "partial") |
 | Finnhub unavailable or not permitted | Price-based criteria (Graham 6–7) shown as data gaps; analyst panel hidden or BYOK |
-| LLM cites nothing | Qualitative criterion marked "insufficient evidence" |
+| LLM gives no valid citation, runs out of turns, or the section is missing | Qualitative criterion marked "not assessed" with the reason (ADR-047) |
 | Critic fails twice | Result shown with visible critic warning |
 
 ## 8. Deployment shape (ADR-016, ADR-017)

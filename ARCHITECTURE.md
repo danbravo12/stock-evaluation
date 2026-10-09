@@ -126,7 +126,7 @@ sequenceDiagram
         QA->>FR: search(section, query)
         FR-->>QA: passages with accession no. + section + offset
     end
-    QA-->>ORC: QualFindings (verdict + quoted passage + citation, or "insufficient evidence")
+    QA-->>ORC: QualFindings (verdict + cited sentences with exact offsets; "insufficient evidence" if the filing does not show it, "not assessed" if the system could not judge)
     ORC->>EX: explain(ScoreSet)
     EX-->>ORC: Explanations (one line per criterion)
     ORC->>CR: verify(ScoreSet, QualFindings, Explanations)
@@ -152,7 +152,7 @@ Each arrow carries a typed object (Pydantic models). These are what the trace re
 | `RunPlan` | Planner | ticker, CIK, sector, applicable criteria, skipped criteria + reason, steps |
 | `DataBundle` | Data fetcher | annual series per concept, 10-K accession numbers, price, analyst counts, `gaps[]`, `as_of` per source |
 | `ScoreSet` | Scorers | per criterion: result label, figure, threshold, years covered, source URL, as-of |
-| `QualFindings` | Qualitative agent | per criterion: verdict, quoted passage, citation (accession, section, offset), tool calls made |
+| `QualFindings` | Qualitative agent | per criterion: verdict, rationale, 0–2 citations (accession, section, passage, sentence numbers, quote and offsets built by code), searches and tool calls made, stop reason |
 | `Explanations` | Explainer | per criterion: one plain-English line, figures referenced |
 | `CriticReport` | Critic | per check: pass/fail, failing item, owner to retry, attempt number |
 | `Result` | Reporter | all of the above + scorecard + trace + `cost` + `schema_version` + disclaimer |
@@ -170,7 +170,7 @@ Each arrow carries a typed object (Pydantic models). These are what the trace re
 | Fact normaliser | Python | Map XBRL concepts to one annual series per measure (e.g. several revenue tags → `revenue`), fiscal-year alignment | Unmapped concept → data gap with the tags tried |
 | Scorers | Python, pure functions | G1–G7, B1–B4 exactly as `PROCESS.md` §5 | Labels: pass · fail · partial · n/a · not meaningful · data gap |
 | Filing retriever | Python | Extract 10-K Items 1, 1A, 7; chunk; keyword/BM25 search (no embeddings, $0, ADR-022) | Section not found → returned as "not found", agent records it |
-| Qualitative agent | LLM + tools (`engine/agents/qualitative.py`) | Four independent loops (one per Buffett qualitative criterion): seeded search in code, then `search` / `get_passage` / `submit_finding`, max 4 turns; every quote checked in code against passages retrieved in the loop, with exact offsets (ADR-041 to ADR-045) | No valid citation → "insufficient evidence" with a stop reason (`turn_cap`, `invalid_citation`, `section_missing`, `llm_output_error`); quota and budget errors propagate (ADR-044) |
+| Qualitative agent | LLM + tools (`engine/agents/qualitative.py`) | Four independent loops (one per Buffett qualitative criterion): seeded search in code, then `search` / `get_passage` / `submit_finding`, max 4 turns; passages shown as numbered sentences and cited by pointer, so quote and offsets are built by code and checked against the passages retrieved in the loop (ADR-041 to ADR-047) | No valid citation → "not assessed" with a stop reason (`turn_cap`, `invalid_citation`, `section_missing`, `llm_output_error`); quota and budget errors propagate (ADR-044) |
 | Explainer | LLM | One line per numeric criterion; restates script figures only | Critic catches any mismatch |
 | Critic | Rules first, then LLM | (1) figures match `ScoreSet`, (2) quotes exist verbatim in the cached filing, (3) no advice language, (4) quote supports verdict (ADR-010) | One retry per failed item, then visible warning |
 | Reporter | Template | Assemble `Result` JSON with scorecard, sources, dates, trace, cost, disclaimer | Schema validation before write |
@@ -190,7 +190,7 @@ Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). The qualitative 
 
 | Step | LLM calls per company | Notes |
 |---|---|---|
-| Qualitative agent | 5–9 (mean 7.0, measured) | One loop per criterion, seeded first search; tool calls to the retriever are local and free. Measured on the 5 test tickers: mean 17.8k input + 1.3k output tokens, notional $0.0064 per company (`docs/qualitative_report.md`) |
+| Qualitative agent | 5–9 (mean 7.0, measured) | One loop per criterion, seeded first search; tool calls to the retriever are local and free. Measured on the 5 test tickers: mean 18.8k input + 0.94k output tokens, notional $0.0061 per company (`docs/qualitative_report.md`) |
 | Explainer | 1 | All numeric criteria in one call |
 | Critic (LLM part) | 1 | Rule checks cost nothing |
 | Retries | 0–2 | Only failed items |
@@ -207,7 +207,7 @@ Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). The qualitative 
 - **Demo shows both:** "actual $0.00x (free tier + paid) · notional $0.0xx at paid rates", from the ledger, recorded at run time.
 
 ---|---|---|
-| Qualitative agent | 5–9 (mean 7.0, measured) | One loop per criterion, seeded first search; tool calls to the retriever are local and free. Measured on the 5 test tickers: mean 17.8k input + 1.3k output tokens, notional $0.0064 per company (`docs/qualitative_report.md`) |
+| Qualitative agent | 5–9 (mean 7.0, measured) | One loop per criterion, seeded first search; tool calls to the retriever are local and free. Measured on the 5 test tickers: mean 18.8k input + 0.94k output tokens, notional $0.0061 per company (`docs/qualitative_report.md`) |
 | Explainer | 1 | All numeric criteria in one call |
 | Critic (LLM part) | 1 | Rule checks cost nothing |
 | Retries | 0–2 | Only failed items |

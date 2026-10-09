@@ -83,6 +83,22 @@ class Base(unittest.TestCase):
         path.write_text(json.dumps(data))
 
 
+class TestUseStore(Base):
+    def test_use_store_false_always_calls_and_records_nothing(self):
+        transport = FakeTransport(ok("one"), ok("two"))
+        c = LLMClient("live", self.settings(), transport=transport, sleep=self.clock.sleep, now=self.clock.now, clock=lambda: 0.0, use_store=False)
+        a, b = c.chat(MESSAGES), c.chat(MESSAGES)
+        self.assertEqual((a.content, b.content, len(transport.calls)), ("one", "two", 2))
+        self.assertFalse((self.root / "cache" / "llm").exists())
+        self.assertFalse(any(self.root.rglob("*.json.gz")))
+        self.assertEqual(c.budget.ledger.requests_today(c.profile_name, __import__("engine.llm.budget", fromlist=["x"]).pacific_day(self.clock.now())), 2)  # still counted
+
+    def test_default_still_caches(self):
+        transport = FakeTransport(ok("one"), ok("two"))
+        c = self.client(transport=transport)
+        self.assertEqual((c.chat(MESSAGES).content, c.chat(MESSAGES).content, len(transport.calls)), ("one", "one", 1))
+
+
 class TestRecordReplay(Base):
     def test_request_hash_is_stable_and_excludes_the_key(self):
         c = self.client()

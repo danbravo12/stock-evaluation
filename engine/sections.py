@@ -14,6 +14,7 @@ import re
 from dataclasses import dataclass
 
 from engine.contracts import FilingSection, Passage
+from engine.sentences import split_sentences
 
 MIN_SECTION_CHARS = 2000
 MAX_HEADING_WORDS = 25
@@ -149,5 +150,6 @@ def make_passages(text: str, section: FilingSection) -> list[Passage]:
     if acc:
         spans.append(acc)
     return [Passage(passage_id=f"{section.accession}:{section.item}:{n}", accession=section.accession, item=section.item, n=n,
-                    char_start=a, char_end=b, words=len(text[a:b].split()), text=text[a:b])
+                    char_start=a, char_end=b, words=len(text[a:b].split()), text=text[a:b],
+                    sentences=split_sentences(text, a, b))
             for n, (a, b) in enumerate(spans, start=1)]

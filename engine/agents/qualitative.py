@@ -1,14 +1,15 @@
-"""Buffett qualitative agent (ADR-018, ADR-041 to ADR-045).
+"""Buffett qualitative agent (ADR-018, ADR-041 to ADR-047).
 
 One independent tool-using loop per criterion over the company's latest 10-K:
 
     plan (criterion + seeded queries) -> seeded search (code) -> model turns (search / get_passage) ->
-    submit_finding -> citation self-check (code) -> finding
+    submit_finding -> citation check (code) -> finding
 
-Every verdict except "insufficient evidence" quotes and cites a passage. A quote is accepted only if it appears
-(whitespace aside) in a passage this loop retrieved, and its exact offsets in the normalised document text are
-computed and round-trip checked here; the Critic re-checks independently later (ADR-042). Quota and budget errors
-propagate so the batch stops and resumes from the ledger (ADR-044).
+Passages are shown as numbered sentences; the model cites {passage_id, first, last} and code builds the quote and its exact
+offsets from the sentence segmentation, so a quote mismatch is impossible by construction (ADR-046). A pointer is accepted only
+for a passage retrieved in this criterion's loop. The Critic re-checks independently later (ADR-042). Verdicts: found, weak,
+insufficient (the filing as retrieved does not show it) or not assessed (the system could not judge; ADR-047). Quota and budget
+errors propagate so the batch stops and resumes from the ledger (ADR-044).
 """
 from __future__ import annotations
 
@@ -25,8 +26,8 @@ from engine.universe import cik10
 
 SEARCH_TERMS_PATH = REPO_ROOT / "config" / "search_terms.json"
 SEED_K = 4  # passages in the seeded search and in every model-requested search
-MAX_QUOTE_WORDS = 60
-SHORT_QUOTE_WORDS = 40  # what the prompt asks for and what a rejection suggests
+MAX_SPAN_SENTENCES = 3  # last - first <= 2
+MAX_SPAN_WORDS = 120
 MAX_RATIONALE_WORDS = 80  # proxy for "two sentences"
 ITEMS = ("1", "1A", "7")
 VERDICTS = ("evidence found", "evidence weak", "insufficient evidence")
@@ -40,10 +41,9 @@ Rules:
 - Judge only the filing text you are shown. Use no outside knowledge of the company.
 - The company's own marketing language ("leading", "world-class", "trusted brand") is a claim, not evidence. Evidence is concrete: figures, named products, segments or actions, admitted setbacks.
 - Tools: search (find passages), get_passage (read one passage in full), submit_finding (finish). Call submit_finding exactly once when you can decide.
-- Cite with quotes. Each quote must be copied exactly from a passage you were shown: one contiguous stretch of its text, character for character. Never join sentences that are not next to each other, add or drop punctuation, use ellipses or reword. Choose the one or two sentences that matter and keep each quote to about 40 words; more than 60 words is rejected, as is any quote that cannot be found in those passages.
-- verdict is one of "evidence found", "evidence weak", "insufficient evidence". Unless the verdict is "insufficient evidence", give 1 or 2 citations.
-- rationale: at most two sentences, about what the filing shows.
-- If the passages shown do not settle the question, you may search again, but prefer "insufficient evidence" to guessing."""
+- Passages are shown as numbered sentences: [1], [2], ... Cite by pointer, never by quoting: each citation is {passage_id, first, last}, the numbers of the first and last sentence (inclusive, at most 3 consecutive sentences, at most 120 words) that carry the evidence. Choose the fewest sentences that do; the system copies the text itself. Give 1 or 2 citations unless the verdict is "insufficient evidence".
+- verdict: "evidence found", "evidence weak" or "insufficient evidence", as the criterion defines them. If the text you were shown does not show the criterion, or argues against it (for example only threats and competitive pressure), the verdict is "insufficient evidence" and the rationale says so. Prefer it to guessing.
+- rationale: at most two sentences. It may state only what the cited sentences show; add no claims of your own."""
 
 TOOLS = [
     {"type": "function", "function": {
@@ -60,14 +60,15 @@ TOOLS = [
         "parameters": {"type": "object", "properties": {"passage_id": {"type": "string"}}, "required": ["passage_id"]}}},
     {"type": "function", "function": {
         "name": "submit_finding",
-        "description": "Finish: give the verdict, a short rationale and verbatim quotes from passages you were shown.",
+        "description": "Finish: give the verdict, a short rationale and sentence pointers into passages you were shown.",
         "parameters": {"type": "object", "properties": {
             "verdict": {"type": "string", "enum": list(VERDICTS)},
-            "rationale": {"type": "string", "description": "At most two sentences, about what the filing shows."},
+            "rationale": {"type": "string", "description": "At most two sentences; only what the cited sentences show."},
             "citations": {"type": "array", "maxItems": 2, "items": {"type": "object", "properties": {
                 "passage_id": {"type": "string"},
-                "quote": {"type": "string", "description": "Exact text from that passage; about 40 words, never more than 60."}},
-                "required": ["passage_id", "quote"]}}},
+                "first": {"type": "integer", "description": "Number of the first cited sentence in that passage (1-based)."},
+                "last": {"type": "integer", "description": "Number of the last cited sentence (inclusive; at most first + 2)."}},
+                "required": ["passage_id", "first", "last"]}}},
             "required": ["verdict", "rationale", "citations"]}}},
 ]
 SUBMIT_ONLY = [TOOLS[2]]
@@ -77,92 +78,39 @@ def load_criteria() -> dict:
     return json.loads(SEARCH_TERMS_PATH.read_text(encoding="utf-8"))["criteria"]
 
 
-# ---------- quote checking (pure functions) ----------
-def _collapse(text: str) -> tuple[str, list[int]]:
-    """Whitespace runs -> one space, ends stripped; plus, for each output character, its index in `text`."""
-    out, where, prev_space = [], [], True
-    for i, ch in enumerate(text):
-        if ch.isspace():
-            if not prev_space:
-                out.append(" ")
-                where.append(i)
-                prev_space = True
-        else:
-            out.append(ch)
-            where.append(i)
-            prev_space = False
-    if out and out[-1] == " ":
-        out.pop()
-        where.pop()
-    return "".join(out), where
-
-
-def locate_quote(quote: str, passage: Passage, document: str) -> tuple[int, int] | None:
-    """Offsets (start, end) of `quote` in `document` inside `passage`, comparing after collapsing whitespace only.
-
-    The match must start and end on a word edge (no quoting half a word) and `document[start:end]` must
-    round-trip to the quote once whitespace is collapsed. None when the quote is not in the passage.
-    """
-    q = " ".join(quote.split())
-    if not q:
-        return None
-    hay, where = _collapse(passage.text)
-    pos = hay.find(q)
-    while pos != -1:
-        end = pos + len(q)
-        edge_ok = (not (q[0].isalnum() and pos > 0 and hay[pos - 1].isalnum())
-                   and not (q[-1].isalnum() and end < len(hay) and hay[end].isalnum()))
-        if edge_ok:
-            start, stop = passage.char_start + where[pos], passage.char_start + where[end - 1] + 1
-            if " ".join(document[start:stop].split()) == q:
-                return start, stop
-        pos = hay.find(q, pos + 1)
-    return None
-
-
-def _diagnose(words: list[str], retrieved: dict[str, Passage], document: str) -> str:
-    """Why a quote was not found: its longest leading run of words that does occur in a retrieved passage (a ready, verified
-    quote the model can resubmit), and what the text says next."""
-    for n in range(min(len(words) - 1, MAX_QUOTE_WORDS), 3, -1):
-        for p in retrieved.values():
-            span = locate_quote(" ".join(words[:n]), p, document)
-            if span:
-                nxt = document[span[1]:p.char_end].split()[:8]
-                return (f"; the longest part of it that is in the text is \"{' '.join(document[span[0]:span[1]].split())}\" (passage {p.passage_id}), "
-                        f"which you may submit as your quote; the text then continues \"{' '.join(nxt)}\", not as you wrote it")
-    return ""
+# ---------- passages as the model sees them, and pointer checking (pure functions) ----------
+def render_passage(p: Passage, document: str) -> str:
+    """Header plus numbered sentences: what search, get_passage and the first message show."""
+    lines = [f"[{p.passage_id}] Item {p.item}"]
+    lines += [f"[{i}] {document[a:b]}" for i, (a, b) in enumerate(p.sentences, start=1)]
+    return "\n".join(lines)
 
 
 def check_citations(raw: list[dict], retrieved: dict[str, Passage], document: str) -> tuple[list[Citation], list[str]]:
-    """Verify each {passage_id, quote} against the passages retrieved in this loop.
+    """Turn {passage_id, first, last} pointers into Citations, or say what is wrong with each bad one.
 
-    Returns (verified citations, one problem string per rejected quote). The cited passage is tried first; if the quote
-    is in another retrieved passage the citation is attributed to that one, so the passage_id always points at the true location.
-    A rejection says what to change: a quote over the word limit comes with a ready, shorter contiguous quote from the same
-    passage; a quote that is not found says where it first departs from the text.
+    The quote is `document[start of first sentence:end of last sentence]`, so it matches the document by construction.
+    Accepted only for a passage retrieved in this loop, first <= last within the passage, at most 3 sentences, at most 120 words.
     """
     ok, problems = [], []
     for c in raw:
-        quote = str(c.get("quote", ""))
-        pid = str(c.get("passage_id", ""))
-        words = quote.split()
-        shown = f'"{" ".join(words)[:100]}"'
-        if not words:
-            problems.append(f"{shown}: empty quote")
-            continue
-        order = ([retrieved[pid]] if pid in retrieved else []) + [p for k, p in retrieved.items() if k != pid]
-        hit = next(((p, span) for p in order if (span := locate_quote(quote, p, document))), None)
-        if hit and len(words) > MAX_QUOTE_WORDS:
-            shorter = " ".join(words[:SHORT_QUOTE_WORDS])
-            problems.append(f"{shown}: {len(words)} words; the limit is {MAX_QUOTE_WORDS}. The text is in passage {hit[0].passage_id}; quote a shorter "
-                            f"contiguous part, for example \"{shorter}\"")
-        elif hit:
-            p, (a, b) = hit
-            ok.append(Citation(passage_id=p.passage_id, accession=p.accession, item=p.item, char_start=a, char_end=b, quote=document[a:b]))
+        pid, first, last = c.get("passage_id"), c.get("first"), c.get("last")
+        label = f"{pid!r} sentences {first}-{last}"
+        p = retrieved.get(pid) if isinstance(pid, str) else None
+        if p is None:
+            problems.append(f"{label}: passage {pid!r} was not shown to you in this session; cite only passages from your search results")
+        elif not all(isinstance(x, int) and not isinstance(x, bool) for x in (first, last)):
+            problems.append(f"{label}: first and last must be whole sentence numbers")
+        elif not 1 <= first <= last <= len(p.sentences):
+            problems.append(f"{label}: sentence numbers must satisfy 1 <= first <= last <= {len(p.sentences)} for this passage")
+        elif last - first + 1 > MAX_SPAN_SENTENCES:
+            problems.append(f"{label}: at most {MAX_SPAN_SENTENCES} consecutive sentences (last - first <= {MAX_SPAN_SENTENCES - 1})")
         else:
-            note = "" if pid in retrieved else f" (passage {pid!r} was not retrieved in this session)"
-            over = f"; also {len(words)} words, over the limit of {MAX_QUOTE_WORDS}" if len(words) > MAX_QUOTE_WORDS else ""
-            problems.append(f"{shown}: not found in any passage you were shown{note}{over}{_diagnose(words, retrieved, document)}")
+            a, b = p.sentences[first - 1][0], p.sentences[last - 1][1]
+            if len(document[a:b].split()) > MAX_SPAN_WORDS:
+                problems.append(f"{label}: {len(document[a:b].split())} words; the limit is {MAX_SPAN_WORDS}. Cite fewer sentences")
+            else:
+                ok.append(Citation(passage_id=pid, accession=p.accession, item=p.item, char_start=a, char_end=b, quote=document[a:b], sentences=[first, last]))
     return ok, problems
 
 
@@ -205,8 +153,8 @@ class _CriterionLoop:
                            llm_calls=len(self.run.calls), tool_calls=self.run.tool_calls, stop_reason=stop_reason, usage=usage,
                            actual_cost_usd=sum(c.actual_cost_usd for c in self.run.calls), notional_cost_usd=sum(c.notional_cost_usd for c in self.run.calls))
 
-    def _insufficient(self, rationale: str, stop_reason: str) -> QualFinding:
-        return self._finding("insufficient evidence", rationale, [], stop_reason)
+    def _not_assessed(self, reason: str, stop_reason: str) -> QualFinding:
+        return self._finding("not assessed", reason, [], stop_reason)
 
     # ---------- the loop ----------
     def execute(self) -> QualFinding:
@@ -216,7 +164,7 @@ class _CriterionLoop:
         if len(missing) == len(spec["items"]):
             reason = "; ".join(f"Item {i} not found in the filing ({r})" for i, r in missing.items())
             self.trace.note(self.agent, f"section_missing: {reason}; no model call")
-            return self._insufficient(f"{reason}.", "section_missing")
+            return self._not_assessed(f"{reason}.", "section_missing")
 
         hits = self.retriever.search_many(self.cik, spec["queries"], spec["items"], k=SEED_K)
         self._remember(hits)
@@ -233,7 +181,7 @@ class _CriterionLoop:
             last = turn == limit
             if last:
                 notes.append(f"This is your last turn (turn {turn} of {limit}). Only submit_finding is available now: submit your finding from the "
-                             "passages you have seen, with verdict \"insufficient evidence\" if they do not settle the question.")
+                             "passages you have seen, with verdict \"insufficient evidence\" if they do not show the criterion.")
             if notes:
                 messages.append({"role": "user", "content": " ".join(notes)})
                 notes = []
@@ -256,10 +204,10 @@ class _CriterionLoop:
         if r.stop == "submitted":
             return self._finding(r.verdict, r.rationale, r.citations, "submitted")
         if r.stop == "invalid_citation":
-            return self._insufficient("The quotes in the submitted finding could not be verified against the retrieved passages, so no finding is recorded.", "invalid_citation")
+            return self._not_assessed("The cited sentence pointers were invalid twice, so no finding is recorded.", "invalid_citation")
         if r.stop == "llm_output_error":
-            return self._insufficient("The model's tool arguments were malformed twice, so no finding is recorded.", "llm_output_error")
-        return self._insufficient(f"No finding was submitted within {limit} turns.", "turn_cap")
+            return self._not_assessed("The model's tool arguments were malformed twice, so no finding is recorded.", "llm_output_error")
+        return self._not_assessed(f"No finding was submitted within {limit} turns.", "turn_cap")
 
     # ---------- messages ----------
     def _first_message(self, hits: list[SearchHit], missing: dict) -> str:
@@ -270,10 +218,12 @@ class _CriterionLoop:
                  f"\"insufficient evidence\" means: {s['insufficient_means']}",
                  "The company's own promotional language is a claim, not evidence; \"evidence found\" needs concrete specifics in the filing.",
                  f"You have up to {self.max_turns} turns, including this one."]
+        if s.get("rationale_note"):
+            lines.append(s["rationale_note"])
         if missing:
             lines.append("Not available in this filing: " + "; ".join(f"Item {i} ({r})" for i, r in missing.items()) + ".")
         lines.append(f"\nA starting search of Item(s) {', '.join(s['items'])} has already been run for you ({len(hits)} passages). Use search for more.\n")
-        lines += [f"[{h.passage_id}] Item {h.item}\n{h.text}\n" for h in hits] or ["(The starting search matched no passages.)"]
+        lines += [render_passage(self.idx.by_id[h.passage_id], self.idx.text) + "\n" for h in hits] or ["(The starting search matched no passages.)"]
         return "\n".join(lines)
 
     @staticmethod
@@ -320,7 +270,7 @@ class _CriterionLoop:
         self.run.searches.append(SearchRecord(queries=[query], items=items or None, passage_ids=[h.passage_id for h in hits]))
         if not hits:
             return "No passages matched. Try different words or other items."
-        return "\n".join(f"[{h.passage_id}] Item {h.item} (score {h.score})\n{h.text}\n" for h in hits)
+        return "\n".join(render_passage(self.idx.by_id[h.passage_id], self.idx.text) + "\n" for h in hits)
 
     def _get_passage(self, args: dict) -> str:
         pid = args.get("passage_id")
@@ -334,7 +284,7 @@ class _CriterionLoop:
         if p is None:
             return f"Tool error: unknown passage id {pid!r} in filing {self.accession}. Use ids returned by search."
         self.run.retrieved[pid] = p
-        return f"[{p.passage_id}] Item {p.item}\n{p.text}"
+        return render_passage(p, self.idx.text)
 
     def _submit(self, args: dict) -> str:
         verdict, rationale, raw = args.get("verdict"), args.get("rationale"), args.get("citations")
@@ -345,25 +295,26 @@ class _CriterionLoop:
         if len(rationale.split()) > MAX_RATIONALE_WORDS:
             raise _BadArgs(f"'rationale' must be at most two short sentences (under {MAX_RATIONALE_WORDS} words)")
         if not isinstance(raw, list) or any(not isinstance(c, dict) for c in raw):
-            raise _BadArgs("'citations' must be a list of {passage_id, quote} objects")
+            raise _BadArgs("'citations' must be a list of {passage_id, first, last} objects")
         if len(raw) > 2:
             raise _BadArgs("give at most 2 citations")
         if verdict != "insufficient evidence" and not raw:
             raise _BadArgs(f"verdict {verdict!r} needs 1 or 2 citations")
         citations, problems = check_citations(raw, self.run.retrieved, self.idx.text)
         outcome = ("rejected: " + " | ".join(problems)) if problems else ("verified: " + "; ".join(
-            f"{c.passage_id} [{c.char_start}:{c.char_end}] \"{c.quote[:80]}\"" for c in citations) if citations else "no citations to check")
-        self.trace.tool_call(self.agent, "citation_check", {"quotes": len(raw)}, outcome)
+            f"{c.passage_id} sentences {c.sentences[0]}-{c.sentences[1]} [{c.char_start}:{c.char_end}] \"{c.quote[:80]}\"" for c in citations)
+            if citations else "no citations to check")
+        self.trace.tool_call(self.agent, "citation_check", {"pointers": raw}, outcome)
         if problems and verdict == "insufficient evidence":
             citations = []  # an insufficient verdict does not need quotes: drop the bad ones rather than reject
         elif problems:
             self.run.rejected += 1
             if self.run.rejected >= 2:
                 self.run.stop = "invalid_citation"
-                self.trace.note(self.agent, "rejected quotes kept: " + " | ".join(problems))
+                self.trace.note(self.agent, "rejected pointers kept: " + " | ".join(problems))
                 return "Rejected again; no finding recorded."
-            return ("Rejected: " + " | ".join(problems) + ". Resubmitting the same text will fail again. Submit again with each quote copied exactly (one contiguous stretch, at most 60 words) from passages "
-                    "you were shown: " + ", ".join(self.run.retrieved) + ".")
+            return ("Rejected: " + " | ".join(problems) + ". Submit again with each citation as {passage_id, first, last} using the sentence numbers "
+                    "shown in passages you were given: " + ", ".join(self.run.retrieved) + ".")
         self.run.stop, self.run.verdict, self.run.rationale, self.run.citations = "submitted", verdict, rationale.strip(), citations
         return "Finding accepted."
 

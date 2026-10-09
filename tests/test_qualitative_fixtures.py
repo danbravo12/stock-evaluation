@@ -8,7 +8,7 @@ import json
 import re
 import unittest
 
-from engine.agents.qualitative import MAX_QUOTE_WORDS, assess_qualitative
+from engine.agents.qualitative import MAX_SPAN_WORDS, assess_qualitative
 from engine.contracts import QUAL_CRITERIA
 from engine.fetch.edgar import EdgarClient
 from engine.llm.client import LLMClient
@@ -39,19 +39,30 @@ class TestQualitativeFixtures(unittest.TestCase):
         for t, fs in self.results.items():
             self.assertEqual([f.criterion for f in fs.findings], list(QUAL_CRITERIA), t)
 
-    def test_every_non_insufficient_finding_quotes_the_filing_exactly(self):
+    def test_every_cited_span_is_exactly_the_document_text(self):
         for t, fs in self.results.items():
+            idx = self.retriever.index(fs.cik)
             for f in fs.findings:
-                if f.verdict == "insufficient evidence":
-                    self.assertTrue(f.stop_reason in ("submitted", "turn_cap", "invalid_citation", "section_missing", "llm_output_error"))
+                if f.stop_reason != "submitted":
+                    self.assertEqual((f.verdict, f.citations), ("not assessed", []), (t, f.criterion))
                     continue
-                self.assertEqual(f.stop_reason, "submitted", (t, f.criterion))
-                self.assertTrue(1 <= len(f.citations) <= 2, (t, f.criterion))
+                self.assertIn(f.verdict, ("evidence found", "evidence weak", "insufficient evidence"))
+                if f.verdict != "insufficient evidence":
+                    self.assertTrue(1 <= len(f.citations) <= 2, (t, f.criterion))
                 for c in f.citations:
+                    p = idx.by_id[c.passage_id]
+                    first, last = c.sentences
+                    self.assertTrue(1 <= first <= last <= len(p.sentences) and last - first <= 2)
+                    self.assertEqual((c.char_start, c.char_end), (p.sentences[first - 1][0], p.sentences[last - 1][1]))
                     self.assertEqual(self.docs[t][c.char_start:c.char_end], c.quote, (t, f.criterion))
-                    self.assertLessEqual(len(c.quote.split()), MAX_QUOTE_WORDS)
+                    self.assertLessEqual(len(c.quote.split()), MAX_SPAN_WORDS)
                     self.assertEqual(c.accession, fs.accession)
                     self.assertTrue(c.passage_id.startswith(fs.accession + ":" + c.item + ":"))
+
+    def test_no_mechanical_citation_failures(self):
+        for t, fs in self.results.items():
+            for f in fs.findings:
+                self.assertNotEqual(f.stop_reason, "invalid_citation", (t, f.criterion))
 
     def test_no_advice_language_in_rationales(self):
         for t, fs in self.results.items():

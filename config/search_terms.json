@@ -1,5 +1,5 @@
 {
-  "_notes": "Starting queries and rubric per qualitative Buffett criterion (ADR-022, ADR-043): which 10-K items to search first, what to ask, and what 'evidence found', 'evidence weak' and 'insufficient evidence' mean. Rule for all four: the company's own marketing language is a claim, not evidence; 'found' needs concrete specifics in the filing; judge only the retrieved text. Reviewed against the fixtures with docs/sections_report.md; not tuned to make particular companies look good.",
+  "_notes": "Starting queries and rubric per qualitative Buffett criterion (ADR-022, ADR-043, ADR-047): which 10-K items to search first, what to ask, and what 'evidence found', 'evidence weak' and 'insufficient evidence' mean. Rule for all four: the company's own marketing language is a claim, not evidence; 'found' needs a checkable specific; judge only the retrieved text; text that argues against the criterion is 'insufficient evidence', and the rationale says so. Rubric tightened in v1.1 (ADR-047). Not tuned to make particular companies look good.",
   "criteria": {
     "understandable_business": {
       "items": [
@@ -16,7 +16,7 @@
       "question": "Can the business be explained simply: what the company sells, to whom, and how it makes money?",
       "found_means": "The filing names specific products or services, the customers or markets they are sold to, and how revenue is earned (for example segments with figures, a pricing or sales model), in plain terms.",
       "weak_means": "The business is described only in general or promotional terms (a 'leading provider of solutions'), or the filing says what is sold but not who buys it or how it earns money.",
-      "insufficient_means": "The retrieved text does not say what the company sells or how it earns money, or the Business section is missing."
+      "insufficient_means": "The retrieved text does not say what the company sells or how it earns money, or the Business section is missing. If the retrieved text argues against the criterion, this is the verdict, and the rationale says so."
     },
     "durable_competitive_advantage": {
       "items": [
@@ -35,9 +35,9 @@
       ],
       "why": "Item 1 states the company's own view of its position; Item 1A lists the ways competitors could erode it.",
       "question": "Does the filing give concrete evidence of an advantage that protects the company's profits from competitors over many years (for example a brand, scale or cost position, switching costs, a network, patents, or a regulated franchise)?",
-      "found_means": "The filing names a specific source of advantage and backs it with a concrete specific: a market share or rank figure, a named brand, asset, licence or patent family, a stated cost or scale fact, a regulated service territory, or customer-retention facts. Statements in the filing that competitors can easily erode it count against this.",
-      "weak_means": "The advantage is only asserted ('strong brand', 'industry leader', 'competitive strengths') without specifics, or the specifics are offset by the filing's own statements that competitors or customers can readily erode the position.",
-      "insufficient_means": "The retrieved text says nothing about the company's competitive position, or only lists competitors and threats."
+      "found_means": "The filing states a source of advantage AND a checkable specific for it: a market share or rank figure; a regulated exclusive franchise or service territory; a quantified scale or cost position; long-term contracts with stated terms; a stated network size. A statement that an asset exists or matters (brand, trade secrets, patents, 'strong' distribution) without a measure is not enough.",
+      "weak_means": "The advantage is only asserted, or an asset is named as important (brand, trade secrets, patents, scale) without any measure; or the specifics are offset by the filing's own statements that competitors or customers can readily erode the position.",
+      "insufficient_means": "The retrieved text says nothing about the company's competitive position, or only lists competitors, threats and competitive pressure. If the retrieved text argues against the criterion, this is the verdict, and the rationale says so."
     },
     "candid_management": {
       "items": [
@@ -47,17 +47,22 @@
       "queries": [
         "challenges",
         "did not meet",
-        "decline decreased",
+        "below our expectations",
+        "we did not achieve",
+        "lessons",
+        "write-down of our investment",
         "impairment",
         "material weakness",
-        "we expect headwinds",
-        "risks uncertainties"
+        "restatement",
+        "decline decreased",
+        "we expect headwinds"
       ],
       "why": "Candour shows where management discusses setbacks and uncertainty in its own words (MD&A) and in the risk factors.",
       "question": "Does management openly discuss setbacks, mistakes, declines and uncertainty in its own words, rather than only successes?",
-      "found_means": "The filing describes specific negative developments (a named decline with a figure, an impairment or charge, a missed target, a restructuring, a material weakness, a failed initiative) and explains them directly. Risk language that every company uses does not count.",
-      "weak_means": "Only generic caution ('results may fluctuate', 'we face risks'), or setbacks mentioned without figures or explanation, or every negative attributed to outside factors with no acknowledgement of the company's own part.",
-      "insufficient_means": "The retrieved text is promotional or boilerplate and gives nothing to judge candour either way, or MD&A and Risk Factors are missing."
+      "found_means": "Management's own account of a setback that it attributes at least partly to the company's own decisions or execution; or a target or guidance of its own that was missed; or an acknowledged material weakness, restatement or write-down of something management chose (an acquisition, investment or project), stated plainly.",
+      "weak_means": "Declines or charges explained only by external factors (interest rates, currency, weather, regulation, the economy, product mix, litigation outcomes), even when quantified; or generic caution ('results may fluctuate', 'we face risks'); or a setback mentioned without explanation.",
+      "insufficient_means": "The retrieved text is promotional or boilerplate and gives nothing to judge candour either way, or MD&A and Risk Factors are missing. If the retrieved text argues against the criterion, this is the verdict, and the rationale says so.",
+      "rationale_note": "Limitation: 10-K text is reviewed by lawyers, and candour is better judged from shareholder letters (outside this tool's scope). Do not read polished or detailed prose as candour; if your verdict is not \"evidence found\", say in the rationale that a 10-K is a limited guide to candour."
     },
     "rational_capital_allocation": {
       "items": [
@@ -73,9 +78,9 @@
       ],
       "why": "MD&A (liquidity and capital resources) reports what was done with cash: buybacks, dividends, deals, capex and debt.",
       "question": "Does the filing show what management does with the cash the business generates (reinvestment, acquisitions, buybacks, dividends, debt repayment) and explain it? You judge whether it is documented concretely, not whether prices paid were good.",
-      "found_means": "The filing states specific actions with amounts: dollar figures or share counts for repurchases, dividends, acquisitions, capital expenditure or debt repaid, ideally with the stated reasoning or the return it aims for.",
-      "weak_means": "Such activity is mentioned without amounts or reasons, or there is only a policy statement ('we intend to return capital to shareholders') with no account of what was done.",
-      "insufficient_means": "The retrieved text does not say what was done with cash, or MD&A is missing."
+      "found_means": "The filing quantifies what was done in the fiscal year (share repurchases, dividends, acquisitions, capital expenditure or debt repayment, with amounts) AND states a policy, priority or rationale for it.",
+      "weak_means": "Forward-looking plans only; or actions without amounts; or amounts with no stated policy, priority or rationale.",
+      "insufficient_means": "The retrieved text does not say what was done with cash, or MD&A is missing. If the retrieved text argues against the criterion, this is the verdict, and the rationale says so."
     }
   }
 }

@@ -78,7 +78,7 @@ class LLMClient:
     def __init__(self, mode: Mode, settings: Settings | None = None, profile: str | None = None, transport: Transport | None = None,
                  sleep: Callable[[float], None] = time.sleep, clock: Callable[[], float] = time.monotonic,
                  now: Callable[[], datetime] = lambda: datetime.now(timezone.utc), trace: TraceRecorder | None = None,
-                 config: dict | None = None, timeout_s: float = 120.0):
+                 config: dict | None = None, timeout_s: float = 120.0, use_store: bool = True):
         if mode not in ("replay", "live", "record"):
             raise ValueError(f"Unknown mode {mode!r}")
         self.mode, self.settings = mode, settings or Settings.from_env()
@@ -89,6 +89,7 @@ class LLMClient:
         self.profile = self.config["profiles"][self.profile_name]
         self.transport, self._sleep, self._clock, self._now = transport or urllib_transport, sleep, clock, now
         self.trace, self.timeout_s, self.calls = trace, timeout_s, []
+        self.use_store = use_store  # False (live only): never read or write the response store, so each call is a fresh request (variability runs)
         root = Path(self.settings.cache_dir if mode == "live" else self.settings.fixtures_dir) / "llm"
         self.store = ResponseStore(root)
         self._key = os.environ.get(self.profile["key_env"] or "") or None
@@ -107,7 +108,7 @@ class LLMClient:
         digest = request_hash(request)
         key = f"{self.profile_name}/{digest}.json"
         call = None
-        if self.mode in ("replay", "live"):
+        if self.mode in ("replay", "live") and (self.use_store or self.mode == "replay"):
             hit = self.store.get(key)
             if hit is not None:
                 env = json.loads(hit.body)
@@ -118,7 +119,8 @@ class LLMClient:
         if call is None:
             response, latency, paid, url = self._send(request, company)
             envelope = {"request": request, "response": response, "latency_s": round(latency, 3)}
-            self.store.put(key, url, json.dumps(envelope, sort_keys=True).encode(), "application/json")
+            if self.use_store or self.mode == "record":
+                self.store.put(key, url, json.dumps(envelope, sort_keys=True).encode(), "application/json")
             call = self._parse(response, digest, round(latency, 3), replayed=False, paid=paid)
             self.budget.record_cost(call.actual_cost_usd, call.notional_cost_usd, company)
         self.calls.append(call)

@@ -134,6 +134,7 @@ class Passage(BaseModel):
     char_end: int
     words: int
     text: str
+    sentences: list[tuple[int, int]] = Field(default_factory=list)  # document offsets of each sentence (engine/sentences.py)
 
 
 class SearchHit(BaseModel):
@@ -195,12 +196,15 @@ class TraceEvent(BaseModel):
 
 # ---------- qualitative agent (ADR-018, ADR-041 to ADR-045) ----------
 QUAL_CRITERIA = ("understandable_business", "durable_competitive_advantage", "candid_management", "rational_capital_allocation")
-Verdict = Literal["evidence found", "evidence weak", "insufficient evidence"]
+# "insufficient evidence": the filing, as retrieved, does not show it. "not assessed": the system could not judge (any stop_reason but "submitted").
+Verdict = Literal["evidence found", "evidence weak", "insufficient evidence", "not assessed"]
 StopReason = Literal["submitted", "turn_cap", "invalid_citation", "section_missing", "llm_output_error"]
 
 
 class Citation(BaseModel):
-    """A verified quote: normalised_document_text[char_start:char_end] == quote, exactly (ADR-035, ADR-042)."""
+    """A cited span of a passage, by sentence pointer: normalised_document_text[char_start:char_end] == quote, exactly (ADR-035, ADR-042).
+
+    The model gives passage_id and sentence numbers; code builds the quote and the offsets, so they cannot mismatch (ADR-046)."""
 
     passage_id: str
     accession: str
@@ -208,6 +212,7 @@ class Citation(BaseModel):
     char_start: int
     char_end: int
     quote: str
+    sentences: list[int]  # [first, last], 1-based inclusive, within the passage
 
 
 class SearchRecord(BaseModel):
@@ -233,13 +238,16 @@ class QualFinding(BaseModel):
     notional_cost_usd: float = 0.0
 
     @model_validator(mode="after")
-    def _cited_or_insufficient(self):
+    def _consistent(self):
         if len(self.citations) > 2:
             raise ValueError("at most 2 citations")
-        if self.verdict != "insufficient evidence" and not self.citations:
+        if self.stop_reason != "submitted":
+            if self.verdict != "not assessed" or self.citations:
+                raise ValueError(f"stop_reason {self.stop_reason!r} can only end in 'not assessed' without citations")
+        elif self.verdict == "not assessed":
+            raise ValueError("a submitted finding is found, weak or insufficient")
+        elif self.verdict != "insufficient evidence" and not self.citations:
             raise ValueError(f"verdict {self.verdict!r} needs at least one citation")
-        if self.stop_reason != "submitted" and self.verdict != "insufficient evidence":
-            raise ValueError(f"stop_reason {self.stop_reason!r} can only end in 'insufficient evidence'")
         return self
 
 

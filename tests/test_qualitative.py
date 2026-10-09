@@ -9,7 +9,7 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from engine.agents.qualitative import MAX_QUOTE_WORDS, SYSTEM_PROMPT, assess_qualitative, check_citations, load_criteria, locate_quote
+from engine.agents.qualitative import MAX_SPAN_WORDS, SYSTEM_PROMPT, assess_qualitative, check_citations, load_criteria, render_passage
 from engine.contracts import QUAL_CRITERIA, QualFinding
 from engine.llm.budget import BudgetExceeded, QuotaReached
 from engine.llm.client import LLMClient, LLMFixtureMissing
@@ -54,8 +54,11 @@ def reply(*tool_calls, content=None, usage=(1000, 100, 1100), message_extra=None
     return 200, {}, json.dumps(body).encode()
 
 
-def submit(quote, pid, verdict="evidence found", rationale="The filing names its products and customers.", id="call-1"):
-    return call("submit_finding", {"verdict": verdict, "rationale": rationale, "citations": [{"passage_id": pid, "quote": quote}]}, id)
+def submit(ptr, verdict="evidence found", rationale="The filing names its products and customers.", id="call-1"):
+    """ptr = (passage_id, first[, last]) or a list of them."""
+    ptrs = ptr if isinstance(ptr, list) else [ptr]
+    cites = [{"passage_id": t[0], "first": t[1], "last": t[2] if len(t) > 2 else t[1]} for t in ptrs]
+    return call("submit_finding", {"verdict": verdict, "rationale": rationale, "citations": cites}, id)
 
 
 def criteria(items: dict[str, list[str]] | None = None, queries: dict[str, list[str]] | None = None) -> dict:
@@ -93,6 +96,15 @@ class AgentCase(Base):
     def pid_of(self, needle: str) -> str:
         return next(p.passage_id for p in self.retriever().index(1).passages if needle in p.text)
 
+    def loc(self, needle: str) -> tuple[str, int]:
+        """(passage id, 1-based sentence number) of the sentence containing `needle`."""
+        idx = self.retriever().index(1)
+        for p in idx.passages:
+            for i, (a, b) in enumerate(p.sentences, start=1):
+                if needle in idx.text[a:b]:
+                    return p.passage_id, i
+        raise AssertionError(needle)
+
     def request(self, i: int) -> dict:
         return json.loads(self.transport.calls[i][2])
 
@@ -102,39 +114,42 @@ class AgentCase(Base):
 
 class TestLoop(AgentCase):
     def test_seeded_search_then_immediate_valid_submit(self):
-        retr = self.retriever()
-        pid = next(p.passage_id for p in retr.index(1).passages if BIZ_A in p.text)
-        f = self.run_agent(reply(submit("sells sparkling beverages and juice to grocery retailers", pid)))
+        pid, i = self.loc(BIZ_A)
+        f = self.run_agent(reply(submit((pid, i))))
         self.assertEqual((f.verdict, f.stop_reason, f.llm_calls), ("evidence found", "submitted", 1))
         self.assertEqual(len(self.transport.calls), 1)
         c = f.citations[0]
+        self.assertEqual(c.quote, BIZ_A)  # the quote is built by code from the pointer
         self.assertEqual(self.doc[c.char_start:c.char_end], c.quote)
-        self.assertEqual((c.passage_id, c.item, c.accession), (pid, "1", "0000000001-26-000001"))
+        self.assertEqual((c.passage_id, c.item, c.accession, c.sentences), (pid, "1", "0000000001-26-000001", [i, i]))
         self.assertTrue(f.searches[0].seeded)
         self.assertEqual(f.tool_calls, 2)  # the seeded search and submit_finding
         first_user = self.request(0)["messages"][1]["content"]
-        self.assertIn(pid, first_user)  # the seeded hits are in the first user message
+        self.assertIn(f"[{pid}] Item 1\n[1] ITEM 1.", first_user)  # numbered sentences under a passage header
+        self.assertIn(f"[{i}] {BIZ_A}", first_user)
         self.assertIn("Question:", first_user)
         self.assertEqual(self.request(0)["messages"][0]["content"], SYSTEM_PROMPT)
         self.assertEqual(self.request(0)["temperature"], 0.0)
+        props = self.request(0)["tools"][2]["function"]["parameters"]["properties"]["citations"]["items"]["properties"]
+        self.assertEqual(sorted(props), ["first", "last", "passage_id"])
 
-    def test_other_criteria_without_their_section_cost_nothing(self):
-        f = self.run_agent(reply(submit("sparkling beverages and juice", "x")), html=NO_ITEM_7)
+    def test_other_criteria_without_their_section_are_not_assessed_and_cost_nothing(self):
+        pid, i = self.loc(BIZ_A)
+        f = self.run_agent(reply(submit((pid, i))), html=NO_ITEM_7)
         others = self.findings.findings[1:]
         self.assertEqual([o.stop_reason for o in others], ["section_missing"] * 3)
         for o in others:
-            self.assertEqual((o.llm_calls, o.tool_calls, o.verdict, o.citations), (0, 0, "insufficient evidence", []))
+            self.assertEqual((o.llm_calls, o.tool_calls, o.verdict, o.citations), (0, 0, "not assessed", []))
             self.assertIn("Item 7", o.rationale)
         self.assertEqual(f.llm_calls, 1)
         self.assertEqual(len(self.transport.calls), 1)
 
     def test_search_get_passage_submit_with_unchanged_messages_and_matching_ids(self):
-        retr = self.retriever()
-        pid = next(p.passage_id for p in retr.index(1).passages if BIZ_C in p.text)
+        pid, i = self.loc(BIZ_C)
         sig = {"google": {"thought_signature": "sig-abc"}}
         r1 = reply(call("search", {"query": "Ohio plant concentrate"}, "s-1", extra=sig), message_extra={"extra_content": sig})
         r2 = reply(call("get_passage", {"passage_id": pid}, "g-1"))
-        r3 = reply(submit("produced 3 million cases of concentrate", pid, id="f-1"))
+        r3 = reply(submit((pid, i), id="f-1"))
         f = self.run_agent(r1, r2, r3)
         self.assertEqual((f.verdict, f.llm_calls, f.stop_reason), ("evidence found", 3, "submitted"))
         self.assertEqual(f.tool_calls, 4)  # seeded + search + get_passage + submit
@@ -148,23 +163,19 @@ class TestLoop(AgentCase):
         self.assertEqual((sent[3]["role"], sent[3]["tool_call_id"]), ("tool", "s-1"))
         self.assertIn(pid, sent[3]["content"])
         self.assertEqual(self.request(2)["messages"][-1]["tool_call_id"], "g-1")
-        self.assertIn(BIZ_C, self.request(2)["messages"][-1]["content"])
+        self.assertIn(f"[{i}] {BIZ_C}", self.request(2)["messages"][-1]["content"])
 
     def test_every_tool_call_in_a_turn_runs_in_order(self):
-        retr = self.retriever()
-        pid = next(p.passage_id for p in retr.index(1).passages if BIZ_C in p.text)
-        f = self.run_agent(reply(call("search", {"query": "Ohio"}, "a"), call("get_passage", {"passage_id": pid}, "b")),
-                           reply(submit("Ohio produced", pid)))
+        pid, i = self.loc(BIZ_C)
+        f = self.run_agent(reply(call("search", {"query": "Ohio"}, "a"), call("get_passage", {"passage_id": pid}, "b")), reply(submit((pid, i))))
         msgs = self.request(1)["messages"]
         self.assertEqual([m["tool_call_id"] for m in msgs if m["role"] == "tool"], ["a", "b"])
         self.assertEqual(f.tool_calls, 4)
 
     def test_get_passage_works_without_a_prior_search_and_foreign_accession_is_a_tool_error(self):
-        retr = self.retriever()
-        pid = next(p.passage_id for p in retr.index(1).passages if BIZ_C in p.text)
+        pid, i = self.loc(BIZ_C)
         f = self.run_agent(reply(call("get_passage", {"passage_id": pid}, "g1"), call("get_passage", {"passage_id": "0000099999-26-000001:1:1"}, "g2"),
-                                 call("get_passage", {"passage_id": "0000000001-26-000001:1:999"}, "g3")),
-                           reply(submit("produced 3 million cases", pid)))
+                                 call("get_passage", {"passage_id": "0000000001-26-000001:1:999"}, "g3")), reply(submit((pid, i))))
         tools = [m["content"] for m in self.request(1)["messages"] if m["role"] == "tool"]
         self.assertIn(BIZ_C, tools[0])
         self.assertIn("different filing", tools[1])
@@ -172,15 +183,15 @@ class TestLoop(AgentCase):
         self.assertEqual(f.verdict, "evidence found")  # errors did not break the loop
 
     def test_plain_text_reply_counts_as_a_turn_and_gets_a_nudge(self):
-        pid = self.pid_of(BIZ_A)
-        f = self.run_agent(reply(content="I think the business is simple."), reply(submit("sells sparkling beverages", pid)))
+        f = self.run_agent(reply(content="I think the business is simple."), reply(submit(self.loc(BIZ_A))))
         self.assertEqual(f.llm_calls, 2)
         self.assertIn("Use a tool", self.request(1)["messages"][-1]["content"])
         self.assertEqual(f.stop_reason, "submitted")
 
-    def test_turn_cap_offers_only_submit_on_the_last_turn_and_ends_insufficient(self):
+    def test_turn_cap_offers_only_submit_on_the_last_turn_and_is_not_assessed(self):
         f = self.run_agent(*[reply(call("search", {"query": f"juice {i}"}, f"s{i}")) for i in range(4)])
-        self.assertEqual((f.verdict, f.stop_reason, f.llm_calls, f.citations), ("insufficient evidence", "turn_cap", 4, []))
+        self.assertEqual((f.verdict, f.stop_reason, f.llm_calls, f.citations), ("not assessed", "turn_cap", 4, []))
+        self.assertIn("4 turns", f.rationale)
         self.assertEqual(len(self.transport.calls), 4)
         for i in range(3):
             self.assertEqual(self.tool_names(i), ["search", "get_passage", "submit_finding"])
@@ -191,96 +202,100 @@ class TestLoop(AgentCase):
         f = self.run_agent(*[reply(call("search", {"query": "juice"}, f"s{i}")) for i in range(4)], max_turns=1)
         self.assertEqual((f.stop_reason, f.llm_calls), ("turn_cap", 1))
 
+    def test_insufficient_verdict_is_a_submitted_finding_about_the_filing(self):
+        f = self.run_agent(reply(call("submit_finding", {"verdict": "insufficient evidence", "rationale": "The passages say nothing on how it earns money.", "citations": []})))
+        self.assertEqual((f.verdict, f.stop_reason, f.citations), ("insufficient evidence", "submitted", []))
 
-class TestCitationSelfCheck(AgentCase):
-    def test_invalid_quote_then_corrected_is_accepted(self):
-        pid = self.pid_of(BIZ_A)
-        f = self.run_agent(reply(submit("sells the world's best beverages", pid)), reply(submit("sells sparkling beverages and juice", pid)))
+    def test_rubric_and_note_reach_the_first_message(self):
+        spec = criteria(**ONLY_BUSINESS)
+        spec["understandable_business"]["rationale_note"] = "NOTE-FOR-RATIONALE"
+        self.run_agent(reply(submit(self.loc(BIZ_A))), spec=spec)
+        first = self.request(0)["messages"][1]["content"]
+        self.assertIn("NOTE-FOR-RATIONALE", first)
+        self.assertIn(spec["understandable_business"]["found_means"], first)
+        self.assertIn("argues against", json.dumps(load_criteria()))  # the 'evidence against' rule is in the real rubric text
+
+
+class TestPointerCitations(AgentCase):
+    def test_multi_sentence_span_gives_the_exact_document_text(self):
+        pid, i = self.loc(BIZ_A)
+        f = self.run_agent(reply(submit((pid, i, i + 1))))
+        c = f.citations[0]
+        self.assertEqual(c.quote, BIZ_A + "\n" + BIZ_B)  # includes the document's own line break
+        self.assertEqual(self.doc[c.char_start:c.char_end], c.quote)
+        self.assertEqual(c.sentences, [i, i + 1])
+
+    def test_out_of_range_then_corrected_is_accepted(self):
+        pid, i = self.loc(BIZ_A)
+        f = self.run_agent(reply(submit((pid, 99))), reply(submit((pid, i))))
         self.assertEqual((f.stop_reason, f.llm_calls, f.verdict), ("submitted", 2, "evidence found"))
         error = self.request(1)["messages"][-1]
         self.assertEqual(error["role"], "tool")
-        self.assertIn("not found in any passage", error["content"])
-        self.assertIn("world's best", error["content"])
+        self.assertIn("<= last <=", error["content"])  # names the valid range
+        self.assertIn(pid, error["content"])
 
-    def test_invalid_twice_is_invalid_citation_and_quotes_stay_in_the_trace(self):
-        pid = self.pid_of(BIZ_A)
-        f = self.run_agent(reply(submit("invented quote one", pid)), reply(submit("invented quote two", pid)))
-        self.assertEqual((f.verdict, f.stop_reason, f.llm_calls, f.citations), ("insufficient evidence", "invalid_citation", 2, []))
-        text = json.dumps([e.model_dump() for e in self.trace.events])
-        self.assertIn("invented quote one", text)
-        self.assertIn("invented quote two", text)
+    def test_every_kind_of_bad_pointer_is_rejected_then_invalid_citation(self):
+        pid, i = self.loc(BIZ_A)
+        self.assertGreaterEqual(len(self.retriever().index(1).by_id[pid].sentences), 4)
+        bad = {"out of range": (pid, 0, 1), "last before first": (pid, i + 1, i), "four sentences": (pid, 1, 4),
+               "non-integer": (pid, "1", "2"), "unknown passage": ("0000000001-26-000001:1:999", 1, 1)}
+        for name, (p, a, b) in bad.items():
+            with self.subTest(name):
+                bad_call = call("submit_finding", {"verdict": "evidence found", "rationale": "ok.", "citations": [{"passage_id": p, "first": a, "last": b}]})
+                f = self.run_agent(reply(bad_call), reply(bad_call))
+                self.assertEqual((f.verdict, f.stop_reason, f.llm_calls, f.citations), ("not assessed", "invalid_citation", 2, []))
+                self.assertTrue(any(str(e.output).startswith("Rejected:") for e in self.trace.events))  # (identical requests are served from the cache, so look at the trace)
 
-    def test_quote_from_a_passage_never_retrieved_is_rejected_even_if_it_is_in_the_filing(self):
-        pid_c = self.pid_of(BIZ_C)
-        pid_a = self.pid_of(BIZ_A)
+    def test_over_120_words_is_rejected(self):
+        idx = self.retriever().index(1)
+        big = next(p for p in idx.passages if p.words > 150)
+        spans = [len(idx.text[a:b].split()) for a, b in big.sentences]
+        first = next(k for k in range(len(spans) - 2) if sum(spans[k:k + 3]) > MAX_SPAN_WORDS)
+        _, problems = check_citations([{"passage_id": big.passage_id, "first": first + 1, "last": first + 3}], {big.passage_id: big}, idx.text)
+        self.assertIn("words; the limit is 120", problems[0])
+
+    def test_passage_never_retrieved_is_rejected_even_if_it_is_in_the_filing(self):
+        pid_c, ic = self.loc(BIZ_C)
+        pid_a, ia = self.loc(BIZ_A)
         narrow = criteria(items={"understandable_business": ["1"]}, queries={"understandable_business": ["sparkling grocery"]})
-        self.assertNotIn(BIZ_C, [p.text for p in self.retriever().search(1, "sparkling grocery")])
-        f = self.run_agent(reply(submit("produced 3 million cases of concentrate", pid_c)),
-                           reply(submit("sells sparkling beverages and juice", pid_a)), spec=narrow)
+        f = self.run_agent(reply(submit((pid_c, ic))), reply(submit((pid_a, ia))), spec=narrow)
         self.assertEqual((f.stop_reason, f.llm_calls), ("submitted", 2))
-        self.assertIn("was not retrieved", self.request(1)["messages"][-1]["content"])
+        self.assertIn("was not shown to you", self.request(1)["messages"][-1]["content"])
         self.assertEqual(f.citations[0].passage_id, pid_a)
 
-    def test_whitespace_only_difference_is_accepted_with_exact_offsets(self):
-        pid = self.pid_of(BIZ_A)
-        f = self.run_agent(reply(submit("grocery  retailers in 40 countries.   Our flagship\nbrand Fizz", pid)))
-        self.assertEqual(f.stop_reason, "submitted")
-        c = f.citations[0]
-        self.assertEqual(self.doc[c.char_start:c.char_end], c.quote)
-        self.assertEqual(c.quote, "grocery retailers in 40 countries.\nOur flagship brand Fizz")  # the document's own whitespace
-        self.assertEqual(c.quote.count("\n"), 1)
+    def test_passage_found_by_the_models_own_search_may_be_cited(self):
+        pid_c, ic = self.loc(BIZ_C)
+        f = self.run_agent(reply(call("search", {"query": "Ohio plant"}, "s")), reply(submit((pid_c, ic))))
+        self.assertEqual((f.stop_reason, f.llm_calls), ("submitted", 2))
 
-    def test_quote_over_60_words_or_starting_mid_word_is_rejected(self):
-        idx = self.retriever().index(1)
-        p = idx.passages[0]
-        self.assertIsNone(locate_quote("ell sparkling beverages", p, idx.text))
-        self.assertIsNotNone(locate_quote("sparkling beverages", p, idx.text))
-        big = next(q for q in idx.passages if q.words > 100)
-        long_quote = " ".join(big.text.split()[:MAX_QUOTE_WORDS + 1])
-        self.assertIsNotNone(locate_quote(long_quote, big, idx.text))  # it is in the text, but too long to cite
-        ok, problems = check_citations([{"passage_id": big.passage_id, "quote": long_quote}], {big.passage_id: big}, idx.text)
-        self.assertEqual((ok, len(problems)), ([], 1))
-        self.assertIn("words", problems[0])
-
-    def test_rejection_messages_say_what_to_change(self):
-        idx = self.retriever().index(1)
-        big = next(q for q in idx.passages if q.words > 100)
-        words = big.text.split()
-        retrieved = {big.passage_id: big}
-        _, problems = check_citations([{"passage_id": big.passage_id, "quote": " ".join(words[:70])}], retrieved, idx.text)
-        suggestion = problems[0].split('for example "')[1].rstrip('"')  # a ready shorter quote...
-        self.assertEqual(len(suggestion.split()), 40)
-        ok, _ = check_citations([{"passage_id": big.passage_id, "quote": suggestion}], retrieved, idx.text)
-        self.assertEqual(len(ok), 1)  # ...that is accepted as it stands
-        edited = " ".join(words[:10] + ["CHANGED"] + words[11:20])
-        _, problems = check_citations([{"passage_id": big.passage_id, "quote": edited}], retrieved, idx.text)
-        prefix = " ".join(words[:10])
-        self.assertIn(f'"{prefix}"', problems[0])  # the verified part, offered for resubmission
-        self.assertIn(words[10], problems[0])
-        resub, _ = check_citations([{"passage_id": big.passage_id, "quote": prefix}], retrieved, idx.text)
-        self.assertEqual(len(resub), 1)
+    def test_rejected_pointers_stay_in_the_trace(self):
+        pid, _ = self.loc(BIZ_A)
+        f = self.run_agent(reply(submit((pid, 77))), reply(submit((pid, 88))))
+        text = json.dumps([e.model_dump() for e in self.trace.events])
+        self.assertIn('"first": 77', text)
+        self.assertIn('"first": 88', text)
+        self.assertEqual(f.stop_reason, "invalid_citation")
 
     def test_rejection_on_the_last_turn_gets_one_extra_turn(self):
-        pid = self.pid_of(BIZ_A)
-        f = self.run_agent(*[reply(call("search", {"query": f"juice {i}"}, f"s{i}")) for i in range(3)],
-                           reply(submit("bad quote", pid)), reply(submit("sells sparkling beverages", pid)))
+        pid, i = self.loc(BIZ_A)
+        f = self.run_agent(*[reply(call("search", {"query": f"juice {k}"}, f"s{k}")) for k in range(3)], reply(submit((pid, 99))), reply(submit((pid, i))))
         self.assertEqual((f.stop_reason, f.llm_calls), ("submitted", 5))
         self.assertEqual(self.tool_names(4), ["submit_finding"])
 
-    def test_insufficient_verdict_needs_no_citation(self):
-        f = self.run_agent(reply(call("submit_finding", {"verdict": "insufficient evidence", "rationale": "The passages do not say how it earns money.", "citations": []})))
-        self.assertEqual((f.verdict, f.stop_reason, f.citations), ("insufficient evidence", "submitted", []))
+    def test_bad_pointers_with_an_insufficient_verdict_are_dropped_not_rejected(self):
+        pid, _ = self.loc(BIZ_A)
+        f = self.run_agent(reply(submit((pid, 99), verdict="insufficient evidence", rationale="Nothing relevant.")))
+        self.assertEqual((f.verdict, f.stop_reason, f.citations, f.llm_calls), ("insufficient evidence", "submitted", [], 1))
 
 
 class TestMalformed(AgentCase):
-    def test_malformed_twice_is_llm_output_error(self):
+    def test_malformed_twice_is_llm_output_error_and_not_assessed(self):
         f = self.run_agent(reply(call("submit_finding", {"rationale": "no verdict", "citations": []})), reply(call("submit_finding", "{not json")))
-        self.assertEqual((f.verdict, f.stop_reason, f.llm_calls), ("insufficient evidence", "llm_output_error", 2))
+        self.assertEqual((f.verdict, f.stop_reason, f.llm_calls), ("not assessed", "llm_output_error", 2))
         self.assertIn("malformed arguments", self.request(1)["messages"][-1]["content"])
 
     def test_one_correction_is_enough(self):
-        pid = self.pid_of(BIZ_A)
-        f = self.run_agent(reply(call("search", {"items": ["1"]})), reply(submit("sells sparkling beverages", pid)))
+        f = self.run_agent(reply(call("search", {"items": ["1"]})), reply(submit(self.loc(BIZ_A))))
         self.assertEqual((f.stop_reason, f.llm_calls), ("submitted", 2))
 
     def test_non_insufficient_without_citations_and_bad_items_are_malformed(self):
@@ -313,20 +328,27 @@ class TestErrorsPropagate(AgentCase):
     def test_real_quota_error_from_the_client_propagates(self):
         self.write_ledger(requests={"gemini-3.1-flash-lite": {"2026-10-09": 500}})
         with self.assertRaises(QuotaReached):
-            self.run_agent(reply(submit("x", "y")))
+            self.run_agent(reply(submit(("x", 1))))
 
 
 class TestTotalsAndTrace(AgentCase):
     def full_run(self):
-        pid = lambda needle: next(p.passage_id for p in self.retriever(FULL).index(1).passages if needle in p.text)  # noqa: E731
         spec = criteria(items={"understandable_business": ["1"], "durable_competitive_advantage": ["1", "1A"], "candid_management": ["7", "1A"],
                                "rational_capital_allocation": ["7"]},
                         queries={"understandable_business": ["sparkling beverages juice"], "durable_competitive_advantage": ["private label shelf space"],
                                  "candid_management": ["decreased unsuccessful"], "rational_capital_allocation": ["repurchased dividends"]})
-        return self.run_agent(reply(submit("sells sparkling beverages", pid(BIZ_A))),
-                              reply(submit("could erode our share of shelf space", pid(RISK)), usage=(2000, 200, 2200)),
-                              reply(submit("an unsuccessful product launch that we discontinued", pid(MDA_A)), usage=(3000, 50, 3050)),
-                              reply(submit("repurchased 2 million shares for $150 million", pid(MDA_B))), html=FULL, spec=spec)
+        self.rt = self.retriever(FULL)
+        loc = self.loc_full
+        return self.run_agent(reply(submit(loc(BIZ_A))), reply(submit(loc(RISK)), usage=(2000, 200, 2200)),
+                              reply(submit(loc(MDA_A)), usage=(3000, 50, 3050)), reply(submit(loc(MDA_B))), html=FULL, spec=spec)
+
+    def loc_full(self, needle):
+        idx = self.retriever(FULL).index(1)
+        for p in idx.passages:
+            for i, (a, b) in enumerate(p.sentences, start=1):
+                if needle in idx.text[a:b]:
+                    return p.passage_id, i
+        raise AssertionError(needle)
 
     def test_four_findings_in_config_order_with_totals_that_add_up(self):
         self.full_run()
@@ -336,10 +358,8 @@ class TestTotalsAndTrace(AgentCase):
         t = fs.totals
         self.assertEqual(t.llm_calls, 4)
         self.assertEqual(t.llm_calls, len(self.llm.calls))
-        self.assertEqual(t.usage.prompt_tokens, sum(c.usage.prompt_tokens for c in self.llm.calls))
         self.assertEqual(t.usage.prompt_tokens, 1000 + 2000 + 3000 + 1000)
         self.assertEqual(t.usage.completion_tokens, 100 + 200 + 50 + 100)
-        self.assertAlmostEqual(t.notional_cost_usd, sum(f.notional_cost_usd for f in fs.findings))
         self.assertAlmostEqual(t.notional_cost_usd, sum(c.notional_cost_usd for c in self.llm.calls))
         self.assertAlmostEqual(t.notional_cost_usd, (7000 * 0.25 + 450 * 1.5) / 1e6)
         self.assertEqual(t.actual_cost_usd, 0.0)
@@ -360,24 +380,27 @@ class TestTotalsAndTrace(AgentCase):
         self.assertIn("accepted", submit_.output)
         self.assertIn("stop: submitted", stop.output)
         self.assertEqual([e.step for e in self.trace.events], list(range(1, len(self.trace.events) + 1)))
-        agents = {e.agent for e in self.trace.events}
-        self.assertEqual(agents, {f"qualitative/{c}" for c in QUAL_CRITERIA})
+        self.assertEqual({e.agent for e in self.trace.events}, {f"qualitative/{c}" for c in QUAL_CRITERIA})
 
     def test_section_missing_is_traced_without_a_model_call(self):
-        self.run_agent(reply(submit("sparkling beverages", "x")))
+        self.run_agent(reply(submit(self.loc(BIZ_A))))
         mine = [e for e in self.trace.events if e.agent == "qualitative/candid_management"]
         self.assertEqual([e.type for e in mine], ["note", "note", "note"])
         self.assertIn("section_missing", mine[1].output)
 
 
 class TestContracts(unittest.TestCase):
-    def test_finding_rules(self):
-        base = dict(criterion="candid_management", rationale="r", stop_reason="submitted")
-        QualFinding(verdict="insufficient evidence", **base)
+    def test_every_stop_reason_maps_to_the_right_verdict(self):
+        base = dict(criterion="candid_management", rationale="r")
+        QualFinding(verdict="insufficient evidence", stop_reason="submitted", **base)
+        for reason in ("turn_cap", "invalid_citation", "section_missing", "llm_output_error"):
+            QualFinding(verdict="not assessed", stop_reason=reason, **base)
+            with self.assertRaises(ValidationError):
+                QualFinding(verdict="insufficient evidence", stop_reason=reason, **base)
         with self.assertRaises(ValidationError):
-            QualFinding(verdict="evidence found", **base)  # needs a citation
+            QualFinding(verdict="not assessed", stop_reason="submitted", **base)
         with self.assertRaises(ValidationError):
-            QualFinding(verdict="evidence found", **{**base, "stop_reason": "turn_cap"})
+            QualFinding(verdict="evidence found", stop_reason="submitted", **base)  # needs a citation
 
 
 if __name__ == "__main__":
