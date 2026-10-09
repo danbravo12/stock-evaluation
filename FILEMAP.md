@@ -113,6 +113,7 @@ The engine is a library, so the batch command, the tests and the future live app
 | `tests/test_score.py` | Synthetic-series tests per criterion: edges, labels, sector exceptions, never-assume-zero, G5 negative base, B4 missing years, G6/G7 with a price. | Built |
 | `tests/test_splits.py` | Split adjustment on synthetic cases and the GOOGL, TSLA, KO and DUK fixtures. | Built |
 | `tests/test_llm.py` | 34 offline tests with a fake transport and injected clock: request hashing, record/replay, cost maths, pacing, Pacific-midnight reset, quota and caps, 429/400/5xx handling, JSON repair, tool calls, trace, key-secrecy scans. | Built |
+| `tests/test_expected_qualitative.py` | Guard: replayed agent verdicts equal the recorded ones; agreement 17/20 with every disagreement over-generous. | Built |
 | `tests/test_sentences.py` | Segmentation rules on synthetic text (bullets, newlines, abbreviations, decimals, long-sentence cuts, nothing lost) and exact round trip of every passage of the 5 recorded filings. | Built |
 | `tests/test_qualitative.py` | 29 offline tests of the agent with scripted model replies through the real client (fake transport) on a synthetic 10-K: seeded search, search / get_passage / submit, unchanged assistant messages and tool-call ids, turn cap and last-turn tools, pointer citations (exact quote from sentence numbers, out-of-range, last before first, over 3 sentences, over 120 words, never-retrieved passage, one correction then `invalid_citation`, one extra turn), verdict per stop reason, malformed arguments, section_missing, quota and budget propagation, totals and trace order. | Built |
 | `tests/test_qualitative_fixtures.py` | Replay of all 5 real runs with zero network: four findings each, every cited span equals `document_text[start:end]` and its sentence offsets, no mechanical citation failures, no advice words, totals add up. Structural only; verdicts not frozen. | Built |
@@ -133,6 +134,8 @@ Committed, so LLM-using tests replay offline. The three smoke-test calls (JSON m
 | File | Function | Status |
 |---|---|---|
 | `eval/snapshot.py` | Reduces a `ScoreSet` to label + key figures (4 significant digits); `python -m eval.snapshot` rewrites the frozen file after a reviewed change. | Built |
+| `eval/expected_qualitative.json` | Gold set for the qualitative agent: per ticker and criterion the recorded agent verdict, the human-reviewed verdict and a note (reviewer line inside). 3 of 20 labels differ, all over-generous. | Built |
+| `eval/qualitative_agreement.py` | Replays the recorded agent run and prints agreement with the gold set (17/20) and the disagreements; `agreement()` is reused by the Critic evaluation. | Built |
 | `eval/expected_scores.json` | Frozen, reviewed results for the 5 test companies and 11 criteria. | Built |
 
 ## Recorded data (`fixtures/`)

@@ -1,0 +1,116 @@
+{
+  "reviewer": "Daniel Bravo, reviewed with Claude, 2026-10-10",
+  "source": "agent_verdict = recorded v1.1 run (docs/qualitative_report.md, fixtures/llm/); human_verdict = reviewed label (ADR-050)",
+  "gold": {
+    "KO": {
+      "understandable_business": {
+        "agent_verdict": "evidence found",
+        "human_verdict": "evidence found",
+        "note": "Cites how finished product operations earn revenue (sales to retailers and distributors). Agree."
+      },
+      "durable_competitive_advantage": {
+        "agent_verdict": "evidence found",
+        "human_verdict": "evidence found",
+        "note": "Cites a checkable measure: trademarked beverages are 2.2 billion of an estimated 65 billion daily servings. Agree."
+      },
+      "candid_management": {
+        "agent_verdict": "insufficient evidence",
+        "human_verdict": "insufficient evidence",
+        "note": "Cites a risk-factor sentence about past and possible impairments; hypothetical, no account of a specific own-decision setback. Agree."
+      },
+      "rational_capital_allocation": {
+        "agent_verdict": "evidence found",
+        "human_verdict": "evidence found",
+        "note": "Quantified dividends ($8.8bn) plus stated capital allocation priorities. Agree."
+      }
+    },
+    "JPM": {
+      "understandable_business": {
+        "agent_verdict": "evidence found",
+        "human_verdict": "evidence found",
+        "note": "Segments, products and client groups described in plain terms (cited from Item 7). Agree."
+      },
+      "durable_competitive_advantage": {
+        "agent_verdict": "insufficient evidence",
+        "human_verdict": "insufficient evidence",
+        "note": "Only total assets and equity are cited; 'leading' is promotional. Agree."
+      },
+      "candid_management": {
+        "agent_verdict": "insufficient evidence",
+        "human_verdict": "insufficient evidence",
+        "note": "Hypothetical risk wording only. Agree."
+      },
+      "rational_capital_allocation": {
+        "agent_verdict": "evidence found",
+        "human_verdict": "evidence weak",
+        "note": "Agent over-generous: the cited sentences name repurchases and dividends with no amounts (and one is a stockholders' equity bridge); rubric says weak."
+      }
+    },
+    "GOOGL": {
+      "understandable_business": {
+        "agent_verdict": "evidence found",
+        "human_verdict": "evidence found",
+        "note": "Revenue sources (advertising, subscriptions, platforms, cloud) described; first cited sentence is thin. Agree."
+      },
+      "durable_competitive_advantage": {
+        "agent_verdict": "insufficient evidence",
+        "human_verdict": "insufficient evidence",
+        "note": "Trade secrets named without a measure; filing says users are one click away. Agree."
+      },
+      "candid_management": {
+        "agent_verdict": "evidence found",
+        "human_verdict": "evidence weak",
+        "note": "Agent over-generous: generic risk-factor wording ('devices have had, and may have, quality issues'); no specific setback named."
+      },
+      "rational_capital_allocation": {
+        "agent_verdict": "evidence found",
+        "human_verdict": "evidence found",
+        "note": "Quantified repurchases ($45.4bn) and capex ($91.4bn) plus the stated primary use of capital. Agree."
+      }
+    },
+    "TSLA": {
+      "understandable_business": {
+        "agent_verdict": "evidence found",
+        "human_verdict": "evidence found",
+        "note": "Two segments, products, direct sales model. Agree."
+      },
+      "durable_competitive_advantage": {
+        "agent_verdict": "evidence weak",
+        "human_verdict": "evidence weak",
+        "note": "'We believe ... strong brand ... give us a competitive advantage': assertion, no measure. Agree."
+      },
+      "candid_management": {
+        "agent_verdict": "evidence found",
+        "human_verdict": "evidence found",
+        "note": "Stays found, but thin: one risk-factor sentence admitting past guidance misses (timing of manufacturing ramps)."
+      },
+      "rational_capital_allocation": {
+        "agent_verdict": "evidence weak",
+        "human_verdict": "evidence weak",
+        "note": "Forward-looking capex only, no past actions or policy. Agree."
+      }
+    },
+    "DUK": {
+      "understandable_business": {
+        "agent_verdict": "evidence found",
+        "human_verdict": "evidence found",
+        "note": "Generates, transmits and sells electricity at commission-approved rates. Agree."
+      },
+      "durable_competitive_advantage": {
+        "agent_verdict": "evidence found",
+        "human_verdict": "evidence found",
+        "note": "Regulated exclusive franchise (sole supplier in its service territories). Agree."
+      },
+      "candid_management": {
+        "agent_verdict": "evidence weak",
+        "human_verdict": "evidence weak",
+        "note": "Net-zero progress 'will not be linear': a hedge, not a setback. Agree."
+      },
+      "rational_capital_allocation": {
+        "agent_verdict": "evidence found",
+        "human_verdict": "evidence weak",
+        "note": "Agent over-generous: only dividends are quantified; the cited 'capital requirements arise from...' is a description, not a policy; the rationale claims figures that are not cited."
+      }
+    }
+  }
+}
