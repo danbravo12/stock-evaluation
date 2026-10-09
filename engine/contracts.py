@@ -304,6 +304,18 @@ class CheckResult(BaseModel):
     detail: str = ""
     owner: CheckOwner
     attempt: int  # 0 = first check, 1 = re-check after the retry
+    kind: str | None = None  # qualitative failures: "verdict" (overstated/no), "rationale" (claims not in the quotes, banned words), "citation" (R2)
+    claims: list[str] = Field(default_factory=list)  # L1: rationale claims the quotes do not show
+
+
+class Repair(BaseModel):
+    """One routed repair attempt (ADR-052)."""
+
+    item: str
+    path: Literal["explanation_retry", "rationale_rewrite", "constrained_retry"]
+    outcome: Literal["accepted", "rejected_by_recheck", "not_submitted", "no_change", "invalid_rewrite"]
+    detail: str = ""
+    llm_calls: int = 0
 
 
 class CriticReport(BaseModel):
@@ -313,6 +325,7 @@ class CriticReport(BaseModel):
     ticker: str
     checks: list[CheckResult]
     final: dict[str, Literal["passed", "passed_after_retry", "warning"]]  # per item
+    repairs: list[Repair] = Field(default_factory=list)
     llm_calls: int = 0
     usage: Usage = Field(default_factory=Usage)
     actual_cost_usd: float = 0.0

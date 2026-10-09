@@ -2,11 +2,11 @@
   "_notes": "Model profiles (ADR-040): one OpenAI-compatible endpoint per profile. Prices are USD per 1M tokens on the paid tier; free_tier limits are per project and model. Select with LLM_PROFILE in .env.",
   "default_profile": "gemini-3.1-flash-lite",
   "budget": {
-    "total_usd_cap": 4.0,
+    "total_usd_cap": 6.0,
     "per_company_usd_cap": 0.05,
     "daily_safety_margin": 10,
     "default_max_tokens": 4096,
-    "_note": "ADR-023: engine cap $4.00 under a $5 Google spend cap. Per-company cap is about 2.5x the estimated $0.018 per company. The margin keeps us below the free daily limit."
+    "_note": "ADR-023 amended 2026-10-10 (approved by Daniel): engine cap $6.00 under a $7 Google project spend cap, to be set in AI Studio BEFORE billing is enabled (card on file required). Per-company cap is about 4x the measured $0.012 notional per company. The margin keeps us below the free daily limit."
   },
   "profiles": {
     "gemini-3.1-flash-lite": {

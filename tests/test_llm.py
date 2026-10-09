@@ -222,7 +222,7 @@ class TestBudgetGuard(Base):
         self.assertEqual((call.paid, call.actual_cost_usd), (False, 0.0))
 
     def test_total_and_company_caps_block_projected_overspend(self):
-        self.write_ledger(requests={"gemini-3.1-flash-lite": {"2026-10-09": 490}}, spend_usd=3.99999)
+        self.write_ledger(requests={"gemini-3.1-flash-lite": {"2026-10-09": 490}}, spend_usd=5.99999)
         t = FakeTransport(ok())
         with self.assertRaises(BudgetExceeded) as ctx:
             self.client(transport=t, paid=True).chat(MESSAGES, max_tokens=4000)

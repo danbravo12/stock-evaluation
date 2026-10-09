@@ -28,14 +28,22 @@ BANNED_PATH = REPO_ROOT / "config" / "banned_phrases.json"
 SEARCH_TERMS_PATH = REPO_ROOT / "config" / "search_terms.json"
 NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?")
 
-SYSTEM_PROMPT = """You are a strict reviewer. For each finding you see a criterion, the definitions of the verdict that was claimed and of the one below it, \
-the quoted sentences from a company's 10-K, and a rationale. Judge only from these quotes; use no outside knowledge.
+SYSTEM_PROMPT = """You are a strict reviewer with two jobs. Judge only from what you are shown; use no outside knowledge.
 
-For each finding return:
+Job 1, findings. For each finding you see a criterion, the definitions of the verdict that was claimed and of the one below it, the quoted sentences from \
+a company's 10-K, and a rationale. Return, in "checks":
 - supports_verdict: "yes" if the quotes show what the claimed verdict's definition requires; "overstated" if the quotes only support the lower verdict (for example they assert something without the specifics the claimed definition needs); "no" if the quotes do not bear on the criterion or support neither.
 - unsupported_claims: claims in the rationale (figures, facts, policies, causes) that the quotes do not contain. Ignore the standard remark that a 10-K is a limited guide to candour. Empty list if none.
 - reason: at most 30 words.
-Reply with only a JSON object: {"checks": [{"criterion": "<name>", "supports_verdict": "...", "unsupported_claims": [], "reason": "..."}]}"""
+
+Job 2, explanations. For each explanation you see a scorecard criterion, its result word, and a plain-English sentence or two written for it. Result words: \
+pass = the test was met; partial_pass = the test was met on the shorter record that exists (it must not sound like a failure); fail = the test was not met; \
+not_meaningful = the test cannot be interpreted. Return, in "explanation_checks":
+- agrees_with_label: "yes" if the text is consistent with the result word, "no" if it contradicts it or suggests another result.
+- reads_correctly: "yes" if the wording is correct, "no" if it uses a wrong term (for example "first-year average" for a 3-year average), has broken grammar, or says something the criterion does not mean.
+- reason: at most 30 words.
+Reply with only a JSON object: {"checks": [{"criterion": "<name>", "supports_verdict": "...", "unsupported_claims": [], "reason": "..."}], \
+"explanation_checks": [{"criterion": "<id>", "agrees_with_label": "yes", "reads_correctly": "yes", "reason": "..."}]}. Use empty lists for a job with nothing to review."""
 
 
 class FindingCheck(BaseModel):
@@ -45,8 +53,16 @@ class FindingCheck(BaseModel):
     reason: str = ""
 
 
+class ExplanationCheck(BaseModel):
+    criterion: str
+    agrees_with_label: Literal["yes", "no"]
+    reads_correctly: Literal["yes", "no"]
+    reason: str = ""
+
+
 class CriticVerdicts(BaseModel):
-    checks: list[FindingCheck]
+    checks: list[FindingCheck] = Field(default_factory=list)
+    explanation_checks: list[ExplanationCheck] = Field(default_factory=list)
 
 
 def load_banned() -> dict:
@@ -146,12 +162,31 @@ def llm_payload(findings: list[QualFinding], rubric: dict) -> list[dict]:
     return out
 
 
-def llm_check(findings: list[QualFinding], llm, ticker: str, rubric: dict | None = None) -> list[FindingCheck]:
+def explanation_payload(items: list[tuple[CriterionResult, Explanation]]) -> list[dict]:
+    return [{"criterion": r.id, "name": r.name, "result": r.label, "year_label": r.year_label, "threshold": r.threshold, "text": e.text} for r, e in items]
+
+
+def llm_review(findings: list[QualFinding], explanations: list[tuple[CriterionResult, Explanation]], llm, ticker: str,
+               rubric: dict | None = None) -> CriticVerdicts:
+    """The Critic's one model call per company: found/weak findings and the written explanations together."""
     rubric = rubric or load_rubric()
-    out = llm.complete_json([{"role": "system", "content": SYSTEM_PROMPT},
-                             {"role": "user", "content": "Findings to review:\n" + json.dumps(llm_payload(findings, rubric), indent=1, ensure_ascii=False)}],
-                            CriticVerdicts, agent="critic", company=ticker, temperature=0.0)
-    return out.checks
+    body = {"findings": llm_payload(findings, rubric), "explanations": explanation_payload(explanations)}
+    return llm.complete_json([{"role": "system", "content": SYSTEM_PROMPT},
+                              {"role": "user", "content": "To review:\n" + json.dumps(body, indent=1, ensure_ascii=False)}],
+                             CriticVerdicts, agent="critic", company=ticker, temperature=0.0)
+
+
+def llm_check(findings: list[QualFinding], llm, ticker: str, rubric: dict | None = None) -> list[FindingCheck]:
+    """Findings only (used for fault injection)."""
+    return llm_review(findings, [], llm, ticker, rubric).checks
+
+
+def explanation_failed(c: ExplanationCheck) -> bool:
+    return c.agrees_with_label != "yes" or c.reads_correctly != "yes"
+
+
+def explanation_detail(c: ExplanationCheck) -> str:
+    return f"agrees_with_label={c.agrees_with_label}; reads_correctly={c.reads_correctly}; {c.reason}"
 
 
 def llm_failed(c: FindingCheck) -> bool:
@@ -208,26 +243,38 @@ class Critic:
             passages = idx.by_id
             for f in todo:
                 probs = check_citations(f, text, sha, accession, idx.sections, passages)
-                r2.append(CheckResult(check="R2", item=f.criterion, status="fail" if probs else "pass", detail="; ".join(probs), owner="qualitative", attempt=attempt))
+                r2.append(CheckResult(check="R2", item=f.criterion, status="fail" if probs else "pass", detail="; ".join(probs), owner="qualitative", attempt=attempt, kind="citation" if probs else None))
         else:
             r2 = [CheckResult(check="R2", item=f.criterion, status="pass", detail="no citations to check", owner="qualitative", attempt=attempt) for f in todo]
         for f in todo:
             hits = banned_hits(f.rationale, self.banned)
-            r3q.append(CheckResult(check="R3", item=f.criterion, status="fail" if hits else "pass", detail="banned language in rationale: " + "; ".join(hits) if hits else "", owner="qualitative", attempt=attempt))
+            r3q.append(CheckResult(check="R3", item=f.criterion, status="fail" if hits else "pass", detail="banned language in rationale: " + "; ".join(hits) if hits else "", owner="qualitative", attempt=attempt, kind="rationale" if hits else None))
         self._log("R1", attempt, r1)
         self._log("R2", attempt, r2)
         self._log("R3", attempt, r3e + r3q)
         results += r1 + r2 + r3e + r3q
-        # L1: one model call for the found/weak findings with citations
+        # L1: one model call for the found/weak findings with citations and the written explanations
         l1 = []
         judged = [f for f in todo if needs_llm_check(f)]
-        if judged:
-            verdicts = {c.criterion: c for c in llm_check(judged, self.llm, scoreset.ticker, self.rubric)}
+        reviewed = [(r, by_expl[r.id]) for r in scoreset.results
+                    if r.id in by_expl and not by_expl[r.id].templated and (only_explanations is None or r.id in only_explanations)]
+        if judged or reviewed:
+            out = llm_review(judged, reviewed, self.llm, scoreset.ticker, self.rubric)
+            verdicts = {c.criterion: c for c in out.checks}
+            ex_checks = {c.criterion: c for c in out.explanation_checks}
             for f in judged:
                 c = verdicts.get(f.criterion)
                 if c is None:
                     l1.append(CheckResult(check="L1", item=f.criterion, status="pass", detail="the model returned no judgement for this finding (not checked)", owner="qualitative", attempt=attempt))
                 else:
-                    l1.append(CheckResult(check="L1", item=f.criterion, status="fail" if llm_failed(c) else "pass", detail=llm_detail(c), owner="qualitative", attempt=attempt))
-        self._log("L1", attempt, l1, "" if judged else " (no found/weak finding with citations to judge)")
+                    failed_ = llm_failed(c)
+                    l1.append(CheckResult(check="L1", item=f.criterion, status="fail" if failed_ else "pass", detail=llm_detail(c), owner="qualitative", attempt=attempt,
+                                          kind=("verdict" if c.supports_verdict != "yes" else "rationale") if failed_ else None, claims=list(c.unsupported_claims)))
+            for r, _ in reviewed:
+                c = ex_checks.get(r.id)
+                if c is None:
+                    l1.append(CheckResult(check="L1", item=r.id, status="pass", detail="the model returned no judgement for this explanation (not checked)", owner="explainer", attempt=attempt))
+                else:
+                    l1.append(CheckResult(check="L1", item=r.id, status="fail" if explanation_failed(c) else "pass", detail=explanation_detail(c), owner="explainer", attempt=attempt))
+        self._log("L1", attempt, l1, "" if (judged or reviewed) else " (nothing to judge)")
         return results + l1

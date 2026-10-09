@@ -190,31 +190,31 @@ Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). The qualitative 
 
 | Step | LLM calls per company | Notes |
 |---|---|---|
-| Qualitative agent | 5–9 (mean 7.0, measured) | One loop per criterion, seeded first search; tool calls to the retriever are local and free. Measured on the 5 test tickers: mean 18.8k input + 0.94k output tokens, notional $0.0061 per company (`docs/qualitative_report.md`) |
+| Qualitative agent | 5–9 (mean 6.6, measured) | One loop per criterion, seeded first search; tool calls to the retriever are local and free. Measured on the 5 test tickers: mean 17.3k input + 0.87k output tokens, notional $0.0056 per company (`docs/qualitative_report.md`) |
 | Explainer | 1 (measured) | All numeric criteria in one call; 0 retries needed on the 5 test companies |
-| Critic (LLM part) | 1.8 (measured: 1 check plus a re-check when something is sent back) | Rule checks cost nothing |
-| Retries (qualitative loops sent back) | 3.8 (measured: 9 items over 5 companies, about 2 calls each) | Only failed items, once |
-| **Total** | **~13.6 (measured)** | About 34k input + 2.4k output tokens, notional $0.012 per company (`docs/critic_report.md`) |
+| Critic (LLM part) | 1.6 (measured: 1 check, which also reviews the explanations, plus a re-check when something is sent back) | Rule checks cost nothing |
+| Repairs (rationale rewrites 1 call, constrained retries up to 3 turns) | 1.2 (measured: 5 repairs over 5 companies) | Only failed items, once (ADR-052) |
+| **Total** | **~10.4 (measured)** | About 25k input + 2.3k output tokens, notional $0.010 per company (`docs/critic_report.md`) |
 
 | Mode | Cost per company | Full S&P 500 | Time |
 |---|---|---|---|
 | Free tier | $0.00 | $0.00 | ~1–2 weeks of daily quota (limit to confirm in AI Studio) |
-| Paid, standard ($0.25 / $1.50 per M tokens) | ~$0.012 (measured) | ~$6 (over the $4 cap) | Hours |
-| Paid, Batch API (half price) | ~$0.006 | ~$3 | Deferred: not v1 (ADR-023 §7) |
-| **v1 plan: hybrid** | free first, paid up to $4 | ≤ $4 paid | Days, not weeks |
+| Paid, standard ($0.25 / $1.50 per M tokens) | ~$0.010 (measured) | ~$5 (under the $6 engine cap) | Hours |
+| Paid, Batch API (half price) | ~$0.005 | ~$2.5 | Deferred: not v1 (ADR-023 §7) |
+| **v1 plan: hybrid** | free first, paid up to $6 | ≤ $6 paid | Days, not weeks |
 
-- **Budget:** engine cap $4.00, Google project spend cap $5 (ADR-023). Paid mode is locked until the evaluation harness passes.
+- **Budget:** engine cap $6.00, Google project spend cap $7 (ADR-023, amended 2026-10-10). Paid mode is locked until the evaluation harness passes.
 - **Demo shows both:** "actual $0.00x (free tier + paid) · notional $0.0xx at paid rates", from the ledger, recorded at run time.
 
 ---|---|---|
-| Qualitative agent | 5–9 (mean 7.0, measured) | One loop per criterion, seeded first search; tool calls to the retriever are local and free. Measured on the 5 test tickers: mean 18.8k input + 0.94k output tokens, notional $0.0061 per company (`docs/qualitative_report.md`) |
+| Qualitative agent | 5–9 (mean 6.6, measured) | One loop per criterion, seeded first search; tool calls to the retriever are local and free. Measured on the 5 test tickers: mean 17.3k input + 0.87k output tokens, notional $0.0056 per company (`docs/qualitative_report.md`) |
 | Explainer | 1 (measured) | All numeric criteria in one call; 0 retries needed on the 5 test companies |
-| Critic (LLM part) | 1.8 (measured: 1 check plus a re-check when something is sent back) | Rule checks cost nothing |
-| Retries (qualitative loops sent back) | 3.8 (measured: 9 items over 5 companies, about 2 calls each) | Only failed items, once |
-| **Total** | **~13.6 (measured)** | |
+| Critic (LLM part) | 1.6 (measured: 1 check, which also reviews the explanations, plus a re-check when something is sent back) | Rule checks cost nothing |
+| Repairs (rationale rewrites 1 call, constrained retries up to 3 turns) | 1.2 (measured: 5 repairs over 5 companies) | Only failed items, once (ADR-052) |
+| **Total** | **~10.4 (measured)** | |
 
 - **Actual cost:** $0.00 per analysis on the Gemini Flash-Lite free tier.
-- **Throughput:** at ~500 requests/day (reported, not published), roughly 35 companies per day (about 13.6 requests each, measured: 7.0 qualitative, 1.0 Explainer, 1.8 Critic, 3.8 qualitative retries), so the full S&P 500 in about 1–2 weeks. The numeric scorecard for all ~500 companies needs no LLM and runs in minutes.
+- **Throughput:** at ~500 requests/day (reported, not published), roughly 47 companies per day (about 10.4 requests each, measured: 6.6 qualitative, 1.0 Explainer, 1.6 Critic, 1.2 repairs), so the full S&P 500 in about 1–2 weeks. The numeric scorecard for all ~500 companies needs no LLM and runs in minutes.
 - **Demo shows both:** "actual $0.00 (free tier) · notional $0.00x at paid rates", where the notional figure is token counts × the published paid price, recorded at run time.
 
 ---

@@ -9,7 +9,7 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from engine.agents.qualitative import MAX_SPAN_WORDS, SYSTEM_PROMPT, assess_qualitative, check_citations, load_criteria, render_passage
+from engine.agents.qualitative import MAX_SPAN_WORDS, SYSTEM_PROMPT, assess_qualitative, check_citations, constrained_retry, load_criteria, render_passage
 from engine.contracts import QUAL_CRITERIA, QualFinding
 from engine.llm.budget import BudgetExceeded, QuotaReached
 from engine.llm.client import LLMClient, LLMFixtureMissing
@@ -286,6 +286,61 @@ class TestPointerCitations(AgentCase):
         pid, _ = self.loc(BIZ_A)
         f = self.run_agent(reply(submit((pid, 99), verdict="insufficient evidence", rationale="Nothing relevant.")))
         self.assertEqual((f.verdict, f.stop_reason, f.citations, f.llm_calls), ("insufficient evidence", "submitted", [], 1))
+
+
+class TestConstrainedRetry(AgentCase):
+    """The Critic-routed retry for a verdict failure (ADR-052): cite something new, or lower the verdict; at most 3 turns."""
+
+    def start(self):
+        self.pid, self.i = self.loc(BIZ_A)
+        self.orig = self.run_agent(reply(submit((self.pid, self.i))))  # "evidence found", citing BIZ_A
+
+    def retry(self, finding, *responses):
+        self.transport = FakeTransport(*responses)
+        self.trace = TraceRecorder("t")
+        self.llm = LLMClient("live", self.settings(), transport=self.transport, sleep=self.clock.sleep, now=self.clock.now, clock=lambda: 0.0, trace=self.trace)
+        self.rt = self.retriever()
+        return constrained_retry(1, "FIZZ", self.rt, self.llm, self.trace, finding, reason="needs a figure, not an assertion", criteria=criteria(**ONLY_BUSINESS))
+
+    def test_first_message_gives_the_reason_the_verdict_the_citations_and_the_two_options(self):
+        self.start()
+        pid_c, ic = self.loc(BIZ_C)
+        res, outcome = self.retry(self.orig, reply(submit((pid_c, ic))))
+        first = self.request(0)["messages"][1]["content"]
+        self.assertIn("needs a figure, not an assertion", first)
+        self.assertIn('earlier verdict was "evidence found"', first)
+        self.assertIn(BIZ_A, first)  # the earlier citation is shown
+        self.assertIn("exactly two options", first)
+        self.assertIn("lower verdict", first)
+        self.assertEqual((outcome, res.verdict), ("submitted", "evidence found"))  # a new citation keeps the verdict
+        self.assertEqual(res.citations[0].passage_id, pid_c)
+
+    def test_same_verdict_without_a_new_citation_gets_one_error_then_the_retry_ends(self):
+        self.start()
+        same = submit((self.pid, self.i))
+        res, outcome = self.retry(self.orig, reply(same), reply(same))
+        self.assertEqual((outcome, res.stop_reason, res.verdict, res.llm_calls), ("no_change", "turn_cap", "not assessed", 2))
+        self.assertIn("at least one sentence you have not cited before", self.request(1)["messages"][-1]["content"])
+        self.assertEqual(len(self.transport.calls), 2)
+
+    def test_a_lower_verdict_is_accepted_even_with_the_same_citation(self):
+        self.start()
+        res, outcome = self.retry(self.orig, reply(submit((self.pid, self.i), verdict="evidence weak", rationale="Only a general statement.")))
+        self.assertEqual((outcome, res.verdict, res.llm_calls), ("submitted", "evidence weak", 1))
+
+    def test_a_higher_verdict_is_refused(self):
+        self.start()
+        weak = self.orig.model_copy(update={"verdict": "evidence weak"})
+        pid_c, ic = self.loc(BIZ_C)
+        res, outcome = self.retry(weak, reply(submit((pid_c, ic), verdict="evidence found")), reply(submit((pid_c, ic), verdict="evidence weak")))
+        self.assertIn("not raise it", self.request(1)["messages"][-1]["content"])
+        self.assertEqual((outcome, res.verdict), ("submitted", "evidence weak"))
+
+    def test_three_turns_at_most_and_the_last_offers_only_submit(self):
+        self.start()
+        res, outcome = self.retry(self.orig, *[reply(call("search", {"query": f"juice {k}"}, f"s{k}")) for k in range(3)])
+        self.assertEqual((outcome, res.stop_reason, len(self.transport.calls)), ("not_submitted", "turn_cap", 3))
+        self.assertEqual(self.tool_names(2), ["submit_finding"])
 
 
 class TestMalformed(AgentCase):

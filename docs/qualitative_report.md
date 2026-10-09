@@ -20,17 +20,17 @@ Model calls are the requests that count against the free-tier quota; tool calls 
 
 | Company | Model calls | Tool calls | Input tokens | Output tokens | Total tokens | Notional cost | Actual cost |
 |---|---|---|---|---|---|---|---|
-| KO | 6 | 10 | 15,556 | 578 | 16,134 | $0.0048 | $0.0000 |
-| JPM | 9 | 13 | 27,270 | 1,125 | 28,395 | $0.0085 | $0.0000 |
-| GOOGL | 9 | 13 | 22,965 | 1,383 | 24,348 | $0.0078 | $0.0000 |
-| TSLA | 5 | 9 | 11,010 | 752 | 11,762 | $0.0039 | $0.0000 |
-| DUK | 6 | 10 | 17,000 | 853 | 17,853 | $0.0055 | $0.0000 |
-| **Mean** | 7.0 | 11.0 | 18,760 | 938 | 19,698 | $0.0061 | $0.0000 |
-| **Total** | 35 | 55 | 93,801 | 4,691 | 98,492 | $0.0305 | $0.0000 |
+| KO | 6 | 10 | 15,572 | 582 | 16,154 | $0.0048 | $0.0000 |
+| JPM | 9 | 13 | 27,302 | 1,125 | 28,427 | $0.0085 | $0.0000 |
+| GOOGL | 8 | 12 | 20,398 | 1,164 | 21,562 | $0.0068 | $0.0000 |
+| TSLA | 5 | 9 | 11,026 | 745 | 11,771 | $0.0039 | $0.0000 |
+| DUK | 5 | 9 | 11,995 | 721 | 12,716 | $0.0041 | $0.0000 |
+| **Mean** | 6.6 | 10.6 | 17,259 | 867 | 18,126 | $0.0056 | $0.0000 |
+| **Total** | 33 | 53 | 86,293 | 4,337 | 90,630 | $0.0281 | $0.0000 |
 
 ## KO
 
-10-K accession `0001628280-26-010047` · 6 model calls, 10 tool calls, 16,134 tokens, notional $0.0048, actual $0.0000
+10-K accession `0001628280-26-010047` · 6 model calls, 10 tool calls, 16,154 tokens, notional $0.0048, actual $0.0000
 
 ### KO · understandable_business: **evidence found**
 
@@ -70,7 +70,7 @@ Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,342 in / 147 out 
 
 ### KO · rational_capital_allocation: **evidence found**
 
-The filing explicitly states the company's capital allocation priorities (investing in operations, growing dividends, acquisitions, and share repurchases) and provides concrete figures for dividends paid during the fiscal year.
+The filing explicitly states the company's capital allocation priorities, which include investing in business operations, growing dividends, making acquisitions, and repurchasing shares. It also provides concrete figures for dividends paid during the fiscal year.
 
 > Our current capital allocation priorities are as follows: investing wisely to support our business operations, continuing to grow our dividend payment, enhancing our beverage portfolio and capabilities through consumer-centric acquisitions, and using excess cash to repurchase shares over time.
 > — accession `0001628280-26-010047`, Item 7, passage `0001628280-26-010047:7:77`, sentences 7–7, characters 281045–281339
@@ -80,11 +80,11 @@ The filing explicitly states the company's capital allocation priorities (invest
 
 Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits
 
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,182 in / 147 out · notional $0.0008
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,198 in / 151 out · notional $0.0008
 
 ## JPM
 
-10-K accession `0001628280-26-008131` · 9 model calls, 13 tool calls, 28,395 tokens, notional $0.0085, actual $0.0000
+10-K accession `0001628280-26-008131` · 9 model calls, 13 tool calls, 28,427 tokens, notional $0.0085, actual $0.0000
 
 ### JPM · understandable_business: **evidence found**
 
@@ -127,7 +127,7 @@ Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,499 in / 179 out 
 
 ### JPM · rational_capital_allocation: **evidence found**
 
-The filing documents that the firm engages in common share repurchases and dividend payments as part of its capital actions. It explains that these actions are managed under a governance framework and determined by factors including capital position, organic capital generation, and investment opportunities.
+The filing confirms the firm engaged in share repurchases and dividend payments during the fiscal year and outlines a capital management framework where management determines the timing and amount of these actions based on factors such as capital position, organic capital generation, and investment opportunities.
 
 > •the impact of capital actions, including net repurchases of common shares and dividend payments on common and preferred stock.
 > — accession `0001628280-26-008131`, Item 7, passage `0001628280-26-008131:7:35`, sentences 7–7, characters 240020–240147
@@ -137,11 +137,11 @@ The filing documents that the firm engages in common share repurchases and divid
 
 Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits
 
-Stop: `submitted` · model calls 2 · tool calls 3 · tokens 4,955 in / 357 out · notional $0.0018
+Stop: `submitted` · model calls 2 · tool calls 3 · tokens 4,987 in / 357 out · notional $0.0018
 
 ## GOOGL
 
-10-K accession `0001652044-26-000018` · 9 model calls, 13 tool calls, 24,348 tokens, notional $0.0078, actual $0.0000
+10-K accession `0001652044-26-000018` · 8 model calls, 12 tool calls, 21,562 tokens, notional $0.0068, actual $0.0000
 
 ### GOOGL · understandable_business: **evidence found**
 
@@ -184,21 +184,21 @@ Stop: `submitted` · model calls 2 · tool calls 3 · tokens 4,882 in / 250 out 
 
 ### GOOGL · rational_capital_allocation: **evidence found**
 
-The filing quantifies capital expenditures ($91.4 billion) and share repurchases ($45.4 billion) for 2025. It also states that the primary use of capital is to invest for long-term growth and that management regularly evaluates the size, pace, and form of capital returns to stockholders.
-
-> •Repurchases of Class A and Class C shares were $6.5 billion and $38.9 billion, respectively, totaling $45.4 billion for the year ended December 31, 2025. •Operating cash flow was $164.7 billion for the year ended December 31, 2025. •Capital expenditures, which primarily reflected investments in technical infrastructure, were $91.4 billion for the year ended December 31, 2025.
-> — accession `0001652044-26-000018`, Item 7, passage `0001652044-26-000018:7:20`, sentences 2–4, characters 150578–150957
+The filing states that the primary use of capital is to invest for long-term growth and that management regularly evaluates capital returns to stockholders. It also provides concrete figures for 2025, including $91.4 billion in capital expenditures and $45.4 billion in share repurchases.
 
 > The primary use of capital continues to be to invest for the long-term growth of the business. We regularly evaluate our cash and capital structure, including the size, pace, and form of capital return to stockholders.
 > — accession `0001652044-26-000018`, Item 7, passage `0001652044-26-000018:7:31`, sentences 5–6, characters 163027–163245
 
+> •Repurchases of Class A and Class C shares were $6.5 billion and $38.9 billion, respectively, totaling $45.4 billion for the year ended December 31, 2025. •Operating cash flow was $164.7 billion for the year ended December 31, 2025. •Capital expenditures, which primarily reflected investments in technical infrastructure, were $91.4 billion for the year ended December 31, 2025.
+> — accession `0001652044-26-000018`, Item 7, passage `0001652044-26-000018:7:20`, sentences 2–4, characters 150578–150957
+
 Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits
 
-Stop: `submitted` · model calls 2 · tool calls 3 · tokens 4,912 in / 388 out · notional $0.0018
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,345 in / 169 out · notional $0.0008
 
 ## TSLA
 
-10-K accession `0001628280-26-003952` · 5 model calls, 9 tool calls, 11,762 tokens, notional $0.0039, actual $0.0000
+10-K accession `0001628280-26-003952` · 5 model calls, 9 tool calls, 11,771 tokens, notional $0.0039, actual $0.0000
 
 ### TSLA · understandable_business: **evidence found**
 
@@ -238,7 +238,7 @@ Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,371 in / 121 out 
 
 ### TSLA · rational_capital_allocation: **evidence weak**
 
-The filing states a priority of focusing on long-term growth through high-value investments and provides a concrete expectation for capital expenditures exceeding $20 billion in 2026 for specific initiatives like AI, manufacturing, and infrastructure. However, it does not quantify or provide a policy for other uses of cash such as share repurchases, dividends, or debt repayment beyond mentioning the possibility of voluntary early repayment.
+The filing states a priority of focusing on long-term growth through high-value investments and quantifies expected capital expenditures for 2026 at over $20 billion to fund AI initiatives, manufacturing, and infrastructure. However, it does not quantify past capital allocation actions (such as specific amounts spent on acquisitions, buybacks, or debt repayment) during the fiscal year.
 
 > As discussed in and subject to the considerations referenced in Part II, Item 7, Management's Discussion and Analysis of Financial Condition and Results of Operations—Management Opportunities, Challenges and Uncertainties and 2026 Outlook—Cash Flow and Capital Expenditure Trends in this Annual Report on Form 10-K, we currently expect our capital expenditures to exceed $20 billion in 2026 driven by our AI initiatives, including investments in compute infrastructure and data centers, the expansion and ramp of our manufacturing and R&D production lines and facilities, and growth in our fleet of company-operated AI-enabled assets and our retail, service and charging footprint.
 > — accession `0001628280-26-003952`, Item 7, passage `0001628280-26-003952:7:50`, sentences 1–2, characters 198178–198859
@@ -248,11 +248,11 @@ The filing states a priority of focusing on long-term growth through high-value 
 
 Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits
 
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,065 in / 190 out · notional $0.0008
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,081 in / 183 out · notional $0.0008
 
 ## DUK
 
-10-K accession `0001326160-26-000014` · 6 model calls, 10 tool calls, 17,853 tokens, notional $0.0055, actual $0.0000
+10-K accession `0001326160-26-000014` · 5 model calls, 9 tool calls, 12,716 tokens, notional $0.0041, actual $0.0000
 
 ### DUK · understandable_business: **evidence found**
 
@@ -292,15 +292,15 @@ Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,182 in / 122 out 
 
 ### DUK · rational_capital_allocation: **evidence found**
 
-The filing identifies capital requirements (capital expenditures, debt repayment, and dividends) and provides concrete figures for these activities in 2025. It also states a policy of maintaining a business portfolio that delivers a reliable and growing dividend and notes that capital allocation is driven by the need to fund capital expenditures and debt maturities.
+The filing identifies capital expenditures, debt repayment, and dividends as the primary capital requirements for the business. It provides concrete figures for capital expenditures in 2025 and 2024, as well as data on debt and equity financing activities.
 
-> Duke Energy relies primarily upon cash flows from operations, debt and equity issuances and its existing cash and cash equivalents to fund its liquidity and capital requirements. Duke Energy's capital requirements arise primarily from capital and investment expenditures, repaying long-term debt and paying dividends to shareholders.
-> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:80`, sentences 1–2, characters 284630–284963
+> Duke Energy's capital requirements arise primarily from capital and investment expenditures, repaying long-term debt and paying dividends to shareholders.
+> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:80`, sentences 2–2, characters 284809–284963
 
-> Dividends paid | (3,300) | (3,213) | (87)
-> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:102`, sentences 1–1, characters 308275–308316
+> Gas Utilities and Infrastructure | 1,114 | 1,313 | (199) Other | 335 | 261 | 74 Total capital, investment and acquisition expenditures, net of return of investment capital | $ | 14,002 | $ | 12,263 | $ | 1,739
+> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:101`, sentences 6–8, characters 307579–307788
 
-Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits; "dividends paid amount policy rationale" in items 7 → 4 hits
+Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits
 
-Stop: `submitted` · model calls 3 · tool calls 4 · tokens 10,515 in / 450 out · notional $0.0033
+Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,510 in / 318 out · notional $0.0019
 

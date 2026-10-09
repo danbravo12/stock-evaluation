@@ -30,6 +30,7 @@ MAX_SPAN_SENTENCES = 3  # last - first <= 2
 MAX_SPAN_WORDS = 120
 MAX_RATIONALE_WORDS = 80  # proxy for "two sentences"
 ITEMS = ("1", "1A", "7")
+RANK = {"insufficient evidence": 0, "evidence weak": 1, "evidence found": 2}
 VERDICTS = ("evidence found", "evidence weak", "insufficient evidence")
 
 # Fixed on purpose: the request hash (record/replay) depends on it. Criterion-specific text goes in the first user message.
@@ -128,6 +129,7 @@ class _Run:
     tool_calls: int = 0
     malformed: int = 0
     rejected: int = 0
+    no_change: int = 0
     stop: str | None = None
     verdict: str | None = None
     rationale: str = ""
@@ -136,9 +138,9 @@ class _Run:
 
 class _CriterionLoop:
     def __init__(self, name: str, spec: dict, cik: str, ticker: str, retriever: Retriever, idx: FilingIndex, accession: str,
-                 llm, trace: TraceRecorder, max_turns: int, feedback: str | None = None):
+                 llm, trace: TraceRecorder, max_turns: int, constraint: "RetryConstraint | None" = None):
         self.name, self.spec, self.cik, self.ticker = name, spec, cik, ticker
-        self.feedback = feedback  # a Critic message about the previous attempt (ADR-049)
+        self.constraint = constraint  # set for a Critic-routed constrained retry (ADR-052)
         self.retriever, self.idx, self.accession, self.llm, self.trace = retriever, idx, accession, llm, trace
         self.max_turns, self.agent = max_turns, f"qualitative/{name}"
         self.run = _Run()
@@ -174,7 +176,16 @@ class _CriterionLoop:
         self.trace.tool_call(self.agent, "search_many", {"queries": spec["queries"], "items": spec["items"], "k": SEED_K, "seeded": True},
                              "seeded search (decided in code, before the first model call): " + self._hit_summary(hits))
 
-        messages = [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": self._first_message(hits, missing)}]
+        extra = ""
+        if self.constraint:  # earlier citations stay citable and are shown
+            shown = {h.passage_id for h in hits}
+            for c in self.constraint.finding.citations:
+                p = self.idx.by_id[c.passage_id]
+                self.run.retrieved[c.passage_id] = p
+                if c.passage_id not in shown:
+                    shown.add(c.passage_id)
+                    extra += "\n" + render_passage(p, self.idx.text) + "\n"
+        messages = [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": self._first_message(hits, missing) + extra}]
         limit, notes, extended = self.max_turns, [], False
         turn = 0
         while turn < limit:
@@ -221,9 +232,14 @@ class _CriterionLoop:
                  f"You have up to {self.max_turns} turns, including this one."]
         if s.get("rationale_note"):
             lines.append(s["rationale_note"])
-        if self.feedback:
-            lines.append("A reviewer checked your previous attempt at this criterion and rejected it: " + self.feedback
-                         + " Judge again from the passages; keep a verdict only if the cited sentences support it, and add nothing the cited sentences do not show.")
+        if self.constraint:
+            f = self.constraint.finding
+            cited = "\n".join(f"- {c.passage_id} sentences {c.sentences[0]}-{c.sentences[1]}: {c.quote}" for c in f.citations) or "- (none)"
+            lines.append(f"\nA reviewer rejected your earlier finding for this criterion. Reviewer's reason: {self.constraint.reason}\n"
+                         f"Your earlier verdict was \"{f.verdict}\", citing:\n{cited}\n"
+                         "You now have exactly two options: (a) search and cite sentences you have not cited before that show what was missing, "
+                         "then submit; or (b) submit a lower verdict (\"evidence weak\" or \"insufficient evidence\"). "
+                         "Submitting the same verdict without at least one newly cited sentence is not accepted. Add no claim that your cited sentences do not show.")
         if missing:
             lines.append("Not available in this filing: " + "; ".join(f"Item {i} ({r})" for i, r in missing.items()) + ".")
         lines.append(f"\nA starting search of Item(s) {', '.join(s['items'])} has already been run for you ({len(hits)} passages). Use search for more.\n")
@@ -319,6 +335,20 @@ class _CriterionLoop:
                 return "Rejected again; no finding recorded."
             return ("Rejected: " + " | ".join(problems) + ". Submit again with each citation as {passage_id, first, last} using the sentence numbers "
                     "shown in passages you were given: " + ", ".join(self.run.retrieved) + ".")
+        if self.constraint:
+            old = self.constraint.finding
+            if RANK[verdict] > RANK[old.verdict]:
+                return f"Rejected: a retry may keep or lower the verdict (\"{old.verdict}\"), not raise it."
+            seen = {(c.passage_id, tuple(c.sentences)) for c in old.citations}
+            has_new = any((c.passage_id, tuple(c.sentences)) not in seen for c in citations)
+            if RANK[verdict] == RANK[old.verdict] and not has_new:
+                self.run.no_change += 1
+                if self.run.no_change >= 2:
+                    self.run.stop = "no_change"
+                    self.trace.note(self.agent, "retry ended: the same verdict again without a newly cited sentence")
+                    return "Rejected again; the retry ends and the earlier finding stands."
+                return ("Rejected: the same verdict needs at least one sentence you have not cited before. Search for sentences that show what was missing, "
+                        "or submit a lower verdict.")
         self.run.stop, self.run.verdict, self.run.rationale, self.run.citations = "submitted", verdict, rationale.strip(), citations
         return "Finding accepted."
 
@@ -345,11 +375,27 @@ def qual_totals(findings: list[QualFinding]) -> QualTotals:
                       actual_cost_usd=sum(f.actual_cost_usd for f in findings), notional_cost_usd=sum(f.notional_cost_usd for f in findings))
 
 
-def reassess_criterion(cik: str | int, ticker: str, retriever: Retriever, llm, trace: TraceRecorder, criterion: str, *, feedback: str,
-                       max_turns: int = 4, criteria: dict | None = None) -> QualFinding:
-    """Run one criterion's loop again with the Critic's message in the first user message (a routed retry, ADR-049)."""
+@dataclass
+class RetryConstraint:
+    """What a Critic-routed retry is told: the finding being repaired and the Critic's reason (ADR-052)."""
+
+    finding: QualFinding
+    reason: str
+
+
+def constrained_retry(cik: str | int, ticker: str, retriever: Retriever, llm, trace: TraceRecorder, finding: QualFinding, *, reason: str,
+                      max_turns: int = 3, criteria: dict | None = None) -> tuple[QualFinding, str]:
+    """Re-run one criterion's loop for a verdict the Critic rejected: search and cite something new, or lower the verdict.
+
+    Returns (result, outcome) with outcome "submitted", "no_change" (same verdict, no new citation, twice) or "not_submitted".
+    The caller keeps the original finding unless the result is submitted and passes the Critic's re-check.
+    """
     cik = cik10(cik)
     idx = retriever.index(cik)
     accession = next(iter(idx.sections.values())).accession
     spec = criteria or load_criteria()
-    return _CriterionLoop(criterion, spec[criterion], cik, ticker, retriever, idx, accession, llm, trace, max_turns, feedback).execute()
+    loop = _CriterionLoop(finding.criterion, spec[finding.criterion], cik, ticker, retriever, idx, accession, llm, trace, max_turns,
+                          RetryConstraint(finding, reason))
+    result = loop.execute()
+    outcome = "submitted" if result.stop_reason == "submitted" else ("no_change" if loop.run.stop == "no_change" else "not_submitted")
+    return result, outcome

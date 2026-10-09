@@ -32,7 +32,7 @@ StockEvaluation/
 |---|---|---|
 | `README.md` | Front door for a stranger: what the tool is, the not-financial-advice disclaimer, how to run tests and record fixtures. Will grow into the full README for v1. | Built (stub) |
 | `STATUS.md` | Where the project is: done, waiting on, next steps, notes for the next build step, milestone summaries. | Built |
-| `DECISIONS.md` | ADR log: every key decision with context, decision and trade-off (ADR-001 to ADR-051). | Built |
+| `DECISIONS.md` | ADR log: every key decision with context, decision and trade-off (ADR-001 to ADR-052). | Built |
 | `PROCESS.md` | The research workflow being automated: inputs, steps, decision points, criteria tables (G1–G7, B1–B4, four qualitative Buffett criteria), failure handling. | Built |
 | `ARCHITECTURE.md` | System view, agent hand-off sequence, component catalogue, run economics. | Built |
 | `FILEMAP.md` | This file. | Built |
@@ -78,8 +78,9 @@ The engine is a library, so the batch command, the tests and the future live app
 | `engine/trace.py` | `TraceRecorder`: one JSONL event per LLM call, tool call or note (ADR-020). | Built |
 | `engine/sentences.py` | Deterministic sentence segmentation with exact document offsets (newlines, bullets, sentence ends, abbreviations, long-sentence cuts); stored on every `Passage` (ADR-046). | Built |
 | `engine/agents/explainer.py` | The Explainer: `explain(scoreset, llm, trace, only=, feedback=)` makes one call per company for pass/fail/partial/not-meaningful criteria, with `{placeholders}` rendered by code from `figures` (`render`, `format_value`); templated lines for n/a and data gaps (ADR-048). | Built |
-| `engine/agents/critic.py` | The Critic's checks: pure functions `check_explanation` (R1), `check_citations` (R2, independent of the agent's checker), `banned_hits` (R3), `llm_check` (L1), and the `Critic` class that runs them against the re-loaded 10-K (ADR-049). | Built |
-| `engine/agents/review.py` | `explain_and_verify(scoreset, qual, ...)`: Explainer, Critic, one routed retry per failed item to its owner, re-check, warnings; returns `ReviewResult` (explanations, qualitative findings, `CriticReport`). No orchestrator yet. | Built |
+| `engine/agents/critic.py` | The Critic's checks: pure functions `check_explanation` (R1), `check_citations` (R2, independent of the agent's checker), `banned_hits` (R3), `llm_review` (L1: findings and explanation meaning in one call), and the `Critic` class that runs them against the re-loaded 10-K (ADR-049). | Built |
+| `engine/agents/repair.py` | `rewrite_rationale`: the cheap repair for a finding whose verdict stands but whose rationale says more than its quotes; one call, sees only the question, verdict, quotes and problems (ADR-052). | Built |
+| `engine/agents/review.py` | `explain_and_verify(scoreset, qual, ...)`: Explainer, Critic, one repair per failed item by the path that fits (explanation retry, rationale rewrite, constrained retry), re-check; a failed repair keeps the original with a warning; returns `ReviewResult` (explanations, qualitative findings, `CriticReport`). No orchestrator yet. | Built |
 | `engine/agents/__init__.py` | Package for the LLM agents. | Built |
 | `engine/agents/qualitative.py` | The Buffett qualitative agent: `assess_qualitative(cik, ticker, retriever, llm, trace)` runs one tool loop per criterion (seeded search, `search` / `get_passage` / `submit_finding`, 4-turn cap). Passages are shown as numbered sentences and cited by pointer; code builds the quote and exact offsets; "not assessed" is assigned from the stop reason (ADR-041 to ADR-047). | Built |
 | `engine/fetch/__init__.py` | Marks `fetch` as a package. | Built |

@@ -26,15 +26,24 @@ It is not investment advice.
 For each criterion write one or two sentences, at most 45 words, saying what the figures show against the threshold.
 Rules:
 - Never write a figure yourself. Write its placeholder in braces, for example {revenue} or {ratio}; the system replaces it with the value only (for example "$47.94 billion" or "2.43"), so always name the quantity in words before it: "a current ratio of {current_ratio}", "long-term debt of {long_term_debt}". Use only the placeholder keys listed for that criterion.
-- Give the threshold, if at all, last and in parentheses as "(test: {threshold})"; never use it in the middle of a sentence.
+- Give the threshold, if at all, last and in parentheses as "(test: {threshold})"; never use it in the middle of a sentence. Use the terms of the criterion's own name and threshold ("3-year average", "owner earnings") correctly.
 - Write no other digits, except a fiscal year listed for that criterion.
 - Do not just restate the result word (pass, fail, partial, not meaningful); say what the figures show.
 - No investment opinion, advice or valuation language (no buy, sell, hold, cheap, expensive, attractive, undervalued). Describe the company's statements only.
 - For a "not meaningful" result, explain why from the reason given.
+What the result words mean (do not restate the word, but never contradict it):
+- pass: the test was met.
+- partial_pass: the test was met on the shorter record that exists (for example a dividend test on the years on record). Say this neutrally, such as "on the {years_on_record} years on record"; never use wording that sounds like a failure.
+- fail: the test was not met.
+- not_meaningful: the test cannot be interpreted; explain why from the reason.
+
 Examples of the style wanted (placeholders in braces):
-- "Revenue in 2025 was {revenue}, comfortably above the minimum size (test: {threshold})."
-- "The current ratio was {current_ratio} and long-term debt was {long_term_debt} against net current assets of {net_current_assets}, so the balance sheet does not meet the test (test: {threshold})."
-- "Dividends were paid in each of the {years_on_record} years on record, which is the full record available for the test (test: {threshold})."
+- Good: "Revenue in 2025 was {revenue}, comfortably above the minimum size (test: {threshold})."
+- Good (partial pass): "Dividends were paid in every one of the {years_on_record} years on record, which is all the history available for this test (test: {threshold})."
+- Good: "Net income was positive in each of the {years_on_record} years on record, with no loss years (test: {threshold})."
+- Bad: "Net income was positive with none years showing a loss." (broken grammar)
+- Bad: "Dividends were paid, but this does not cover the full period required." (sounds like a failure for a partial pass)
+- Bad: "The three-year average rose from the first-year average ..." (a three-year average is not a first-year average; use the names in the criterion)
 Reply with only a JSON object: {"explanations": [{"criterion": "<id>", "text": "<your sentences with placeholders>"}]}"""
 
 
