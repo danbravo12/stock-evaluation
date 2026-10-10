@@ -3,7 +3,7 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "TSLA-replay",
-  "engine_commit": "ed8c529",
+  "engine_commit": "c29ebe8",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "replay",
   "generated_at": null,
