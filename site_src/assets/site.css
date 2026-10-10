@@ -145,3 +145,4 @@ figure.diagram svg .box { fill: var(--surface); stroke: var(--ink); stroke-width
 td.sector, th.sector { white-space: nowrap; }
 .tablewrap table.wide { min-width: 1000px; }
 .sub { margin-top: 2.2em; }
+@media (max-width: 900px) { .tr .detail { order: -1; } }

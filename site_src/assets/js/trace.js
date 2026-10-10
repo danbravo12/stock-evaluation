@@ -62,6 +62,8 @@ function go(i, user) {
   const s = data.steps[at], g = data.groups.find((x) => x.id === s.group);
   document.querySelectorAll(".step").forEach((b) => (Number(b.dataset.i) === at ? b.setAttribute("aria-current", "step") : b.removeAttribute("aria-current")));
   document.querySelectorAll(".tick").forEach((t) => t.classList.toggle("active", Number(t.dataset.n) === s.n));
+  const sw = $("swim"), tick = document.querySelector(`.tick[data-n="${s.n}"] circle`);
+  if (tick) { const cx = Number(tick.getAttribute("cx")); if (cx < sw.scrollLeft + 180 || cx > sw.scrollLeft + sw.clientWidth - 30) sw.scrollLeft = Math.max(0, cx - sw.clientWidth / 2); } // keep the active mark in view in the sideways-scrolling overview
   const det = document.querySelector(`details.grp[data-id="${g.id}"]`);
   if (det && !det.open) det.open = true; // playing expands the group it enters
   const btn = document.querySelector(`.step[data-i="${at}"]`);
