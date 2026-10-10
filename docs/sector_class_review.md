@@ -6,13 +6,13 @@ Class precedence: per-CIK override → GICS sub-industry (a company in the snaps
 
 | Class | Before (SIC) | After (GICS) |
 |---|---|---|
-| bank | 17 | 22 |
+| bank | 17 | 25 |
 | insurer | 29 | 17 |
-| other | 425 | 406 |
+| other | 425 | 403 |
 | reit | 0 | 28 |
 | utility | 29 | 27 |
 
-## Companies whose class changes (51 of 500)
+## Companies whose class changes (54 of 500)
 
 | Symbol | Company | GICS sub-industry | SIC | SIC class | New class | Why |
 |---|---|---|---|---|---|---|
@@ -29,9 +29,12 @@ Class precedence: per-CIK override → GICS sub-industry (a company in the snaps
 | UNH | UnitedHealth Group | Managed Health Care | 6324 Hospital & Medical Service Plans | insurer | other | gics:Managed Health Care (no exception rule): no ADR-013 exception applies to this sub-industry |
 | WTW | Willis Towers Watson | Insurance Brokers | 6411 Insurance Agents, Brokers & Service | insurer | other | gics:Insurance Brokers: Daniel's decision 2026-10-11 (ADR-057 amendment): insurance brokers are service firms; client fiduciary funds sit in current assets, they carry no underwriting risk, so the insurer exemptions do not apply. |
 | AXP | American Express | Consumer Finance | 6199 Finance Services | other | bank | gics:Consumer Finance: Lenders (Capital One, Synchrony, American Express): the balance sheet is loans funded by deposits and debt, with no classified current assets (Daniel's decision, ADR-057). |
-| GS | Goldman Sachs | Investment Banking & Brokerage | 6211 Security Brokers, Dealers & Flotation Companies | other | bank | override:Goldman Sachs: Bank holding company: no classified current assets (Daniel's decision 2026-10-11, ADR-057 amendment). |
-| MS | Morgan Stanley | Investment Banking & Brokerage | 6211 Security Brokers, Dealers & Flotation Companies | other | bank | override:Morgan Stanley: Bank holding company: no classified current assets (Daniel's decision 2026-10-11, ADR-057 amendment). |
-| SCHW | Charles Schwab Corporation | Investment Banking & Brokerage | 6211 Security Brokers, Dealers & Flotation Companies | other | bank | override:Charles Schwab: Bank holding company: no classified current assets (Daniel's decision 2026-10-11, ADR-057 amendment). |
+| GS | Goldman Sachs | Investment Banking & Brokerage | 6211 Security Brokers, Dealers & Flotation Companies | other | bank | gics:Investment Banking & Brokerage: Broker-dealers and investment banks (Goldman Sachs, Morgan Stanley, Schwab, Raymond James, Interactive Brokers, Robinhood): no classified current assets; leverage is the business (Daniel's decision 2026-10-11, extended from three companies to the sub-industry 2026-10-12). |
+| HOOD | Robinhood Markets | Investment Banking & Brokerage | 6211 Security Brokers, Dealers & Flotation Companies | other | bank | gics:Investment Banking & Brokerage: Broker-dealers and investment banks (Goldman Sachs, Morgan Stanley, Schwab, Raymond James, Interactive Brokers, Robinhood): no classified current assets; leverage is the business (Daniel's decision 2026-10-11, extended from three companies to the sub-industry 2026-10-12). |
+| IBKR | Interactive Brokers | Investment Banking & Brokerage | 6211 Security Brokers, Dealers & Flotation Companies | other | bank | gics:Investment Banking & Brokerage: Broker-dealers and investment banks (Goldman Sachs, Morgan Stanley, Schwab, Raymond James, Interactive Brokers, Robinhood): no classified current assets; leverage is the business (Daniel's decision 2026-10-11, extended from three companies to the sub-industry 2026-10-12). |
+| MS | Morgan Stanley | Investment Banking & Brokerage | 6211 Security Brokers, Dealers & Flotation Companies | other | bank | gics:Investment Banking & Brokerage: Broker-dealers and investment banks (Goldman Sachs, Morgan Stanley, Schwab, Raymond James, Interactive Brokers, Robinhood): no classified current assets; leverage is the business (Daniel's decision 2026-10-11, extended from three companies to the sub-industry 2026-10-12). |
+| RJF | Raymond James Financial | Investment Banking & Brokerage | 6211 Security Brokers, Dealers & Flotation Companies | other | bank | gics:Investment Banking & Brokerage: Broker-dealers and investment banks (Goldman Sachs, Morgan Stanley, Schwab, Raymond James, Interactive Brokers, Robinhood): no classified current assets; leverage is the business (Daniel's decision 2026-10-11, extended from three companies to the sub-industry 2026-10-12). |
+| SCHW | Charles Schwab Corporation | Investment Banking & Brokerage | 6211 Security Brokers, Dealers & Flotation Companies | other | bank | gics:Investment Banking & Brokerage: Broker-dealers and investment banks (Goldman Sachs, Morgan Stanley, Schwab, Raymond James, Interactive Brokers, Robinhood): no classified current assets; leverage is the business (Daniel's decision 2026-10-11, extended from three companies to the sub-industry 2026-10-12). |
 | SYF | Synchrony Financial | Consumer Finance | 6199 Finance Services | other | bank | gics:Consumer Finance: Lenders (Capital One, Synchrony, American Express): the balance sheet is loans funded by deposits and debt, with no classified current assets (Daniel's decision, ADR-057). |
 | AMT | American Tower | Telecom Tower REITs | 6798 Real Estate Investment Trusts | other | reit | gics:Telecom Tower REITs: Equity REIT: rules unchanged, results carry a sector note (ADR-058). |
 | ARE | Alexandria Real Estate Equities | Office REITs | 6798 Real Estate Investment Trusts | other | reit | gics:Office REITs: Equity REIT: rules unchanged, results carry a sector note (ADR-058). |
@@ -68,7 +71,7 @@ Class precedence: per-CIK override → GICS sub-industry (a company in the snaps
 | NRG | NRG Energy | Independent Power Producers & Energy Traders | 4911 Electric Services | utility | other | gics:Independent Power Producers & Energy Traders: Daniel's decision 2026-10-11 (ADR-057 amendment): independent power producers are not rate-regulated, so Graham's utility variant (debt <= 2x equity) does not apply. |
 | VST | Vistra Corp. | Electric Utilities | 4911 Electric Services | utility | other | override:Vistra: Merchant power generator that GICS files under Electric Utilities; named as an independent power producer in Daniel's decision 2026-10-11 (ADR-057 amendment). |
 
-## Financials left as "other" (37)
+## Financials left as "other" (34)
 
 | Symbol | Company | GICS sub-industry | Reason |
 |---|---|---|---|
@@ -96,9 +99,6 @@ Class precedence: per-CIK override → GICS sub-industry (a company in the snaps
 | ERIE | Erie Indemnity | Insurance Brokers | no rule for this sub-industry |
 | MRSH | Marsh McLennan | Insurance Brokers | no rule for this sub-industry |
 | WTW | Willis Towers Watson | Insurance Brokers | no rule for this sub-industry |
-| HOOD | Robinhood Markets | Investment Banking & Brokerage | broker-dealer left as other: Goldman Sachs, Morgan Stanley and Schwab are overridden to bank (Daniel, 2026-10-11); the others (Raymond James, Interactive Brokers, Robinhood) were not part of that decision. |
-| IBKR | Interactive Brokers | Investment Banking & Brokerage | broker-dealer left as other: Goldman Sachs, Morgan Stanley and Schwab are overridden to bank (Daniel, 2026-10-11); the others (Raymond James, Interactive Brokers, Robinhood) were not part of that decision. |
-| RJF | Raymond James Financial | Investment Banking & Brokerage | broker-dealer left as other: Goldman Sachs, Morgan Stanley and Schwab are overridden to bank (Daniel, 2026-10-11); the others (Raymond James, Interactive Brokers, Robinhood) were not part of that decision. |
 | BRK-B | Berkshire Hathaway | Multi-Sector Holdings | Berkshire Hathaway: stays other, with a note that its figures mix insurance and industrial balance sheets (Daniel, 2026-10-11). |
 | CPAY | Corpay | Transaction & Payment Processing Services | payment processor: conventional statements (Visa, Mastercard, PayPal); American Express is Consumer Finance and so a bank here. |
 | FIS | Fidelity National Information Services | Transaction & Payment Processing Services | payment processor: conventional statements (Visa, Mastercard, PayPal); American Express is Consumer Finance and so a bank here. |
@@ -133,10 +133,9 @@ Insurance brokers (Marsh McLennan, Aon…) are **other** with the note "Insuranc
 | CBRE | CBRE Group | Real Estate Services | other |  |
 | CSGP | CoStar Group | Real Estate Services | other |  |
 
-## Companies with no exception rule for their GICS sub-industry (395; ordinary companies, SIC is not consulted)
+## Companies with no exception rule for their GICS sub-industry (392; ordinary companies, SIC is not consulted)
 
 - Asset Management & Custody Banks: 9
 - Financial Exchanges & Data: 9
-- Investment Banking & Brokerage: 3
 - Real Estate Services: 2
 - Transaction & Payment Processing Services: 9

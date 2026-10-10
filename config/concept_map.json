@@ -75,8 +75,9 @@
     },
     "dividends_paid": {
       "unit": "USD", "period": "duration",
-      "concepts": ["us-gaap:PaymentsOfDividendsCommonStock", "us-gaap:PaymentsOfDividends", "us-gaap:PaymentsOfOrdinaryDividends"],
-      "_notes": "Cash paid on common stock; PaymentsOfDividends is the generic tag KO, JPM and DUK use. DUK switched to PaymentsOfOrdinaryDividends in 2021."
+      "concepts": ["us-gaap:PaymentsOfDividendsCommonStock", "us-gaap:PaymentsOfDividends", "us-gaap:PaymentsOfOrdinaryDividends", "us-gaap:DividendsCommonStockCash"],
+      "component_guard": 0.5,
+      "_notes": "Cash paid on common stock; PaymentsOfDividends is the generic tag KO, JPM and DUK use. DUK switched to PaymentsOfOrdinaryDividends in 2021. DividendsCommonStockCash (ADR-012 fallback, 2026-10-12) is the last resort: the statement-of-equity line, tagged by payers whose cash-flow line is untagged (Federal Realty, Cigna); component_guard 0.5 as for the other dividend measure."
     },
     "dividends_per_share": {
       "unit": "USD/shares", "period": "duration",

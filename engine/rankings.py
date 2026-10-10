@@ -1,6 +1,6 @@
 """Rankings builder (ADR-004, ADR-062): `results/scores/*.json` (+ full results) -> `site_data/rankings.json`.
 
-The criteria ranking orders companies by the share of the decided criteria they meet. The analyst ranking is an empty section until Finnhub gives
+The criteria ranking orders companies by the Wilson lower bound of the share of decided criteria they meet. The analyst ranking is an empty section until Finnhub gives
 written permission (ADR-007, ADR-021). There is no text that compares the two (ADR-004), and the output has no wall-clock time: the same inputs
 write the same bytes.
 """
@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import json
 import re
-from fractions import Fraction
+from math import sqrt
 from pathlib import Path
 from typing import Any, Literal
 
@@ -25,16 +25,29 @@ OUTPUT_PATH = REPO_ROOT / "site_data" / "rankings.json"
 CRITERIA = [f"G{i}" for i in range(1, 8)] + [f"B{i}" for i in range(1, 5)]
 MET = ("pass", "partial_pass")
 DECIDED = MET + ("fail",)
-MIN_DECIDED = 6
+MIN_DECIDED = 5
+Z = 1.96  # 95% Wilson score interval
 VALUATION_CAVEAT = "Valuation criteria (G6, G7) pending price data."
 ANALYSTS_PENDING = "pending Finnhub permission (ADR-007, ADR-021)"
 SEC_ATTRIBUTION = "Filings and XBRL data: U.S. Securities and Exchange Commission, EDGAR (public domain)"
+
+
+def wilson_lower_bound(met: int, decided: int, z: float = Z) -> float:
+    """Lower bound of the Wilson score interval for the share `met / decided` (ADR-062 amendment). A short list of passes earns less than a long one."""
+    if decided == 0:
+        return 0.0
+    p = met / decided
+    centre = p + z * z / (2 * decided)
+    spread = z * sqrt(p * (1 - p) / decided + z * z / (4 * decided * decided))
+    return max(0.0, (centre - spread) / (1 + z * z / decided))
+
+
 METHOD = {
-    "score": "met / decided",
+    "score": "lower bound of the 95% Wilson score interval for met / decided (z = 1.96), to 3 decimals; percent_met is the plain share",
     "met": "criteria with the label pass or partial_pass",
     "decided": "criteria with the label pass, partial_pass or fail, over G1 to G7 and B1 to B4; not_applicable, not_meaningful and data_gap are left out",
     "minimum_decided": f"a company is ranked only if at least {MIN_DECIDED} criteria are decided; the others are listed as insufficient data with their counts",
-    "ties": "more criteria met, then fewer data gaps, then symbol",
+    "ties": "higher met, then fewer data gaps, then symbol",
 }
 
 
@@ -48,9 +61,10 @@ class RankingRow(BaseModel):
     notes: list[str] = Field(default_factory=list)  # sector notes (REIT, broker, ...) and registrant notes (successor)
     caveats: list[str] = Field(default_factory=list)  # e.g. VALUATION_CAVEAT
     rank: int | None = None  # None in the insufficient-data group
-    score: float | None = None  # met / decided; None in the insufficient-data group
+    score: float | None = None  # Wilson lower bound of met / decided, 3 dp; None in the insufficient-data group
     met: int
     decided: int
+    percent_met: float | None = None  # met / decided as a percentage, 1 dp; None when nothing is decided
     data_gaps: int
     labels: dict[str, str]  # criterion id -> label, G1..G7 then B1..B4
     has_full_analysis: bool  # the agent analysis (results/<CIK>.json) exists
@@ -133,7 +147,7 @@ def _row(symbol: str, cik: str, info: dict, full_path: str | None) -> RankingRow
     decided = sum(l in DECIDED for l in labels.values())
     caveats = [VALUATION_CAVEAT] if "data_gap" in (labels["G6"], labels["G7"]) else []
     return RankingRow(symbol=symbol, cik=cik, name=info["name"], gics_sector=info["gics_sector"], gics_sub_industry=info["gics_sub_industry"], sector_class=info["sector_class"],
-                      notes=info["notes"], caveats=caveats, met=met, decided=decided, data_gaps=sum(l == "data_gap" for l in labels.values()), labels=labels,
+                      notes=info["notes"], caveats=caveats, met=met, decided=decided, percent_met=round(100 * met / decided, 1) if decided else None, data_gaps=sum(l == "data_gap" for l in labels.values()), labels=labels,
                       has_full_analysis=full_path is not None, analysis_path=full_path, as_of_fiscal_year=info["as_of"])
 
 
@@ -162,9 +176,9 @@ def build_rankings(universe: Universe, scores_dir: Path, results_dir: Path) -> R
             fetched.append(info["fetched"])
         rows.append(_row(c.symbol, c.cik, info, full_path))
 
-    ranked = sorted((r for r in rows if r.decided >= MIN_DECIDED), key=lambda r: (-Fraction(r.met, r.decided), -r.met, r.data_gaps, r.symbol))
+    ranked = sorted((r for r in rows if r.decided >= MIN_DECIDED), key=lambda r: (-round(wilson_lower_bound(r.met, r.decided), 9), -r.met, r.data_gaps, r.symbol))
     for i, r in enumerate(ranked, 1):
-        r.rank, r.score = i, round(r.met / r.decided, 6)
+        r.rank, r.score = i, round(wilson_lower_bound(r.met, r.decided), 3)
     insufficient = sorted((r for r in rows if r.decided < MIN_DECIDED), key=lambda r: r.symbol)
     caveats = [VALUATION_CAVEAT] if any(VALUATION_CAVEAT in r.caveats for r in rows) else []
     return Rankings(
@@ -200,4 +214,4 @@ def export_rankings_schema(path: Path = SCHEMA_PATH) -> Path:
     return path
 
 
-__all__ = ["Rankings", "RankingRow", "build_rankings", "write_rankings", "export_rankings_schema", "VALUATION_CAVEAT", "ANALYSTS_PENDING", "MIN_DECIDED", "NO_ANNUAL_REPORT"]
+__all__ = ["Rankings", "RankingRow", "build_rankings", "write_rankings", "export_rankings_schema", "VALUATION_CAVEAT", "ANALYSTS_PENDING", "MIN_DECIDED", "NO_ANNUAL_REPORT", "wilson_lower_bound"]

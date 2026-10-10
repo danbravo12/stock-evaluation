@@ -106,6 +106,10 @@
     "Timber REITs": {
       "class": "reit",
       "why": "Equity REIT: rules unchanged, results carry a sector note (ADR-058)."
+    },
+    "Investment Banking & Brokerage": {
+      "class": "bank",
+      "why": "Broker-dealers and investment banks (Goldman Sachs, Morgan Stanley, Schwab, Raymond James, Interactive Brokers, Robinhood): no classified current assets; leverage is the business (Daniel's decision 2026-10-11, extended from three companies to the sub-industry 2026-10-12)."
     }
   },
   "cik_overrides": {
@@ -123,21 +127,6 @@
       "name": "Northern Trust",
       "class": "bank",
       "why": "Custody bank (as BNY)."
-    },
-    "0000886982": {
-      "name": "Goldman Sachs",
-      "class": "bank",
-      "why": "Bank holding company: no classified current assets (Daniel's decision 2026-10-11, ADR-057 amendment)."
-    },
-    "0000895421": {
-      "name": "Morgan Stanley",
-      "class": "bank",
-      "why": "Bank holding company: no classified current assets (Daniel's decision 2026-10-11, ADR-057 amendment)."
-    },
-    "0000316709": {
-      "name": "Charles Schwab",
-      "class": "bank",
-      "why": "Bank holding company: no classified current assets (Daniel's decision 2026-10-11, ADR-057 amendment)."
     },
     "0001067983": {
       "name": "Berkshire Hathaway",

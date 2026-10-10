@@ -243,6 +243,18 @@
      "title": "Notes",
      "type": "array"
     },
+    "percent_met": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Percent Met"
+    },
     "rank": {
      "anyOf": [
       {

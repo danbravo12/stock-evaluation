@@ -34,7 +34,7 @@ class TestResolution(unittest.TestCase):
                  "Property & Casualty Insurance": "insurer", "Reinsurance": "insurer", "Insurance Brokers": "other", "Electric Utilities": "utility", "Gas Utilities": "utility",
                  "Multi-Utilities": "utility", "Water Utilities": "utility", "Independent Power Producers & Energy Traders": "other", "Industrial REITs": "reit",
                  "Retail REITs": "reit", "Data Center REITs": "reit", "Telecom Tower REITs": "reit", "Timber REITs": "reit", "Managed Health Care": "other",
-                 "Asset Management & Custody Banks": "other", "Investment Banking & Brokerage": "other", "Real Estate Services": "other", "Soft Drinks & Non-alcoholic Beverages": "other"}
+                 "Asset Management & Custody Banks": "other", "Investment Banking & Brokerage": "bank", "Real Estate Services": "other", "Soft Drinks & Non-alcoholic Beverages": "other"}
         for sub, cls in cases.items():
             self.assertEqual(res(sub)[0], cls, sub)
 

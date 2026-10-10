@@ -10,7 +10,7 @@ import jsonschema
 
 from engine import cli
 from engine.rankings import (ANALYSTS_PENDING, CRITERIA, MIN_DECIDED, SCHEMA_PATH, VALUATION_CAVEAT, Rankings, build_rankings, export_rankings_schema, rankings_json,
-                             write_rankings)
+                             wilson_lower_bound, write_rankings)
 from engine.report import PublishGateError, finnhub_fields
 from engine.settings import REPO_ROOT
 from engine.universe import Constituent, Universe
@@ -73,45 +73,47 @@ class TestScoreMaths(RankingsCase):
         # 3 pass + 1 partial = 4 met; 2 fail; 1 not_applicable, 1 not_meaningful, 2 data_gap (G6, G7) left out
         self.env.put(u, "AAA", labels(met=3, partial=1, fail=2, na=1, nm=1, gap=3))
         row = self.env.build(u).criteria_ranking.ranked[0]
-        self.assertEqual((row.met, row.decided, row.data_gaps, row.score), (4, 6, 3, round(4 / 6, 6)))
+        self.assertEqual((row.met, row.decided, row.data_gaps, row.percent_met, row.score), (4, 6, 3, 66.7, round(wilson_lower_bound(4, 6), 3)))
         self.assertEqual(list(row.labels), CRITERIA)
 
     def test_partial_pass_counts_as_met(self):
         u = universe(["AAA"])
         self.env.put(u, "AAA", labels(met=5, partial=1))
         row = self.env.build(u).criteria_ranking.ranked[0]
-        self.assertEqual((row.met, row.decided, row.score), (6, 6, 1.0))
+        self.assertEqual((row.met, row.decided, row.percent_met), (6, 6, 100.0))
         self.assertEqual(row.labels["B1"], "partial_pass")
 
-    def test_the_fraction_decides_not_the_count(self):
-        u = universe(["BIG", "SMALL", "MID"])
-        self.env.put(u, "BIG", labels(met=8, fail=2))        # 0.8
-        self.env.put(u, "SMALL", labels(met=5, fail=1))      # 0.8333
-        self.env.put(u, "MID", labels(met=7, fail=3))        # 0.7
-        self.assertEqual(self.ranked(self.env.build(u)), ["SMALL", "BIG", "MID"])
+    def test_wilson_lower_bound_known_values(self):
+        self.assertAlmostEqual(wilson_lower_bound(9, 9), 0.7006, places=3)   # 9 of 9
+        self.assertAlmostEqual(wilson_lower_bound(0, 9), 0.0, places=6)
+        self.assertAlmostEqual(wilson_lower_bound(5, 10), 0.2366, places=3)
+        self.assertEqual(wilson_lower_bound(0, 0), 0.0)
+        self.assertLess(wilson_lower_bound(5, 5), wilson_lower_bound(9, 10))  # a short list of passes does not beat a long record
+        self.assertLess(wilson_lower_bound(3, 3), wilson_lower_bound(5, 5))
 
-    def test_close_fractions_are_compared_exactly(self):
-        u = universe(["A", "B"])
-        self.env.put(u, "A", labels(met=10, fail=1))  # 10/11
-        self.env.put(u, "B", labels(met=9, fail=1))   # 9/10 = 0.9 < 0.90909
+    def test_evidence_beats_a_short_perfect_list(self):
+        u = universe(["SHORT", "LONG", "MID"])
+        self.env.put(u, "SHORT", labels(met=5, na=6))         # 5/5 = 100%, lower bound 0.566
+        self.env.put(u, "LONG", labels(met=9, fail=1, gap=1))  # 9/10 = 90%, lower bound 0.596
+        self.env.put(u, "MID", labels(met=7, fail=3, gap=1))   # 70%
         r = self.env.build(u)
-        self.assertEqual(self.ranked(r), ["A", "B"])
-        self.assertEqual([x.rank for x in r.criteria_ranking.ranked], [1, 2])
+        self.assertEqual(self.ranked(r), ["LONG", "SHORT", "MID"])
+        self.assertEqual([x.score for x in r.criteria_ranking.ranked], [0.596, 0.566, round(wilson_lower_bound(7, 10), 3)])
 
 
 class TestThresholdAndTies(RankingsCase):
-    def test_ranked_only_from_six_decided(self):
-        self.assertEqual(MIN_DECIDED, 6)
-        u = universe(["SIX", "FIVE"])
-        self.env.put(u, "SIX", labels(met=6))
-        self.env.put(u, "FIVE", labels(met=5))
+    def test_ranked_only_from_five_decided(self):
+        self.assertEqual(MIN_DECIDED, 5)
+        u = universe(["FIVE", "FOUR"])
+        self.env.put(u, "FIVE", labels(met=5, na=4))
+        self.env.put(u, "FOUR", labels(met=4, na=5))
         r = self.env.build(u)
-        self.assertEqual(self.ranked(r), ["SIX"])
+        self.assertEqual(self.ranked(r), ["FIVE"])
         ins = r.criteria_ranking.insufficient_data
-        self.assertEqual([(x.symbol, x.rank, x.score, x.met, x.decided) for x in ins], [("FIVE", None, None, 5, 5)])
+        self.assertEqual([(x.symbol, x.rank, x.score, x.met, x.decided, x.percent_met) for x in ins], [("FOUR", None, None, 4, 4, 100.0)])
         self.assertEqual(r.counts.model_dump(), {"universe": 2, "ranked": 1, "insufficient_data": 1, "excluded": 0})
 
-    def test_ties_more_met_then_fewer_gaps_then_symbol(self):
+    def test_ties_higher_met_then_fewer_gaps_then_symbol(self):
         u = universe(["ZZ", "AA", "BB", "CC", "DD"])
         self.env.put(u, "ZZ", labels(met=6, fail=0, gap=5))     # 6/6, 5 gaps
         self.env.put(u, "AA", labels(met=8, fail=0, gap=3))     # 8/8, 3 gaps: more met wins over the 6/6s
@@ -274,10 +276,10 @@ class TestCommittedRankings(unittest.TestCase):
     def test_ranks_follow_the_rule(self):
         rows = self.r.criteria_ranking.ranked
         self.assertEqual([x.rank for x in rows], list(range(1, len(rows) + 1)))
-        keys = [(-x.met / x.decided, -x.met, x.data_gaps, x.symbol) for x in rows]
+        keys = [(-round(wilson_lower_bound(x.met, x.decided), 9), -x.met, x.data_gaps, x.symbol) for x in rows]
         self.assertEqual(keys, sorted(keys))
-        self.assertTrue(all(x.decided >= MIN_DECIDED and x.score == round(x.met / x.decided, 6) for x in rows))
-        self.assertTrue(all(x.decided < MIN_DECIDED and x.rank is None for x in self.r.criteria_ranking.insufficient_data))
+        self.assertTrue(all(x.decided >= MIN_DECIDED and x.score == round(wilson_lower_bound(x.met, x.decided), 3) for x in rows))
+        self.assertTrue(all(x.decided < MIN_DECIDED and x.rank is None and x.score is None for x in self.r.criteria_ranking.insufficient_data))
         self.assertTrue(all(VALUATION_CAVEAT in x.caveats for x in rows))
 
     def test_the_sample_companies_have_a_full_analysis_and_the_new_registrants_are_excluded(self):

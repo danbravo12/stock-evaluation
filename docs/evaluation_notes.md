@@ -142,3 +142,9 @@ Start of the honest list of known weaknesses, found while reviewing the scores o
 - **What the order shows:** the top is crowded with 100% scores on short lists: 14 companies score 100% (AMAT, FAST, GWW and WST at 9 of 9; SNA 8 of 8; EME, EXPD, GRMN and WSM 7 of 7; AMP, DE, DHI, ERIE and PCAR 6 of 6, among others). Because the score is met over decided, a company with 6 of 6 ranks above one with 9 of 10; the tie-breaks (more met, fewer gaps) only separate equal fractions. The row shows met, decided and data gaps next to the score so the site can display them; whether to rank by a different statistic (for example a lower bound on the fraction) is a design question for the site, not decided here.
 - **Valuation:** with G6 and G7 pending for everyone, no row has more than 9 decided criteria. Once prices exist the denominators grow and the banks and insurers can rank.
 
+
+## 23. Ranking statistic and data tweaks (2026-10-12, ADR-062, ADR-057 and ADR-012 amendments)
+- **Ranking:** Wilson lower bound, threshold 5: 477 ranked, 21 insufficient data (was 406 / 92). The top 10 is unchanged (AMAT, FAST, GWW, WST, SNA, EME, EXPD, GRMN, WSM, AMP) because all are at 100% and the bound separates them only by list length. It does not fully remove the short-list effect: 6 of 6 (0.610) still edges out 9 of 10 (0.596).
+- **Brokers:** Raymond James, Interactive Brokers and Robinhood join Goldman Sachs, Morgan Stanley and Schwab as banks.
+- **Dividends:** `DividendsCommonStockCash` cleared Federal Realty, Cigna and Cboe and also General Motors, whose 2011 to 2013 figures look like preferred dividends (GM paid no common dividend then): one probable false pass.
+- **Labels moved over the index:** B2 data_gap 66 → 63, B3 118 → 115, B4 101 → 99, G2 88 → 85 (the three brokers become not applicable); B4 pass 247 → 246; G4 fail 191 → 187, partial pass 302 → 306.

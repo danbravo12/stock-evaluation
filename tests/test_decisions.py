@@ -35,15 +35,13 @@ class TestFinancialClasses(unittest.TestCase):
     def plan(self, symbol):
         return plan_for(symbol, self.u, None)
 
-    def test_brokers_dealers_are_banks(self):
-        for sym in ("GS", "MS", "SCHW"):
+    def test_brokers_dealers_are_banks_by_sub_industry(self):
+        syms = [r.symbol for r in self.u.primary if r.gics_sub_industry == "Investment Banking & Brokerage"]
+        self.assertEqual(sorted(syms), ["GS", "HOOD", "IBKR", "MS", "RJF", "SCHW"])
+        for sym in syms:
             p = self.plan(sym)
             self.assertEqual((p.sector_class, [x.id for x in p.not_applicable], p.sector_notes), ("bank", ["G2", "B2", "B3", "B4"], []), sym)
-            self.assertTrue(p.sector_basis.startswith("override:"), sym)
-
-    def test_other_brokers_dealers_are_not_swept_in(self):  # the decision names three companies, not the whole GICS sub-industry
-        for sym in ("RJF", "IBKR", "HOOD"):
-            self.assertEqual(self.plan(sym).sector_class, "other", sym)
+            self.assertEqual(p.sector_basis, "gics:Investment Banking & Brokerage", sym)  # a rule, no longer per-CIK overrides
 
     def test_insurance_brokers_are_other_with_the_note(self):
         syms = [r.symbol for r in self.u.primary if r.gics_sub_industry == "Insurance Brokers"]
@@ -149,10 +147,10 @@ class TestFederalRealty(unittest.TestCase):
     def g4(self, nf):
         return next(r for r in score_company(nf, "FRT", 6798, RULES, sector="reit").results if r.id == "G4")
 
-    def test_the_recorded_record_has_no_dividend_data_before_2012(self):
+    def test_2011_is_paid_through_the_equity_statement_line(self):
         r = self.g4(self.nf)
-        # per-share dividends are tagged from 2012 only, so 2011 precedes the first year with data and stays unpaid (the rule is not widened)
-        self.assertEqual((r.label, r.figures["unpaid_years"], "unknown_years" in r.figures), ("fail", [2011], False))
+        # per-share dividends are tagged from 2012 only; 2011 has the statement-of-equity line DividendsCommonStockCash (ADR-012 fallback, 2026-10-12)
+        self.assertEqual((r.label, r.by_year["2011"]["source"], r.by_year["2011"]["paid"]), ("partial_pass", "dividends_paid", True))
 
     def test_a_year_missing_inside_the_recorded_record_is_a_data_gap(self):
         """Federal Realty's real facts with 2016 removed (and the record starting in 2012, the first year with dividend data)."""

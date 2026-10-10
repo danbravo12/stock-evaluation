@@ -23,36 +23,36 @@ Scored through a predecessor registrant (ADR-063):
 | Criterion | pass | partial | fail | n/a | n/m | gap | % pass (decided) |
 |---|---|---|---|---|---|---|---|
 | B1 | 165 | 0 | 223 | 0 | 59 | 51 | 43% of 388 |
-| B2 | 172 | 0 | 221 | 39 | 0 | 66 | 44% of 393 |
-| B3 | 198 | 0 | 143 | 39 | 0 | 118 | 58% of 341 |
-| B4 | 247 | 0 | 111 | 39 | 0 | 101 | 69% of 358 |
+| B2 | 172 | 0 | 221 | 42 | 0 | 63 | 44% of 393 |
+| B3 | 198 | 0 | 143 | 42 | 0 | 115 | 58% of 341 |
+| B4 | 246 | 0 | 111 | 42 | 0 | 99 | 69% of 357 |
 | G1 | 495 | 0 | 1 | 0 | 0 | 2 | 100% of 496 |
-| G2 | 66 | 0 | 305 | 39 | 0 | 88 | 18% of 371 |
+| G2 | 66 | 0 | 305 | 42 | 0 | 85 | 18% of 371 |
 | G3 | 320 | 0 | 177 | 0 | 0 | 1 | 64% of 497 |
-| G4 | 0 | 302 | 191 | 0 | 0 | 5 | 61% of 493 |
+| G4 | 0 | 306 | 187 | 0 | 0 | 5 | 62% of 493 |
 | G5 | 283 | 0 | 122 | 0 | 30 | 63 | 70% of 405 |
 | G6 | 0 | 0 | 0 | 0 | 0 | 498 | – |
 | G7 | 0 | 0 | 0 | 0 | 0 | 498 | – |
 
 ## By sector class
 
-Companies per class: bank 22, insurer 17, other 404, reit 28, utility 27.
+Companies per class: bank 25, insurer 17, other 401, reit 28, utility 27.
 
 **bank**
 
 | Criterion | pass | partial | fail | n/a | n/m | gap |
 |---|---|---|---|---|---|---|
-| B1 | 2 | 0 | 20 | 0 | 0 | 0 |
-| B2 | 0 | 0 | 0 | 22 | 0 | 0 |
-| B3 | 0 | 0 | 0 | 22 | 0 | 0 |
-| B4 | 0 | 0 | 0 | 22 | 0 | 0 |
-| G1 | 22 | 0 | 0 | 0 | 0 | 0 |
-| G2 | 0 | 0 | 0 | 22 | 0 | 0 |
-| G3 | 19 | 0 | 3 | 0 | 0 | 0 |
-| G4 | 0 | 21 | 1 | 0 | 0 | 0 |
-| G5 | 14 | 0 | 7 | 0 | 0 | 1 |
-| G6 | 0 | 0 | 0 | 0 | 0 | 22 |
-| G7 | 0 | 0 | 0 | 0 | 0 | 22 |
+| B1 | 3 | 0 | 21 | 0 | 0 | 1 |
+| B2 | 0 | 0 | 0 | 25 | 0 | 0 |
+| B3 | 0 | 0 | 0 | 25 | 0 | 0 |
+| B4 | 0 | 0 | 0 | 25 | 0 | 0 |
+| G1 | 25 | 0 | 0 | 0 | 0 | 0 |
+| G2 | 0 | 0 | 0 | 25 | 0 | 0 |
+| G3 | 21 | 0 | 4 | 0 | 0 | 0 |
+| G4 | 0 | 23 | 2 | 0 | 0 | 0 |
+| G5 | 16 | 0 | 7 | 0 | 0 | 2 |
+| G6 | 0 | 0 | 0 | 0 | 0 | 25 |
+| G7 | 0 | 0 | 0 | 0 | 0 | 25 |
 
 **insurer**
 
@@ -74,17 +74,17 @@ Companies per class: bank 22, insurer 17, other 404, reit 28, utility 27.
 
 | Criterion | pass | partial | fail | n/a | n/m | gap |
 |---|---|---|---|---|---|---|
-| B1 | 157 | 0 | 143 | 0 | 56 | 48 |
-| B2 | 171 | 0 | 174 | 0 | 0 | 59 |
-| B3 | 166 | 0 | 132 | 0 | 0 | 106 |
-| B4 | 244 | 0 | 90 | 0 | 0 | 70 |
-| G1 | 401 | 0 | 1 | 0 | 0 | 2 |
-| G2 | 41 | 0 | 298 | 0 | 0 | 65 |
-| G3 | 251 | 0 | 152 | 0 | 0 | 1 |
-| G4 | 0 | 220 | 180 | 0 | 0 | 4 |
-| G5 | 232 | 0 | 90 | 0 | 26 | 56 |
-| G6 | 0 | 0 | 0 | 0 | 0 | 404 |
-| G7 | 0 | 0 | 0 | 0 | 0 | 404 |
+| B1 | 156 | 0 | 142 | 0 | 56 | 47 |
+| B2 | 171 | 0 | 174 | 0 | 0 | 56 |
+| B3 | 166 | 0 | 132 | 0 | 0 | 103 |
+| B4 | 243 | 0 | 90 | 0 | 0 | 68 |
+| G1 | 398 | 0 | 1 | 0 | 0 | 2 |
+| G2 | 41 | 0 | 298 | 0 | 0 | 62 |
+| G3 | 249 | 0 | 151 | 0 | 0 | 1 |
+| G4 | 0 | 221 | 176 | 0 | 0 | 4 |
+| G5 | 230 | 0 | 90 | 0 | 26 | 55 |
+| G6 | 0 | 0 | 0 | 0 | 0 | 401 |
+| G7 | 0 | 0 | 0 | 0 | 0 | 401 |
 
 **reit**
 
@@ -97,7 +97,7 @@ Companies per class: bank 22, insurer 17, other 404, reit 28, utility 27.
 | G1 | 28 | 0 | 0 | 0 | 0 | 0 |
 | G2 | 0 | 0 | 5 | 0 | 0 | 23 |
 | G3 | 22 | 0 | 6 | 0 | 0 | 0 |
-| G4 | 0 | 20 | 7 | 0 | 0 | 1 |
+| G4 | 0 | 21 | 6 | 0 | 0 | 1 |
 | G5 | 8 | 0 | 15 | 0 | 0 | 5 |
 | G6 | 0 | 0 | 0 | 0 | 0 | 28 |
 | G7 | 0 | 0 | 0 | 0 | 0 | 28 |
@@ -124,16 +124,16 @@ G6 and G7 are data gaps for all 498 companies (no price). Other criteria that en
 
 | Criterion | Reason | Companies |
 |---|---|---|
-| B3 | missing: operating_income [..] | 75 |
-| B2 | missing: long_term_debt [..] | 65 |
+| B3 | missing: operating_income [..] | 73 |
 | G5 | missing: eps_diluted [..] | 63 |
-| B4 | missing: capex [..] | 52 |
-| G2 | missing: long_term_debt [..] | 44 |
-| B3 | missing: operating_income [..]; revenue [..] | 42 |
-| B4 | missing: net_income [..]; depreciation_amortization [..]; capex [..] | 40 |
+| B2 | missing: long_term_debt [..] | 62 |
+| B4 | missing: capex [..] | 51 |
+| G2 | missing: long_term_debt [..] | 43 |
+| B3 | missing: operating_income [..]; revenue [..] | 41 |
 | B1 | missing: net_income [..]; stockholders_equity [..] | 39 |
+| B4 | missing: net_income [..]; depreciation_amortization [..]; capex [..] | 39 |
 | G2 | missing: current_assets [..]; current_liabilities [..] | 23 |
-| G2 | missing: current_assets [..]; current_liabilities [..]; long_term_debt [..] | 21 |
+| G2 | missing: current_assets [..]; current_liabilities [..]; long_term_debt [..] | 19 |
 | B1 | missing: stockholders_equity [..] | 11 |
 | B4 | missing: depreciation_amortization [..] | 5 |
 | G4 | net_income missing inside the record: [..] | 4 |
@@ -150,8 +150,8 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | Measure | Reason | Companies |
 |---|---|---|
 | dividends_per_share | no listed concept reported | 96 |
-| dividends_paid | no listed concept reported | 81 |
 | operating_income | no listed concept reported | 80 |
+| dividends_paid | no listed concept reported | 78 |
 | current_assets | no listed concept reported | 78 |
 | current_liabilities | no listed concept reported | 78 |
 | capex | no listed concept reported | 39 |
@@ -185,23 +185,22 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | net_income | #-#-#: net_income NetIncomeLoss=#e+# used; NetIncomeLossAvailableToCommonStockholdersBasic=#e+# differs by more than #% | 920 |
 | depreciation_amortization | #-#-#: depreciation_amortization Depreciation+AmortizationOfIntangibleAssets=#e+# used; Depreciation=#e+# differs by more than #% | 719 |
 | depreciation_amortization | #-#-#: depreciation_amortization DepreciationAndAmortization=#e+# used; Depreciation=#e+# differs by more than #% | 682 |
+| dividends_paid | #-#-#: dividends_paid PaymentsOfDividendsCommonStock=#e+# used; DividendsCommonStockCash=#e+# differs by more than #% | 663 |
 | depreciation_amortization | #-#-#: depreciation_amortization DepreciationDepletionAndAmortization=#e+# used; DepreciationAndAmortization=#e+# differs by more than #% | 506 |
 | long_term_debt | #-#-#: long_term_debt LongTermDebtAndCapitalLeaseObligations=#e+# used; LongTermDebt=#e+# differs by more than #% | 452 |
+| dividends_paid | #-#-#: dividends_paid PaymentsOfDividends=#e+# used; DividendsCommonStockCash=#e+# differs by more than #% | 308 |
 | depreciation_amortization | #-#-#: depreciation_amortization uses Depreciation alone, excludes amortisation (understates D&A) | 306 |
 | revenue | #-#-#: revenue Revenues=#e+# used; RevenueFromContractWithCustomerExcludingAssessedTax=#e+# differs by more than #% | 300 |
 | net_income | #-#-#: net_income ProfitLoss=#e+# used; NetIncomeLossAvailableToCommonStockholdersBasic=#e+# differs by more than #% | 293 |
-| revenue | #-#-#: revenue Revenues=#e+# used; SalesRevenueGoodsNet=#e+# differs by more than #% | 287 |
-| capex | #-#-#: capex PaymentsToAcquirePropertyPlantAndEquipment=#e+# used; PaymentsToAcquireProductiveAssets=#e+# differs by more than #% | 277 |
 
 ## Anomalies that smell like mapping bugs
 
-### G4 fails although a dividend was paid in at least 13 of the years on record (35)
+### G4 fails although a dividend was paid in at least 13 of the years on record (32)
 
 | ticker | class | years_on_record | unpaid_years | dividends per share in those years |
 |---|---|---|---|---|
 | AIG | insurer | 15 | [2012] | {'2012': 0.0} |
 | EQT | other | 15 | [2021] | {'2021': 0.0} |
-| FRT | reit | 15 | [2011] | {'2011': None} |
 | INTC | other | 15 | [2025] | {'2025': 0.0} |
 | LUV | other | 15 | [2021] | {'2021': 0.0} |
 | TMO | other | 15 | [2011] | {'2011': 0.0} |
@@ -224,7 +223,8 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | NDAQ | other | 15 | [2011] | {'2011': None} |
 | MPWR | other | 15 | [2011] | {'2011': None} |
 | DPZ | other | 15 | [2011] | {'2011': None} |
-| … 10 more |  |  |  | |
+| EXPE | other | 15 | [2023, 2024] | {'2023': 0.0, '2024': 0.0} |
+| … 7 more |  |  |  | |
 
 ### Revenue jumps of more than 3x year on year (28 companies)
 
@@ -274,7 +274,7 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | HPE | other | 2025: -0.04 vs 57,000,000 |
 | VRT | other | 2022: -0.04 vs 76,600,000 |
 
-### Restatements over 10% (281 companies)
+### Restatements over 10% (283 companies)
 
 | ticker | class | restatements | largest |
 |---|---|---|---|
@@ -303,7 +303,7 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | DAL | other | 2 | current_assets 2014 26% |
 | DOV | other | 20 | capex 2012 51% |
 | OMC | other | 4 | capex 2008 200% |
-| … 256 more |  |  | |
+| … 258 more |  |  | |
 
 ### Stock-split adjustment applied (80 companies)
 

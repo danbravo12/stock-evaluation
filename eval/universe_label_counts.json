@@ -2,9 +2,9 @@
  "scored": 498,
  "no_annual_report": 2,
  "sector_classes": {
-  "bank": 22,
+  "bank": 25,
   "insurer": 17,
-  "other": 404,
+  "other": 401,
   "reit": 28,
   "utility": 27
  },
@@ -18,20 +18,20 @@
   "B2": {
    "pass": 172,
    "fail": 221,
-   "not_applicable": 39,
-   "data_gap": 66
+   "not_applicable": 42,
+   "data_gap": 63
   },
   "B3": {
    "pass": 198,
    "fail": 143,
-   "not_applicable": 39,
-   "data_gap": 118
+   "not_applicable": 42,
+   "data_gap": 115
   },
   "B4": {
-   "pass": 247,
+   "pass": 246,
    "fail": 111,
-   "not_applicable": 39,
-   "data_gap": 101
+   "not_applicable": 42,
+   "data_gap": 99
   },
   "G1": {
    "pass": 495,
@@ -41,8 +41,8 @@
   "G2": {
    "pass": 66,
    "fail": 305,
-   "not_applicable": 39,
-   "data_gap": 88
+   "not_applicable": 42,
+   "data_gap": 85
   },
   "G3": {
    "pass": 320,
@@ -50,8 +50,8 @@
    "data_gap": 1
   },
   "G4": {
-   "partial_pass": 302,
-   "fail": 191,
+   "partial_pass": 306,
+   "fail": 187,
    "data_gap": 5
   },
   "G5": {
@@ -70,42 +70,43 @@
  "by_sector_class": {
   "bank": {
    "B1": {
-    "pass": 2,
-    "fail": 20
+    "pass": 3,
+    "fail": 21,
+    "data_gap": 1
    },
    "B2": {
-    "not_applicable": 22
+    "not_applicable": 25
    },
    "B3": {
-    "not_applicable": 22
+    "not_applicable": 25
    },
    "B4": {
-    "not_applicable": 22
+    "not_applicable": 25
    },
    "G1": {
-    "pass": 22
+    "pass": 25
    },
    "G2": {
-    "not_applicable": 22
+    "not_applicable": 25
    },
    "G3": {
-    "pass": 19,
-    "fail": 3
+    "pass": 21,
+    "fail": 4
    },
    "G4": {
-    "partial_pass": 21,
-    "fail": 1
+    "partial_pass": 23,
+    "fail": 2
    },
    "G5": {
-    "data_gap": 1,
-    "pass": 14,
+    "data_gap": 2,
+    "pass": 16,
     "fail": 7
    },
    "G6": {
-    "data_gap": 22
+    "data_gap": 25
    },
    "G7": {
-    "data_gap": 22
+    "data_gap": 25
    }
   },
   "insurer": {
@@ -150,57 +151,57 @@
   },
   "other": {
    "B1": {
-    "fail": 143,
+    "fail": 142,
     "not_meaningful": 56,
-    "pass": 157,
-    "data_gap": 48
+    "pass": 156,
+    "data_gap": 47
    },
    "B2": {
     "pass": 171,
-    "data_gap": 59,
+    "data_gap": 56,
     "fail": 174
    },
    "B3": {
     "pass": 166,
     "fail": 132,
-    "data_gap": 106
+    "data_gap": 103
    },
    "B4": {
-    "pass": 244,
+    "pass": 243,
     "fail": 90,
-    "data_gap": 70
+    "data_gap": 68
    },
    "G1": {
-    "pass": 401,
+    "pass": 398,
     "data_gap": 2,
     "fail": 1
    },
    "G2": {
     "fail": 298,
     "pass": 41,
-    "data_gap": 65
+    "data_gap": 62
    },
    "G3": {
-    "pass": 251,
-    "fail": 152,
+    "pass": 249,
+    "fail": 151,
     "data_gap": 1
    },
    "G4": {
-    "partial_pass": 220,
-    "fail": 180,
+    "partial_pass": 221,
+    "fail": 176,
     "data_gap": 4
    },
    "G5": {
-    "pass": 232,
+    "pass": 230,
     "not_meaningful": 26,
     "fail": 90,
-    "data_gap": 56
+    "data_gap": 55
    },
    "G6": {
-    "data_gap": 404
+    "data_gap": 401
    },
    "G7": {
-    "data_gap": 404
+    "data_gap": 401
    }
   },
   "reit": {
@@ -237,9 +238,9 @@
     "fail": 6
    },
    "G4": {
-    "fail": 7,
-    "partial_pass": 20,
-    "data_gap": 1
+    "partial_pass": 21,
+    "data_gap": 1,
+    "fail": 6
    },
    "G5": {
     "fail": 15,

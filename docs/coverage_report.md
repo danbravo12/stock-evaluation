@@ -150,7 +150,7 @@ _Cash outflow, reported as a positive number. ADR-064 looked for more concepts w
 
 ### dividends_paid
 
-_Cash paid on common stock; PaymentsOfDividends is the generic tag KO, JPM and DUK use. DUK switched to PaymentsOfOrdinaryDividends in 2021._
+_Cash paid on common stock; PaymentsOfDividends is the generic tag KO, JPM and DUK use. DUK switched to PaymentsOfOrdinaryDividends in 2021. DividendsCommonStockCash (ADR-012 fallback, 2026-10-12) is the last resort: the statement-of-equity line, tagged by payers whose cash-flow line is untagged (Federal Realty, Cigna); component_guard 0.5 as for the other dividend measure._
 
 - **KO**: `PaymentsOfDividends` ×19; restated 0
 - **JPM**: `PaymentsOfDividends` ×19; restated 0
