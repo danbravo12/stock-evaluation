@@ -37,6 +37,12 @@ CSV_FIELDS = ["symbol", "security", "gics_sector", "gics_sub_industry", "cik", "
 MIN_ROWS, MAX_ROWS = 495, 510
 
 
+def display_name(security: str) -> str:
+    """Wikipedia lists "Coca-Cola Company (The)"; people say "The Coca-Cola Company". The raw value stays in the CSV."""
+    m = re.match(r"^(.*?)\s*\(The\)$", security)
+    return f"The {m.group(1)}" if m else security
+
+
 class Constituent(BaseModel):
     symbol: str  # normalised (BRK-B)
     security: str
@@ -44,6 +50,10 @@ class Constituent(BaseModel):
     gics_sub_industry: str
     cik: str  # 10 digits
     date_added: str  # as listed; may be empty
+
+    @property
+    def display_name(self) -> str:
+        return display_name(self.security)
 
 
 class _TableParser(HTMLParser):

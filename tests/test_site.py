@@ -64,7 +64,7 @@ class TestBuild(SiteCase):
         d = self.out / "data"
         self.assertTrue((d / "rankings.json").exists() and (d / "manifest.json").exists())
         for c in SAMPLES:
-            for f in (f"{c}.json", f"{c}.trace.json", f"{c}.passages.json"):
+            for f in (f"{c}.json", f"{c}.trace.json", f"{c}.passages.json", f"{c}.explain.json"):
                 self.assertTrue((d / "results" / f).exists(), f)
         for name in DOCS:
             self.assertTrue((d / "docs" / f"{name}.md").exists(), name)
@@ -93,8 +93,13 @@ class TestBuild(SiteCase):
     def test_trace_is_the_recorded_run(self):
         trace = json.loads((self.out / "data/results/0000021344.trace.json").read_text())
         lines = (self.results / "0000021344.trace.jsonl").read_text().splitlines()
-        self.assertEqual(len(trace), len(lines))
-        self.assertEqual([e["step"] for e in trace], list(range(1, len(trace) + 1)))
+        self.assertEqual(len(trace["steps"]), len(lines))
+        self.assertEqual([s["raw_step"] for s in trace["steps"]], list(range(1, len(lines) + 1)))
+        self.assertEqual([l["id"] for l in trace["lanes"]], ["orchestrator", "scorers", "qualitative", "explainer", "critic", "reporter"])
+        text = json.dumps(trace)
+        self.assertIn("Passage 1:8: Our finished product operations", text)  # the searches list the passages they found, from the recorded 10-K
+        ex = json.loads((self.out / "data/results/0000021344.explain.json").read_text())
+        self.assertEqual(ex["name"], "The Coca-Cola Company")
 
     def test_size_of_the_index_page(self):
         total = sum(p.stat().st_size for p in [self.out / "index.html", self.out / "assets/site.css", self.out / "data/rankings.json", self.out / "data/manifest.json",

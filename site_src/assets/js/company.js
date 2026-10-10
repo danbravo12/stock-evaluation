@@ -2,8 +2,6 @@ import { el, getJSON, tryJSON, fail, manifest, footer, mark, status, WORD, CRITE
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
-const CHECK_WORD = { R1: "Explanation check (every figure reproduces from the scores)", R2: "Quote check (each quote is in the filing at the stated place)", R3: "Language check (no advice words)", L1: "Second-model review (does the evidence support the verdict?)" };
-const CRITIC_WORD = { passed: "Passed all checks", passed_after_retry: "Passed after one repair", passed_after_repair: "Passed after one repair", warning: "Still objected to after one repair" };
 const FLAG_WORD = { derived: "derived", restated: "restated", split_adjusted: "split-adjusted" };
 
 let model; // { row, criteria, qual, result, passages }
@@ -28,11 +26,12 @@ async function load() {
   const score = await tryJSON(`data/scores/${cik}.json`);
   const result = row.has_full_analysis ? await tryJSON(`data/results/${cik}.json`) : null;
   const passages = result ? await tryJSON(`data/results/${cik}.passages.json`) : null;
+  const explain = result ? await tryJSON(`data/results/${cik}.explain.json`) : null;
   let criteria;
   if (result && result.scorecard) criteria = result.scorecard.criteria.map((c) => ({ ...c, inputs: inputsOf(c, result.scorecard) }));
   else if (score) criteria = score.score.results;
   else throw new Error("No score file for this company.");
-  return { cik, row, score, result, passages, criteria, qual: result ? result.qualitative : [] };
+  return { cik, row, score, result, passages, explain, criteria, qual: result ? result.qualitative : [] };
 }
 
 // ---------- the list of tests ----------
@@ -43,8 +42,8 @@ function lineOf(c, cls) {
   return (plainReason(c, cls) || `Test: ${c.threshold}.`) + (figs.length && !plainReason(c, cls) ? ` ${figs.join("; ")}.` : "");
 }
 
-function critRow(id, name, label, line, warn) {
-  const b = el("button", { class: "crit", type: "button", "aria-expanded": "false", "aria-controls": "pane", "data-id": id, onclick: () => select(id, true) },
+function critRow(id, name, label, line, warn, qual) {
+  const b = el("button", { class: "crit", "data-q": qual ? "1" : false, type: "button", "aria-expanded": "false", "aria-controls": "pane", "data-id": id, onclick: () => select(id, true) },
     el("span", {}, el("span", { class: "t" }, id.length <= 3 ? el("span", { class: "id", text: id }) : null, name), el("br"), status(label)),
     el("span", { class: "line", text: line }),
     warn ? el("span", { class: "warn", text: warn }) : null);
@@ -52,13 +51,15 @@ function critRow(id, name, label, line, warn) {
 }
 
 function renderList() {
-  const ul = $("crits"), cls = model.row.sector_class, status_ = model.result ? model.result.critic.final : {};
+  const ul = $("crits");
+  if (model.result) ul.before(el("p", { class: "small muted", text: "Each score and judgement below was re-checked by the Critic, a second reviewer that is partly code and partly a model." }));
+  const cls = model.row.sector_class, status_ = model.result ? model.result.critic.final : {};
   const byId = Object.fromEntries(model.criteria.map((c) => [c.id, c]));
   const group = (title, ids) => {
     ul.append(el("li", {}, el("h3", { text: title })));
     for (const id of ids) {
       const c = byId[id]; if (!c) continue;
-      const warn = status_[id] === "warning" ? "The second reader still objects to this explanation. Open it to see why." : null;
+      const warn = status_[id] === "warning" ? "The Critic still objects to this explanation. Open it to see why." : null;
       ul.append(critRow(id, `${NAMES[id] || c.name}`, c.label, lineOf(c, cls), warn));
     }
   };
@@ -68,7 +69,7 @@ function renderList() {
     ul.append(el("li", { id: "analysis" }, el("h3", { text: "Buffett's four judgement tests, read from the annual report by the agent" })));
     for (const q of model.qual) {
       const f = q.finding, st = q.critic_status;
-      ul.append(critRow(f.criterion, QUAL[f.criterion] || f.criterion, f.verdict, f.rationale, st === "warning" ? "The second reader still objects to this rationale. Open it to see why." : null));
+      ul.append(critRow(f.criterion, QUAL[f.criterion] || f.criterion, f.verdict, f.rationale, st === "warning" ? "The Critic still objects to this rationale. Open it to see why." : null, true));
     }
   }
 }
@@ -116,14 +117,10 @@ function inputsTable(list) {
 }
 
 function checksFor(id) {
-  if (!model.result) return null;
-  const cs = model.result.critic.checks.filter((c) => c.item === id);
-  const final = model.result.critic.final[id];
-  const repairs = model.result.critic.repairs.filter((r) => r.item === id);
-  const items = cs.map((c) => el("li", {}, mark(c.status === "pass" ? "pass" : "fail"), " ", `${c.attempt ? "After repair: " : "First pass: "}${CHECK_WORD[c.check] || c.check}: ${c.status === "pass" ? "passed" : "raised an objection"}`,
-    c.status !== "pass" && c.detail ? el("div", { class: "small muted", text: c.detail }) : null));
-  repairs.forEach((r) => items.push(el("li", {}, `Repair: ${r.path.replaceAll("_", " ")}, ${r.outcome}.`)));
-  return el("div", {}, el("h3", { text: "Checks by the second reader" }), final ? el("p", { text: CRITIC_WORD[final] || final }) : null, el("ul", { class: "checks" }, items));
+  const n = model.explain && model.explain.critic[id];
+  if (!n) return null;
+  return el("div", {}, el("h3", { text: "What the Critic found" }), el("p", {}, mark(n.objected ? "partial_pass" : "pass"), " ", n.status + "."),
+    ...n.sentences.map((t) => el("p", { text: t })), n.ran ? el("p", { class: "small muted", text: n.ran }) : null);
 }
 
 function numericPane(c) {
@@ -168,13 +165,14 @@ function qualPane(q) {
   f.citations.forEach((c) => {
     pane.push(passageView(c));
     const filing = model.result.data.filing;
-    pane.push(el("p", { class: "src" }, `Item ${c.item}, filing ${c.accession}. `, secLink(filing.url, "Open the 10-K"), ` (characters ${c.char_start} to ${c.char_end} of the normalised text).`));
+    pane.push(el("p", { class: "src" }, `Item ${c.item}, filing ${c.accession}. `, secLink(filing.url, "Open the 10-K"), "."),
+      el("p", { class: "src offs", text: `Characters ${c.char_start} to ${c.char_end} of the filing's normalised text.` }));
   });
-  if (f.searches && f.searches.length) pane.push(el("p", { class: "small muted", text: `The agent searched the filing ${f.searches.length} time(s), made ${f.llm_calls} model call(s) and ${f.tool_calls} tool call(s).` }));
+  const qn = model.explain && model.explain.qualitative[f.criterion];
+  if (qn) pane.push(el("p", { class: "small muted", text: qn }));
   const st = q.critic_status;
   const cc = checksFor(f.criterion);
   if (cc) pane.push(cc);
-  else if (st) pane.push(el("p", { text: CRITIC_WORD[st] || st }));
   return pane;
 }
 
@@ -205,10 +203,9 @@ function costLine() {
   const r = model.result;
   if (!r) return el("div", { class: "cost" },
     el("p", { text: "Full agent analysis has not been run for this company. These scores come from the SEC's structured data alone." }),
-    el("p", { text: "A full analysis would add a plain-English explanation of each score, four judgements on Buffett's qualitative questions (is the business understandable, does it have a lasting advantage, is management candid, is capital used sensibly), each backed by a quoted sentence from the annual report, a second reader that checks them, and a replayable record of every step the agents took." }));
-  const c = r.cost;
+    el("p", { text: "A full analysis would add a plain-English explanation of each score, four judgements on Buffett's qualitative questions (is the business understandable, does it have a lasting advantage, is management candid, is capital used sensibly), each backed by a quoted sentence from the annual report, a Critic (a second reviewer) that checks them, and a replayable record of every step the agents took." }));
   return el("div", { class: "cost", id: "cost" },
-    el("p", { text: `The agents made ${c.llm_calls} model calls and read ${c.input_tokens.toLocaleString("en-US")} tokens, writing ${c.output_tokens.toLocaleString("en-US")}. On the free tier that cost $${c.actual_cost_usd.toFixed(2)}; at paid rates it would have cost about $${c.notional_cost_usd.toFixed(4)}.` }),
+    el("p", { text: model.explain ? model.explain.cost : "" }),
     el("p", {}, el("a", { href: `trace.html?cik=${model.cik}`, text: "Replay the agent run step by step" }), ". Filing used: ", secLink(r.data.filing.url, `Form 10-K filed ${r.data.filing.filing_date}`), "."));
 }
 
@@ -221,10 +218,10 @@ async function main() {
   }
   const r = model.row;
   document.title = `${r.name} (${r.symbol}) analysis`;
-  const classWord = { bank: "Bank", insurer: "Insurer", utility: "Utility", reit: "Real estate investment trust", other: "Ordinary company" }[r.sector_class] || r.sector_class;
+  const classWord = { bank: "bank rules (no current assets or operating income)", insurer: "insurer rules (no current assets or operating income)", utility: "utility variant of the debt test", reit: "standard rules with a REIT note", other: "standard" }[r.sector_class] || r.sector_class;
   $("head").replaceChildren(el("h1", { text: `${r.name} (${r.symbol})` }),
     el("ul", { class: "facts" },
-      el("li", {}, el("b", { text: "Sector " }), r.gics_sector), el("li", {}, el("b", { text: "Treated as " }), classWord),
+      el("li", {}, el("b", { text: "Sector " }), r.gics_sector), el("li", {}, el("b", { text: "Rules applied " }), classWord),
       el("li", {}, el("b", { text: "Latest fiscal year " }), String(r.as_of_fiscal_year)),
       el("li", {}, el("b", { text: "Tests met " }), `${r.met} of ${r.decided} decided`), el("li", {}, el("b", { text: "Rank " }), r.rank ? `${r.rank}` : "not ranked (too few decided tests)")),
     ...r.notes.map((n) => el("p", { class: "notebox", text: n })),

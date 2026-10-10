@@ -17,6 +17,7 @@ from pathlib import Path
 
 from engine.agents.critic import banned_hits, load_banned
 from engine.rankings import OUTPUT_PATH, Rankings
+from engine.trace_render import critic_notes, render_trace
 from engine.report import PublishGateError, finnhub_fields
 from engine.settings import REPO_ROOT, Settings
 
@@ -92,6 +93,12 @@ def page_text(path: Path) -> str:
     return text
 
 
+def _retriever(settings: Settings):
+    from engine.fetch.edgar import EdgarClient
+    from engine.retrieve import Retriever
+    return Retriever(EdgarClient("replay", settings))
+
+
 def passages_for(cik: str, result: dict, settings: Settings) -> dict:
     """The cited passages with their text, from the recorded 10-K (replay), so the page can show the sentences around each quote."""
     from engine.fetch.edgar import EdgarClient
@@ -146,7 +153,18 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
                 res = json.loads((results_dir / f"{r.cik}.json").read_text(encoding="utf-8"))
                 put(f"results/{r.cik}.json", res)
                 trace = [json.loads(l) for l in (results_dir / f"{r.cik}.trace.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
-                put(f"results/{r.cik}.trace.json", trace)
+                retriever = _retriever(settings)
+                try:
+                    if retriever:
+                        retriever.index(r.cik)
+                except Exception:
+                    retriever = None
+                put(f"results/{r.cik}.trace.json", render_trace(trace, res, retriever=retriever, cik=r.cik))
+                notes = critic_notes(res)
+                notes["name"] = r.name
+                put(f"results/{r.cik}.explain.json", notes)
+                for key, text in _strings(notes):
+                    scan_text(f"{r.symbol}:explain", text, banned)
                 put(f"results/{r.cik}.passages.json", passages_for(r.cik, res, settings))
                 scan_result(r.symbol, res, banned)
                 full.append(r.symbol)

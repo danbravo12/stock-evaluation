@@ -1226,7 +1226,7 @@
    {
     "symbol": "KO",
     "cik": "0000021344",
-    "name": "Coca-Cola Company (The)",
+    "name": "The Coca-Cola Company",
     "gics_sector": "Consumer Staples",
     "gics_sub_industry": "Soft Drinks & Non-alcoholic Beverages",
     "sector_class": "other",
@@ -1736,7 +1736,7 @@
    {
     "symbol": "HD",
     "cik": "0000354950",
-    "name": "Home Depot (The)",
+    "name": "The Home Depot",
     "gics_sector": "Consumer Discretionary",
     "gics_sub_industry": "Home Improvement Retail",
     "sector_class": "other",
@@ -2008,7 +2008,7 @@
    {
     "symbol": "HSY",
     "cik": "0000047111",
-    "name": "Hershey Company (The)",
+    "name": "The Hershey Company",
     "gics_sector": "Consumer Staples",
     "gics_sub_industry": "Packaged Foods & Meats",
     "sector_class": "other",
@@ -5896,7 +5896,7 @@
    {
     "symbol": "TRV",
     "cik": "0000086312",
-    "name": "Travelers Companies (The)",
+    "name": "The Travelers Companies",
     "gics_sector": "Financials",
     "gics_sub_industry": "Property & Casualty Insurance",
     "sector_class": "insurer",
@@ -8696,7 +8696,7 @@
    {
     "symbol": "COO",
     "cik": "0000711404",
-    "name": "Cooper Companies (The)",
+    "name": "The Cooper Companies",
     "gics_sector": "Health Care",
     "gics_sub_industry": "Health Care Supplies",
     "sector_class": "other",
@@ -12904,7 +12904,7 @@
    {
     "symbol": "EL",
     "cik": "0001001250",
-    "name": "Estée Lauder Companies (The)",
+    "name": "The Estée Lauder Companies",
     "gics_sector": "Consumer Staples",
     "gics_sub_industry": "Personal Care Products",
     "sector_class": "other",
@@ -13210,7 +13210,7 @@
    {
     "symbol": "MOS",
     "cik": "0001285785",
-    "name": "Mosaic Company (The)",
+    "name": "The Mosaic Company",
     "gics_sector": "Materials",
     "gics_sub_industry": "Fertilizers & Agricultural Chemicals",
     "sector_class": "other",
@@ -15198,7 +15198,7 @@
    {
     "symbol": "SJM",
     "cik": "0000091419",
-    "name": "J.M. Smucker Company (The)",
+    "name": "The J.M. Smucker Company",
     "gics_sector": "Consumer Staples",
     "gics_sub_industry": "Packaged Foods & Meats",
     "sector_class": "other",
@@ -15438,7 +15438,7 @@
    {
     "symbol": "DIS",
     "cik": "0001744489",
-    "name": "Walt Disney Company (The)",
+    "name": "The Walt Disney Company",
     "gics_sector": "Communication Services",
     "gics_sub_industry": "Movies & Entertainment",
     "sector_class": "other",
@@ -16702,7 +16702,7 @@
    {
     "symbol": "HIG",
     "cik": "0000874766",
-    "name": "Hartford (The)",
+    "name": "The Hartford",
     "gics_sector": "Financials",
     "gics_sub_industry": "Property & Casualty Insurance",
     "sector_class": "insurer",

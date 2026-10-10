@@ -25,7 +25,7 @@
 <li><b>Numbers from the SEC.</b> The SEC publishes every tagged figure companies report. The tool keeps full-year figures, picks one value per year, adjusts per-share figures for stock splits, and records for each value the filing it came from. A missing figure becomes a data gap with a reason; it is never guessed.</li>
 <li><b>Eleven tests, plain arithmetic.</b> Seven from Benjamin Graham's defensive-investor criteria (size, financial strength, earnings stability, dividend record, earnings growth, and two price tests) and four from Warren Buffett's (return on equity, conservative debt, stable margins, owner earnings). Python code computes them. No model is involved in any number.</li>
 <li><b>Four questions about the annual report.</b> For companies with a full analysis, one agent per question reads the relevant parts of the latest 10-K by searching it, then must cite the exact sentences it relies on. Code, not the model, builds the quote and its position in the filing from sentence pointers, so a quote cannot be paraphrased or invented.</li>
-<li><b>Explain, then check.</b> The Explainer writes one plain line per score using placeholders instead of numbers; code fills the numbers in. The Critic checks the lines, re-opens the filing to verify every quote, scans for advice language, and asks a model whether the evidence supports each verdict. A failed item goes back once for repair; if it still fails it is shown with a warning.</li>
+<li><b>Explain, then check.</b> The Explainer writes one plain line per score using placeholders instead of numbers; code fills the numbers in. The Critic, a second reviewer that is partly code and partly a model, checks the lines, re-opens the filing to verify every quote, scans for advice language, and asks a model whether the evidence supports each verdict. A failed item goes back once for repair; if it still fails it is shown with a warning.</li>
 <li><b>Publish files.</b> Each company becomes one file with its scores, evidence, checks, cost and a trace of every step. This site only displays those files.</li>
 </ol>
 
@@ -50,7 +50,7 @@
 <h2>What it gets wrong</h2>
 <ol>
 <li><b>The judgement verdicts lean generous.</b> Where the reviewer disagreed with the agent, the agent had been too positive; the Critic catches most but not all of these.</li>
-<li><b>Rationales can say more than the quotes show.</b> The second reader flags it and asks for a rewrite, but it is a language-model check and can miss things.</li>
+<li><b>Rationales can say more than the quotes show.</b> The Critic flags it and asks for a rewrite, but it is a language-model check and can miss things.</li>
 <li><b>Some companies do not report what a test needs.</b> The margin test is a data gap for about 115 companies and the owner-earnings test for about 100, mostly because their filings give no usable operating income or capital spending, or cover fewer than ten years. They are shown as gaps, not guessed.</li>
 <li><b>Dividend history is a short window with data quirks.</b> SEC data covers about 15 years, not Graham's 20. A one-off payment or a mis-tagged figure can make a company look like a payer (Alphabet in 2015 is a known case).</li>
 <li><b>Earnings growth depends on a single unusual year.</b> The growth test compares three-year averages ten years apart, so one odd year can flip it.</li>
@@ -61,7 +61,7 @@
 <ul>
 <li>Filings and financial data: U.S. Securities and Exchange Commission, EDGAR (public domain).</li>
 <li>S&amp;P 500 membership: Wikipedia list of S&amp;P 500 companies, as of the snapshot date shown in the page footer (CC BY-SA).</li>
-<li>Language model: Google Gemini 3.1 Flash-Lite, free tier, for the explanations, the four judgement tests and the second reader.</li>
+<li>Language model: Google Gemini 3.1 Flash-Lite, free tier, for the explanations, the four judgement tests and the Critic.</li>
 <li>Prices and analyst opinions: not shown. The provider's licence for public display has not been granted, and the build refuses to publish any such field until it is.</li>
 <li>Typefaces: Public Sans and Source Serif 4, both under the SIL Open Font License, served from this site.</li>
 </ul>

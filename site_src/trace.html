@@ -19,6 +19,8 @@
 <p class="crumbs" id="crumbs"><a href="index.html">All rankings</a></p>
 <h1 id="title">Loading the run</h1>
 <p class="lede" id="lede"></p>
+<figure class="swim" id="swimfig" hidden><div class="scroll" id="swim" tabindex="0" role="region" aria-label="Overview of the run: one row per agent, one mark per step. Scrolls sideways on narrow screens."></div>
+<figcaption class="small muted">Each mark is one step, in order. A blue line is a hand-off from one agent to the next. The highlighted mark is the step shown below; select a mark to jump to it.</figcaption></figure>
 <div class="bar" id="bar" hidden>
   <button class="btn" id="back" type="button">Step back</button>
   <button class="btn" id="play" type="button" aria-pressed="false">Play</button>
@@ -27,7 +29,7 @@
   <span class="totals" id="totals" aria-live="polite"></span>
 </div>
 <div class="tr" id="tr" hidden>
-  <ol class="steps" id="steps" aria-label="Steps of the run"></ol>
+  <div class="groups" id="groups" aria-label="Steps of the run, grouped by agent"></div>
   <section class="detail" id="detail" aria-live="polite" aria-label="Selected step"></section>
 </div>
 </main>

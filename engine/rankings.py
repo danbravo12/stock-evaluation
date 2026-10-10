@@ -17,7 +17,7 @@ from pydantic import BaseModel, Field
 from engine.report import DISCLAIMER, PublishGateError, finnhub_fields
 from engine.settings import REPO_ROOT
 from engine.successors import NO_ANNUAL_REPORT
-from engine.universe import Universe
+from engine.universe import Universe, display_name
 
 SCHEMA_VERSION = "1.0"
 SCHEMA_PATH = REPO_ROOT / "schema" / "rankings.schema.json"
@@ -146,7 +146,7 @@ def _row(symbol: str, cik: str, info: dict, full_path: str | None) -> RankingRow
     met = sum(l in MET for l in labels.values())
     decided = sum(l in DECIDED for l in labels.values())
     caveats = [VALUATION_CAVEAT] if "data_gap" in (labels["G6"], labels["G7"]) else []
-    return RankingRow(symbol=symbol, cik=cik, name=info["name"], gics_sector=info["gics_sector"], gics_sub_industry=info["gics_sub_industry"], sector_class=info["sector_class"],
+    return RankingRow(symbol=symbol, cik=cik, name=display_name(info["name"]), gics_sector=info["gics_sector"], gics_sub_industry=info["gics_sub_industry"], sector_class=info["sector_class"],
                       notes=info["notes"], caveats=caveats, met=met, decided=decided, percent_met=round(100 * met / decided, 1) if decided else None, data_gaps=sum(l == "data_gap" for l in labels.values()), labels=labels,
                       has_full_analysis=full_path is not None, analysis_path=full_path, as_of_fiscal_year=info["as_of"])
 
@@ -163,14 +163,14 @@ def build_rankings(universe: Universe, scores_dir: Path, results_dir: Path) -> R
         full_path = f"results/{c.cik}.json" if full_file and full_file.get("scorecard") else None
         info = None
         if score_file and score_file.get("status") == "no_annual_report":
-            excluded.append(ExcludedRow(symbol=c.symbol, cik=c.cik, name=c.security, gics_sector=c.gics_sector, status="no_annual_report", reason=score_file["message"]))
+            excluded.append(ExcludedRow(symbol=c.symbol, cik=c.cik, name=c.display_name, gics_sector=c.gics_sector, status="no_annual_report", reason=score_file["message"]))
             continue
         if score_file and score_file.get("score"):
             info = _from_score_file(score_file)
         elif full_file:
             info = _from_full_result(full_file)
         if info is None:
-            excluded.append(ExcludedRow(symbol=c.symbol, cik=c.cik, name=c.security, gics_sector=c.gics_sector, status="not_scored", reason="no result file: run the batch for this company"))
+            excluded.append(ExcludedRow(symbol=c.symbol, cik=c.cik, name=c.display_name, gics_sector=c.gics_sector, status="not_scored", reason="no result file: run the batch for this company"))
             continue
         if info["fetched"]:
             fetched.append(info["fetched"])
