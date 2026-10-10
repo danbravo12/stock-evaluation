@@ -15,7 +15,7 @@ Gold set: `eval/expected_qualitative.json` (Daniel Bravo, reviewed with Claude, 
 | JPM | understandable_business | found | found | L1 | found | passed_after_retry | yes |
 | JPM | durable_competitive_advantage | insufficient | insufficient | – | insufficient | passed | yes |
 | JPM | candid_management | insufficient | insufficient | – | insufficient | passed | yes |
-| JPM | rational_capital_allocation | found | weak | L1 | found | passed_after_retry | NO |
+| JPM | rational_capital_allocation | found | found | L1 | found | passed_after_retry | yes |
 | GOOGL | understandable_business | found | found | – | found | passed | yes |
 | GOOGL | durable_competitive_advantage | insufficient | insufficient | – | insufficient | passed | yes |
 | GOOGL | candid_management | found | weak | L1 | insufficient | passed_after_retry | NO |
@@ -27,17 +27,17 @@ Gold set: `eval/expected_qualitative.json` (Daniel Bravo, reviewed with Claude, 
 | DUK | understandable_business | found | found | – | found | passed | yes |
 | DUK | durable_competitive_advantage | found | found | – | found | passed | yes |
 | DUK | candid_management | weak | weak | – | weak | passed | yes |
-| DUK | rational_capital_allocation | found | weak | L1 | found | passed_after_retry | NO |
+| DUK | rational_capital_allocation | found | found | L1 | found | passed_after_retry | yes |
 
 | Scorecard | |
 |---|---|
-| Gold-set disagreements caught (flagged) | **3 of 3** |
-| False alarms (correct found/weak finding flagged) | **2 of 13** |
-| Disagreements fixed by routing and retry (final = human) | 0 of 3 |
+| Gold-set disagreements caught (flagged) | **1 of 1** |
+| False alarms (correct found/weak finding flagged) | **4 of 15** |
+| Disagreements fixed by routing and retry (final = human) | 0 of 1 |
 | Correct findings changed to wrong by a retry | 0 |
-| Agreement with the gold set: agent only → after the Critic | **17/20 → 17/20** |
+| Agreement with the gold set: agent only → after the Critic | **19/20 → 19/20** |
 
-"False alarms" are judged on the verdict only (the gold set labels verdicts, not rationales). Flagged although agent = human: KO understandable_business (yes + claims not in the quotes); JPM understandable_business (yes + claims not in the quotes).
+"False alarms" are judged on the verdict only (the gold set labels verdicts, not rationales). Flagged although agent = human: KO understandable_business (yes + claims not in the quotes); JPM understandable_business (yes + claims not in the quotes); JPM rational_capital_allocation (overstated + claims not in the quotes); DUK rational_capital_allocation (yes + claims not in the quotes).
 
 ## Repairs
 

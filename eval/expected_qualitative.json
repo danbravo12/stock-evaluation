@@ -1,6 +1,6 @@
 {
   "reviewer": "Daniel Bravo, reviewed with Claude, 2026-10-10",
-  "source": "agent_verdict = recorded v1.1 run (docs/qualitative_report.md, fixtures/llm/); human_verdict = reviewed label (ADR-050)",
+  "source": "agent_verdict = recorded run (docs/qualitative_report.md, fixtures/llm/); human_verdict = reviewed label (ADR-050)",
   "gold": {
     "KO": {
       "understandable_business": {
@@ -42,8 +42,16 @@
       },
       "rational_capital_allocation": {
         "agent_verdict": "evidence found",
-        "human_verdict": "evidence weak",
-        "note": "Agent over-generous: the cited sentences name repurchases and dividends with no amounts (and one is a stockholders' equity bridge); rubric says weak."
+        "human_verdict": "evidence found",
+        "note": "Found under the clarified rubric (ADR-052): the filing quantifies $31,640M of common stock repurchases in 2025 and states the dividend policy. The original agent citations were weaker than the filing; the verdict is right.",
+        "label_history": [
+          {
+            "date": "2026-10-10",
+            "old": "evidence weak",
+            "new": "evidence found",
+            "reason": "ADR-052 rubric clarification: one quantified past action plus a stated policy is enough. The filing quantifies $31,640M of repurchases and states the dividend policy."
+          }
+        ]
       }
     },
     "GOOGL": {
@@ -60,7 +68,7 @@
       "candid_management": {
         "agent_verdict": "evidence found",
         "human_verdict": "evidence weak",
-        "note": "Agent over-generous: generic risk-factor wording ('devices have had, and may have, quality issues'); no specific setback named."
+        "note": "Stays weak: generic risk-factor wording ('devices have had, and may have, quality issues'); no specific setback named. The agent now says insufficient evidence after the Critic's constrained retry (under-generous by one step); the original agent verdict was found."
       },
       "rational_capital_allocation": {
         "agent_verdict": "evidence found",
@@ -108,9 +116,18 @@
       },
       "rational_capital_allocation": {
         "agent_verdict": "evidence found",
-        "human_verdict": "evidence weak",
-        "note": "Agent over-generous: only dividends are quantified; the cited 'capital requirements arise from...' is a description, not a policy; the rationale claims figures that are not cited."
+        "human_verdict": "evidence found",
+        "note": "Found under the clarified rubric (ADR-052): the filing quantifies $14,002M of capital and investment expenditure and states a dividend policy. The agent's verdict is right; its citation is weaker than that policy sentence.",
+        "label_history": [
+          {
+            "date": "2026-10-10",
+            "old": "evidence weak",
+            "new": "evidence found",
+            "reason": "ADR-052 rubric clarification (same as JPM). The filing quantifies $14,002M of capital and investment expenditure and states \"We are committed to manage a business portfolio that delivers a reliable and growing dividend\"."
+          }
+        ]
       }
     }
-  }
+  },
+  "label_policy": "human_verdict judges what the filing shows under the CURRENT rubric (config/search_terms.json), not only what the agent cited. A label changes only when the rubric changes, and every change is recorded in label_history (date, old -> new, reason)."
 }

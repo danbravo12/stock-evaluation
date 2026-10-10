@@ -136,7 +136,7 @@ The engine is a library, so the batch command, the tests and the future live app
 | `tests/test_explainer.py` | Formats, placeholder rendering, every fixture figure key has a format, None figures withheld, templated lines, one call per company, retry with feedback. | Built |
 | `tests/test_critic.py` | Rule faults (wrong placeholder, stray number, altered quote, span outside the passage, wrong sha, banned phrase, "share buyback" not flagged), the model check's inputs, routing to owners, one retry then warning, never alters a verdict, cost totals, trace order. | Built |
 | `tests/test_critic_fixtures.py` | Replay of the recorded review on the 5 companies: structure, R2 on real findings, 3 injected faults flagged, gold-set disagreements caught, no network. | Built |
-| `tests/test_expected_qualitative.py` | Guard: replayed agent verdicts equal the recorded ones; agreement 17/20 with every disagreement over-generous. | Built |
+| `tests/test_expected_qualitative.py` | Guard: replayed agent verdicts equal the recorded ones; agreement 19/20 with the one disagreement over-generous; every changed label has a dated reason. | Built |
 | `tests/test_sentences.py` | Segmentation rules on synthetic text (bullets, newlines, abbreviations, decimals, long-sentence cuts, nothing lost) and exact round trip of every passage of the 5 recorded filings. | Built |
 | `tests/test_qualitative.py` | 29 offline tests of the agent with scripted model replies through the real client (fake transport) on a synthetic 10-K: seeded search, search / get_passage / submit, unchanged assistant messages and tool-call ids, turn cap and last-turn tools, pointer citations (exact quote from sentence numbers, out-of-range, last before first, over 3 sentences, over 120 words, never-retrieved passage, one correction then `invalid_citation`, one extra turn), verdict per stop reason, malformed arguments, section_missing, quota and budget propagation, totals and trace order. | Built |
 | `tests/test_qualitative_fixtures.py` | Replay of all 5 real runs with zero network: four findings each, every cited span equals `document_text[start:end]` and its sentence offsets, no mechanical citation failures, no advice words, totals add up. Structural only; verdicts not frozen. | Built |
@@ -167,8 +167,8 @@ Committed, so LLM-using tests replay offline. The three smoke-test calls (JSON m
 | File | Function | Status |
 |---|---|---|
 | `eval/snapshot.py` | Reduces a `ScoreSet` to label + key figures (4 significant digits); `python -m eval.snapshot` rewrites the frozen file after a reviewed change. | Built |
-| `eval/expected_qualitative.json` | Gold set for the qualitative agent: per ticker and criterion the recorded agent verdict, the human-reviewed verdict and a note (reviewer line inside). 3 of 20 labels differ, all over-generous. | Built |
-| `eval/qualitative_agreement.py` | Replays the recorded agent run and prints agreement with the gold set (17/20) and the disagreements; `agreement()` is reused by the Critic evaluation. | Built |
+| `eval/expected_qualitative.json` | Gold set for the qualitative agent: per ticker and criterion the recorded agent verdict, the human-reviewed verdict and a note (reviewer line inside). Labels judge the filing under the current rubric; changes are kept in `label_history`. 1 of 20 labels differs from the agent's verdict. | Built |
+| `eval/qualitative_agreement.py` | Replays the recorded agent run and prints agreement with the gold set (19/20) and the disagreements; `agreement()` is reused by the Critic evaluation. | Built |
 | `eval/expected_scores.json` | Frozen, reviewed results for the 5 test companies and 11 criteria. | Built |
 
 ## Recorded data (`fixtures/`)
