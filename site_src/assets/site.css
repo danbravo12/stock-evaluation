@@ -140,3 +140,8 @@ figure.diagram svg .box { fill: var(--surface); stroke: var(--ink); stroke-width
 .inputs td, .inputs th { white-space: nowrap; }
 
 @media (max-width: 900px) { .detail { position: static; max-height: none; } .crit[aria-expanded="true"][data-q] .line { display: none; } }
+
+.nowrap { white-space: nowrap; }
+td.sector, th.sector { white-space: nowrap; }
+.tablewrap table.wide { min-width: 1000px; }
+.sub { margin-top: 2.2em; }

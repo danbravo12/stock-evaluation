@@ -140,7 +140,7 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
         rk_text = Path(rankings_path).read_text(encoding="utf-8")
         rankings = Rankings.model_validate_json(rk_text)
         put("rankings.json", text=rk_text)
-        rows = rankings.criteria_ranking.ranked + rankings.criteria_ranking.insufficient_data
+        rows = rankings.criteria_ranking.ranked + rankings.criteria_ranking.ranked_financials + rankings.criteria_ranking.insufficient_data
         n_scores, full = 0, []
         for r in rows:
             sf = results_dir / "scores" / f"{r.cik}.json"

@@ -200,7 +200,7 @@ class TestLinksAndSchemas(SiteCase):
 
     def test_every_company_in_the_rankings_with_a_full_analysis_has_its_files(self):
         rk = json.loads((self.out / "data/rankings.json").read_text())
-        rows = rk["criteria_ranking"]["ranked"] + rk["criteria_ranking"]["insufficient_data"]
+        rows = rk["criteria_ranking"]["ranked"] + rk["criteria_ranking"]["ranked_financials"] + rk["criteria_ranking"]["insufficient_data"]
         full = [r for r in rows if r["has_full_analysis"]]
         self.assertEqual(sorted(r["cik"] for r in full), sorted(SAMPLES))
         for r in full:
@@ -229,6 +229,15 @@ class TestLinksAndSchemas(SiteCase):
             for m in re.finditer(r"innerHTML", body):
                 line = body[body.rfind("\n", 0, m.start()) + 1:body.find("\n", m.start())]
                 self.assertIn("svg.innerHTML", line, f"{js.name}: {line.strip()[:80]}")  # only the fixed SVG symbol definitions
+
+    def test_rankings_page_has_the_pending_mark_the_second_table_and_unbroken_dates(self):
+        js = (self.out / "assets/js/common.js").read_text() + (self.out / "assets/js/index.js").read_text()
+        self.assertIn('id="m-pending"', js)
+        self.assertIn("Pending: waiting for licensed price data", js)
+        self.assertIn("Banks and insurers (fewer tests apply)", (self.out / "index.html").read_text())
+        self.assertIn('class: "nowrap"', js)
+        self.assertRegex((self.out / "assets/site.css").read_text(), r"\.nowrap \{ white-space: nowrap; \}")
+        self.assertIn('id="ranking"', (self.out / "how-it-works.html").read_text())  # the long explanation of the score lives there, not on the rankings page
 
     def test_no_third_party_requests(self):
         for p in list(self.out.glob("*.html")) + list((self.out / "assets").rglob("*.js")) + [self.out / "assets/site.css"]:

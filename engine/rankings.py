@@ -23,9 +23,12 @@ SCHEMA_VERSION = "1.0"
 SCHEMA_PATH = REPO_ROOT / "schema" / "rankings.schema.json"
 OUTPUT_PATH = REPO_ROOT / "site_data" / "rankings.json"
 CRITERIA = [f"G{i}" for i in range(1, 8)] + [f"B{i}" for i in range(1, 5)]
+PENDING = "pending"  # a valuation test (G6, G7) that waits for price data: not a data gap, not counted in decided
 MET = ("pass", "partial_pass")
 DECIDED = MET + ("fail",)
-MIN_DECIDED = 5
+MIN_DECIDED = 7  # main ranking
+FINANCIAL_MIN_DECIDED = 4  # banks and insurers: G2 and B2 to B4 do not apply and valuation is pending, so at most 5 tests can be decided
+FINANCIAL_CLASSES = ("bank", "insurer")
 Z = 1.96  # 95% Wilson score interval
 VALUATION_CAVEAT = "Valuation criteria (G6, G7) pending price data."
 ANALYSTS_PENDING = "pending Finnhub permission (ADR-007, ADR-021)"
@@ -46,7 +49,8 @@ METHOD = {
     "score": "lower bound of the 95% Wilson score interval for met / decided (z = 1.96), to 3 decimals; percent_met is the plain share",
     "met": "criteria with the label pass or partial_pass",
     "decided": "criteria with the label pass, partial_pass or fail, over G1 to G7 and B1 to B4; not_applicable, not_meaningful and data_gap are left out",
-    "minimum_decided": f"a company is ranked only if at least {MIN_DECIDED} criteria are decided; the others are listed as insufficient data with their counts",
+    "pending": "G6 and G7 wait for licensed price data: they are shown as pending, are not data gaps and are not counted as decided",
+    "minimum_decided": f"the main ranking needs at least {MIN_DECIDED} decided criteria; banks and insurers (fewer tests apply) are ranked in their own section from {FINANCIAL_MIN_DECIDED}; the others are listed as insufficient data with their counts",
     "ties": "higher met, then fewer data gaps, then symbol",
 }
 
@@ -60,7 +64,8 @@ class RankingRow(BaseModel):
     sector_class: str
     notes: list[str] = Field(default_factory=list)  # sector notes (REIT, broker, ...) and registrant notes (successor)
     caveats: list[str] = Field(default_factory=list)  # e.g. VALUATION_CAVEAT
-    rank: int | None = None  # None in the insufficient-data group
+    group: str = "main"  # main, financials or insufficient_data
+    rank: int | None = None  # within its group; None in the insufficient-data group
     score: float | None = None  # Wilson lower bound of met / decided, 3 dp; None in the insufficient-data group
     met: int
     decided: int
@@ -84,7 +89,9 @@ class ExcludedRow(BaseModel):
 class CriteriaRanking(BaseModel):
     method: dict[str, str]
     minimum_decided: int
+    financials_minimum_decided: int
     ranked: list[RankingRow]
+    ranked_financials: list[RankingRow]  # banks and insurers, their own ranking with the same score
     insufficient_data: list[RankingRow]
 
 
@@ -103,6 +110,7 @@ class DataAsOf(BaseModel):
 class Counts(BaseModel):
     universe: int
     ranked: int
+    ranked_financials: int
     insufficient_data: int
     excluded: int
 
@@ -125,9 +133,16 @@ def _load(path: Path) -> dict | None:
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
 
 
+def _label(r: dict) -> str:
+    """The label, with a valuation test that only waits for a price shown as pending instead of a data gap."""
+    if r["label"] == "data_gap" and (r.get("reason") or "").startswith("price not available"):
+        return PENDING
+    return r["label"]
+
+
 def _from_score_file(d: dict) -> dict | None:
     sc = d["score"]
-    return {"labels": {r["id"]: r["label"] for r in sc["results"]}, "as_of": sc["as_of_year"], "sector_class": d["sector_class"], "name": d["name"], "gics_sector": d["gics_sector"],
+    return {"labels": {r["id"]: _label(r) for r in sc["results"]}, "as_of": sc["as_of_year"], "sector_class": d["sector_class"], "name": d["name"], "gics_sector": d["gics_sector"],
             "gics_sub_industry": d.get("gics_sub_industry"), "notes": list(d.get("sector_notes") or []) + list(d.get("source_notes") or []), "fetched": d.get("fetched_at")}
 
 
@@ -136,7 +151,7 @@ def _from_full_result(d: dict) -> dict | None:
     if not card:
         return None
     plan, data = d["plan"], d.get("data") or {}
-    return {"labels": {c["id"]: c["label"] for c in card["criteria"]}, "as_of": card["as_of_year"], "sector_class": card["sector_class"], "name": plan.get("name") or plan["ticker"],
+    return {"labels": {c["id"]: _label(c) for c in card["criteria"]}, "as_of": card["as_of_year"], "sector_class": card["sector_class"], "name": plan.get("name") or plan["ticker"],
             "gics_sector": plan.get("gics_sector") or "", "gics_sub_industry": None, "notes": list(card.get("sector_notes") or []),
             "fetched": (data.get("as_of") or {}).get("companyfacts") or None}
 
@@ -145,7 +160,7 @@ def _row(symbol: str, cik: str, info: dict, full_path: str | None) -> RankingRow
     labels = {c: info["labels"].get(c, "data_gap") for c in CRITERIA}
     met = sum(l in MET for l in labels.values())
     decided = sum(l in DECIDED for l in labels.values())
-    caveats = [VALUATION_CAVEAT] if "data_gap" in (labels["G6"], labels["G7"]) else []
+    caveats = [VALUATION_CAVEAT] if PENDING in (labels["G6"], labels["G7"]) else []
     return RankingRow(symbol=symbol, cik=cik, name=display_name(info["name"]), gics_sector=info["gics_sector"], gics_sub_industry=info["gics_sub_industry"], sector_class=info["sector_class"],
                       notes=info["notes"], caveats=caveats, met=met, decided=decided, percent_met=round(100 * met / decided, 1) if decided else None, data_gaps=sum(l == "data_gap" for l in labels.values()), labels=labels,
                       has_full_analysis=full_path is not None, analysis_path=full_path, as_of_fiscal_year=info["as_of"])
@@ -176,16 +191,27 @@ def build_rankings(universe: Universe, scores_dir: Path, results_dir: Path) -> R
             fetched.append(info["fetched"])
         rows.append(_row(c.symbol, c.cik, info, full_path))
 
-    ranked = sorted((r for r in rows if r.decided >= MIN_DECIDED), key=lambda r: (-round(wilson_lower_bound(r.met, r.decided), 9), -r.met, r.data_gaps, r.symbol))
-    for i, r in enumerate(ranked, 1):
-        r.rank, r.score = i, round(wilson_lower_bound(r.met, r.decided), 3)
-    insufficient = sorted((r for r in rows if r.decided < MIN_DECIDED), key=lambda r: r.symbol)
+    def order(rs):
+        out = sorted(rs, key=lambda r: (-round(wilson_lower_bound(r.met, r.decided), 9), -r.met, r.data_gaps, r.symbol))
+        for i, r in enumerate(out, 1):
+            r.rank, r.score = i, round(wilson_lower_bound(r.met, r.decided), 3)
+        return out
+
+    fin = lambda r: r.sector_class in FINANCIAL_CLASSES  # noqa: E731
+    ranked = order([r for r in rows if not fin(r) and r.decided >= MIN_DECIDED])
+    ranked_fin = order([r for r in rows if fin(r) and r.decided >= FINANCIAL_MIN_DECIDED])
+    for r in ranked_fin:
+        r.group = "financials"
+    in_group = {id(r) for r in ranked + ranked_fin}
+    insufficient = sorted((r for r in rows if id(r) not in in_group), key=lambda r: r.symbol)
+    for r in insufficient:
+        r.group = "insufficient_data"
     caveats = [VALUATION_CAVEAT] if any(VALUATION_CAVEAT in r.caveats for r in rows) else []
     return Rankings(
         data_as_of=DataAsOf(sec_fetched_from=min(fetched) if fetched else None, sec_fetched_to=max(fetched) if fetched else None, constituents_snapshot=universe.snapshot_date),
         attribution=[universe.attribution, SEC_ATTRIBUTION], caveats=caveats,
-        counts=Counts(universe=len(universe.primary), ranked=len(ranked), insufficient_data=len(insufficient), excluded=len(excluded)),
-        criteria_ranking=CriteriaRanking(method=METHOD, minimum_decided=MIN_DECIDED, ranked=ranked, insufficient_data=insufficient),
+        counts=Counts(universe=len(universe.primary), ranked=len(ranked), ranked_financials=len(ranked_fin), insufficient_data=len(insufficient), excluded=len(excluded)),
+        criteria_ranking=CriteriaRanking(method=METHOD, minimum_decided=MIN_DECIDED, financials_minimum_decided=FINANCIAL_MIN_DECIDED, ranked=ranked, ranked_financials=ranked_fin, insufficient_data=insufficient),
         ranking_by_analysts=PendingSection(reason=ANALYSTS_PENDING), excluded=sorted(excluded, key=lambda e: e.symbol))
 
 
@@ -214,4 +240,4 @@ def export_rankings_schema(path: Path = SCHEMA_PATH) -> Path:
     return path
 
 
-__all__ = ["Rankings", "RankingRow", "build_rankings", "write_rankings", "export_rankings_schema", "VALUATION_CAVEAT", "ANALYSTS_PENDING", "MIN_DECIDED", "NO_ANNUAL_REPORT", "wilson_lower_bound"]
+__all__ = ["Rankings", "RankingRow", "build_rankings", "write_rankings", "export_rankings_schema", "VALUATION_CAVEAT", "ANALYSTS_PENDING", "MIN_DECIDED", "FINANCIAL_MIN_DECIDED", "PENDING", "NO_ANNUAL_REPORT", "wilson_lower_bound"]

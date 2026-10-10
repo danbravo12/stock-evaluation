@@ -31,9 +31,9 @@ export function fail(message, hint) {
 
 // ---------- status marks: a shape and a word, never colour alone ----------
 const NS = "http://www.w3.org/2000/svg";
-const KIND = { pass: "pass", partial_pass: "partial", fail: "fail", data_gap: "gap", not_applicable: "na", not_meaningful: "nm",
+const KIND = { pending: "pending", pass: "pass", partial_pass: "partial", fail: "fail", data_gap: "gap", not_applicable: "na", not_meaningful: "nm",
   "evidence found": "pass", "evidence weak": "partial", "insufficient evidence": "gap", "not assessed": "na" };
-export const WORD = { pass: "Pass", partial_pass: "Partial pass", fail: "Fail", data_gap: "Data gap", not_applicable: "Not applicable", not_meaningful: "Not meaningful",
+export const WORD = { pending: "Pending", pass: "Pass", partial_pass: "Partial pass", fail: "Fail", data_gap: "Data gap", not_applicable: "Not applicable", not_meaningful: "Not meaningful",
   "evidence found": "Evidence found", "evidence weak": "Evidence weak", "insufficient evidence": "Insufficient evidence", "not assessed": "Not assessed" };
 
 function defs() {
@@ -48,6 +48,7 @@ function defs() {
     <symbol id="m-fail" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="var(--fail)" stroke-width="1.6"/><path d="M5.4 5.4l5.2 5.2M10.6 5.4l-5.2 5.2" stroke="var(--fail)" stroke-width="1.6" stroke-linecap="round"/></symbol>
     <symbol id="m-gap" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="url(#hatch)" stroke="var(--muted)" stroke-width="1.2"/></symbol>
     <symbol id="m-na" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="var(--muted)" stroke-width="1.4" stroke-dasharray="2.6 2.2"/></symbol>
+    <symbol id="m-pending" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="var(--muted)" stroke-width="1.4"/><circle cx="8" cy="8" r="2.4" fill="var(--muted)"/></symbol>
     <symbol id="m-nm" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="var(--muted)" stroke-width="1.4" stroke-dasharray="2.6 2.2"/><path d="M5 8h6" stroke="var(--muted)" stroke-width="1.4" stroke-linecap="round"/></symbol>`;
   document.body.prepend(svg);
 }
@@ -127,6 +128,10 @@ export const measureName = (m) => MEASURE[m] || m.replaceAll("_", " ");
 const yearsText = (ys) => (ys.length > 4 ? `${ys.length} years (${ys[0]} to ${ys[ys.length - 1]})` : ys.join(", "));
 
 // The scorers' reasons in plain words: what the SEC filings do or do not say.
+export function effectiveLabel(c) { // a valuation test that only waits for a price is pending, not a data gap
+  return c.label === "data_gap" && /^price not available/i.test(c.reason || "") ? "pending" : c.label;
+}
+
 export function plainReason(c, sectorClass) {
   const r = (c.reason || "").trim();
   if (c.label === "not_applicable") {
@@ -134,8 +139,8 @@ export function plainReason(c, sectorClass) {
     if (c.id === "G2" || c.id === "B2") return `Not applicable to ${who}: their balance sheets are not split into current and long-term items.`;
     return `Not applicable to ${who}: they report no operating income or capital spending in the usual sense.`;
   }
-  if (c.label === "data_gap") {
-    if (/^price not available/i.test(r)) return "Pending licensed price data.";
+  if (c.label === "data_gap" || c.label === "pending") {
+    if (/^price not available/i.test(r)) return "Pending licensed price data. This test compares the share price with earnings or assets.";
     const dm = r.match(/^dividend data missing for (.+)$/);
     if (dm) return `Dividend data is missing for ${dm[1]} in the SEC filings, so the record cannot be judged.`;
     const nm = r.match(/^net_income missing inside the record: \[(.*)\]$/);

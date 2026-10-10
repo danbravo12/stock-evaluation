@@ -74,7 +74,7 @@ def main(argv: list[str] | None = None) -> int:
         results_dir = Path(a.results_dir) if a.results_dir else settings.results_dir
         out = write_rankings(build_rankings(load_universe(), results_dir / "scores", results_dir), Path(a.out) if a.out else OUTPUT_PATH, finnhub_public_ok=settings.finnhub_public_ok)
         r = Rankings.model_validate_json(out.read_text(encoding="utf-8"))
-        print(f"wrote {out.relative_to(REPO_ROOT) if out.is_relative_to(REPO_ROOT) else out}: {r.counts.ranked} ranked, {r.counts.insufficient_data} insufficient data, {r.counts.excluded} excluded")
+        print(f"wrote {out.relative_to(REPO_ROOT) if out.is_relative_to(REPO_ROOT) else out}: {r.counts.ranked} ranked, {r.counts.ranked_financials} banks and insurers ranked, {r.counts.insufficient_data} insufficient data, {r.counts.excluded} excluded")
         return 0
     if a.cmd in ("analyse", "batch"):
         a.mode = a.mode or ("live" if getattr(a, "numeric_only", False) else "replay")

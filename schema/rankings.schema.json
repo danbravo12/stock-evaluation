@@ -14,6 +14,10 @@
      "title": "Ranked",
      "type": "integer"
     },
+    "ranked_financials": {
+     "title": "Ranked Financials",
+     "type": "integer"
+    },
     "universe": {
      "title": "Universe",
      "type": "integer"
@@ -22,6 +26,7 @@
    "required": [
     "universe",
     "ranked",
+    "ranked_financials",
     "insufficient_data",
     "excluded"
    ],
@@ -30,6 +35,10 @@
   },
   "CriteriaRanking": {
    "properties": {
+    "financials_minimum_decided": {
+     "title": "Financials Minimum Decided",
+     "type": "integer"
+    },
     "insufficient_data": {
      "items": {
       "$ref": "#/$defs/RankingRow"
@@ -54,12 +63,21 @@
      },
      "title": "Ranked",
      "type": "array"
+    },
+    "ranked_financials": {
+     "items": {
+      "$ref": "#/$defs/RankingRow"
+     },
+     "title": "Ranked Financials",
+     "type": "array"
     }
    },
    "required": [
     "method",
     "minimum_decided",
+    "financials_minimum_decided",
     "ranked",
+    "ranked_financials",
     "insufficient_data"
    ],
    "title": "CriteriaRanking",
@@ -216,6 +234,11 @@
      ],
      "default": null,
      "title": "Gics Sub Industry"
+    },
+    "group": {
+     "default": "main",
+     "title": "Group",
+     "type": "string"
     },
     "has_full_analysis": {
      "title": "Has Full Analysis",

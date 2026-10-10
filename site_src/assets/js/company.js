@@ -1,4 +1,4 @@
-import { el, getJSON, tryJSON, fail, manifest, footer, mark, status, WORD, CRITERIA, NAMES, QUAL, usd, perShare, pct, figures, plainReason, secLink, secOk, measureName } from "./common.js";
+import { el, getJSON, tryJSON, fail, manifest, footer, mark, status, effectiveLabel, WORD, CRITERIA, NAMES, QUAL, usd, perShare, pct, figures, plainReason, secLink, secOk, measureName } from "./common.js";
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -29,14 +29,15 @@ async function load() {
   const explain = result ? await tryJSON(`data/results/${cik}.explain.json`) : null;
   let criteria;
   if (result && result.scorecard) criteria = result.scorecard.criteria.map((c) => ({ ...c, inputs: inputsOf(c, result.scorecard) }));
-  else if (score) criteria = score.score.results;
+  else if (score) criteria = score.score.results.map((c) => ({ ...c }));
   else throw new Error("No score file for this company.");
+  criteria.forEach((c) => { c.label = effectiveLabel(c); });
   return { cik, row, score, result, passages, explain, criteria, qual: result ? result.qualitative : [] };
 }
 
 // ---------- the list of tests ----------
 function lineOf(c, cls) {
-  if (c.label === "data_gap" || c.label === "not_applicable") return plainReason(c, cls);
+  if (c.label === "data_gap" || c.label === "pending" || c.label === "not_applicable") return plainReason(c, cls);
   if (c.explanation && c.explanation.text) return c.explanation.text;
   const figs = figures(c).filter(([k]) => !/^Years (on record|without|with)/.test(k)).slice(0, 3).map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1).toLowerCase()} ${v}`);
   return (plainReason(c, cls) || `Test: ${c.threshold}.`) + (figs.length && !plainReason(c, cls) ? ` ${figs.join("; ")}.` : "");
@@ -127,7 +128,7 @@ function numericPane(c) {
   const pane = [];
   pane.push(el("h2", {}, `${c.id} ${NAMES[c.id] || c.name}`), el("p", {}, status(c.label)));
   const line = lineOf(c, model.row.sector_class);
-  if (c.explanation || c.label === "data_gap" || c.label === "not_applicable") pane.push(el("p", { text: line }));
+  if (c.explanation || c.label === "data_gap" || c.label === "pending" || c.label === "not_applicable") pane.push(el("p", { text: line }));
   pane.push(el("p", { class: "small muted", text: `The test: ${c.threshold}.` + (c.year_label ? ` Record: ${c.year_label}.` : "") }));
   const figs = figures(c);
   if (figs.length) pane.push(el("h3", { text: "What the filings show" }), el("dl", { class: "fig" }, figs.flatMap(([k, v]) => [el("dt", { text: k }), el("dd", { text: v })])));
@@ -135,7 +136,7 @@ function numericPane(c) {
   if (ch) pane.push(el("h3", { text: { G3: "Net income by year", G4: "Dividends per share by year", B1: "Return on average equity by year", B3: "Operating margin by year", B4: "Owner earnings by year" }[c.id] || "By year" }), ch);
   const ins = inputsTable(c.inputs || []);
   if (ins) pane.push(el("h3", { text: "Every input, with its filing" }), ins);
-  else if (c.label !== "data_gap" && c.label !== "not_applicable") pane.push(el("p", { class: "muted", text: "No filing figures are attached to this result." }));
+  else if (!["data_gap", "pending", "not_applicable"].includes(c.label)) pane.push(el("p", { class: "muted", text: "No filing figures are attached to this result." }));
   if (c.id === "G6" || c.id === "G7") pane.push(el("p", { class: "muted", text: "This test compares a share price with earnings and assets. Prices come from a licensed data feed that is not connected yet." }));
   const cc = checksFor(c.id); if (cc) pane.push(cc);
   return pane;
