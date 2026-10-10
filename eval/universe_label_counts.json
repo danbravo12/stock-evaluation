@@ -22,10 +22,10 @@
    "data_gap": 66
   },
   "B3": {
-   "pass": 197,
-   "fail": 142,
+   "pass": 198,
+   "fail": 143,
    "not_applicable": 39,
-   "data_gap": 120
+   "data_gap": 118
   },
   "B4": {
    "pass": 247,
@@ -34,9 +34,9 @@
    "data_gap": 101
   },
   "G1": {
-   "pass": 493,
-   "fail": 2,
-   "data_gap": 3
+   "pass": 495,
+   "fail": 1,
+   "data_gap": 2
   },
   "G2": {
    "pass": 66,
@@ -216,9 +216,9 @@
     "pass": 1
    },
    "B3": {
-    "pass": 11,
-    "fail": 4,
-    "data_gap": 13
+    "pass": 12,
+    "fail": 5,
+    "data_gap": 11
    },
    "B4": {
     "data_gap": 20,
@@ -226,9 +226,7 @@
     "pass": 3
    },
    "G1": {
-    "pass": 26,
-    "data_gap": 1,
-    "fail": 1
+    "pass": 28
    },
    "G2": {
     "data_gap": 23,

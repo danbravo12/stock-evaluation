@@ -11,10 +11,12 @@
         "us-gaap:RegulatedAndUnregulatedOperatingRevenue",
         "us-gaap:SalesRevenueGoodsNet",
         "us-gaap:RevenuesNetOfInterestExpense",
-        {"sum": ["us-gaap:InterestIncomeExpenseNet", "us-gaap:NoninterestIncome"], "note": "bank net revenue: net interest income plus noninterest income (ADR-061)"}
+        {"sum": ["us-gaap:InterestIncomeExpenseNet", "us-gaap:NoninterestIncome"], "note": "bank net revenue: net interest income plus noninterest income (ADR-061)"},
+        "us-gaap:OperatingLeaseLeaseIncome",
+        "us-gaap:OperatingLeasesIncomeStatementLeaseRevenue"
       ],
       "component_guard": 0.5,
-      "_notes": "component_guard 0.5 (ADR-061): a candidate worth less than half of the largest candidate for the same year is a component (General Mills' `Revenues` was $2.0B against $19B total in 2019-2024, Hershey's $1.5B, Camden's fee line $0.01B), so it is skipped. Companies switch tags over time (GOOGL, TSLA, DUK). Banks tag total net revenue as Revenues (JPM). SalesRevenueGoodsNet is last so it only fills years nothing else covers (KO 2007-2017)."
+      "_notes": "component_guard 0.5 (ADR-061): a candidate worth less than half of the largest candidate for the same year is a component (General Mills' `Revenues` was $2.0B against $19B total in 2019-2024, Hershey's $1.5B, Camden's fee line $0.01B), so it is skipped. Companies switch tags over time (GOOGL, TSLA, DUK). Banks tag total net revenue as Revenues (JPM). SalesRevenueGoodsNet is last so it only fills years nothing else covers (KO 2007-2017). The two lease-income concepts (ADR-064) are the last resort for REITs that tag no `Revenues` (Camden Property Trust: `RevenueFromContractWithCustomerExcludingAssessedTax` is a $0.01B non-lease component and rental income is $1.57B); the guard above skips the component, and lease income is within a few percent of total revenue for the REITs that report both."
     },
     "net_income": {
       "unit": "USD", "period": "duration",
@@ -48,8 +50,12 @@
     },
     "operating_income": {
       "unit": "USD", "period": "duration",
-      "concepts": ["us-gaap:OperatingIncomeLoss"],
-      "_notes": "Banks do not report operating income (JPM is a gap)."
+      "concepts": [
+        "us-gaap:OperatingIncomeLoss",
+        {"difference": ["us-gaap:Revenues", "us-gaap:CostsAndExpenses"], "validate_against": "us-gaap:OperatingIncomeLoss", "min_overlap": 2,
+         "note": "derived: revenues minus costs and expenses, from the same filing and period, and proven equal to the company's reported operating income in at least 2 overlapping years, and used only from the first proven year onward (ADR-064)"}
+      ],
+      "_notes": "Banks do not report operating income (JPM is a gap). The derived difference (ADR-064) fills the years after a company stopped tagging OperatingIncomeLoss (Boston Properties and Public Storage from FY2018), and only when A - B equals the reported value within 1% in every overlapping year; years before the first proven one are not filled (Ford's 2007-2016 differ in presentation). Without that proof it is not used: of the 14 non-financial companies that have no OperatingIncomeLoss at all but tag both concepts, 7 have A - B equal to pre-tax income in every year (Chevron, Bristol-Myers Squibb, HCA, Textron, Ventas, Welltower, Arthur J. Gallagher): costs include interest and other non-operating items, a different scope."
     },
     "depreciation_amortization": {
       "unit": "USD", "period": "duration",
@@ -65,7 +71,7 @@
     "capex": {
       "unit": "USD", "period": "duration",
       "concepts": ["us-gaap:PaymentsToAcquirePropertyPlantAndEquipment", "us-gaap:PaymentsToAcquireProductiveAssets"],
-      "_notes": "Cash outflow, reported as a positive number."
+      "_notes": "Cash outflow, reported as a positive number. ADR-064 looked for more concepts with total-capex meaning for the 41 untagged companies and added none. Measured against PaymentsToAcquirePropertyPlantAndEquipment where a company reports both: PaymentsForCapitalImprovements median 0.38, PaymentsToAcquireOtherProductiveAssets median 0.05, PaymentsToAcquireOtherPropertyPlantAndEquipment 0.92 but 37% of years below half, PaymentsForConstructionInProcess (utilities) about 9 times: components or a different scope, so using one alone would overstate owner earnings (B4 is conservative by design: for REITs the proxy should include property acquisitions, and only the sum of acquisitions, development and improvements would, which no concept provides). PaymentsToAcquireAndDevelopRealEstate, the one combined REIT concept, was tried: it moved the label of no REIT (their other inputs are missing too) and of one software company (Workday, a campus-development line), so it was removed."
     },
     "dividends_paid": {
       "unit": "USD", "period": "duration",

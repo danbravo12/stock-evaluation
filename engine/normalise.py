@@ -104,14 +104,43 @@ def _derived_values(parts: list[dict[date, AnnualValue]], concepts: list[str]) -
     return out
 
 
+def _difference_values(parts: list[dict[date, AnnualValue]], concepts: list[str], check: dict[date, AnnualValue] | None, min_overlap: int) -> dict[date, AnnualValue]:
+    """Explicit difference `A - B` (ADR-028, amended 2026-10-11 by ADR-064), only for periods where A and B come from the same filing and the same fiscal period.
+
+    If `check` is given (the concept the difference stands in for, operating income), the difference is used only when it has been proven to mean the same thing
+    for this company: in at least `min_overlap` periods where all three exist, A - B equals the reported value within 1% in every one of them. A company whose
+    costs include interest and other non-operating items (Chevron, Bristol-Myers Squibb, HCA: A - B is pre-tax income) fails that test and gets nothing.
+    The proof reaches forward only: periods before the first proven one are dropped, because a company that started tagging the concept later (Ford, from
+    2017) may have presented its costs differently before.
+    """
+    a, b = parts
+    out = {}
+    for end in set(a) & set(b):
+        if a[end].accession == b[end].accession and a[end].period_start == b[end].period_start:
+            out[end] = a[end].model_copy(update={
+                "value": a[end].value - b[end].value, "concept": f"{concepts[0].split(':')[1]}-{concepts[1].split(':')[1]}",
+                "restated": a[end].restated or b[end].restated, "original_value": None, "derived": True, "source_concepts": concepts})
+    if check is not None:
+        overlap = [e for e in out if e in check]
+        if len(overlap) < min_overlap or any(_differs(out[e].value, check[e].value, DISAGREE_TOLERANCE) for e in overlap):
+            return {}
+        first = min(overlap)
+        out = {e: v for e, v in out.items() if e >= first}
+    return out
+
+
 # ---------- one measure ----------
 def _candidates(companyfacts: dict, spec: dict, fye_mmdd: str) -> list[tuple[str | None, dict[date, AnnualValue]]]:
     """One (note, end-date -> value) pair per entry of the priority list, in priority order.
-    A {"sum": [...]} entry is a derived value; its optional "note" is added to the series
-    whenever that entry supplies a year (a one-concept sum is a flagged last resort)."""
+    A {"sum": [...]} entry is a derived value; a {"difference": [A, B], "validate_against": C} entry is a validated derived difference;
+    the optional "note" is added to the series whenever that entry supplies a year (a one-concept sum is a flagged last resort)."""
     result = []
     for entry in spec["concepts"]:
-        if isinstance(entry, dict):
+        if isinstance(entry, dict) and "difference" in entry:
+            parts = [_annual_values(companyfacts, c, spec, fye_mmdd) for c in entry["difference"]]
+            check = _annual_values(companyfacts, entry["validate_against"], spec, fye_mmdd) if entry.get("validate_against") else None
+            result.append((entry.get("note"), _difference_values(parts, entry["difference"], check, entry.get("min_overlap", 2))))
+        elif isinstance(entry, dict):
             parts = [_annual_values(companyfacts, c, spec, fye_mmdd) for c in entry["sum"]]
             result.append((entry.get("note"), _derived_values(parts, entry["sum"])))
         else:
@@ -133,7 +162,9 @@ def _pick_per_year(measure: str, candidates: list[tuple[str | None, dict[date, A
         if guard and len(have) > 1:
             biggest = max(v.value for _, v in have)
             keep = [(n, v) for n, v in have if v.value >= guard * biggest]
-            skipped = [v for _, v in have if v.value < guard * biggest]
+            if keep:  # note only a skip that changed the choice: a small candidate behind the chosen one in priority order is not a finding
+                first_kept = have.index(keep[0])
+                skipped = [v for _, v in have[:first_kept]]
             have = keep or have
         (note, chosen), others = have[0], [v for _, v in have[1:]]
         values.append(chosen)
@@ -150,7 +181,7 @@ def _pick_per_year(measure: str, candidates: list[tuple[str | None, dict[date, A
 
 def _why_missing(companyfacts: dict, spec: dict, end: date | None) -> str:
     """Best explanation for a missing figure, from what the listed concepts do contain."""
-    concepts = [c for e in spec["concepts"] for c in (e["sum"] if isinstance(e, dict) else [e])]
+    concepts = [c for e in spec["concepts"] if not (isinstance(e, dict) and "difference" in e) for c in (e["sum"] if isinstance(e, dict) else [e])]  # a validated difference is not evidence that a figure exists
     other_unit = False
     for concept in concepts:
         units = _facts_of(companyfacts, concept)

@@ -24,9 +24,9 @@ Scored through a predecessor registrant (ADR-063):
 |---|---|---|---|---|---|---|---|
 | B1 | 165 | 0 | 223 | 0 | 59 | 51 | 43% of 388 |
 | B2 | 172 | 0 | 221 | 39 | 0 | 66 | 44% of 393 |
-| B3 | 197 | 0 | 142 | 39 | 0 | 120 | 58% of 339 |
+| B3 | 198 | 0 | 143 | 39 | 0 | 118 | 58% of 341 |
 | B4 | 247 | 0 | 111 | 39 | 0 | 101 | 69% of 358 |
-| G1 | 493 | 0 | 2 | 0 | 0 | 3 | 100% of 495 |
+| G1 | 495 | 0 | 1 | 0 | 0 | 2 | 100% of 496 |
 | G2 | 66 | 0 | 305 | 39 | 0 | 88 | 18% of 371 |
 | G3 | 320 | 0 | 177 | 0 | 0 | 1 | 64% of 497 |
 | G4 | 0 | 302 | 191 | 0 | 0 | 5 | 61% of 493 |
@@ -92,9 +92,9 @@ Companies per class: bank 22, insurer 17, other 404, reit 28, utility 27.
 |---|---|---|---|---|---|---|
 | B1 | 4 | 0 | 19 | 0 | 3 | 2 |
 | B2 | 1 | 0 | 20 | 0 | 0 | 7 |
-| B3 | 11 | 0 | 4 | 0 | 0 | 13 |
+| B3 | 12 | 0 | 5 | 0 | 0 | 11 |
 | B4 | 3 | 0 | 5 | 0 | 0 | 20 |
-| G1 | 26 | 0 | 1 | 0 | 0 | 1 |
+| G1 | 28 | 0 | 0 | 0 | 0 | 0 |
 | G2 | 0 | 0 | 5 | 0 | 0 | 23 |
 | G3 | 22 | 0 | 6 | 0 | 0 | 0 |
 | G4 | 0 | 20 | 7 | 0 | 0 | 1 |
@@ -124,12 +124,12 @@ G6 and G7 are data gaps for all 498 companies (no price). Other criteria that en
 
 | Criterion | Reason | Companies |
 |---|---|---|
-| B3 | missing: operating_income [..] | 76 |
+| B3 | missing: operating_income [..] | 75 |
 | B2 | missing: long_term_debt [..] | 65 |
 | G5 | missing: eps_diluted [..] | 63 |
 | B4 | missing: capex [..] | 52 |
 | G2 | missing: long_term_debt [..] | 44 |
-| B3 | missing: operating_income [..]; revenue [..] | 43 |
+| B3 | missing: operating_income [..]; revenue [..] | 42 |
 | B4 | missing: net_income [..]; depreciation_amortization [..]; capex [..] | 40 |
 | B1 | missing: net_income [..]; stockholders_equity [..] | 39 |
 | G2 | missing: current_assets [..]; current_liabilities [..] | 23 |
@@ -138,7 +138,7 @@ G6 and G7 are data gaps for all 498 companies (no price). Other criteria that en
 | B4 | missing: depreciation_amortization [..] | 5 |
 | G4 | net_income missing inside the record: [..] | 4 |
 | B4 | missing: depreciation_amortization [..]; capex [..] | 4 |
-| G1 | no revenue for # | 3 |
+| G1 | no revenue for # | 2 |
 | G4 | dividend data missing for # # # # | 1 |
 | B3 | missing: revenue [..] | 1 |
 | G3 | net_income missing inside the record: [..] | 1 |
@@ -226,7 +226,7 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | DPZ | other | 15 | [2011] | {'2011': None} |
 | … 10 more |  |  |  | |
 
-### Revenue jumps of more than 3x year on year (30 companies)
+### Revenue jumps of more than 3x year on year (28 companies)
 
 | ticker | class | jumps (year: ratio) |
 |---|---|---|
@@ -239,7 +239,6 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | VRTX | other | 2011: 9.84x |
 | INCY | other | 2010: 18.34x; 2012: 3.14x |
 | RCL | other | 2020: 0.2x; 2022: 5.77x |
-| CPT | reit | 2017: 0.01x |
 | ERIE | other | 2013: 0.24x |
 | HST | reit | 2020: 0.3x |
 | WYNN | other | 2020: 0.32x |
@@ -255,7 +254,8 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | NCLH | other | 2020: 0.2x; 2022: 7.48x |
 | COIN | other | 2021: 6.14x |
 | MRNA | other | 2020: 13.38x; 2021: 23.0x |
-| … 5 more |  | |
+| VICI | reit | 2018: 4.79x |
+| … 3 more |  | |
 
 ### Diluted EPS sign disagreeing with net income (12 companies)
 
@@ -274,7 +274,7 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | HPE | other | 2025: -0.04 vs 57,000,000 |
 | VRT | other | 2022: -0.04 vs 76,600,000 |
 
-### Restatements over 10% (282 companies)
+### Restatements over 10% (281 companies)
 
 | ticker | class | restatements | largest |
 |---|---|---|---|
@@ -303,7 +303,7 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | DAL | other | 2 | current_assets 2014 26% |
 | DOV | other | 20 | capex 2012 51% |
 | OMC | other | 4 | capex 2008 200% |
-| … 257 more |  |  | |
+| … 256 more |  |  | |
 
 ### Stock-split adjustment applied (80 companies)
 
