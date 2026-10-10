@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graham and Buffett rankings</title>
+<meta name="description" content="S&P 500 companies ranked by how many of Graham and Buffett's published tests they meet, with every figure traced to SEC filings.">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="preload" href="assets/fonts/public-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site"><div class="wrap">
+  <a class="name" href="index.html">Graham and Buffett research tool</a>
+  <nav aria-label="Main"><a href="index.html" aria-current="page">Rankings</a><a href="how-it-works.html">How it works</a></nav>
+</div></header>
+<div class="disclaimer"><div class="wrap"><p><strong>This is a research tool, not financial advice.</strong> It reports what public SEC filings say and which published Graham and Buffett tests a company meets. It does not tell anyone to buy, sell or hold anything.</p></div></div>
+<main id="main" class="wrap">
+<h1>Which S&amp;P 500 companies meet Graham's and Buffett's published tests?</h1>
+<p class="lede" id="intro">Every score comes from SEC filings, and every figure links back to the filing it came from.</p>
+<p id="asof">Loading the data.</p>
+<p id="showcase"></p>
+<p class="notebox" id="caveat" hidden></p>
+<div class="controls" role="search">
+  <label>Search by name or symbol<input type="search" id="q" autocomplete="off"></label>
+  <label>Sector<select id="sector"><option value="">All sectors</option></select></label>
+  <label>Sort by<select id="sort"><option value="score">Score (ranking order)</option><option value="pct">Share of tests met</option><option value="name">Name</option></select></label>
+  <span class="muted small" id="count" aria-live="polite"></span>
+</div>
+<div class="tablewrap" tabindex="0" role="region" aria-label="Criteria ranking, scrolls sideways on narrow screens">
+<table id="rank" class="wide"><thead><tr><th class="num" scope="col">Rank</th><th scope="col">Company</th><th class="sector" scope="col">Sector</th><th class="num" scope="col">Met of decided</th><th class="num" scope="col">Share met</th><th class="num" scope="col">Data gaps</th><th scope="col">The 11 tests</th><th scope="col">Full analysis</th></tr></thead><tbody></tbody></table>
+</div>
+<section id="fin-section" hidden aria-labelledby="fin-h"><h2 id="fin-h" class="sub">Banks and insurers (fewer tests apply)</h2>
+<p id="fin-why"></p>
+<div class="tablewrap" tabindex="0" role="region" aria-label="Banks and insurers ranking, scrolls sideways on narrow screens"><table id="fin" class="wide"><thead><tr><th class="num" scope="col">Rank</th><th scope="col">Company</th><th class="sector" scope="col">Sector</th><th class="num" scope="col">Met of decided</th><th class="num" scope="col">Share met</th><th class="num" scope="col">Data gaps</th><th scope="col">The 11 tests</th><th scope="col">Full analysis</th></tr></thead><tbody></tbody></table></div></section>
+<h2 class="sub" id="key-h">Key to the marks</h2>
+<ul class="legend" id="legend" aria-labelledby="key-h"></ul>
+<p class="small muted" id="scorenote"></p>
+<details class="fold" id="insufficient"><summary id="insuf-sum"></summary><p class="small muted" id="insuf-why"></p><div class="tablewrap" tabindex="0" role="region" aria-label="Companies with too few decided tests"><table id="insuf" class="wide"><thead><tr><th scope="col">Company</th><th class="sector" scope="col">Sector</th><th class="num" scope="col">Met of decided</th><th class="num" scope="col">Data gaps</th><th scope="col">The 11 tests</th></tr></thead><tbody></tbody></table></div></details>
+<details class="fold" id="excluded"><summary id="excl-sum"></summary><ul class="notes" id="excl-list"></ul></details>
+<section aria-labelledby="analysts"><h2 id="analysts">Analyst ranking</h2><p id="analysts-text"></p></section>
+</main>
+<footer class="site"><div class="wrap"><p>Data sources: U.S. Securities and Exchange Commission (EDGAR) and a Wikipedia constituents list.</p></div></footer>
+<script type="module" src="assets/js/index.js"></script>
+</body>
+</html>
