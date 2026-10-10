@@ -1,7 +1,7 @@
 # File Map
 
 What every file in this repo is for, and where planned files will go.
-Updated 2026-10-09 · after the GICS sector classes and numeric run commit. **Rule:** update this file in the same commit as any file you add, move or delete.
+Updated 2026-10-11 · after the rankings builder commit. **Rule:** update this file in the same commit as any file you add, move or delete.
 
 Status: **Built** = exists and tested · **Planned** = designed in `ARCHITECTURE.md`, not yet created.
 
@@ -32,7 +32,7 @@ StockEvaluation/
 |---|---|---|
 | `README.md` | Front door for a stranger: what the tool is, the not-financial-advice disclaimer, how to run tests and record fixtures. Will grow into the full README for v1. | Built (stub) |
 | `STATUS.md` | Where the project is: done, waiting on, next steps, notes for the next build step, milestone summaries. | Built |
-| `DECISIONS.md` | ADR log: every key decision with context, decision and trade-off (ADR-001 to ADR-061). | Built |
+| `DECISIONS.md` | ADR log: every key decision with context, decision and trade-off (ADR-001 to ADR-064). | Built |
 | `PROCESS.md` | The research workflow being automated: inputs, steps, decision points, criteria tables (G1–G7, B1–B4, four qualitative Buffett criteria), failure handling. | Built |
 | `ARCHITECTURE.md` | System view, agent hand-off sequence, component catalogue, run economics. | Built |
 | `FILEMAP.md` | This file. | Built |
@@ -46,7 +46,8 @@ StockEvaluation/
 | `requirements.txt` | Exact pinned dependency list (Pydantic 2.13.5, ADR-029). Install with `pip install -r requirements.txt` in `.venv`. | Built |
 | `.gitignore` | Keeps `.env`, `data/cache/`, Python caches and `.DS_Store` out of git. | Built |
 | `config/concept_map.json` | Per measure: unit, period type, ordered XBRL concepts (with explicit derived sums) and a short reason. Read by the normaliser; reviewable without reading code (ADR-028). | Built |
-| `config/sector_rules.json` | SIC code ranges → bank / insurer / utility / other, with a reason per rule; will be confirmed by GICS later (ADR-033). | Built |
+| `config/sector_rules.json` | Sector class by GICS sub-industry with per-CIK overrides, each with a reason and an optional `note` that travels with the results; SIC ranges only for tickers outside the snapshot (ADR-057, amended 2026-10-11). | Built |
+| `config/registrant_successors.json` | Successor CIK → predecessor CIK(s) with the evidence filing (form, accession, URL, quote), reason and the visible note; Exxon (ADR-063). | Built |
 | `config/models.json` | Model profiles (base URL, model id, key variable, prices, free-tier limits, source note) and the budget caps (ADR-039, ADR-040). | Built |
 | `config/prompt_versions.json` | Active prompt version per agent; v2 is written but waits for the re-record (ADR-046 and ADR-048 amendments). | Built |
 | `config/universe_primary.json` | Primary symbol of each dual share class (GOOGL, FOXA, NWSA): one analysis per CIK (ADR-053). | Built |
@@ -89,12 +90,14 @@ The engine is a library, so the batch command, the tests and the future live app
 | `engine/report.py` | `Result` (schema 1.0) and its parts, `write_result` (round-trip validation, Finnhub publish gate, `results/<CIK>.json`), `export_schema`, `cost_from_trace` (ADR-054). | Built |
 | `engine/numeric.py` | `score_numeric(symbol, edgar=, universe=)`: fetch, normalise, split-adjust, classify and score one company with no 10-K and no model, plus `diagnose` (gaps, notes, split factors, restatements, plausibility flags) and `write_numeric` (ADR-059). | Built |
 | `engine/batch.py` | `CompanyLedger` (`data/ledger/companies.json`), `run_batch` (resumable, stops cleanly on quota or cap), `run_numeric_batch` (numeric-only; own ledger `numeric.json`; a crash is a failed row), `progress_markdown` (ADR-056, ADR-059). | Built |
-| `engine/cli.py` | `python -m engine.cli analyse | batch | status | schema`. | Built |
+| `engine/cli.py` | `python -m engine.cli analyse | batch | rankings | status | schema`. | Built |
+| `engine/successors.py` | Registrant successors and companies without a 10-K: `load_successors`, `has_annual_report`, `NoAnnualReport`, the message "No annual report (10-K) filed yet; listed since <date>." (ADR-063). | Built |
+| `engine/rankings.py` | Rankings builder: `build_rankings(universe, scores_dir, results_dir)` → `Rankings` (criteria ranking with the decided ≥ 6 threshold and exact tie-breaks, insufficient-data group, empty analyst section, excluded companies), `write_rankings` (round-trip validation and the Finnhub gate), `export_rankings_schema` (ADR-062). | Built |
 | `engine/agents/__init__.py` | Package for the LLM agents. | Built |
 | `engine/agents/qualitative.py` | The Buffett qualitative agent: `assess_qualitative(cik, ticker, retriever, llm, trace)` runs one tool loop per criterion (seeded search, `search` / `get_passage` / `submit_finding`, 4-turn cap). Passages are shown as numbered sentences and cited by pointer; code builds the quote and exact offsets; "not assessed" is assigned from the stop reason (ADR-041 to ADR-047). | Built |
 | `engine/fetch/__init__.py` | Marks `fetch` as a package. | Built |
 | `engine/fetch/store.py` | `ResponseStore`: saves each raw response as gzip plus a `.meta.json` (URL, fetch time, SHA-256, size) and verifies the checksum on read. Backs both the cache and the fixtures (ADR-025). | Built |
-| `engine/fetch/edgar.py` | `EdgarClient`: the data fetcher's EDGAR tools. `company_tickers`, `lookup_cik`, `submissions`, `companyfacts`, `latest_filing` (skips 10-K/A), `filing_document`. Three modes: replay (fixtures only, no network), live (cache, fetch on miss), record (fetch and write fixtures). Declared User-Agent, ~6 requests/s, retries with `Retry-After`. | Built |
+| `engine/fetch/edgar.py` | `EdgarClient`: the data fetcher's EDGAR tools. `company_tickers`, `lookup_cik`, `submissions`, `companyfacts`, `latest_filing` (skips 10-K/A; both read a registrant successor's predecessor, `source_for`, ADR-063), `filing_document`. Three modes: replay (fixtures only, no network), live (cache, fetch on miss), record (fetch and write fixtures). Declared User-Agent, ~6 requests/s, retries with `Retry-After`. | Built |
 
 ## Scripts (`scripts/`)
 
@@ -120,8 +123,8 @@ The engine is a library, so the batch command, the tests and the future live app
 | `docs/scorecard_report.md` | Summary table and, per company, every criterion's result, figures, threshold, years, flags and source filings. | Built |
 | `docs/sections_report.md` | Per company and item: status, method, length, opening text; then the top 3 passages per qualitative criterion. Preview of what the agent sees. | Built |
 | `docs/qualitative_report.md` | Per company and criterion: verdict, rationale, quoted text with accession, item, passage and offsets, searches made, stop reason, calls, tokens and notional cost; summary table and calls and tokens per company. Verdicts are not frozen: they are reviewed by hand. | Built |
-| `docs/universe_scorecard_report.md` | The numeric run over the index: 497 scored, label distribution per criterion and sector class, data gaps by reason, the 15 most common normaliser notes, anomaly lists (G4, revenue jumps, EPS sign, restatements, splits). | Built |
-| `docs/sector_class_review.md` | GICS against SIC: the 38 class changes and the 34 financials left "other", with reasons, for review. | Built |
+| `docs/universe_scorecard_report.md` | The numeric run over the index: 498 scored, 2 without a 10-K, label distribution per criterion and sector class, data gaps by reason, the 15 most common normaliser notes, anomaly lists (G4, revenue jumps, EPS sign, restatements, splits). | Built |
+| `docs/sector_class_review.md` | GICS against SIC: the 51 class changes, the financials left "other" and Daniel's decisions of 2026-10-11, with reasons and notes. | Built |
 | `docs/universe_report.md` | Snapshot size, dual classes, SIC-derived against GICS-implied sector classes (12 disagreements) and the 35 financials no exception covers. | Built |
 | `docs/critic_report.md` | Per company: rendered explanations, every Critic check with attempt and detail, retries and final statuses; then the gold-set table, the Critic scorecard (caught / false alarms / agreement after retry), fault injection and cost per company. | Built |
 | `docs/qualitative_variability.md` | Per company and criterion: verdicts of the recorded run and two live repeat runs, agreement, whether the cited passage changed; overall "identical in X of 20"; calls and tokens per run. Live result, not replayable. | Built |
@@ -140,6 +143,9 @@ The engine is a library, so the batch command, the tests and the future live app
 | `tests/test_pld_dividends.py` | Prologis' and Trane's recorded facts: cash-paid dividends win over tiny declared amounts, and Trane's declared dividends survive a $0 cash-paid tag; G4 correct for both (ADR-060, ADR-061). | Built |
 | `tests/test_sector_classes.py` | GICS mapping, overrides, precedence, SIC only as fallback, no REIT/insurance/utility sub-industry unmapped, REIT note and unchanged labels, numeric-only path (no model, no 10-K, crash = failed row, CLI default live). | Built |
 | `tests/test_revenue_guard.py` | Component guard logic and recorded General Mills, Fifth Third, Goldman Sachs (ADR-061). | Built |
+| `tests/test_decisions.py` | Financial classes and notes, G4 unknown years (synthetic and Federal Realty's recorded facts), Exxon successor (true accessions, note, evidence in the successor's own history), `no_annual_report` in the numeric batch and the full path (ADR-057, ADR-012, ADR-063). | Built |
+| `tests/test_coverage.py` | Validated derived difference (same filing and period, overlap proof, forward only), Boston Properties, Public Storage, Chevron and Ford on recorded facts, Camden lease revenue, capex concepts stay totals (ADR-064). | Built |
+| `tests/test_rankings.py` | Score maths, threshold, exact ties, exclusions, caveat, analyst section, Finnhub gate, schema, determinism, CLI, and checks of the committed `site_data/rankings.json` (ADR-062). | Built |
 | `tests/test_universe_counts.py` | The frozen label counts: consistency, tolerance logic, and the local run when `results/scores/` exists. | Built |
 | `tests/test_universe.py` | Parsing, validation (count, duplicates, CIK checks, dual-class primary rule), CSV round trip, and the committed snapshot against SEC's ticker file. | Built |
 | `tests/test_orchestrator.py` | Planner rules per sector class (and agreement with the scorers), out-of-scope ticker, step degradation and skip reasons, propagating errors, trace order, two replays byte-identical, JSON Schema validation, Finnhub gate, cost by agent, resumable batch, PROGRESS text, CLI. | Built |
@@ -165,6 +171,8 @@ The engine is a library, so the batch command, the tests and the future live app
 |---|---|---|
 | `results/scores/<CIK>.json` | Numeric-only results of the whole index (git-ignored, local). | Built |
 | `results/<CIK>.json`, `results/<CIK>.trace.jsonl` | One `Result` (schema 1.0) and its trace per analysed company. Git-ignored except the 5 test tickers (KO, JPM, GOOGL, TSLA, DUK), committed as site sample data (ADR-054). | Built |
+| `site_data/rankings.json` | The criteria ranking of the index (and the empty analyst section), built by `python -m engine.cli rankings`; committed as the input of the static site (ADR-062). | Built |
+| `schema/rankings.schema.json` | JSON Schema of `Rankings`, exported by `python -m engine.cli schema`; a test fails if it is stale. | Built |
 | `schema/result.schema.json` | JSON Schema of `Result`, exported by `python -m engine.cli schema`; a test fails if it is stale. | Built |
 | `PROGRESS.md` | Written by `status` and after every batch: done / warnings / failed / remaining, spend, measured calls per company, projection. | Built |
 | `data/universe/sp500_<date>.csv`, `sic_<date>.csv` | The constituents snapshot and each company's SIC code (committed, small). | Built |
@@ -181,7 +189,7 @@ Committed, so LLM-using tests replay offline. The three smoke-test calls (JSON m
 | `eval/snapshot.py` | Reduces a `ScoreSet` to label + key figures (4 significant digits); `python -m eval.snapshot` rewrites the frozen file after a reviewed change. | Built |
 | `eval/expected_qualitative.json` | Gold set for the qualitative agent: per ticker and criterion the recorded agent verdict, the human-reviewed verdict and a note (reviewer line inside). Labels judge the filing under the current rubric; changes are kept in `label_history`. 1 of 20 labels differs from the agent's verdict. | Built |
 | `eval/qualitative_agreement.py` | Replays the recorded agent run and prints agreement with the gold set (19/20) and the disagreements; `agreement()` is reused by the Critic evaluation. | Built |
-| `eval/universe_label_counts.json` | Frozen per-criterion label counts (and per sector class) of the 497-company numeric run, with the tolerance rule. | Built |
+| `eval/universe_label_counts.json` | Frozen per-criterion label counts (and per sector class) of the 498-company numeric run, with the tolerance rule. | Built |
 | `eval/universe_counts.py` | `count_labels`, `compare` (tolerance max(5, 2%)) and `--freeze`; run as `python -m eval.universe_counts`. | Built |
 | `eval/expected_scores.json` | Frozen, reviewed results for the 5 test companies and 11 criteria. | Built |
 

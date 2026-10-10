@@ -75,6 +75,7 @@ def score_numeric(symbol: str, *, edgar, universe: Universe, rules: dict | None 
     score = score_company(nf, plan.ticker, sic, rules, None, sector=plan.sector_class, sector_notes_=plan.sector_notes)
     return {"status": "scored", "ticker": plan.ticker, "cik": row.cik, "name": row.security, "gics_sector": row.gics_sector, "gics_sub_industry": row.gics_sub_industry, "sic": sic,
             "sector_class": plan.sector_class, "sector_basis": plan.sector_basis, "sector_notes": score.sector_notes, "source_notes": [source_note] if source_note else [],
+            "fetched_at": nf.companyfacts_fetched_at[:10],
             "score": score.model_dump(mode="json"), "diagnostics": diagnose(nf, score), "seconds": round(time.perf_counter() - t0, 2)}
 
 

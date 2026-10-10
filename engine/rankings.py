@@ -1,0 +1,203 @@
+"""Rankings builder (ADR-004, ADR-062): `results/scores/*.json` (+ full results) -> `site_data/rankings.json`.
+
+The criteria ranking orders companies by the share of the decided criteria they meet. The analyst ranking is an empty section until Finnhub gives
+written permission (ADR-007, ADR-021). There is no text that compares the two (ADR-004), and the output has no wall-clock time: the same inputs
+write the same bytes.
+"""
+from __future__ import annotations
+
+import json
+import re
+from fractions import Fraction
+from pathlib import Path
+from typing import Any, Literal
+
+from pydantic import BaseModel, Field
+
+from engine.report import DISCLAIMER, PublishGateError, finnhub_fields
+from engine.settings import REPO_ROOT
+from engine.successors import NO_ANNUAL_REPORT
+from engine.universe import Universe
+
+SCHEMA_VERSION = "1.0"
+SCHEMA_PATH = REPO_ROOT / "schema" / "rankings.schema.json"
+OUTPUT_PATH = REPO_ROOT / "site_data" / "rankings.json"
+CRITERIA = [f"G{i}" for i in range(1, 8)] + [f"B{i}" for i in range(1, 5)]
+MET = ("pass", "partial_pass")
+DECIDED = MET + ("fail",)
+MIN_DECIDED = 6
+VALUATION_CAVEAT = "Valuation criteria (G6, G7) pending price data."
+ANALYSTS_PENDING = "pending Finnhub permission (ADR-007, ADR-021)"
+SEC_ATTRIBUTION = "Filings and XBRL data: U.S. Securities and Exchange Commission, EDGAR (public domain)"
+METHOD = {
+    "score": "met / decided",
+    "met": "criteria with the label pass or partial_pass",
+    "decided": "criteria with the label pass, partial_pass or fail, over G1 to G7 and B1 to B4; not_applicable, not_meaningful and data_gap are left out",
+    "minimum_decided": f"a company is ranked only if at least {MIN_DECIDED} criteria are decided; the others are listed as insufficient data with their counts",
+    "ties": "more criteria met, then fewer data gaps, then symbol",
+}
+
+
+class RankingRow(BaseModel):
+    symbol: str
+    cik: str
+    name: str
+    gics_sector: str
+    gics_sub_industry: str | None = None
+    sector_class: str
+    notes: list[str] = Field(default_factory=list)  # sector notes (REIT, broker, ...) and registrant notes (successor)
+    caveats: list[str] = Field(default_factory=list)  # e.g. VALUATION_CAVEAT
+    rank: int | None = None  # None in the insufficient-data group
+    score: float | None = None  # met / decided; None in the insufficient-data group
+    met: int
+    decided: int
+    data_gaps: int
+    labels: dict[str, str]  # criterion id -> label, G1..G7 then B1..B4
+    has_full_analysis: bool  # the agent analysis (results/<CIK>.json) exists
+    analysis_path: str | None = None
+    as_of_fiscal_year: int
+
+
+class ExcludedRow(BaseModel):
+    symbol: str
+    cik: str
+    name: str
+    gics_sector: str
+    status: str
+    reason: str
+
+
+class CriteriaRanking(BaseModel):
+    method: dict[str, str]
+    minimum_decided: int
+    ranked: list[RankingRow]
+    insufficient_data: list[RankingRow]
+
+
+class PendingSection(BaseModel):
+    status: Literal["pending"] = "pending"
+    reason: str
+    rows: list[Any] = Field(default_factory=list)
+
+
+class DataAsOf(BaseModel):
+    sec_fetched_from: str | None
+    sec_fetched_to: str | None
+    constituents_snapshot: str
+
+
+class Counts(BaseModel):
+    universe: int
+    ranked: int
+    insufficient_data: int
+    excluded: int
+
+
+class Rankings(BaseModel):
+    schema_version: str = SCHEMA_VERSION
+    disclaimer: str = DISCLAIMER
+    data_as_of: DataAsOf
+    attribution: list[str]
+    caveats: list[str]
+    counts: Counts
+    criteria_ranking: CriteriaRanking
+    # not named "analyst*": the Finnhub publish gate (ADR-021) matches that key pattern and this section holds no Finnhub data yet
+    ranking_by_analysts: PendingSection
+    excluded: list[ExcludedRow]
+
+
+# ---------- reading the inputs ----------
+def _load(path: Path) -> dict | None:
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+
+
+def _from_score_file(d: dict) -> dict | None:
+    sc = d["score"]
+    return {"labels": {r["id"]: r["label"] for r in sc["results"]}, "as_of": sc["as_of_year"], "sector_class": d["sector_class"], "name": d["name"], "gics_sector": d["gics_sector"],
+            "gics_sub_industry": d.get("gics_sub_industry"), "notes": list(d.get("sector_notes") or []) + list(d.get("source_notes") or []), "fetched": d.get("fetched_at")}
+
+
+def _from_full_result(d: dict) -> dict | None:
+    card = d.get("scorecard")
+    if not card:
+        return None
+    plan, data = d["plan"], d.get("data") or {}
+    return {"labels": {c["id"]: c["label"] for c in card["criteria"]}, "as_of": card["as_of_year"], "sector_class": card["sector_class"], "name": plan.get("name") or plan["ticker"],
+            "gics_sector": plan.get("gics_sector") or "", "gics_sub_industry": None, "notes": list(card.get("sector_notes") or []),
+            "fetched": (data.get("as_of") or {}).get("companyfacts") or None}
+
+
+def _row(symbol: str, cik: str, info: dict, full_path: str | None) -> RankingRow:
+    labels = {c: info["labels"].get(c, "data_gap") for c in CRITERIA}
+    met = sum(l in MET for l in labels.values())
+    decided = sum(l in DECIDED for l in labels.values())
+    caveats = [VALUATION_CAVEAT] if "data_gap" in (labels["G6"], labels["G7"]) else []
+    return RankingRow(symbol=symbol, cik=cik, name=info["name"], gics_sector=info["gics_sector"], gics_sub_industry=info["gics_sub_industry"], sector_class=info["sector_class"],
+                      notes=info["notes"], caveats=caveats, met=met, decided=decided, data_gaps=sum(l == "data_gap" for l in labels.values()), labels=labels,
+                      has_full_analysis=full_path is not None, analysis_path=full_path, as_of_fiscal_year=info["as_of"])
+
+
+def build_rankings(universe: Universe, scores_dir: Path, results_dir: Path) -> Rankings:
+    """One row per company of the snapshot (one per CIK). A company is scored from its score file, else from its full result; a company with neither, or with
+    the status `no_annual_report`, is excluded with the reason."""
+    scores_dir, results_dir = Path(scores_dir), Path(results_dir)
+    rows: list[RankingRow] = []
+    excluded: list[ExcludedRow] = []
+    fetched: list[str] = []
+    for c in universe.primary:
+        score_file, full_file = _load(scores_dir / f"{c.cik}.json"), _load(results_dir / f"{c.cik}.json")
+        full_path = f"results/{c.cik}.json" if full_file and full_file.get("scorecard") else None
+        info = None
+        if score_file and score_file.get("status") == "no_annual_report":
+            excluded.append(ExcludedRow(symbol=c.symbol, cik=c.cik, name=c.security, gics_sector=c.gics_sector, status="no_annual_report", reason=score_file["message"]))
+            continue
+        if score_file and score_file.get("score"):
+            info = _from_score_file(score_file)
+        elif full_file:
+            info = _from_full_result(full_file)
+        if info is None:
+            excluded.append(ExcludedRow(symbol=c.symbol, cik=c.cik, name=c.security, gics_sector=c.gics_sector, status="not_scored", reason="no result file: run the batch for this company"))
+            continue
+        if info["fetched"]:
+            fetched.append(info["fetched"])
+        rows.append(_row(c.symbol, c.cik, info, full_path))
+
+    ranked = sorted((r for r in rows if r.decided >= MIN_DECIDED), key=lambda r: (-Fraction(r.met, r.decided), -r.met, r.data_gaps, r.symbol))
+    for i, r in enumerate(ranked, 1):
+        r.rank, r.score = i, round(r.met / r.decided, 6)
+    insufficient = sorted((r for r in rows if r.decided < MIN_DECIDED), key=lambda r: r.symbol)
+    caveats = [VALUATION_CAVEAT] if any(VALUATION_CAVEAT in r.caveats for r in rows) else []
+    return Rankings(
+        data_as_of=DataAsOf(sec_fetched_from=min(fetched) if fetched else None, sec_fetched_to=max(fetched) if fetched else None, constituents_snapshot=universe.snapshot_date),
+        attribution=[universe.attribution, SEC_ATTRIBUTION], caveats=caveats,
+        counts=Counts(universe=len(universe.primary), ranked=len(ranked), insufficient_data=len(insufficient), excluded=len(excluded)),
+        criteria_ranking=CriteriaRanking(method=METHOD, minimum_decided=MIN_DECIDED, ranked=ranked, insufficient_data=insufficient),
+        ranking_by_analysts=PendingSection(reason=ANALYSTS_PENDING), excluded=sorted(excluded, key=lambda e: e.symbol))
+
+
+# ---------- writing ----------
+def rankings_json(rankings: Rankings) -> str:
+    return json.dumps(rankings.model_dump(mode="json"), indent=1, ensure_ascii=False) + "\n"
+
+
+def write_rankings(rankings: Rankings, path: Path = OUTPUT_PATH, *, finnhub_public_ok: bool = False) -> Path:
+    """Validate by a round trip, apply the Finnhub publish gate (ADR-021), write the file."""
+    text = rankings_json(rankings)
+    Rankings.model_validate_json(text)
+    if not finnhub_public_ok:
+        leaked = finnhub_fields(json.loads(text))
+        if leaked:
+            raise PublishGateError(f"Finnhub-sourced fields in the rankings while FINNHUB_PUBLIC_OK is off (ADR-021): {leaked}")
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8")
+    return path
+
+
+def export_rankings_schema(path: Path = SCHEMA_PATH) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(Rankings.model_json_schema(), indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    return path
+
+
+__all__ = ["Rankings", "RankingRow", "build_rankings", "write_rankings", "export_rankings_schema", "VALUATION_CAVEAT", "ANALYSTS_PENDING", "MIN_DECIDED", "NO_ANNUAL_REPORT"]

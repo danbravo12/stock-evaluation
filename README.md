@@ -42,8 +42,9 @@ Usage and spend are counted in `data/ledger/usage.json` (daily quota resets at m
     .venv/bin/python -m engine.cli batch --universe --numeric-only   # all 500 companies, scores only: live SEC data into the cache, no model, no 10-K (about 5 minutes the first time)
     .venv/bin/python scripts/universe_scorecard_report.py        # docs/universe_scorecard_report.md from results/scores/
     .venv/bin/python -m eval.universe_counts                     # compare with the frozen label counts
+    .venv/bin/python -m engine.cli rankings                      # site_data/rankings.json: criteria ranking from results/scores/ (no model, no network)
     .venv/bin/python -m engine.cli status                        # writes PROGRESS.md
-    .venv/bin/python -m engine.cli schema                        # writes schema/result.schema.json
+    .venv/bin/python -m engine.cli schema                        # writes schema/result.schema.json and schema/rankings.schema.json
     .venv/bin/python scripts/snapshot_universe.py                # S&P 500 snapshot (once, a quarter)
 
 ## Explainer + Critic report and the qualitative gold set

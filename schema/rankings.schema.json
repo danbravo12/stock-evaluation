@@ -1,0 +1,352 @@
+{
+ "$defs": {
+  "Counts": {
+   "properties": {
+    "excluded": {
+     "title": "Excluded",
+     "type": "integer"
+    },
+    "insufficient_data": {
+     "title": "Insufficient Data",
+     "type": "integer"
+    },
+    "ranked": {
+     "title": "Ranked",
+     "type": "integer"
+    },
+    "universe": {
+     "title": "Universe",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "universe",
+    "ranked",
+    "insufficient_data",
+    "excluded"
+   ],
+   "title": "Counts",
+   "type": "object"
+  },
+  "CriteriaRanking": {
+   "properties": {
+    "insufficient_data": {
+     "items": {
+      "$ref": "#/$defs/RankingRow"
+     },
+     "title": "Insufficient Data",
+     "type": "array"
+    },
+    "method": {
+     "additionalProperties": {
+      "type": "string"
+     },
+     "title": "Method",
+     "type": "object"
+    },
+    "minimum_decided": {
+     "title": "Minimum Decided",
+     "type": "integer"
+    },
+    "ranked": {
+     "items": {
+      "$ref": "#/$defs/RankingRow"
+     },
+     "title": "Ranked",
+     "type": "array"
+    }
+   },
+   "required": [
+    "method",
+    "minimum_decided",
+    "ranked",
+    "insufficient_data"
+   ],
+   "title": "CriteriaRanking",
+   "type": "object"
+  },
+  "DataAsOf": {
+   "properties": {
+    "constituents_snapshot": {
+     "title": "Constituents Snapshot",
+     "type": "string"
+    },
+    "sec_fetched_from": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Sec Fetched From"
+    },
+    "sec_fetched_to": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Sec Fetched To"
+    }
+   },
+   "required": [
+    "sec_fetched_from",
+    "sec_fetched_to",
+    "constituents_snapshot"
+   ],
+   "title": "DataAsOf",
+   "type": "object"
+  },
+  "ExcludedRow": {
+   "properties": {
+    "cik": {
+     "title": "Cik",
+     "type": "string"
+    },
+    "gics_sector": {
+     "title": "Gics Sector",
+     "type": "string"
+    },
+    "name": {
+     "title": "Name",
+     "type": "string"
+    },
+    "reason": {
+     "title": "Reason",
+     "type": "string"
+    },
+    "status": {
+     "title": "Status",
+     "type": "string"
+    },
+    "symbol": {
+     "title": "Symbol",
+     "type": "string"
+    }
+   },
+   "required": [
+    "symbol",
+    "cik",
+    "name",
+    "gics_sector",
+    "status",
+    "reason"
+   ],
+   "title": "ExcludedRow",
+   "type": "object"
+  },
+  "PendingSection": {
+   "properties": {
+    "reason": {
+     "title": "Reason",
+     "type": "string"
+    },
+    "rows": {
+     "items": {},
+     "title": "Rows",
+     "type": "array"
+    },
+    "status": {
+     "const": "pending",
+     "default": "pending",
+     "title": "Status",
+     "type": "string"
+    }
+   },
+   "required": [
+    "reason"
+   ],
+   "title": "PendingSection",
+   "type": "object"
+  },
+  "RankingRow": {
+   "properties": {
+    "analysis_path": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Analysis Path"
+    },
+    "as_of_fiscal_year": {
+     "title": "As Of Fiscal Year",
+     "type": "integer"
+    },
+    "caveats": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Caveats",
+     "type": "array"
+    },
+    "cik": {
+     "title": "Cik",
+     "type": "string"
+    },
+    "data_gaps": {
+     "title": "Data Gaps",
+     "type": "integer"
+    },
+    "decided": {
+     "title": "Decided",
+     "type": "integer"
+    },
+    "gics_sector": {
+     "title": "Gics Sector",
+     "type": "string"
+    },
+    "gics_sub_industry": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Gics Sub Industry"
+    },
+    "has_full_analysis": {
+     "title": "Has Full Analysis",
+     "type": "boolean"
+    },
+    "labels": {
+     "additionalProperties": {
+      "type": "string"
+     },
+     "title": "Labels",
+     "type": "object"
+    },
+    "met": {
+     "title": "Met",
+     "type": "integer"
+    },
+    "name": {
+     "title": "Name",
+     "type": "string"
+    },
+    "notes": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Notes",
+     "type": "array"
+    },
+    "rank": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Rank"
+    },
+    "score": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Score"
+    },
+    "sector_class": {
+     "title": "Sector Class",
+     "type": "string"
+    },
+    "symbol": {
+     "title": "Symbol",
+     "type": "string"
+    }
+   },
+   "required": [
+    "symbol",
+    "cik",
+    "name",
+    "gics_sector",
+    "sector_class",
+    "met",
+    "decided",
+    "data_gaps",
+    "labels",
+    "has_full_analysis",
+    "as_of_fiscal_year"
+   ],
+   "title": "RankingRow",
+   "type": "object"
+  }
+ },
+ "properties": {
+  "attribution": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Attribution",
+   "type": "array"
+  },
+  "caveats": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Caveats",
+   "type": "array"
+  },
+  "counts": {
+   "$ref": "#/$defs/Counts"
+  },
+  "criteria_ranking": {
+   "$ref": "#/$defs/CriteriaRanking"
+  },
+  "data_as_of": {
+   "$ref": "#/$defs/DataAsOf"
+  },
+  "disclaimer": {
+   "default": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
+   "title": "Disclaimer",
+   "type": "string"
+  },
+  "excluded": {
+   "items": {
+    "$ref": "#/$defs/ExcludedRow"
+   },
+   "title": "Excluded",
+   "type": "array"
+  },
+  "ranking_by_analysts": {
+   "$ref": "#/$defs/PendingSection"
+  },
+  "schema_version": {
+   "default": "1.0",
+   "title": "Schema Version",
+   "type": "string"
+  }
+ },
+ "required": [
+  "data_as_of",
+  "attribution",
+  "caveats",
+  "counts",
+  "criteria_ranking",
+  "ranking_by_analysts",
+  "excluded"
+ ],
+ "title": "Rankings",
+ "type": "object"
+}
