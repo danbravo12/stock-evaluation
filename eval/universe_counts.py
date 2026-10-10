@@ -23,18 +23,21 @@ LABELS = ("pass", "partial_pass", "fail", "not_applicable", "not_meaningful", "d
 
 def count_labels(scores_dir: Path = SCORES_DIR) -> dict:
     per, by_class = defaultdict(Counter), defaultdict(lambda: defaultdict(Counter))
-    n = 0
+    n = no_report = 0
     classes = Counter()
     for p in sorted(Path(scores_dir).glob("*.json")):
         if p.name.startswith("_"):
             continue
         r = json.loads(p.read_text(encoding="utf-8"))
+        if r.get("status") == "no_annual_report":  # no score: counted on its own, out of every criterion (ADR-063)
+            no_report += 1
+            continue
         n += 1
         classes[r["sector_class"]] += 1
         for c in r["score"]["results"]:
             per[c["id"]][c["label"]] += 1
             by_class[r["sector_class"]][c["id"]][c["label"]] += 1
-    return {"scored": n, "sector_classes": dict(sorted(classes.items())),
+    return {"scored": n, "no_annual_report": no_report, "sector_classes": dict(sorted(classes.items())),
             "criteria": {cid: {l: per[cid][l] for l in LABELS if per[cid][l]} for cid in sorted(per, key=lambda x: (x[0], int(x[1:])))},
             "by_sector_class": {cls: {cid: dict(c) for cid, c in sorted(d.items(), key=lambda kv: (kv[0][0], int(kv[0][1:])))} for cls, d in sorted(by_class.items())}}
 

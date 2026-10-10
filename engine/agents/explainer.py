@@ -123,7 +123,7 @@ def figure_values(result: CriterionResult) -> dict:
         vals["profit_year_count"] = n - vals["loss_year_count"]
     if result.id == "G4" and n is not None:
         vals["unpaid_year_count"] = len(vals.get("unpaid_years") or [])
-        vals["paid_year_count"] = n - vals["unpaid_year_count"]
+        vals["paid_year_count"] = n - vals["unpaid_year_count"] - len(vals.get("unknown_years") or [])
     if result.id == "B4" and "years_with_depreciation_only" in vals:
         vals["depreciation_only_year_count"] = len(vals["years_with_depreciation_only"] or [])
     return vals

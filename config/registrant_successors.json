@@ -1,0 +1,20 @@
+{
+  "_notes": "Registrant successors (ADR-063). A snapshot CIK that has not filed its own 10-K yet is read through its predecessor registrant: the fetcher uses the predecessor's companyfacts and latest 10-K until the successor's submissions list a 10-K of its own. Every value keeps its true accession and URL (the predecessor's). An entry needs a succession filing as evidence (Form 8-K12B or similar); a spin-off or a new listing (Form 10-12B) is NOT a succession and gets no entry: such a company has no annual report yet.",
+  "successors": {
+    "0002115436": {
+      "name": "ExxonMobil Holdings Corp",
+      "predecessors": ["0000034088"],
+      "predecessor_names": ["Exxon Mobil Corp"],
+      "effective": "2026-07-01",
+      "evidence": {
+        "form": "8-K12B",
+        "accession": "0001193125-26-291990",
+        "filed": "2026-07-01",
+        "url": "https://www.sec.gov/Archives/edgar/data/2115436/000119312526291990/d71068d8k12b.htm",
+        "quote": "filed for the purpose of establishing ExxonMobil Holdings Corporation as the successor registrant of ExxonMobil's common stock pursuant to Rule 12g-3(a)"
+      },
+      "reason": "Redomiciliation merger effective 2026-07-01: ExxonMobil Holdings Corporation (Texas) became the registrant of the common stock; the New Jersey company (CIK 0000034088) remains the operating predecessor and filed the FY2025 10-K (0000034088-26-000045).",
+      "note": "Figures from predecessor registrant Exxon Mobil Corp (CIK 34088) until ExxonMobil Holdings files its first 10-K."
+    }
+  }
+}

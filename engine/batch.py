@@ -16,11 +16,11 @@ from typing import Callable
 from engine.llm.budget import BudgetExceeded, QuotaReached
 from engine.llm.client import LLMFixtureMissing, load_models_config
 from engine.orchestrator import analyse
-from engine.report import Result
+from engine.report import Result, no_annual_report_message_of
 from engine.settings import Settings
 from engine.universe import Universe
 
-STATUSES = ("done", "warning", "failed")
+STATUSES = ("done", "warning", "failed", "no_annual_report")  # no_annual_report: a new registrant without a 10-K, not a failure (ADR-063)
 
 
 class CompanyLedger:
@@ -44,7 +44,7 @@ class CompanyLedger:
 
 def row_from_result(result: Result, now: datetime | None = None) -> tuple[str, dict]:
     key = result.plan.cik or result.plan.ticker
-    status = "failed" if (result.scorecard is None or not result.plan.in_scope) else ("warning" if result.warnings else "done")
+    status = ("no_annual_report" if no_annual_report_message_of(result) else "failed") if (result.scorecard is None or not result.plan.in_scope) else ("warning" if result.warnings else "done")
     c = result.cost
     return key, {"ticker": result.plan.ticker, "cik": result.plan.cik, "status": status, "model": result.run.model_profile, "mode": result.run.mode,
                  "calls": c.llm_calls, "input_tokens": c.input_tokens, "output_tokens": c.output_tokens, "actual_cost_usd": c.actual_cost_usd,
@@ -115,7 +115,7 @@ def progress_markdown(ledger: CompanyLedger, universe: Universe, config: dict | 
     L = ["# Progress", "", f"S&P 500 coverage of the analysis engine. {universe.attribution}. Research output, not financial advice.", "",
          f"Last company finished: {last}. Universe: {total} companies (one per CIK).", "",
          "| Status | Companies |", "|---|---|",
-         f"| Done | {len(by['done'])} |", f"| Done with warnings | {len(by['warning'])} |", f"| Failed | {len(by['failed'])} |", f"| Remaining (not yet analysed) | {remaining} |", "",
+         f"| Done | {len(by['done'])} |", f"| Done with warnings | {len(by['warning'])} |", f"| Failed | {len(by['failed'])} |", f"| No annual report yet | {len(by['no_annual_report'])} |", f"| Remaining (not yet analysed) | {remaining} |", "",
          "## Spend", "",
          f"- Actual: **${actual_total:.4f}** (free-tier calls cost nothing). Notional at paid rates ($0.25 / $1.50 per million input / output tokens): **${notional_total:.4f}**.",
          f"- Engine cap: ${cap:.2f} (config/models.json).", "",
@@ -134,6 +134,8 @@ def progress_markdown(ledger: CompanyLedger, universe: Universe, config: dict | 
         L += ["- Not available until a company has finished."]
     if by["failed"]:
         L += ["", "## Failed", ""] + [f"- {r['ticker']}: {r['message'] or 'no scorecard'}" for r in sorted(by["failed"], key=lambda r: r["ticker"])]
+    if by["no_annual_report"]:
+        L += ["", "## No annual report yet", ""] + [f"- {r['ticker']}: {r['message']}" for r in sorted(by["no_annual_report"], key=lambda r: r["ticker"])]
     if by["warning"]:
         L += ["", "## Done with warnings", ""] + [f"- {r['ticker']}: {r['warnings']} warning(s)" for r in sorted(by["warning"], key=lambda r: r["ticker"])]
     return "\n".join(L) + "\n"
@@ -143,7 +145,8 @@ def run_numeric_batch(symbols: list[str], *, universe: Universe, ledger: Company
                       score_fn=None, out: Callable[[str], None] = print, now: Callable[[], datetime] | None = None) -> BatchOutcome:
     """The numeric-only path (ADR-059): score each company without a 10-K or a model. A company that raises becomes a failed ledger row with the
     exception text; the batch always continues. Resumable like `run_batch`, on its own ledger so numeric rows never mark a company as fully analysed."""
-    from engine.numeric import score_numeric, write_numeric
+    from engine.numeric import no_annual_report_result, score_numeric, write_numeric
+    from engine.successors import NoAnnualReport
     score_fn = score_fn or score_numeric
     outcome = BatchOutcome()
     attempted = 0
@@ -165,6 +168,12 @@ def run_numeric_batch(symbols: list[str], *, universe: Universe, ledger: Company
             outcome.done.append(sym)
         except (KeyboardInterrupt, SystemExit):
             raise
+        except NoAnnualReport as e:  # not a failure: the company has not filed a 10-K yet (ADR-063); re-checked on every run
+            write_numeric(no_annual_report_result(sym, universe, e.message), scores_dir)
+            ledger.upsert(key, {"ticker": sym, "cik": key, "status": "no_annual_report", "model": None, "mode": "numeric", "calls": 0, "input_tokens": 0, "output_tokens": 0,
+                                "actual_cost_usd": 0.0, "notional_cost_usd": 0.0, "warnings": 0, "message": e.message, "finished_at": stamp})
+            out(f"{sym}: {e.message}")
+            outcome.done.append(sym)
         except Exception as e:  # one company must never stop the run
             msg = f"{type(e).__name__}: {str(e)[:300]}"
             ledger.upsert(key, {"ticker": sym, "cik": key, "status": "failed", "model": None, "mode": "numeric", "calls": 0, "input_tokens": 0, "output_tokens": 0,

@@ -40,6 +40,8 @@ def main() -> int:
     for p in sorted(SCORES_DIR.glob("*.json")):
         if not p.name.startswith("_"):
             results.append(json.loads(p.read_text(encoding="utf-8")))
+    no_report = [r for r in results if r.get("status") == "no_annual_report"]
+    results = [r for r in results if r.get("status") != "no_annual_report"]
     ledger_path = Settings.from_env().ledger_path.with_name("numeric.json")
     ledger = json.loads(ledger_path.read_text()) if ledger_path.exists() else {}
     failed = sorted((r for r in ledger.values() if r["status"] == "failed"), key=lambda r: r["ticker"])
@@ -51,8 +53,13 @@ def main() -> int:
          "(local, git-ignored; the frozen label counts are in `eval/universe_label_counts.json`). Research output, not financial advice. No model was used and no 10-K was downloaded; "
          "G6 and G7 are data gaps because there is no price yet.", "",
          "## The run", "",
-         f"- Companies in the universe (one per CIK): **{len(u.primary)}**; scored: **{len(results)}**; failed: **{len(failed)}**.",
+         f"- Companies in the universe (one per CIK): **{len(u.primary)}**; scored: **{len(results)}**; no annual report yet: **{len(no_report)}**; failed: **{len(failed)}**.",
          f"- First (downloading) run: **{run.get('seconds_this_run', '?')} s**, **{run.get('edgar_requests_this_run', '?')}** EDGAR requests (submissions had been fetched earlier for the SIC list; throttled to about 6 requests a second, declared User-Agent).", ""]
+    if no_report:
+        L += ["No annual report (10-K) filed yet, so not scored and out of the ranking (ADR-063):", ""] + [f"- {r['ticker']}: {r['message']}" for r in no_report] + [""]
+    sourced = [r for r in results if r.get("source_notes")]
+    if sourced:
+        L += ["Scored through a predecessor registrant (ADR-063):", ""] + [f"- {r['ticker']}: {r['source_notes'][0]}" for r in sourced] + [""]
     if failed:
         L += ["Failed companies:", ""] + [f"- {r['ticker']}: {r['message']}" for r in failed] + [""]
     L += ["## Label distribution per criterion", "",

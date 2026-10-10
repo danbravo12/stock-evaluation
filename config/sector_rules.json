@@ -1,5 +1,5 @@
 {
-  "_notes": "Sector class for the ADR-013 exceptions (ADR-057, supersedes the SIC part of ADR-033). Precedence: per-CIK override, then GICS sub-industry (from the S&P 500 snapshot; a company in the snapshot whose sub-industry has no rule here is 'other' and SIC is not consulted), then the SIC ranges below (only for tickers outside the snapshot), then the default. Classes: bank, insurer (G2 and B2-B4 not applicable), utility (G2 variant), reit (rules unchanged, flagged, ADR-058), other. Anything not listed is 'other'; docs/sector_class_review.md lists every company whose class differs from the SIC class and every financial left as 'other'.",
+  "_notes": "Sector class for the ADR-013 exceptions (ADR-057, supersedes the SIC part of ADR-033). Precedence: per-CIK override, then GICS sub-industry (from the S&P 500 snapshot; a company in the snapshot whose sub-industry has no rule here is 'other' and SIC is not consulted), then the SIC ranges below (only for tickers outside the snapshot), then the default. Classes: bank, insurer (G2 and B2-B4 not applicable), utility (G2 variant), reit (rules unchanged, flagged, ADR-058), other. A rule may carry a `note` that travels with the company's results (ADR-057 amendment 2026-10-11). Anything not listed is 'other'; docs/sector_class_review.md lists every company whose class differs from the SIC class and every financial left as 'other'.",
   "default": "other",
   "notes": {
     "reit": "REIT: structurally debt-funded and required to distribute most taxable income; B1/B2 results reflect that structure."
@@ -34,28 +34,30 @@
       "why": "Insurers (ADR-013)."
     },
     "Insurance Brokers": {
-      "class": "insurer",
-      "why": "GICS groups brokers with insurance; their statements are closer to service firms, flagged in docs/sector_class_review.md for a decision (ADR-057)."
+      "class": "other",
+      "note": "Insurance broker: holds client fiduciary funds, which depress the current ratio; it does not carry underwriting risk.",
+      "why": "Daniel's decision 2026-10-11 (ADR-057 amendment): insurance brokers are service firms; client fiduciary funds sit in current assets, they carry no underwriting risk, so the insurer exemptions do not apply."
     },
     "Electric Utilities": {
       "class": "utility",
-      "why": "GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013). Independent power producers are unregulated; flagged in docs/sector_class_review.md."
+      "why": "GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013)."
     },
     "Gas Utilities": {
       "class": "utility",
-      "why": "GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013). Independent power producers are unregulated; flagged in docs/sector_class_review.md."
+      "why": "GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013)."
     },
     "Multi-Utilities": {
       "class": "utility",
-      "why": "GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013). Independent power producers are unregulated; flagged in docs/sector_class_review.md."
+      "why": "GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013)."
     },
     "Water Utilities": {
       "class": "utility",
-      "why": "GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013). Independent power producers are unregulated; flagged in docs/sector_class_review.md."
+      "why": "GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013)."
     },
     "Independent Power Producers & Energy Traders": {
-      "class": "utility",
-      "why": "GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013). Independent power producers are unregulated; flagged in docs/sector_class_review.md."
+      "class": "other",
+      "note": "Not rate-regulated, so Graham's utility variant does not apply.",
+      "why": "Daniel's decision 2026-10-11 (ADR-057 amendment): independent power producers are not rate-regulated, so Graham's utility variant (debt <= 2x equity) does not apply."
     },
     "Data Center REITs": {
       "class": "reit",
@@ -121,6 +123,39 @@
       "name": "Northern Trust",
       "class": "bank",
       "why": "Custody bank (as BNY)."
+    },
+    "0000886982": {
+      "name": "Goldman Sachs",
+      "class": "bank",
+      "why": "Bank holding company: no classified current assets (Daniel's decision 2026-10-11, ADR-057 amendment)."
+    },
+    "0000895421": {
+      "name": "Morgan Stanley",
+      "class": "bank",
+      "why": "Bank holding company: no classified current assets (Daniel's decision 2026-10-11, ADR-057 amendment)."
+    },
+    "0000316709": {
+      "name": "Charles Schwab",
+      "class": "bank",
+      "why": "Bank holding company: no classified current assets (Daniel's decision 2026-10-11, ADR-057 amendment)."
+    },
+    "0001067983": {
+      "name": "Berkshire Hathaway",
+      "class": "other",
+      "note": "Conglomerate with large insurance operations; consolidated figures mix insurance and industrial balance sheets.",
+      "why": "Daniel's decision 2026-10-11 (ADR-057 amendment): stays an ordinary company, flagged by a note."
+    },
+    "0001692819": {
+      "name": "Vistra",
+      "class": "other",
+      "note": "Not rate-regulated, so Graham's utility variant does not apply.",
+      "why": "Merchant power generator that GICS files under Electric Utilities; named as an independent power producer in Daniel's decision 2026-10-11 (ADR-057 amendment)."
+    },
+    "0001868275": {
+      "name": "Constellation Energy",
+      "class": "other",
+      "note": "Not rate-regulated, so Graham's utility variant does not apply.",
+      "why": "Merchant power generator that GICS files under Electric Utilities; named as an independent power producer in Daniel's decision 2026-10-11 (ADR-057 amendment)."
     }
   },
   "sic_fallback": {

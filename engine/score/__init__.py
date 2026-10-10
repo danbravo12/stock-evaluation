@@ -34,9 +34,9 @@ def summarise(results) -> Summary:
 
 
 def score_company(nf, ticker: str, sic, rules: dict, price: float | None = None, *, sector: str | None = None,
-                  gics_sub_industry: str | None = None) -> ScoreSet:
+                  gics_sub_industry: str | None = None, sector_notes_: list[str] | None = None) -> ScoreSet:
     """`nf` is split-adjusted NormalisedFacts. `price` is optional (Finnhub, later). `sector` fixes the class (the planner passes its own);
-    otherwise it is resolved from the CIK, the GICS sub-industry and the SIC code (ADR-057)."""
+    `sector_notes_` likewise (the planner's notes); otherwise both are resolved from the CIK, the GICS sub-industry and the SIC code (ADR-057)."""
     f = Facts(nf)
     as_of = f.as_of_year()
     if as_of is None:
@@ -49,7 +49,7 @@ def score_company(nf, ticker: str, sic, rules: dict, price: float | None = None,
             seen[(i.measure, i.fiscal_year)] = i
     return ScoreSet(cik=nf.cik, ticker=ticker, as_of_year=as_of, sector_class=sector, results=results,
                     summary=summarise(results), inputs=sorted(seen.values(), key=lambda i: (i.measure, i.fiscal_year)),
-                    sector_notes=sector_notes(sector, rules))
+                    sector_notes=sector_notes_ if sector_notes_ is not None else sector_notes(sector, rules, gics_sub_industry=gics_sub_industry, cik=nf.cik))
 
 
 def score_ticker(client, ticker: str, rules: dict | None = None, price: float | None = None) -> ScoreSet:

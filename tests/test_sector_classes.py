@@ -31,8 +31,8 @@ def res(sub=None, sic=None, cik=None):
 class TestResolution(unittest.TestCase):
     def test_gics_sub_industries_map_to_the_agreed_classes(self):
         cases = {"Diversified Banks": "bank", "Regional Banks": "bank", "Consumer Finance": "bank", "Life & Health Insurance": "insurer", "Multi-line Insurance": "insurer",
-                 "Property & Casualty Insurance": "insurer", "Reinsurance": "insurer", "Insurance Brokers": "insurer", "Electric Utilities": "utility", "Gas Utilities": "utility",
-                 "Multi-Utilities": "utility", "Water Utilities": "utility", "Independent Power Producers & Energy Traders": "utility", "Industrial REITs": "reit",
+                 "Property & Casualty Insurance": "insurer", "Reinsurance": "insurer", "Insurance Brokers": "other", "Electric Utilities": "utility", "Gas Utilities": "utility",
+                 "Multi-Utilities": "utility", "Water Utilities": "utility", "Independent Power Producers & Energy Traders": "other", "Industrial REITs": "reit",
                  "Retail REITs": "reit", "Data Center REITs": "reit", "Telecom Tower REITs": "reit", "Timber REITs": "reit", "Managed Health Care": "other",
                  "Asset Management & Custody Banks": "other", "Investment Banking & Brokerage": "other", "Real Estate Services": "other", "Soft Drinks & Non-alcoholic Beverages": "other"}
         for sub, cls in cases.items():
@@ -64,7 +64,7 @@ class TestResolution(unittest.TestCase):
 
     def test_every_rule_has_a_reason_and_a_valid_class(self):
         for name, r in RULES["gics_sub_industries"].items():
-            self.assertIn(r["class"], {"bank", "insurer", "utility", "reit"}, name)
+            self.assertIn(r["class"], {"bank", "insurer", "utility", "reit"} | ({"other"} if r.get("note") else set()), name)  # an explicit 'other' carries its note
             self.assertTrue(r["why"], name)
 
     def test_no_reit_insurance_or_utility_sub_industry_of_the_snapshot_silently_falls_to_other(self):

@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field
 
 from engine.contracts import (SEC_SOURCE, CriticReport, DataBundle, Explanation, InputRef, QualFinding, RunPlan, ScoreSet, Summary, TraceEvent)
 from engine.settings import REPO_ROOT
+from engine.successors import NO_ANNUAL_REPORT
 
 SCHEMA_VERSION = "1.1"  # 1.1: sector notes and sector basis (ADR-058); additive over 1.0
 DISCLAIMER = ("Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. "
@@ -112,6 +113,11 @@ class Result(BaseModel):
     attribution: list[str] = Field(default_factory=list)
     trace_path: str | None = None
     warnings: list[ResultWarning] = Field(default_factory=list)
+
+
+def no_annual_report_message_of(result: Result) -> str | None:
+    """The plan-level warning of a company that has filed no 10-K yet (ADR-063), or None."""
+    return next((w.message for w in result.warnings if w.where == "plan" and w.message.startswith(NO_ANNUAL_REPORT)), None)
 
 
 # ---------- assembling ----------

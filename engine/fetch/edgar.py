@@ -24,6 +24,7 @@ from dataclasses import dataclass
 from typing import Callable, Literal
 
 from engine.fetch.store import ResponseStore, StoredResponse
+from engine.successors import NoAnnualReport, has_annual_report, load_successors
 from engine.settings import Settings
 from engine.universe import cik10, normalise_ticker
 
@@ -50,6 +51,10 @@ class FixtureMissing(EdgarError):
 
 class EdgarNotFound(EdgarError):
     pass
+
+
+class NoAnnualReportError(EdgarNotFound, NoAnnualReport):
+    """The registrant (and its predecessor, if any) has never filed a 10-K: a new listing or spin-off (ADR-063)."""
 
 
 @dataclass(frozen=True)
@@ -101,6 +106,7 @@ class EdgarClient:
         sleep: Callable[[float], None] = time.sleep,
         clock: Callable[[], float] = time.monotonic,
         timeout_s: float = 30.0,
+        successors: dict | None = None,
     ):
         if mode not in ("replay", "live", "record"):
             raise ValueError(f"Unknown mode {mode!r}")
@@ -110,6 +116,7 @@ class EdgarClient:
         self._sleep = sleep
         self._clock = clock
         self.timeout_s = timeout_s
+        self.successors = load_successors() if successors is None else successors  # ADR-063
         self._last_request_at: float | None = None
         self.requests_made = 0
         self.store = ResponseStore(
@@ -137,13 +144,22 @@ class EdgarClient:
         c = cik10(cik)
         return self._get_json(f"edgar/{c}/submissions.json", SUBMISSIONS_URL.format(cik10=c))
 
-    def companyfacts(self, cik: int | str) -> dict:
+    def source_for(self, cik: int | str) -> tuple[str, str | None]:
+        """(CIK whose companyfacts and 10-K stand in for `cik`, visible note). Normally the CIK itself. For a registrant successor (ADR-063) that has
+        not filed a 10-K yet it is the predecessor registrant, with the note from `config/registrant_successors.json`."""
         c = cik10(cik)
+        entry = self.successors.get(c)
+        if entry is None or has_annual_report(self.submissions(c)):
+            return c, None
+        return cik10(entry["predecessors"][0]), entry["note"]
+
+    def companyfacts(self, cik: int | str) -> dict:
+        c = self.source_for(cik)[0]
         return self._get_json(f"edgar/{c}/companyfacts.json", COMPANYFACTS_URL.format(cik10=c))
 
     def latest_filing(self, cik: int | str, form: str = "10-K") -> FilingRef:
-        """Most recent original filing of `form` (amendments such as 10-K/A excluded)."""
-        c = cik10(cik)
+        """Most recent original filing of `form` (amendments such as 10-K/A excluded). A successor without a 10-K of its own gets its predecessor's (ADR-063)."""
+        c = self.source_for(cik)[0]
         recent = self.submissions(c).get("filings", {}).get("recent", {})
         forms = recent.get("form", [])
         for i, f in enumerate(forms):  # SEC lists newest first
@@ -156,7 +172,10 @@ class EdgarClient:
                     report_date=recent.get("reportDate", [""] * len(forms))[i],
                     primary_document=recent["primaryDocument"][i],
                 )
-        raise EdgarNotFound(f"No {form} found in recent filings for CIK {c}")
+        message = f"No {form} found in recent filings for CIK {c}"
+        if form == "10-K" and not has_annual_report(self.submissions(c)):
+            raise NoAnnualReportError(message)
+        raise EdgarNotFound(message)
 
     def filing_document(self, ref: FilingRef) -> StoredResponse:
         key = f"edgar/{ref.cik}/{ref.form}/{ref.accession}/{ref.primary_document}"

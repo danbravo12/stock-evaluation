@@ -77,9 +77,24 @@ def g4_dividend_record(f: Facts, as_of: int) -> CriterionResult:
         by_year[y] = {"paid": used is not None and used.value > 0, "source": source, "value": used.value if used else None}
         if used is not None:
             inputs.append((source, used))
-    if not all(d["paid"] for d in by_year.values()):
-        return result("G4", name, "fail", thr, figures={"years_on_record": len(record), "unpaid_years": [y for y in record if not by_year[y]["paid"]]},
-                      by_year=by_year, years=record, inputs=inputs)
+    # ADR-012 amendment 2026-10-11: a year with no dividend data between the company's first and last paid years is unknown, not unpaid
+    # (a payer whose filing lacks the tag, Federal Realty 2011). Years before the first paid year, or after the last, stay unpaid.
+    # The span comes from per-share data when the company has any positive per-share dividend, else from cash paid: Alphabet's one-off $47M
+    # cash-paid tag in 2015 (ADR-012 correction) must not make 2016 to 2023 look like years between payments. The whole history counts, not only the window.
+    per_share_paid = [y for y, v in sorted(f.by["dividends_per_share"].items()) if v.value > 0]
+    paid_years = per_share_paid or [y for y, v in sorted(f.by["dividends_paid"].items()) if v.value > 0]
+    unknown = [y for y in record if by_year[y]["source"] == "none" and paid_years and paid_years[0] < y < paid_years[-1]]
+    for y in unknown:
+        by_year[y]["paid"] = None
+    unpaid = [y for y in record if by_year[y]["paid"] is False]
+    if unpaid:
+        figures = {"years_on_record": len(record), "unpaid_years": unpaid}
+        if unknown:
+            figures["unknown_years"] = unknown
+        return result("G4", name, "fail", thr, figures=figures, by_year=by_year, years=record, inputs=inputs)
+    if unknown:
+        return result("G4", name, "data_gap", thr, figures={"years_on_record": len(record), "unknown_years": unknown}, by_year=by_year, years=record,
+                      reason=f"dividend data missing for {', '.join(map(str, unknown))}", inputs=inputs)
     full = len(record) == DIVIDEND_WINDOW_YEARS
     return result("G4", name, "partial_pass", thr, figures={"years_on_record": len(record)}, by_year=by_year, years=record,
                   year_label="partial (15 of 20 yrs)" if full else f"{len(record)} yrs on record", inputs=inputs)

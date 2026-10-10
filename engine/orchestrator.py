@@ -26,6 +26,7 @@ from engine.score import score_company
 from engine.score.common import load_sector_rules
 from engine.settings import REPO_ROOT, Settings
 from engine.splits import adjust_for_splits
+from engine.successors import has_annual_report, no_annual_report_message
 from engine.trace import TraceRecorder
 from engine.universe import Universe, load_universe
 
@@ -131,8 +132,17 @@ def analyse(ticker: str, *, mode: str = "replay", settings: Settings | None = No
                 steps.append(StepRecord(step=s, status="skipped", reason=plan.out_of_scope_reason))
             state.update({s: "skipped" for s in STEPS[:-1]})
             warnings.append(ResultWarning(where="plan", message=plan.out_of_scope_reason or "out of scope"))
+        elif not has_annual_report(edgar.submissions(edgar.source_for(plan.cik)[0])):  # a new registrant: no 10-K yet, nothing to score (ADR-063)
+            msg = no_annual_report_message(row.date_added)
+            for s in STEPS[:-1]:
+                steps.append(StepRecord(step=s, status="skipped", reason=msg))
+            state.update({s: "skipped" for s in STEPS[:-1]})
+            warnings.append(ResultWarning(where="plan", message=msg))
         else:
             cik = plan.cik
+            source_note = edgar.source_for(cik)[1]
+            if source_note:  # a registrant successor read through its predecessor (ADR-063): the note stays visible in the result
+                plan.notes.append(source_note)
 
             def fetch() -> DataBundle:
                 nf = adjust_for_splits(normalise_from_store(edgar, cik), edgar.companyfacts(cik))
@@ -150,7 +160,7 @@ def analyse(ticker: str, *, mode: str = "replay", settings: Settings | None = No
 
             bundle = run("fetch", fetch)
             outputs["bundle"] = bundle
-            score: ScoreSet | None = run("score", lambda: score_company(bundle.facts, symbol, sic, load_sector_rules(), None, sector=plan.sector_class))
+            score: ScoreSet | None = run("score", lambda: score_company(bundle.facts, symbol, sic, load_sector_rules(), None, sector=plan.sector_class, sector_notes_=plan.sector_notes))
             qual = run("qualitative", lambda: assess_qualitative(cik, symbol, outputs["retriever"], llm, trace))
             review = run("explain_and_verify", lambda: explain_and_verify(score, qual, retriever=outputs["retriever"], llm=llm, trace=trace))
             outputs.update(score=score, qual=qual, review=review)

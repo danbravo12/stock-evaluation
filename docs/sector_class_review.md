@@ -6,23 +6,32 @@ Class precedence: per-CIK override → GICS sub-industry (a company in the snaps
 
 | Class | Before (SIC) | After (GICS) |
 |---|---|---|
-| bank | 17 | 19 |
-| insurer | 29 | 23 |
-| other | 425 | 399 |
+| bank | 17 | 22 |
+| insurer | 29 | 17 |
+| other | 425 | 406 |
 | reit | 0 | 28 |
-| utility | 29 | 31 |
+| utility | 29 | 27 |
 
-## Companies whose class changes (38 of 500)
+## Companies whose class changes (51 of 500)
 
 | Symbol | Company | GICS sub-industry | SIC | SIC class | New class | Why |
 |---|---|---|---|---|---|---|
-| BRK-B | Berkshire Hathaway | Multi-Sector Holdings | 6331 Fire, Marine & Casualty Insurance | insurer | other | gics:Multi-Sector Holdings (no exception rule): no ADR-013 exception applies to this sub-industry |
+| AJG | Arthur J. Gallagher & Co. | Insurance Brokers | 6411 Insurance Agents, Brokers & Service | insurer | other | gics:Insurance Brokers: Daniel's decision 2026-10-11 (ADR-057 amendment): insurance brokers are service firms; client fiduciary funds sit in current assets, they carry no underwriting risk, so the insurer exemptions do not apply. |
+| AON | Aon plc | Insurance Brokers | 6411 Insurance Agents, Brokers & Service | insurer | other | gics:Insurance Brokers: Daniel's decision 2026-10-11 (ADR-057 amendment): insurance brokers are service firms; client fiduciary funds sit in current assets, they carry no underwriting risk, so the insurer exemptions do not apply. |
+| BRK-B | Berkshire Hathaway | Multi-Sector Holdings | 6331 Fire, Marine & Casualty Insurance | insurer | other | override:Berkshire Hathaway: Daniel's decision 2026-10-11 (ADR-057 amendment): stays an ordinary company, flagged by a note. |
+| BRO | Brown & Brown | Insurance Brokers | 6411 Insurance Agents, Brokers & Service | insurer | other | gics:Insurance Brokers: Daniel's decision 2026-10-11 (ADR-057 amendment): insurance brokers are service firms; client fiduciary funds sit in current assets, they carry no underwriting risk, so the insurer exemptions do not apply. |
 | CI | Cigna | Health Care Services | 6324 Hospital & Medical Service Plans | insurer | other | gics:Health Care Services (no exception rule): no ADR-013 exception applies to this sub-industry |
 | CNC | Centene Corporation | Managed Health Care | 6324 Hospital & Medical Service Plans | insurer | other | gics:Managed Health Care (no exception rule): no ADR-013 exception applies to this sub-industry |
 | ELV | Elevance Health | Managed Health Care | 6324 Hospital & Medical Service Plans | insurer | other | gics:Managed Health Care (no exception rule): no ADR-013 exception applies to this sub-industry |
+| ERIE | Erie Indemnity | Insurance Brokers | 6411 Insurance Agents, Brokers & Service | insurer | other | gics:Insurance Brokers: Daniel's decision 2026-10-11 (ADR-057 amendment): insurance brokers are service firms; client fiduciary funds sit in current assets, they carry no underwriting risk, so the insurer exemptions do not apply. |
 | HUM | Humana | Managed Health Care | 6324 Hospital & Medical Service Plans | insurer | other | gics:Managed Health Care (no exception rule): no ADR-013 exception applies to this sub-industry |
+| MRSH | Marsh McLennan | Insurance Brokers | 6411 Insurance Agents, Brokers & Service | insurer | other | gics:Insurance Brokers: Daniel's decision 2026-10-11 (ADR-057 amendment): insurance brokers are service firms; client fiduciary funds sit in current assets, they carry no underwriting risk, so the insurer exemptions do not apply. |
 | UNH | UnitedHealth Group | Managed Health Care | 6324 Hospital & Medical Service Plans | insurer | other | gics:Managed Health Care (no exception rule): no ADR-013 exception applies to this sub-industry |
+| WTW | Willis Towers Watson | Insurance Brokers | 6411 Insurance Agents, Brokers & Service | insurer | other | gics:Insurance Brokers: Daniel's decision 2026-10-11 (ADR-057 amendment): insurance brokers are service firms; client fiduciary funds sit in current assets, they carry no underwriting risk, so the insurer exemptions do not apply. |
 | AXP | American Express | Consumer Finance | 6199 Finance Services | other | bank | gics:Consumer Finance: Lenders (Capital One, Synchrony, American Express): the balance sheet is loans funded by deposits and debt, with no classified current assets (Daniel's decision, ADR-057). |
+| GS | Goldman Sachs | Investment Banking & Brokerage | 6211 Security Brokers, Dealers & Flotation Companies | other | bank | override:Goldman Sachs: Bank holding company: no classified current assets (Daniel's decision 2026-10-11, ADR-057 amendment). |
+| MS | Morgan Stanley | Investment Banking & Brokerage | 6211 Security Brokers, Dealers & Flotation Companies | other | bank | override:Morgan Stanley: Bank holding company: no classified current assets (Daniel's decision 2026-10-11, ADR-057 amendment). |
+| SCHW | Charles Schwab Corporation | Investment Banking & Brokerage | 6211 Security Brokers, Dealers & Flotation Companies | other | bank | override:Charles Schwab: Bank holding company: no classified current assets (Daniel's decision 2026-10-11, ADR-057 amendment). |
 | SYF | Synchrony Financial | Consumer Finance | 6199 Finance Services | other | bank | gics:Consumer Finance: Lenders (Capital One, Synchrony, American Express): the balance sheet is loans funded by deposits and debt, with no classified current assets (Daniel's decision, ADR-057). |
 | AMT | American Tower | Telecom Tower REITs | 6798 Real Estate Investment Trusts | other | reit | gics:Telecom Tower REITs: Equity REIT: rules unchanged, results carry a sector note (ADR-058). |
 | ARE | Alexandria Real Estate Equities | Office REITs | 6798 Real Estate Investment Trusts | other | reit | gics:Office REITs: Equity REIT: rules unchanged, results carry a sector note (ADR-058). |
@@ -52,10 +61,14 @@ Class precedence: per-CIK override → GICS sub-industry (a company in the snaps
 | VTR | Ventas | Health Care REITs | 6798 Real Estate Investment Trusts | other | reit | gics:Health Care REITs: Equity REIT: rules unchanged, results carry a sector note (ADR-058). |
 | WELL | Welltower | Health Care REITs | 6798 Real Estate Investment Trusts | other | reit | gics:Health Care REITs: Equity REIT: rules unchanged, results carry a sector note (ADR-058). |
 | WY | Weyerhaeuser | Timber REITs | 6798 Real Estate Investment Trusts | other | reit | gics:Timber REITs: Equity REIT: rules unchanged, results carry a sector note (ADR-058). |
-| ATO | Atmos Energy | Gas Utilities | 4924 Natural Gas Distribution | other | utility | gics:Gas Utilities: GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013). Independent power producers are unregulated; flagged in docs/sector_class_review.md. |
-| AWK | American Water Works | Water Utilities | 4941 Water Supply | other | utility | gics:Water Utilities: GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013). Independent power producers are unregulated; flagged in docs/sector_class_review.md. |
+| ATO | Atmos Energy | Gas Utilities | 4924 Natural Gas Distribution | other | utility | gics:Gas Utilities: GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013). |
+| AWK | American Water Works | Water Utilities | 4941 Water Supply | other | utility | gics:Water Utilities: GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013). |
+| AES | AES Corporation | Independent Power Producers & Energy Traders | 4991 Cogeneration Services & Small Power Producers | utility | other | gics:Independent Power Producers & Energy Traders: Daniel's decision 2026-10-11 (ADR-057 amendment): independent power producers are not rate-regulated, so Graham's utility variant (debt <= 2x equity) does not apply. |
+| CEG | Constellation Energy | Electric Utilities | 4911 Electric Services | utility | other | override:Constellation Energy: Merchant power generator that GICS files under Electric Utilities; named as an independent power producer in Daniel's decision 2026-10-11 (ADR-057 amendment). |
+| NRG | NRG Energy | Independent Power Producers & Energy Traders | 4911 Electric Services | utility | other | gics:Independent Power Producers & Energy Traders: Daniel's decision 2026-10-11 (ADR-057 amendment): independent power producers are not rate-regulated, so Graham's utility variant (debt <= 2x equity) does not apply. |
+| VST | Vistra Corp. | Electric Utilities | 4911 Electric Services | utility | other | override:Vistra: Merchant power generator that GICS files under Electric Utilities; named as an independent power producer in Daniel's decision 2026-10-11 (ADR-057 amendment). |
 
-## Financials left as "other" (34)
+## Financials left as "other" (37)
 
 | Symbol | Company | GICS sub-industry | Reason |
 |---|---|---|---|
@@ -77,13 +90,16 @@ Class precedence: per-CIK override → GICS sub-industry (a company in the snaps
 | MSCI | MSCI | Financial Exchanges & Data | exchange or data business: a conventional income statement; clearing balances inflate some balance sheets (CME, ICE, Nasdaq, Cboe). |
 | NDAQ | Nasdaq, Inc. | Financial Exchanges & Data | exchange or data business: a conventional income statement; clearing balances inflate some balance sheets (CME, ICE, Nasdaq, Cboe). |
 | SPGI | S&P Global | Financial Exchanges & Data | exchange or data business: a conventional income statement; clearing balances inflate some balance sheets (CME, ICE, Nasdaq, Cboe). |
-| GS | Goldman Sachs | Investment Banking & Brokerage | broker-dealer: no classified balance sheet, leverage is the business (Goldman Sachs, Morgan Stanley, Schwab, Raymond James); closer to banks than to industrials. DECISION for Daniel. |
-| HOOD | Robinhood Markets | Investment Banking & Brokerage | broker-dealer: no classified balance sheet, leverage is the business (Goldman Sachs, Morgan Stanley, Schwab, Raymond James); closer to banks than to industrials. DECISION for Daniel. |
-| IBKR | Interactive Brokers | Investment Banking & Brokerage | broker-dealer: no classified balance sheet, leverage is the business (Goldman Sachs, Morgan Stanley, Schwab, Raymond James); closer to banks than to industrials. DECISION for Daniel. |
-| MS | Morgan Stanley | Investment Banking & Brokerage | broker-dealer: no classified balance sheet, leverage is the business (Goldman Sachs, Morgan Stanley, Schwab, Raymond James); closer to banks than to industrials. DECISION for Daniel. |
-| RJF | Raymond James Financial | Investment Banking & Brokerage | broker-dealer: no classified balance sheet, leverage is the business (Goldman Sachs, Morgan Stanley, Schwab, Raymond James); closer to banks than to industrials. DECISION for Daniel. |
-| SCHW | Charles Schwab Corporation | Investment Banking & Brokerage | broker-dealer: no classified balance sheet, leverage is the business (Goldman Sachs, Morgan Stanley, Schwab, Raymond James); closer to banks than to industrials. DECISION for Daniel. |
-| BRK-B | Berkshire Hathaway | Multi-Sector Holdings | diversified holding company (Berkshire Hathaway, SIC insurer): insurance is one segment among railroads, utilities and manufacturing. DECISION for Daniel. |
+| AJG | Arthur J. Gallagher & Co. | Insurance Brokers | no rule for this sub-industry |
+| AON | Aon plc | Insurance Brokers | no rule for this sub-industry |
+| BRO | Brown & Brown | Insurance Brokers | no rule for this sub-industry |
+| ERIE | Erie Indemnity | Insurance Brokers | no rule for this sub-industry |
+| MRSH | Marsh McLennan | Insurance Brokers | no rule for this sub-industry |
+| WTW | Willis Towers Watson | Insurance Brokers | no rule for this sub-industry |
+| HOOD | Robinhood Markets | Investment Banking & Brokerage | broker-dealer left as other: Goldman Sachs, Morgan Stanley and Schwab are overridden to bank (Daniel, 2026-10-11); the others (Raymond James, Interactive Brokers, Robinhood) were not part of that decision. |
+| IBKR | Interactive Brokers | Investment Banking & Brokerage | broker-dealer left as other: Goldman Sachs, Morgan Stanley and Schwab are overridden to bank (Daniel, 2026-10-11); the others (Raymond James, Interactive Brokers, Robinhood) were not part of that decision. |
+| RJF | Raymond James Financial | Investment Banking & Brokerage | broker-dealer left as other: Goldman Sachs, Morgan Stanley and Schwab are overridden to bank (Daniel, 2026-10-11); the others (Raymond James, Interactive Brokers, Robinhood) were not part of that decision. |
+| BRK-B | Berkshire Hathaway | Multi-Sector Holdings | Berkshire Hathaway: stays other, with a note that its figures mix insurance and industrial balance sheets (Daniel, 2026-10-11). |
 | CPAY | Corpay | Transaction & Payment Processing Services | payment processor: conventional statements (Visa, Mastercard, PayPal); American Express is Consumer Finance and so a bank here. |
 | FIS | Fidelity National Information Services | Transaction & Payment Processing Services | payment processor: conventional statements (Visa, Mastercard, PayPal); American Express is Consumer Finance and so a bank here. |
 | FISV | Fiserv | Transaction & Payment Processing Services | payment processor: conventional statements (Visa, Mastercard, PayPal); American Express is Consumer Finance and so a bank here. |
@@ -94,28 +110,33 @@ Class precedence: per-CIK override → GICS sub-industry (a company in the snaps
 | V | Visa Inc. | Transaction & Payment Processing Services | payment processor: conventional statements (Visa, Mastercard, PayPal); American Express is Consumer Finance and so a bank here. |
 | XYZ | Block, Inc. | Transaction & Payment Processing Services | payment processor: conventional statements (Visa, Mastercard, PayPal); American Express is Consumer Finance and so a bank here. |
 
-## Mapped by the proposal but worth a second look (10)
+## Decided by Daniel on 2026-10-11 (16)
 
-Insurance brokers (Marsh McLennan, Aon…) are insurers here because GICS groups them with insurance, but they are service firms with conventional statements; independent power producers (Vistra, NRG) are unregulated and get the lenient utility G2 variant; real estate services (CBRE, CoStar) are not REITs and stay other.
+Insurance brokers (Marsh McLennan, Aon…) are **other** with the note "Insurance broker: holds client fiduciary funds, which depress the current ratio; it does not carry underwriting risk." Independent power producers are **other** with the note "Not rate-regulated, so Graham's utility variant does not apply." GICS files Vistra and Constellation under Electric Utilities, so they are overridden by CIK. Real estate services (CBRE, CoStar) are not REITs and stay other. Goldman Sachs, Morgan Stanley and Schwab are banks; Berkshire Hathaway is other with its own note.
 
-| Symbol | Company | GICS sub-industry | Class |
-|---|---|---|---|
-| AES | AES Corporation | Independent Power Producers & Energy Traders | utility |
-| NRG | NRG Energy | Independent Power Producers & Energy Traders | utility |
-| AJG | Arthur J. Gallagher & Co. | Insurance Brokers | insurer |
-| AON | Aon plc | Insurance Brokers | insurer |
-| BRO | Brown & Brown | Insurance Brokers | insurer |
-| ERIE | Erie Indemnity | Insurance Brokers | insurer |
-| MRSH | Marsh McLennan | Insurance Brokers | insurer |
-| WTW | Willis Towers Watson | Insurance Brokers | insurer |
-| CBRE | CBRE Group | Real Estate Services | other |
-| CSGP | CoStar Group | Real Estate Services | other |
+| Symbol | Company | GICS sub-industry | Class | Note |
+|---|---|---|---|---|
+| CEG | Constellation Energy | Electric Utilities | other | Not rate-regulated, so Graham's utility variant does not apply. |
+| VST | Vistra Corp. | Electric Utilities | other | Not rate-regulated, so Graham's utility variant does not apply. |
+| AES | AES Corporation | Independent Power Producers & Energy Traders | other | Not rate-regulated, so Graham's utility variant does not apply. |
+| NRG | NRG Energy | Independent Power Producers & Energy Traders | other | Not rate-regulated, so Graham's utility variant does not apply. |
+| AJG | Arthur J. Gallagher & Co. | Insurance Brokers | other | Insurance broker: holds client fiduciary funds, which depress the current ratio; it does not carry underwriting risk. |
+| AON | Aon plc | Insurance Brokers | other | Insurance broker: holds client fiduciary funds, which depress the current ratio; it does not carry underwriting risk. |
+| BRO | Brown & Brown | Insurance Brokers | other | Insurance broker: holds client fiduciary funds, which depress the current ratio; it does not carry underwriting risk. |
+| ERIE | Erie Indemnity | Insurance Brokers | other | Insurance broker: holds client fiduciary funds, which depress the current ratio; it does not carry underwriting risk. |
+| MRSH | Marsh McLennan | Insurance Brokers | other | Insurance broker: holds client fiduciary funds, which depress the current ratio; it does not carry underwriting risk. |
+| WTW | Willis Towers Watson | Insurance Brokers | other | Insurance broker: holds client fiduciary funds, which depress the current ratio; it does not carry underwriting risk. |
+| GS | Goldman Sachs | Investment Banking & Brokerage | bank |  |
+| MS | Morgan Stanley | Investment Banking & Brokerage | bank |  |
+| SCHW | Charles Schwab Corporation | Investment Banking & Brokerage | bank |  |
+| BRK-B | Berkshire Hathaway | Multi-Sector Holdings | other | Conglomerate with large insurance operations; consolidated figures mix insurance and industrial balance sheets. |
+| CBRE | CBRE Group | Real Estate Services | other |  |
+| CSGP | CoStar Group | Real Estate Services | other |  |
 
-## Companies with no exception rule for their GICS sub-industry (399; ordinary companies, SIC is not consulted)
+## Companies with no exception rule for their GICS sub-industry (395; ordinary companies, SIC is not consulted)
 
 - Asset Management & Custody Banks: 9
 - Financial Exchanges & Data: 9
-- Investment Banking & Brokerage: 6
-- Multi-Sector Holdings: 1
+- Investment Banking & Brokerage: 3
 - Real Estate Services: 2
 - Transaction & Payment Processing Services: 9

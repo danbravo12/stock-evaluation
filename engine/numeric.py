@@ -14,6 +14,7 @@ from engine.normalise import normalise_from_store
 from engine.planner import plan_for
 from engine.score import score_company
 from engine.score.common import fiscal_year, load_sector_rules
+from engine.successors import NoAnnualReport, has_annual_report, no_annual_report_message
 from engine.splits import adjust_for_splits
 from engine.universe import Universe
 
@@ -65,13 +66,23 @@ def score_numeric(symbol: str, *, edgar, universe: Universe, rules: dict | None 
     row = universe.row_for(symbol)
     if row is None:
         raise ValueError(f"{symbol} is not in the S&P 500 snapshot")
+    source, source_note = edgar.source_for(row.cik)  # a registrant successor is read through its predecessor (ADR-063)
+    if not has_annual_report(edgar.submissions(source)):
+        raise NoAnnualReport(no_annual_report_message(row.date_added))
     sic = edgar.submissions(row.cik).get("sic")
     plan = plan_for(symbol, universe, sic, rules)
     nf = adjust_for_splits(normalise_from_store(edgar, row.cik), edgar.companyfacts(row.cik))
-    score = score_company(nf, plan.ticker, sic, rules, None, sector=plan.sector_class)
-    return {"ticker": plan.ticker, "cik": row.cik, "name": row.security, "gics_sector": row.gics_sector, "gics_sub_industry": row.gics_sub_industry, "sic": sic,
-            "sector_class": plan.sector_class, "sector_basis": plan.sector_basis, "sector_notes": score.sector_notes,
+    score = score_company(nf, plan.ticker, sic, rules, None, sector=plan.sector_class, sector_notes_=plan.sector_notes)
+    return {"status": "scored", "ticker": plan.ticker, "cik": row.cik, "name": row.security, "gics_sector": row.gics_sector, "gics_sub_industry": row.gics_sub_industry, "sic": sic,
+            "sector_class": plan.sector_class, "sector_basis": plan.sector_basis, "sector_notes": score.sector_notes, "source_notes": [source_note] if source_note else [],
             "score": score.model_dump(mode="json"), "diagnostics": diagnose(nf, score), "seconds": round(time.perf_counter() - t0, 2)}
+
+
+def no_annual_report_result(symbol: str, universe: Universe, message: str) -> dict:
+    """The score file of a company with no 10-K yet: no score, the reason in words, out of the ranking (ADR-063)."""
+    row = universe.row_for(symbol)
+    return {"status": "no_annual_report", "ticker": row.symbol, "cik": row.cik, "name": row.security, "gics_sector": row.gics_sector, "gics_sub_industry": row.gics_sub_industry,
+            "date_added": row.date_added, "message": message, "score": None}
 
 
 def write_numeric(result: dict, scores_dir: Path) -> Path:

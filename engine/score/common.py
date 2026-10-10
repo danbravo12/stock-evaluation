@@ -77,8 +77,11 @@ def resolve_sector(rules: dict, *, sic: int | str | None = None, gics_sub_indust
     return cls, f"sic:{sic}" if sic else "default", "SIC fallback (ticker not in the snapshot)" if sic else "no classification available"
 
 
-def sector_notes(cls: str, rules: dict) -> list[str]:
-    note = rules.get("notes", {}).get(cls)
+def sector_notes(cls: str, rules: dict, *, gics_sub_industry: str | None = None, cik: str | None = None) -> list[str]:
+    """Notes that travel with a company's results: the note of the rule that decided its class (per-CIK override, then GICS sub-industry; ADR-057
+    amendment 2026-10-11), otherwise the class note (REIT, ADR-058). A rule's note replaces the class note, it is not added to it."""
+    rule = rules.get("cik_overrides", {}).get(cik) if cik and cik in rules.get("cik_overrides", {}) else rules.get("gics_sub_industries", {}).get(gics_sub_industry)
+    note = (rule or {}).get("note") or rules.get("notes", {}).get(cls)
     return [note] if note else []
 
 

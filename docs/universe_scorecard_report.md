@@ -4,14 +4,17 @@ Constituents: Wikipedia, as of 2026-10-10 (CC BY-SA). Data: U.S. Securities and 
 
 ## The run
 
-- Companies in the universe (one per CIK): **500**; scored: **497**; failed: **3**.
+- Companies in the universe (one per CIK): **500**; scored: **498**; no annual report yet: **2**; failed: **0**.
 - First (downloading) run: **305.2 s**, **498** EDGAR requests (submissions had been fetched earlier for the SIC list; throttled to about 6 requests a second, declared User-Agent).
 
-Failed companies:
+No annual report (10-K) filed yet, so not scored and out of the ranking (ADR-063):
 
-- HONA: ValueError: HONA: no annual net income in EDGAR; cannot set an as-of year
-- VYLR: ValueError: VYLR: no annual net income in EDGAR; cannot set an as-of year
-- XOM: ValueError: XOM: no annual net income in EDGAR; cannot set an as-of year
+- HONA: No annual report (10-K) filed yet; listed since 2026-06-29.
+- VYLR: No annual report (10-K) filed yet; listed since 2026-10-01.
+
+Scored through a predecessor registrant (ADR-063):
+
+- XOM: Figures from predecessor registrant Exxon Mobil Corp (CIK 34088) until ExxonMobil Holdings files its first 10-K.
 
 ## Label distribution per criterion
 
@@ -19,69 +22,69 @@ Failed companies:
 
 | Criterion | pass | partial | fail | n/a | n/m | gap | % pass (decided) |
 |---|---|---|---|---|---|---|---|
-| B1 | 165 | 0 | 222 | 0 | 59 | 51 | 43% of 387 |
-| B2 | 172 | 0 | 218 | 42 | 0 | 65 | 44% of 390 |
-| B3 | 193 | 0 | 142 | 42 | 0 | 120 | 58% of 335 |
-| B4 | 243 | 0 | 111 | 42 | 0 | 101 | 69% of 354 |
-| G1 | 492 | 0 | 2 | 0 | 0 | 3 | 100% of 494 |
-| G2 | 67 | 0 | 299 | 42 | 0 | 89 | 18% of 366 |
-| G3 | 320 | 0 | 176 | 0 | 0 | 1 | 65% of 496 |
-| G4 | 0 | 301 | 192 | 0 | 0 | 4 | 61% of 493 |
-| G5 | 282 | 0 | 122 | 0 | 30 | 63 | 70% of 404 |
-| G6 | 0 | 0 | 0 | 0 | 0 | 497 | – |
-| G7 | 0 | 0 | 0 | 0 | 0 | 497 | – |
+| B1 | 165 | 0 | 223 | 0 | 59 | 51 | 43% of 388 |
+| B2 | 172 | 0 | 221 | 39 | 0 | 66 | 44% of 393 |
+| B3 | 197 | 0 | 142 | 39 | 0 | 120 | 58% of 339 |
+| B4 | 247 | 0 | 111 | 39 | 0 | 101 | 69% of 358 |
+| G1 | 493 | 0 | 2 | 0 | 0 | 3 | 100% of 495 |
+| G2 | 66 | 0 | 305 | 39 | 0 | 88 | 18% of 371 |
+| G3 | 320 | 0 | 177 | 0 | 0 | 1 | 64% of 497 |
+| G4 | 0 | 302 | 191 | 0 | 0 | 5 | 61% of 493 |
+| G5 | 283 | 0 | 122 | 0 | 30 | 63 | 70% of 405 |
+| G6 | 0 | 0 | 0 | 0 | 0 | 498 | – |
+| G7 | 0 | 0 | 0 | 0 | 0 | 498 | – |
 
 ## By sector class
 
-Companies per class: bank 19, insurer 23, other 396, reit 28, utility 31.
+Companies per class: bank 22, insurer 17, other 404, reit 28, utility 27.
 
 **bank**
 
 | Criterion | pass | partial | fail | n/a | n/m | gap |
 |---|---|---|---|---|---|---|
-| B1 | 2 | 0 | 17 | 0 | 0 | 0 |
-| B2 | 0 | 0 | 0 | 19 | 0 | 0 |
-| B3 | 0 | 0 | 0 | 19 | 0 | 0 |
-| B4 | 0 | 0 | 0 | 19 | 0 | 0 |
-| G1 | 19 | 0 | 0 | 0 | 0 | 0 |
-| G2 | 0 | 0 | 0 | 19 | 0 | 0 |
-| G3 | 16 | 0 | 3 | 0 | 0 | 0 |
-| G4 | 0 | 18 | 1 | 0 | 0 | 0 |
-| G5 | 11 | 0 | 7 | 0 | 0 | 1 |
-| G6 | 0 | 0 | 0 | 0 | 0 | 19 |
-| G7 | 0 | 0 | 0 | 0 | 0 | 19 |
+| B1 | 2 | 0 | 20 | 0 | 0 | 0 |
+| B2 | 0 | 0 | 0 | 22 | 0 | 0 |
+| B3 | 0 | 0 | 0 | 22 | 0 | 0 |
+| B4 | 0 | 0 | 0 | 22 | 0 | 0 |
+| G1 | 22 | 0 | 0 | 0 | 0 | 0 |
+| G2 | 0 | 0 | 0 | 22 | 0 | 0 |
+| G3 | 19 | 0 | 3 | 0 | 0 | 0 |
+| G4 | 0 | 21 | 1 | 0 | 0 | 0 |
+| G5 | 14 | 0 | 7 | 0 | 0 | 1 |
+| G6 | 0 | 0 | 0 | 0 | 0 | 22 |
+| G7 | 0 | 0 | 0 | 0 | 0 | 22 |
 
 **insurer**
 
 | Criterion | pass | partial | fail | n/a | n/m | gap |
 |---|---|---|---|---|---|---|
-| B1 | 4 | 0 | 17 | 0 | 1 | 1 |
-| B2 | 0 | 0 | 0 | 23 | 0 | 0 |
-| B3 | 0 | 0 | 0 | 23 | 0 | 0 |
-| B4 | 0 | 0 | 0 | 23 | 0 | 0 |
-| G1 | 23 | 0 | 0 | 0 | 0 | 0 |
-| G2 | 0 | 0 | 0 | 23 | 0 | 0 |
-| G3 | 16 | 0 | 7 | 0 | 0 | 0 |
-| G4 | 0 | 21 | 2 | 0 | 0 | 0 |
-| G5 | 17 | 0 | 3 | 0 | 2 | 1 |
-| G6 | 0 | 0 | 0 | 0 | 0 | 23 |
-| G7 | 0 | 0 | 0 | 0 | 0 | 23 |
+| B1 | 2 | 0 | 15 | 0 | 0 | 0 |
+| B2 | 0 | 0 | 0 | 17 | 0 | 0 |
+| B3 | 0 | 0 | 0 | 17 | 0 | 0 |
+| B4 | 0 | 0 | 0 | 17 | 0 | 0 |
+| G1 | 17 | 0 | 0 | 0 | 0 | 0 |
+| G2 | 0 | 0 | 0 | 17 | 0 | 0 |
+| G3 | 11 | 0 | 6 | 0 | 0 | 0 |
+| G4 | 0 | 15 | 2 | 0 | 0 | 0 |
+| G5 | 12 | 0 | 3 | 0 | 2 | 0 |
+| G6 | 0 | 0 | 0 | 0 | 0 | 17 |
+| G7 | 0 | 0 | 0 | 0 | 0 | 17 |
 
 **other**
 
 | Criterion | pass | partial | fail | n/a | n/m | gap |
 |---|---|---|---|---|---|---|
-| B1 | 155 | 0 | 142 | 0 | 54 | 45 |
-| B2 | 170 | 0 | 169 | 0 | 0 | 57 |
-| B3 | 162 | 0 | 131 | 0 | 0 | 103 |
-| B4 | 239 | 0 | 89 | 0 | 0 | 68 |
-| G1 | 393 | 0 | 1 | 0 | 0 | 2 |
-| G2 | 41 | 0 | 290 | 0 | 0 | 65 |
-| G3 | 249 | 0 | 146 | 0 | 0 | 1 |
-| G4 | 0 | 216 | 177 | 0 | 0 | 3 |
-| G5 | 229 | 0 | 90 | 0 | 24 | 53 |
-| G6 | 0 | 0 | 0 | 0 | 0 | 396 |
-| G7 | 0 | 0 | 0 | 0 | 0 | 396 |
+| B1 | 157 | 0 | 143 | 0 | 56 | 48 |
+| B2 | 171 | 0 | 174 | 0 | 0 | 59 |
+| B3 | 166 | 0 | 132 | 0 | 0 | 106 |
+| B4 | 244 | 0 | 90 | 0 | 0 | 70 |
+| G1 | 401 | 0 | 1 | 0 | 0 | 2 |
+| G2 | 41 | 0 | 298 | 0 | 0 | 65 |
+| G3 | 251 | 0 | 152 | 0 | 0 | 1 |
+| G4 | 0 | 220 | 180 | 0 | 0 | 4 |
+| G5 | 232 | 0 | 90 | 0 | 26 | 56 |
+| G6 | 0 | 0 | 0 | 0 | 0 | 404 |
+| G7 | 0 | 0 | 0 | 0 | 0 | 404 |
 
 **reit**
 
@@ -103,39 +106,40 @@ Companies per class: bank 19, insurer 23, other 396, reit 28, utility 31.
 
 | Criterion | pass | partial | fail | n/a | n/m | gap |
 |---|---|---|---|---|---|---|
-| B1 | 0 | 0 | 27 | 0 | 1 | 3 |
-| B2 | 1 | 0 | 29 | 0 | 0 | 1 |
-| B3 | 20 | 0 | 7 | 0 | 0 | 4 |
-| B4 | 1 | 0 | 17 | 0 | 0 | 13 |
-| G1 | 31 | 0 | 0 | 0 | 0 | 0 |
-| G2 | 26 | 0 | 4 | 0 | 0 | 1 |
-| G3 | 17 | 0 | 14 | 0 | 0 | 0 |
-| G4 | 0 | 26 | 5 | 0 | 0 | 0 |
-| G5 | 17 | 0 | 7 | 0 | 4 | 3 |
-| G6 | 0 | 0 | 0 | 0 | 0 | 31 |
-| G7 | 0 | 0 | 0 | 0 | 0 | 31 |
+| B1 | 0 | 0 | 26 | 0 | 0 | 1 |
+| B2 | 0 | 0 | 27 | 0 | 0 | 0 |
+| B3 | 20 | 0 | 6 | 0 | 0 | 1 |
+| B4 | 0 | 0 | 16 | 0 | 0 | 11 |
+| G1 | 27 | 0 | 0 | 0 | 0 | 0 |
+| G2 | 25 | 0 | 2 | 0 | 0 | 0 |
+| G3 | 17 | 0 | 10 | 0 | 0 | 0 |
+| G4 | 0 | 26 | 1 | 0 | 0 | 0 |
+| G5 | 17 | 0 | 7 | 0 | 2 | 1 |
+| G6 | 0 | 0 | 0 | 0 | 0 | 27 |
+| G7 | 0 | 0 | 0 | 0 | 0 | 27 |
 
 ## Data gaps
 
-G6 and G7 are data gaps for all 497 companies (no price). Other criteria that ended as data gaps, by reason:
+G6 and G7 are data gaps for all 498 companies (no price). Other criteria that ended as data gaps, by reason:
 
 | Criterion | Reason | Companies |
 |---|---|---|
 | B3 | missing: operating_income [..] | 76 |
-| B2 | missing: long_term_debt [..] | 64 |
+| B2 | missing: long_term_debt [..] | 65 |
 | G5 | missing: eps_diluted [..] | 63 |
-| B4 | missing: capex [..] | 51 |
-| G2 | missing: long_term_debt [..] | 43 |
+| B4 | missing: capex [..] | 52 |
+| G2 | missing: long_term_debt [..] | 44 |
 | B3 | missing: operating_income [..]; revenue [..] | 43 |
 | B4 | missing: net_income [..]; depreciation_amortization [..]; capex [..] | 40 |
 | B1 | missing: net_income [..]; stockholders_equity [..] | 39 |
-| G2 | missing: current_assets [..]; current_liabilities [..] | 25 |
+| G2 | missing: current_assets [..]; current_liabilities [..] | 23 |
 | G2 | missing: current_assets [..]; current_liabilities [..]; long_term_debt [..] | 21 |
 | B1 | missing: stockholders_equity [..] | 11 |
-| B4 | missing: depreciation_amortization [..] | 6 |
+| B4 | missing: depreciation_amortization [..] | 5 |
 | G4 | net_income missing inside the record: [..] | 4 |
 | B4 | missing: depreciation_amortization [..]; capex [..] | 4 |
 | G1 | no revenue for # | 3 |
+| G4 | dividend data missing for # # # # | 1 |
 | B3 | missing: revenue [..] | 1 |
 | G3 | net_income missing inside the record: [..] | 1 |
 | B1 | missing: net_income [..] | 1 |
@@ -147,7 +151,7 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 |---|---|---|
 | dividends_per_share | no listed concept reported | 96 |
 | dividends_paid | no listed concept reported | 81 |
-| operating_income | no listed concept reported | 79 |
+| operating_income | no listed concept reported | 80 |
 | current_assets | no listed concept reported | 78 |
 | current_liabilities | no listed concept reported | 78 |
 | capex | no listed concept reported | 39 |
@@ -174,8 +178,8 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | Measure | Note (numbers blanked) | Occurrences |
 |---|---|---|
 | depreciation_amortization | #-#-#: depreciation_amortization DepreciationDepletionAndAmortization=#e+# used; Depreciation=#e+# differs by more than #% | 2632 |
-| stockholders_equity | #-#-#: stockholders_equity StockholdersEquity=#e+# used; StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest=#e+# differs by more than #% | 1985 |
-| net_income | #-#-#: net_income NetIncomeLoss=#e+# used; ProfitLoss=#e+# differs by more than #% | 1967 |
+| stockholders_equity | #-#-#: stockholders_equity StockholdersEquity=#e+# used; StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest=#e+# differs by more than #% | 2003 |
+| net_income | #-#-#: net_income NetIncomeLoss=#e+# used; ProfitLoss=#e+# differs by more than #% | 1984 |
 | long_term_debt | #-#-#: long_term_debt LongTermDebtNoncurrent=#e+# used; LongTermDebt=#e+# differs by more than #% | 1707 |
 | depreciation_amortization | #-#-#: depreciation_amortization DepreciationDepletionAndAmortization=#e+# used; Depreciation+AmortizationOfIntangibleAssets=#e+# differs by more than #% | 1127 |
 | net_income | #-#-#: net_income NetIncomeLoss=#e+# used; NetIncomeLossAvailableToCommonStockholdersBasic=#e+# differs by more than #% | 920 |
@@ -184,18 +188,18 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | depreciation_amortization | #-#-#: depreciation_amortization DepreciationDepletionAndAmortization=#e+# used; DepreciationAndAmortization=#e+# differs by more than #% | 506 |
 | long_term_debt | #-#-#: long_term_debt LongTermDebtAndCapitalLeaseObligations=#e+# used; LongTermDebt=#e+# differs by more than #% | 452 |
 | depreciation_amortization | #-#-#: depreciation_amortization uses Depreciation alone, excludes amortisation (understates D&A) | 306 |
-| revenue | #-#-#: revenue Revenues=#e+# used; RevenueFromContractWithCustomerExcludingAssessedTax=#e+# differs by more than #% | 295 |
+| revenue | #-#-#: revenue Revenues=#e+# used; RevenueFromContractWithCustomerExcludingAssessedTax=#e+# differs by more than #% | 300 |
 | net_income | #-#-#: net_income ProfitLoss=#e+# used; NetIncomeLossAvailableToCommonStockholdersBasic=#e+# differs by more than #% | 293 |
 | revenue | #-#-#: revenue Revenues=#e+# used; SalesRevenueGoodsNet=#e+# differs by more than #% | 287 |
 | capex | #-#-#: capex PaymentsToAcquirePropertyPlantAndEquipment=#e+# used; PaymentsToAcquireProductiveAssets=#e+# differs by more than #% | 277 |
 
 ## Anomalies that smell like mapping bugs
 
-### G4 fails although a dividend was paid in at least 13 of the years on record (33)
+### G4 fails although a dividend was paid in at least 13 of the years on record (35)
 
 | ticker | class | years_on_record | unpaid_years | dividends per share in those years |
 |---|---|---|---|---|
-| AIG | insurer | 15 | [2011, 2012] | {'2011': None, '2012': 0.0} |
+| AIG | insurer | 15 | [2012] | {'2012': 0.0} |
 | EQT | other | 15 | [2021] | {'2021': 0.0} |
 | FRT | reit | 15 | [2011] | {'2011': None} |
 | INTC | other | 15 | [2025] | {'2025': 0.0} |
@@ -206,10 +210,11 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | COO | other | 15 | [2024, 2025] | {'2024': 0.0, '2025': 0.0} |
 | PHM | other | 15 | [2011, 2012] | {'2011': 0.0, '2012': 0.0} |
 | GEN | other | 15 | [2012, 2013] | {'2012': None, '2013': 0.0} |
-| AES | utility | 15 | [2011] | {'2011': 0.0} |
+| HCA | other | 15 | [2017] | {'2017': 0.0} |
+| AES | other | 15 | [2011] | {'2011': 0.0} |
 | RMD | other | 15 | [2012] | {'2012': None} |
 | NTAP | other | 15 | [2012, 2013] | {'2012': 0.0, '2013': 0.0} |
-| NRG | utility | 15 | [2011] | {'2011': 0.0} |
+| NRG | other | 15 | [2011] | {'2011': 0.0} |
 | RL | other | 15 | [2021] | {'2021': 0.0} |
 | NVDA | other | 15 | [2012] | {'2012': 0.0} |
 | MAR | other | 15 | [2021] | {'2021': 0.0} |
@@ -217,10 +222,9 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | A | other | 15 | [2011] | {'2011': 0.0} |
 | TPR | other | 15 | [2021] | {'2021': 0.0} |
 | NDAQ | other | 15 | [2011] | {'2011': None} |
-| MPWR | other | 15 | [2011, 2013] | {'2011': None, '2013': None} |
+| MPWR | other | 15 | [2011] | {'2011': None} |
 | DPZ | other | 15 | [2011] | {'2011': None} |
-| LDOS | other | 15 | [2011, 2012] | {'2011': None, '2012': 0.0} |
-| … 8 more |  |  |  | |
+| … 10 more |  |  |  | |
 
 ### Revenue jumps of more than 3x year on year (30 companies)
 
@@ -236,7 +240,7 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 | INCY | other | 2010: 18.34x; 2012: 3.14x |
 | RCL | other | 2020: 0.2x; 2022: 5.77x |
 | CPT | reit | 2017: 0.01x |
-| ERIE | insurer | 2013: 0.24x |
+| ERIE | other | 2013: 0.24x |
 | HST | reit | 2020: 0.3x |
 | WYNN | other | 2020: 0.32x |
 | TMUS | other | 2011: 5.07x |
@@ -259,7 +263,7 @@ Whole-measure gaps in the normalised data (measure missing for the company), mos
 |---|---|---|
 | BAC | bank | 2009: -0.29 vs 6,276,000,000 |
 | COHR | other | 2025: -0.52 vs 49,364,000 |
-| MS | other | 2009: -0.77 vs 1,346,000,000; 2012: -0.02 vs 68,000,000 |
+| MS | bank | 2009: -0.77 vs 1,346,000,000; 2012: -0.02 vs 68,000,000 |
 | PLD | reit | 2009: -0.01 vs 22,773,000 |
 | EXPE | other | 2021: -1.8 vs 12,000,000 |
 | LYV | other | 2016: -0.23 vs 2,942,000; 2018: -0.09 vs 60,249,000; 2019: -0.02 vs 69,889,000; 2025: -0.24 vs 495,972,000 |

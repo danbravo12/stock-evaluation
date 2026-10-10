@@ -11,7 +11,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from engine.score.common import load_sector_rules, resolve_sector, sector_class  # noqa: E402
+from engine.score.common import load_sector_rules, resolve_sector, sector_class, sector_notes  # noqa: E402
 from engine.settings import REPO_ROOT  # noqa: E402
 from engine.universe import UNIVERSE_DIR, load_universe  # noqa: E402
 
@@ -19,9 +19,9 @@ OUT = REPO_ROOT / "docs" / "sector_class_review.md"
 WHY_OTHER = {
     "Asset Management & Custody Banks": "asset manager: fee income, not a lender, so no bank exception (the three custody banks are overridden to bank). Funds consolidated by KKR, Apollo, Blackstone and Ares make their balance sheets unlike an industrial's.",
     "Financial Exchanges & Data": "exchange or data business: a conventional income statement; clearing balances inflate some balance sheets (CME, ICE, Nasdaq, Cboe).",
-    "Investment Banking & Brokerage": "broker-dealer: no classified balance sheet, leverage is the business (Goldman Sachs, Morgan Stanley, Schwab, Raymond James); closer to banks than to industrials. DECISION for Daniel.",
+    "Investment Banking & Brokerage": "broker-dealer left as other: Goldman Sachs, Morgan Stanley and Schwab are overridden to bank (Daniel, 2026-10-11); the others (Raymond James, Interactive Brokers, Robinhood) were not part of that decision.",
     "Transaction & Payment Processing Services": "payment processor: conventional statements (Visa, Mastercard, PayPal); American Express is Consumer Finance and so a bank here.",
-    "Multi-Sector Holdings": "diversified holding company (Berkshire Hathaway, SIC insurer): insurance is one segment among railroads, utilities and manufacturing. DECISION for Daniel.",
+    "Multi-Sector Holdings": "Berkshire Hathaway: stays other, with a note that its figures mix insurance and industrial balance sheets (Daniel, 2026-10-11).",
 }
 
 
@@ -53,13 +53,14 @@ def main() -> int:
     L += ["", f"## Financials left as \"other\" ({len(fin)})", "", "| Symbol | Company | GICS sub-industry | Reason |", "|---|---|---|---|"]
     for r, code, desc, old, new, basis, why in sorted(fin, key=lambda x: (x[0].gics_sub_industry, x[0].symbol)):
         L.append(f"| {r.symbol} | {r.security} | {r.gics_sub_industry} | {WHY_OTHER.get(r.gics_sub_industry, 'no rule for this sub-industry')} |")
-    qs = [x for x in rows if x[0].gics_sub_industry in ("Insurance Brokers", "Independent Power Producers & Energy Traders", "Real Estate Services")]
-    L += ["", f"## Mapped by the proposal but worth a second look ({len(qs)})", "",
-          "Insurance brokers (Marsh McLennan, Aon…) are insurers here because GICS groups them with insurance, but they are service firms with conventional statements; independent power "
-          "producers (Vistra, NRG) are unregulated and get the lenient utility G2 variant; real estate services (CBRE, CoStar) are not REITs and stay other.", "",
-          "| Symbol | Company | GICS sub-industry | Class |", "|---|---|---|---|"]
+    qs = [x for x in rows if x[0].gics_sub_industry in ("Insurance Brokers", "Independent Power Producers & Energy Traders", "Real Estate Services") or x[0].symbol in ("VST", "CEG", "BRK-B", "GS", "MS", "SCHW")]
+    L += ["", f"## Decided by Daniel on 2026-10-11 ({len(qs)})", "",
+          "Insurance brokers (Marsh McLennan, Aon…) are **other** with the note \"Insurance broker: holds client fiduciary funds, which depress the current ratio; it does not carry underwriting risk.\" "
+          "Independent power producers are **other** with the note \"Not rate-regulated, so Graham's utility variant does not apply.\" GICS files Vistra and Constellation under Electric Utilities, "
+          "so they are overridden by CIK. Real estate services (CBRE, CoStar) are not REITs and stay other. Goldman Sachs, Morgan Stanley and Schwab are banks; Berkshire Hathaway is other with its own note.", "",
+          "| Symbol | Company | GICS sub-industry | Class | Note |", "|---|---|---|---|---|"]
     for r, code, desc, old, new, basis, why in sorted(qs, key=lambda x: (x[0].gics_sub_industry, x[0].symbol)):
-        L.append(f"| {r.symbol} | {r.security} | {r.gics_sub_industry} | {new} |")
+        L.append(f"| {r.symbol} | {r.security} | {r.gics_sub_industry} | {new} | {'; '.join(sector_notes(new, rules, gics_sub_industry=r.gics_sub_industry, cik=r.cik))} |")
     unmapped = [x for x in rows if "no exception rule" in x[5]]
     L += ["", f"## Companies with no exception rule for their GICS sub-industry ({len(unmapped)}; ordinary companies, SIC is not consulted)", ""]
     for key, n in sorted(Counter(x[0].gics_sub_industry for x in unmapped if x[0].gics_sector in ("Financials", "Utilities", "Real Estate")).items()):

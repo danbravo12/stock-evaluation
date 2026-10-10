@@ -211,6 +211,8 @@ def normalise(companyfacts: dict, submissions: dict, concept_map: dict, provenan
 
 def normalise_from_store(client, cik: str, concept_map: dict | None = None) -> NormalisedFacts:
     """Convenience wrapper: read a company through an EdgarClient (replay mode in tests)."""
-    facts, submissions = client.companyfacts(cik), client.submissions(cik)  # fetch first: in live mode the store is empty until then
-    stored = client.store.get(f"edgar/{cik10(cik)}/companyfacts.json")
+    facts = client.companyfacts(cik)  # fetch first: in live mode the store is empty until then
+    source = cik10(facts.get("cik", cik))  # a registrant successor is read through its predecessor (ADR-063): the facts name the CIK they belong to
+    submissions = client.submissions(source)
+    stored = client.store.get(f"edgar/{source}/companyfacts.json")
     return normalise(facts, submissions, concept_map or load_concept_map(), {"fetched_at": stored.fetched_at, "sha256": stored.sha256})

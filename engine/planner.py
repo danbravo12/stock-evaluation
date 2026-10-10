@@ -31,5 +31,5 @@ def plan_for(ticker: str, universe: Universe, sic: str | int | None = None, rule
         notes.append("G2 uses the utility variant: long-term debt <= 2x equity (ADR-013)")
     applicable = [i for i in GRAHAM + BUFFETT_QUANT if i not in na_ids]
     skipped = [SkippedStep(step="price", reason=PRICE_GAP), SkippedStep(step="criteria G6, G7", reason="need a price (Finnhub not yet integrated)")]
-    return RunPlan(ticker=t, cik=row.cik, name=row.security, gics_sector=row.gics_sector, sector_class=sector, sector_basis=basis, sector_notes=sector_notes(sector, rules), in_scope=True,
+    return RunPlan(ticker=t, cik=row.cik, name=row.security, gics_sector=row.gics_sector, sector_class=sector, sector_basis=basis, sector_notes=sector_notes(sector, rules, gics_sub_industry=row.gics_sub_industry, cik=row.cik), in_scope=True,
                    universe_snapshot=universe.snapshot_date, steps=list(STEPS), skipped=skipped, applicable=applicable, not_applicable=na, notes=notes)
