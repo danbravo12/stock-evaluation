@@ -1,0 +1,7 @@
+{
+  "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045609.json",
+  "fetched_at": "2026-10-10T12:45:08+00:00",
+  "sha256": "42b1e16ac75fb70de369040e3e511da28ae2ad9bbe32c9c6bcd4affa074e55d1",
+  "bytes": 3564170,
+  "content_type": "application/json"
+}

@@ -5,11 +5,12 @@ import copy
 import json
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 from pydantic import ValidationError
 
-from engine.agents.qualitative import MAX_SPAN_WORDS, SYSTEM_PROMPT, assess_qualitative, check_citations, constrained_retry, load_criteria, render_passage
+from engine.agents.qualitative import MAX_SPAN_WORDS, SYSTEM_PROMPT, SYSTEM_PROMPT_V2, TOOLS, prompt_parts, assess_qualitative, check_citations, constrained_retry, load_criteria, render_passage
 from engine.contracts import QUAL_CRITERIA, QualFinding
 from engine.llm.budget import BudgetExceeded, QuotaReached
 from engine.llm.client import LLMClient, LLMFixtureMissing
@@ -286,6 +287,38 @@ class TestPointerCitations(AgentCase):
         pid, _ = self.loc(BIZ_A)
         f = self.run_agent(reply(submit((pid, 99), verdict="insufficient evidence", rationale="Nothing relevant.")))
         self.assertEqual((f.verdict, f.stop_reason, f.citations, f.llm_calls), ("insufficient evidence", "submitted", [], 1))
+
+
+class TestWordCapPromptV2(AgentCase):
+    """ADR-046 amendment: a citation is a contiguous range of at most 120 words, not at most 3 sentences. Inactive until the re-record."""
+
+    def v2(self):
+        return mock.patch("engine.agents.qualitative.active_prompt", lambda name: "v2")
+
+    def test_the_recorded_prompt_version_is_the_default(self):
+        from engine.prompts import active
+        self.assertEqual(active("qualitative"), "v1")
+        self.assertEqual(prompt_parts()[3], 3)
+
+    def test_v2_accepts_a_long_range_that_v1_refuses_and_still_caps_the_words(self):
+        pid, _ = self.loc(BIZ_A)
+        with self.v2():
+            f = self.run_agent(reply(submit((pid, 1, 4))))  # four sentences of passage 1
+            self.assertEqual((f.stop_reason, f.llm_calls, f.citations[0].sentences), ("submitted", 1, [1, 4]))
+            sent = self.request(0)
+            self.assertEqual(sent["messages"][0]["content"], SYSTEM_PROMPT_V2)
+            self.assertIn("up to 120 words", json.dumps(sent["tools"]))
+            self.assertNotIn("at most first + 2", json.dumps(sent["tools"]))
+            idx = self.retriever().index(1)
+            big = next(p for p in idx.passages if p.words > 150)
+            ok, problems = check_citations([{"passage_id": big.passage_id, "first": 1, "last": len(big.sentences)}], {big.passage_id: big}, idx.text, None)
+            self.assertEqual(ok, [])
+            self.assertIn("words; the limit is 120", problems[0])
+
+    def test_v1_prompt_and_tools_are_unchanged(self):
+        self.assertIn("at most 3 consecutive sentences", SYSTEM_PROMPT)
+        self.assertNotIn("at most 3 consecutive sentences", SYSTEM_PROMPT_V2)
+        self.assertIn("at most first + 2", json.dumps(TOOLS))
 
 
 class TestConstrainedRetry(AgentCase):

@@ -71,8 +71,8 @@
     },
     "dividends_per_share": {
       "unit": "USD/shares", "period": "duration",
-      "concepts": ["us-gaap:CommonStockDividendsPerShareDeclared", "us-gaap:CommonStockDividendsPerShareCashPaid"],
-      "_notes": "Declared first; KO only reports CashPaid."
+      "concepts": ["us-gaap:CommonStockDividendsPerShareCashPaid", "us-gaap:CommonStockDividendsPerShareDeclared"],
+      "_notes": "CashPaid first, Declared as the per-year fallback (ADR-060). G4 asks whether a dividend was PAID. Prologis tags a small amount ($0.00 to $0.03 a year) as Declared and the real dividend ($1.76 to $4.04) as CashPaid, so Declared-first made G4 fail in 5 years in which it paid. KO reports only CashPaid."
     },
     "diluted_shares": {
       "unit": "shares", "period": "duration",

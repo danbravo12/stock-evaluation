@@ -21,6 +21,11 @@
     "avg_first_3y": "usd_billions",
     "avg_last_3y": "usd_billions",
     "years_positive": "count",
-    "years_with_depreciation_only": "years"
+    "years_with_depreciation_only": "years",
+    "loss_year_count": "count",
+    "profit_year_count": "count",
+    "unpaid_year_count": "count",
+    "paid_year_count": "count",
+    "depreciation_only_year_count": "count"
   }
 }

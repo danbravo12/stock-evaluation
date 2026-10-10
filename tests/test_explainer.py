@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import unittest
+from unittest import mock
 
 from engine.agents import explainer
 from engine.agents.explainer import _Item, _Out, explain, format_value, load_formats, render, templated_line, usable_keys
@@ -50,6 +51,38 @@ class TestExplainer(unittest.TestCase):
         self.assertIn("$42.12 billion", out)
         self.assertIn(r.threshold, out)
         self.assertIn("{made_up}", out)
+
+    def test_count_placeholders_render_numbers_not_empty_lists(self):
+        g3 = self.result("KO", "G3")
+        self.assertEqual(g3.figures["loss_years"], [])
+        out = render("With {loss_year_count} loss years and {profit_year_count} profitable ones of {years_on_record}; list: {loss_years}.", g3)
+        self.assertEqual(out, "With 0 loss years and 10 profitable ones of 10; list: none.")
+        tsla = self.result("TSLA", "G3")
+        self.assertEqual(render("{loss_year_count} loss years: {loss_years}", tsla), f"{len(tsla.figures['loss_years'])} loss years: " + ", ".join(str(y) for y in tsla.figures["loss_years"]))
+        g4 = self.result("KO", "G4")  # a partial pass has no unpaid_years figure at all
+        self.assertNotIn("unpaid_years", g4.figures)
+        self.assertEqual(render("{paid_year_count} of {years_on_record} paid, {unpaid_year_count} missed", g4), "15 of 15 paid, 0 missed")
+        g4f = self.result("TSLA", "G4")
+        self.assertEqual(render("{paid_year_count}+{unpaid_year_count}={years_on_record}", g4f).count("+"), 1)
+        b4 = self.result("KO", "B4")
+        self.assertEqual(render("{depreciation_only_year_count}", b4), "0")
+        self.assertIn("loss_year_count", usable_keys(g3))
+
+    def test_every_derived_key_has_a_format_and_none_collides_with_a_real_figure(self):
+        formats = load_formats()
+        derived = {"loss_year_count", "profit_year_count", "unpaid_year_count", "paid_year_count", "depreciation_only_year_count"}
+        self.assertTrue(derived <= set(formats))
+        self.assertEqual({formats[k] for k in derived}, {"count"})
+        self.assertEqual(derived & {k for s in self.scores.values() for r in s.results for k in r.figures}, set())
+
+    def test_the_v2_prompt_teaches_counts_and_is_not_active_until_the_re_record(self):
+        from engine.prompts import active
+        self.assertEqual(active("explainer"), "v1")  # fixtures were recorded with v1
+        self.assertEqual(explainer.system_prompt(), explainer.SYSTEM_PROMPT)
+        self.assertIn("{loss_year_count}", explainer.SYSTEM_PROMPT_V2)
+        self.assertNotIn("{loss_year_count}", explainer.SYSTEM_PROMPT)
+        with mock.patch.object(explainer, "active_prompt", lambda name: "v2"):
+            self.assertEqual(explainer.system_prompt(), explainer.SYSTEM_PROMPT_V2)
 
     def test_none_figures_are_not_offered_as_placeholders(self):
         r = self.result("TSLA", "G5")

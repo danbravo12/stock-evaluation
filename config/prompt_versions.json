@@ -1,0 +1,5 @@
+{
+  "_notes": "Which prompt text each LLM agent uses (ADR-046 amendment, ADR-048). Fixtures in fixtures/llm/ were recorded with v1. v2 is written and tested but must NOT be activated until the agents are re-recorded (a different prompt is a different request hash, so replays would fail). To activate: set the value to v2, run scripts/qualitative_report.py record and scripts/review_report.py record, prune orphans, update the gold agent_verdicts, and delete pending_rerecord.",
+  "active": {"qualitative": "v1", "explainer": "v1"},
+  "pending_rerecord": ["qualitative: citations capped by words (120) instead of 3 sentences", "explainer: count placeholders in the examples"]
+}

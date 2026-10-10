@@ -13,11 +13,13 @@ errors propagate so the batch stops and resumes from the ledger (ADR-044).
 """
 from __future__ import annotations
 
+import copy
 import json
 from dataclasses import dataclass, field
 
 from engine.contracts import (QUAL_CRITERIA, Citation, LLMCall, Passage, QualFinding, QualFindings, QualTotals, SearchHit,
                               SearchRecord, Usage)
+from engine.prompts import active as active_prompt
 from engine.retrieve import FilingIndex, Retriever
 from engine.settings import REPO_ROOT
 from engine.trace import TraceRecorder
@@ -74,6 +76,19 @@ TOOLS = [
 ]
 SUBMIT_ONLY = [TOOLS[2]]
 
+# v2 (ADR-046 amendment): a citation is a contiguous range of at most 120 words, not at most 3 sentences, because the segmenter over-splits
+# bullets and table rows. Written and tested, but inactive until the agent is re-recorded (config/prompt_versions.json).
+SYSTEM_PROMPT_V2 = SYSTEM_PROMPT.replace("(inclusive, at most 3 consecutive sentences, at most 120 words)", "(inclusive; a contiguous range of at most 120 words in total)")
+TOOLS_V2 = copy.deepcopy(TOOLS)
+TOOLS_V2[2]["function"]["parameters"]["properties"]["citations"]["items"]["properties"]["last"]["description"] = "Number of the last cited sentence (inclusive; the range may be as long as you need up to 120 words)."
+SUBMIT_ONLY_V2 = [TOOLS_V2[2]]
+
+
+def prompt_parts(version: str | None = None) -> tuple[str, list, list, int | None]:
+    """(system prompt, tools, submit-only tools, max sentences per citation) for the active prompt version."""
+    v = version or active_prompt("qualitative")
+    return (SYSTEM_PROMPT_V2, TOOLS_V2, SUBMIT_ONLY_V2, None) if v == "v2" else (SYSTEM_PROMPT, TOOLS, SUBMIT_ONLY, MAX_SPAN_SENTENCES)
+
 
 def load_criteria() -> dict:
     return json.loads(SEARCH_TERMS_PATH.read_text(encoding="utf-8"))["criteria"]
@@ -87,11 +102,11 @@ def render_passage(p: Passage, document: str) -> str:
     return "\n".join(lines)
 
 
-def check_citations(raw: list[dict], retrieved: dict[str, Passage], document: str) -> tuple[list[Citation], list[str]]:
+def check_citations(raw: list[dict], retrieved: dict[str, Passage], document: str, max_sentences: int | None = MAX_SPAN_SENTENCES) -> tuple[list[Citation], list[str]]:
     """Turn {passage_id, first, last} pointers into Citations, or say what is wrong with each bad one.
 
     The quote is `document[start of first sentence:end of last sentence]`, so it matches the document by construction.
-    Accepted only for a passage retrieved in this loop, first <= last within the passage, at most 3 sentences, at most 120 words.
+    Accepted only for a passage retrieved in this loop, first <= last within the passage, at most 120 words (and, in prompt v1, at most 3 sentences).
     """
     ok, problems = [], []
     for c in raw:
@@ -104,8 +119,8 @@ def check_citations(raw: list[dict], retrieved: dict[str, Passage], document: st
             problems.append(f"{label}: first and last must be whole sentence numbers")
         elif not 1 <= first <= last <= len(p.sentences):
             problems.append(f"{label}: sentence numbers must satisfy 1 <= first <= last <= {len(p.sentences)} for this passage")
-        elif last - first + 1 > MAX_SPAN_SENTENCES:
-            problems.append(f"{label}: at most {MAX_SPAN_SENTENCES} consecutive sentences (last - first <= {MAX_SPAN_SENTENCES - 1})")
+        elif max_sentences is not None and last - first + 1 > max_sentences:
+            problems.append(f"{label}: at most {max_sentences} consecutive sentences (last - first <= {max_sentences - 1})")
         else:
             a, b = p.sentences[first - 1][0], p.sentences[last - 1][1]
             if len(document[a:b].split()) > MAX_SPAN_WORDS:
@@ -140,6 +155,7 @@ class _CriterionLoop:
     def __init__(self, name: str, spec: dict, cik: str, ticker: str, retriever: Retriever, idx: FilingIndex, accession: str,
                  llm, trace: TraceRecorder, max_turns: int, constraint: "RetryConstraint | None" = None):
         self.name, self.spec, self.cik, self.ticker = name, spec, cik, ticker
+        self.system_prompt, self.tools, self.submit_only, self.max_sentences = prompt_parts()
         self.constraint = constraint  # set for a Critic-routed constrained retry (ADR-052)
         self.retriever, self.idx, self.accession, self.llm, self.trace = retriever, idx, accession, llm, trace
         self.max_turns, self.agent = max_turns, f"qualitative/{name}"
@@ -185,7 +201,7 @@ class _CriterionLoop:
                 if c.passage_id not in shown:
                     shown.add(c.passage_id)
                     extra += "\n" + render_passage(p, self.idx.text) + "\n"
-        messages = [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": self._first_message(hits, missing) + extra}]
+        messages = [{"role": "system", "content": self.system_prompt}, {"role": "user", "content": self._first_message(hits, missing) + extra}]
         limit, notes, extended = self.max_turns, [], False
         turn = 0
         while turn < limit:
@@ -197,7 +213,7 @@ class _CriterionLoop:
             if notes:
                 messages.append({"role": "user", "content": " ".join(notes)})
                 notes = []
-            call = self.llm.chat(messages, tools=SUBMIT_ONLY if last else TOOLS, temperature=0.0, company=self.ticker, agent=self.agent)
+            call = self.llm.chat(messages, tools=self.submit_only if last else self.tools, temperature=0.0, company=self.ticker, agent=self.agent)
             self.run.calls.append(call)
             messages.append(call.message)  # unchanged: Gemini thought signatures live in extra_content
             if not call.tool_calls:
@@ -320,7 +336,7 @@ class _CriterionLoop:
             raise _BadArgs("give at most 2 citations")
         if verdict != "insufficient evidence" and not raw:
             raise _BadArgs(f"verdict {verdict!r} needs 1 or 2 citations")
-        citations, problems = check_citations(raw, self.run.retrieved, self.idx.text)
+        citations, problems = check_citations(raw, self.run.retrieved, self.idx.text, self.max_sentences)
         outcome = ("rejected: " + " | ".join(problems)) if problems else ("verified: " + "; ".join(
             f"{c.passage_id} sentences {c.sentences[0]}-{c.sentences[1]} [{c.char_start}:{c.char_end}] \"{c.quote[:80]}\"" for c in citations)
             if citations else "no citations to check")
