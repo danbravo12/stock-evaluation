@@ -5,6 +5,7 @@
     python -m engine.cli batch --universe --numeric-only   # the whole index, scores only, live SEC data, no model
     python -m engine.cli rankings                           # site_data/rankings.json from results/scores/ (no model, no network)
     python -m engine.cli publish [--serve]                  # build site/ from site_src/, site_data/ and results/ (Finnhub gate, banned phrases, link checks)
+    python -m engine.cli deploy [--dry-run]                 # build, run every gate and the secret scan, then push site/ to the gh-pages branch (never without a remote)
     python -m engine.cli status
     python -m engine.cli schema
 """
@@ -52,6 +53,8 @@ def main(argv: list[str] | None = None) -> int:
     pb.add_argument("--serve", action="store_true", help="then serve it locally with http.server")
     pb.add_argument("--port", type=int, default=8000)
     pb.add_argument("--out", default=None)
+    dp = sub.add_parser("deploy", help="publish site/ to the gh-pages branch of the origin remote (ADR-068)")
+    dp.add_argument("--dry-run", action="store_true", help="build, check and scan, then print what would be pushed")
     sub.add_parser("status")
     sub.add_parser("schema", help="write schema/result.schema.json and schema/rankings.schema.json")
     r = sub.add_parser("rankings", help="build site_data/rankings.json: criteria ranking from the numeric scores (ADR-062)")
@@ -63,6 +66,17 @@ def main(argv: list[str] | None = None) -> int:
         print("wrote", export_schema().relative_to(REPO_ROOT), "and", export_rankings_schema().relative_to(REPO_ROOT))
         return 0
     settings = Settings.from_env()
+    if a.cmd == "deploy":
+        from engine.deploy import DeployRefused, deploy, summary
+        try:
+            rep = deploy(settings=settings, dry_run=a.dry_run)
+        except DeployRefused as e:
+            print("REFUSED:", e)
+            return 4
+        print(summary(rep, SITE_OUT))
+        if not a.dry_run:
+            print(f"Pushed to {rep.remote}, branch gh-pages.")
+        return 0
     if a.cmd == "publish":
         out = Path(a.out) if a.out else SITE_OUT
         m = build_site(out, settings=settings)

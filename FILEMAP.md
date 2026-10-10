@@ -32,7 +32,7 @@ StockEvaluation/
 |---|---|---|
 | `README.md` | Front door for a stranger: what the tool is, the not-financial-advice disclaimer, how to run tests and record fixtures. Will grow into the full README for v1. | Built (stub) |
 | `STATUS.md` | Where the project is: done, waiting on, next steps, notes for the next build step, milestone summaries. | Built |
-| `DECISIONS.md` | ADR log: every key decision with context, decision and trade-off (ADR-001 to ADR-066). | Built |
+| `DECISIONS.md` | ADR log: every key decision with context, decision and trade-off (ADR-001 to ADR-068). | Built |
 | `PROCESS.md` | The research workflow being automated: inputs, steps, decision points, criteria tables (G1–G7, B1–B4, four qualitative Buffett criteria), failure handling. | Built |
 | `ARCHITECTURE.md` | System view, agent hand-off sequence, component catalogue, run economics. | Built |
 | `FILEMAP.md` | This file. | Built |
@@ -44,6 +44,8 @@ StockEvaluation/
 | `.env.example` | Template listing every setting the tool reads from the environment (`SEC_USER_AGENT`, `FINNHUB_API_KEY`, `GEMINI_API_KEY`), with empty values. Safe to commit. | Built |
 | `.env` | Your real values. Read by `engine/settings.py`. **Never committed** (git-ignored, checked with `git check-ignore`). | Local only |
 | `requirements.txt` | Exact pinned dependency list (Pydantic 2.13.5, ADR-029). Install with `pip install -r requirements.txt` in `.venv`. | Built |
+| `LICENSE` | MIT, copyright Daniel Bravo. | Built |
+| `config/secret_scan_allow.json` | Regexes the secret scan ignores (empty; each entry needs a stated reason). | Built |
 | `.gitignore` | Keeps `.env`, `data/cache/`, Python caches and `.DS_Store` out of git. | Built |
 | `config/concept_map.json` | Per measure: unit, period type, ordered XBRL concepts (with explicit derived sums) and a short reason. Read by the normaliser; reviewable without reading code (ADR-028). | Built |
 | `config/sector_rules.json` | Sector class by GICS sub-industry with per-CIK overrides, each with a reason and an optional `note` that travels with the results; SIC ranges only for tickers outside the snapshot (ADR-057, amended 2026-10-11). | Built |
@@ -92,6 +94,8 @@ The engine is a library, so the batch command, the tests and the future live app
 | `engine/batch.py` | `CompanyLedger` (`data/ledger/companies.json`), `run_batch` (resumable, stops cleanly on quota or cap), `run_numeric_batch` (numeric-only; own ledger `numeric.json`; a crash is a failed row), `progress_markdown` (ADR-056, ADR-059). | Built |
 | `engine/cli.py` | `python -m engine.cli analyse | batch | rankings | status | schema`. | Built |
 | `engine/successors.py` | Registrant successors and companies without a 10-K: `load_successors`, `has_annual_report`, `NoAnnualReport`, the message "No annual report (10-K) filed yet; listed since <date>." (ADR-063). | Built |
+| `engine/deploy.py` | `deploy`: build, every gate, secret scan, then the `gh-pages` push through a git worktree; `--dry-run` prints what would be pushed; refuses without a remote or on any finding (ADR-068). | Built |
+| `engine/secrets_scan.py` | Secret scan over files and over every blob and commit message of the git history (gzip unpacked), key shapes plus the exact values of `.env`, redacted findings (ADR-068). | Built |
 | `engine/trace_render.py` | `render_trace` (events → numbered plain-language steps, groups, hand-offs, running totals) and `critic_notes` (the Critic's checks, the agent's work and the cost as sentences), `plural`, `money` (ADR-067). | Built |
 | `engine/publish.py` | `build_site`: builds the git-ignored `site/` from `site_src/`, `site_data/` and `results/` (reduced score files, results, traces as arrays, cited passages, documents, manifest); Finnhub gate, banned phrases and SEC-link checks fail the build; `serve` (ADR-065). | Built |
 | `engine/rankings.py` | Rankings builder: `build_rankings(universe, scores_dir, results_dir)` → `Rankings` (criteria ranking with the decided ≥ 6 threshold and exact tie-breaks, insufficient-data group, empty analyst section, excluded companies), `write_rankings` (round-trip validation and the Finnhub gate), `export_rankings_schema` (ADR-062). | Built |
@@ -159,6 +163,7 @@ The engine is a library, so the batch command, the tests and the future live app
 | `tests/test_revenue_guard.py` | Component guard logic and recorded General Mills, Fifth Third, Goldman Sachs (ADR-061). | Built |
 | `tests/test_decisions.py` | Financial classes and notes, G4 unknown years (synthetic and Federal Realty's recorded facts), Exxon successor (true accessions, note, evidence in the successor's own history), `no_annual_report` in the numeric batch and the full path (ADR-057, ADR-012, ADR-063). | Built |
 | `tests/test_coverage.py` | Validated derived difference (same filing and period, overlap proof, forward only), Boston Properties, Public Storage, Chevron and Ford on recorded facts, Camden lease revenue, capex concepts stay totals (ADR-064). | Built |
+| `tests/test_deploy.py` | Scanner patterns and redaction, history scan (deleted secret, gzip fixture, commit message, `.env` value, this repository clean), dry run, planted secret / gate / broken link refuse, push to a local bare remote (ADR-068). | Built |
 | `tests/test_trace_render.py` | Every event of the 5 recorded traces renders; no raw JSON or key=value text; titles, hand-offs, group summaries, running totals, Critic sentences, plurals, display names (ADR-067). | Built |
 | `tests/test_site.py` | Publish output deterministic, disclaimer on every page, planted Finnhub field / banned word / non-SEC link fail the build, links and data paths resolve, JSON validates against the schemas, no third-party requests, no `innerHTML` from data, index size (ADR-065). | Built |
 | `tests/test_rankings.py` | Score maths, threshold, exact ties, exclusions, caveat, analyst section, Finnhub gate, schema, determinism, CLI, and checks of the committed `site_data/rankings.json` (ADR-062). | Built |

@@ -193,6 +193,8 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
         missing = [p for p in PAGES if not (tmp / p).exists()]
         if missing:
             raise LinkError(f"pages missing from site_src: {missing}")
+        (tmp / ".nojekyll").write_text("", encoding="utf-8")  # GitHub Pages must not process the folder with Jekyll
+        check_site(tmp)
         if out.exists():
             shutil.rmtree(out)
         tmp.rename(out)
@@ -200,6 +202,30 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
     except BaseException:
         shutil.rmtree(tmp, ignore_errors=True)
         raise
+
+
+def check_site(out: Path) -> None:
+    """Checks on a finished site folder: every JSON file is valid, the rankings and the results satisfy their schemas, and every internal link and data path resolves."""
+    import jsonschema
+    from engine.rankings import SCHEMA_PATH as RANKINGS_SCHEMA
+    from engine.report import SCHEMA_PATH as RESULT_SCHEMA
+    out = Path(out)
+    for p in out.rglob("*.json"):
+        json.loads(p.read_text(encoding="utf-8"))
+    jsonschema.validate(json.loads((out / "data/rankings.json").read_text(encoding="utf-8")), json.loads(RANKINGS_SCHEMA.read_text(encoding="utf-8")))
+    schema = json.loads(RESULT_SCHEMA.read_text(encoding="utf-8"))
+    for p in sorted((out / "data/results").glob("*.json")):
+        if p.name.count(".") == 1:
+            jsonschema.validate(json.loads(p.read_text(encoding="utf-8")), schema)
+    for page in sorted(out.glob("*.html")):
+        for ref in re.findall(r'(?:href|src)="([^"]+)"', page.read_text(encoding="utf-8")):
+            if not ref.startswith(("http", "#", "mailto:", "data:")) and not (out / ref.split("#")[0].split("?")[0]).exists():
+                raise LinkError(f"{page.name}: {ref} does not exist in the built site")
+    for js in sorted((out / "assets/js").glob("*.js")):
+        text = js.read_text(encoding="utf-8")
+        for ref in set(re.findall(r'["`](data/[A-Za-z0-9_./-]+\.json)["`]', text)) | set(re.findall(r'["`]((?:index|company|trace|how-it-works|doc)\.html)', text)):
+            if not (out / ref).exists():
+                raise LinkError(f"{js.name}: {ref} does not exist in the built site")
 
 
 def serve(directory: Path = SITE_OUT, port: int = 8000) -> None:
