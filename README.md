@@ -39,6 +39,9 @@ Usage and spend are counted in `data/ledger/usage.json` (daily quota resets at m
     .venv/bin/python -m engine.cli analyse KO                    # one company, offline (replay), writes results/0000021344.json and its trace
     .venv/bin/python -m engine.cli analyse MET --mode live       # live: SEC + Gemini free tier (needs SEC_USER_AGENT and GEMINI_API_KEY in .env)
     .venv/bin/python -m engine.cli batch --universe --limit 40   # resumable; stops cleanly at the daily quota, run it again after midnight Pacific
+    .venv/bin/python -m engine.cli batch --universe --numeric-only   # all 500 companies, scores only: live SEC data into the cache, no model, no 10-K (about 5 minutes the first time)
+    .venv/bin/python scripts/universe_scorecard_report.py        # docs/universe_scorecard_report.md from results/scores/
+    .venv/bin/python -m eval.universe_counts                     # compare with the frozen label counts
     .venv/bin/python -m engine.cli status                        # writes PROGRESS.md
     .venv/bin/python -m engine.cli schema                        # writes schema/result.schema.json
     .venv/bin/python scripts/snapshot_universe.py                # S&P 500 snapshot (once, a quarter)

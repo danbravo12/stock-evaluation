@@ -119,13 +119,26 @@ def _candidates(companyfacts: dict, spec: dict, fye_mmdd: str) -> list[tuple[str
     return result
 
 
-def _pick_per_year(measure: str, candidates: list[tuple[str | None, dict[date, AnnualValue]]]) -> tuple[list[AnnualValue], list[str]]:
-    """Per fiscal year, take the first concept in priority order that has a value."""
+def _pick_per_year(measure: str, candidates: list[tuple[str | None, dict[date, AnnualValue]]], spec: dict | None = None) -> tuple[list[AnnualValue], list[str]]:
+    """Per fiscal year, take the first concept in priority order that has a value.
+
+    If the spec has `component_guard` (a fraction, ADR-061), a candidate worth less than that fraction of the largest candidate for the same year is
+    treated as a component (a segment, or fee income only), not the total, and skipped; the note says so.
+    """
+    guard = (spec or {}).get("component_guard")
     values, notes = [], []
     for end in sorted(set().union(*(c for _, c in candidates))):
         have = [(note, c[end]) for note, c in candidates if end in c]
+        skipped = []
+        if guard and len(have) > 1:
+            biggest = max(v.value for _, v in have)
+            keep = [(n, v) for n, v in have if v.value >= guard * biggest]
+            skipped = [v for _, v in have if v.value < guard * biggest]
+            have = keep or have
         (note, chosen), others = have[0], [v for _, v in have[1:]]
         values.append(chosen)
+        for v in skipped:
+            notes.append(f"{end}: {measure} {v.concept}={v.value:g} skipped: below {guard:.0%} of the largest candidate for the year, so a component, not the total")
         if note:
             notes.append(f"{end}: {measure} uses {chosen.concept} alone, {note}")
         for other in others:
@@ -173,7 +186,7 @@ def normalise(companyfacts: dict, submissions: dict, concept_map: dict, provenan
     measures = concept_map["measures"]
     picked = {}
     for measure, spec in measures.items():
-        picked[measure] = _pick_per_year(measure, _candidates(companyfacts, spec, fye))
+        picked[measure] = _pick_per_year(measure, _candidates(companyfacts, spec, fye), spec)
 
     years = _fiscal_years([values for values, _ in picked.values()])
     series = {}

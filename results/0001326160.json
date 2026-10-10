@@ -1,9 +1,9 @@
 {
- "schema_version": "1.0",
+ "schema_version": "1.1",
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "DUK-replay",
-  "engine_commit": "cda8af5",
+  "engine_commit": "ed8c529",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "replay",
   "generated_at": null,
@@ -40,6 +40,8 @@
     "reason": "need a price (Finnhub not yet integrated)"
    }
   ],
+  "sector_basis": "gics:Electric Utilities",
+  "sector_notes": [],
   "applicable": [
    "G1",
    "G2",
@@ -1669,7 +1671,8 @@
     "source_url": "https://www.sec.gov/Archives/edgar/data/1326160/000132616026000014/",
     "flags": []
    }
-  ]
+  ],
+  "sector_notes": []
  },
  "qualitative": [
   {

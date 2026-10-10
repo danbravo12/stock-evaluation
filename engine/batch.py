@@ -137,3 +137,40 @@ def progress_markdown(ledger: CompanyLedger, universe: Universe, config: dict | 
     if by["warning"]:
         L += ["", "## Done with warnings", ""] + [f"- {r['ticker']}: {r['warnings']} warning(s)" for r in sorted(by["warning"], key=lambda r: r["ticker"])]
     return "\n".join(L) + "\n"
+
+
+def run_numeric_batch(symbols: list[str], *, universe: Universe, ledger: CompanyLedger, edgar, scores_dir: Path, limit: int | None = None, force: bool = False,
+                      score_fn=None, out: Callable[[str], None] = print, now: Callable[[], datetime] | None = None) -> BatchOutcome:
+    """The numeric-only path (ADR-059): score each company without a 10-K or a model. A company that raises becomes a failed ledger row with the
+    exception text; the batch always continues. Resumable like `run_batch`, on its own ledger so numeric rows never mark a company as fully analysed."""
+    from engine.numeric import score_numeric, write_numeric
+    score_fn = score_fn or score_numeric
+    outcome = BatchOutcome()
+    attempted = 0
+    for sym in symbols:
+        row = universe.row_for(sym)
+        key = row.cik if row else sym
+        if not force and ledger.status_of(key) == "done":
+            outcome.skipped.append(sym)
+            continue
+        if limit is not None and attempted >= limit:
+            break
+        attempted += 1
+        stamp = (now() if now else datetime.now(timezone.utc)).replace(microsecond=0).isoformat()
+        try:
+            result = score_fn(sym, edgar=edgar, universe=universe)
+            write_numeric(result, scores_dir)
+            ledger.upsert(key, {"ticker": result["ticker"], "cik": key, "status": "done", "model": None, "mode": "numeric", "calls": 0, "input_tokens": 0, "output_tokens": 0,
+                                "actual_cost_usd": 0.0, "notional_cost_usd": 0.0, "warnings": 0, "message": "", "finished_at": stamp})
+            outcome.done.append(sym)
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as e:  # one company must never stop the run
+            msg = f"{type(e).__name__}: {str(e)[:300]}"
+            ledger.upsert(key, {"ticker": sym, "cik": key, "status": "failed", "model": None, "mode": "numeric", "calls": 0, "input_tokens": 0, "output_tokens": 0,
+                                "actual_cost_usd": 0.0, "notional_cost_usd": 0.0, "warnings": 0, "message": msg, "finished_at": stamp})
+            out(f"{sym}: FAILED {msg}")
+            outcome.done.append(sym)
+        if len(outcome.done) % 25 == 0:
+            out(f"{len(outcome.done)} companies processed")
+    return outcome

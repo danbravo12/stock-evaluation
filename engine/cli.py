@@ -2,15 +2,20 @@
 
     python -m engine.cli analyse KO [--mode replay|live|record]
     python -m engine.cli batch [--tickers KO JPM | --universe] [--limit N] [--force] [--mode ...]
+    python -m engine.cli batch --universe --numeric-only   # the whole index, scores only, live SEC data, no model
     python -m engine.cli status
     python -m engine.cli schema
 """
 from __future__ import annotations
 
 import argparse
+import dataclasses
+import json
 import sys
+import time
+from pathlib import Path
 
-from engine.batch import CompanyLedger, progress_markdown, run_batch
+from engine.batch import CompanyLedger, progress_markdown, run_batch, run_numeric_batch
 from engine.fetch.edgar import EdgarClient
 from engine.llm.budget import BudgetExceeded, QuotaReached
 from engine.orchestrator import analyse
@@ -30,7 +35,7 @@ def main(argv: list[str] | None = None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     for name in ("analyse", "batch"):
         p = sub.add_parser(name)
-        p.add_argument("--mode", choices=["replay", "live", "record"], default="replay")
+        p.add_argument("--mode", choices=["replay", "live", "record"], default=None, help="default replay; live with --numeric-only")
         p.add_argument("--results-dir", default=None)
     sub.choices["analyse"].add_argument("ticker")
     b = sub.choices["batch"]
@@ -38,6 +43,7 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--universe", action="store_true", help="every company in the latest snapshot (one per CIK)")
     b.add_argument("--limit", type=int)
     b.add_argument("--force", action="store_true")
+    b.add_argument("--numeric-only", action="store_true", help="fetch live, normalise and score only: no 10-K download, no model (ADR-059)")
     sub.add_parser("status")
     sub.add_parser("schema", help="write schema/result.schema.json")
     a = ap.parse_args(argv)
@@ -46,7 +52,12 @@ def main(argv: list[str] | None = None) -> int:
         print("wrote", export_schema().relative_to(REPO_ROOT))
         return 0
     settings = Settings.from_env()
-    edgar = EdgarClient("replay" if getattr(a, "mode", "replay") == "replay" else a.mode, settings) if a.cmd != "status" else EdgarClient("replay", settings)
+    if a.cmd in ("analyse", "batch"):
+        a.mode = a.mode or ("live" if getattr(a, "numeric_only", False) else "replay")
+    if getattr(a, "numeric_only", False):
+        # EDGAR fair access: a declared User-Agent and at most ~6 requests a second
+        settings = dataclasses.replace(settings, sec_min_interval_s=max(settings.sec_min_interval_s, 0.17))
+    edgar = EdgarClient(a.mode, settings) if a.cmd in ("analyse", "batch") else EdgarClient("replay", settings)
     universe = load_universe(sec_tickers=edgar.company_tickers())
 
     if a.cmd == "status":
@@ -70,6 +81,22 @@ def main(argv: list[str] | None = None) -> int:
     if not symbols:
         print("Give --tickers or --universe.")
         return 2
+    if a.numeric_only:
+        if a.mode == "replay":
+            print("--numeric-only reads live SEC data into the cache; use --mode live (the default).")
+            return 2
+        ledger = CompanyLedger(settings.ledger_path.with_name("numeric.json"))
+        scores_dir = (Path(results_dir) if results_dir else settings.results_dir) / "scores"
+        t0 = time.time()
+        outcome = run_numeric_batch(symbols, universe=universe, ledger=ledger, edgar=edgar, scores_dir=scores_dir, limit=a.limit, force=a.force)
+        elapsed = time.time() - t0
+        rows = ledger.rows.values()
+        summary = {"processed_this_run": len(outcome.done), "skipped": len(outcome.skipped), "seconds_this_run": round(elapsed, 1), "edgar_requests_this_run": edgar.requests_made,
+                   "done": sum(r["status"] == "done" for r in rows), "failed": sum(r["status"] == "failed" for r in rows)}
+        scores_dir.mkdir(parents=True, exist_ok=True)
+        (scores_dir / "_run.json").write_text(json.dumps(summary, indent=1) + "\n", encoding="utf-8")
+        print(f"numeric batch: {summary}")
+        return 0
     ledger = ledger_for(settings)
     outcome = run_batch(symbols, mode=a.mode, settings=settings, universe=universe, ledger=ledger, limit=a.limit, force=a.force, edgar=edgar, results_dir=results_dir)
     PROGRESS_PATH.write_text(progress_markdown(ledger, universe), encoding="utf-8")

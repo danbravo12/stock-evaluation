@@ -150,7 +150,7 @@ def analyse(ticker: str, *, mode: str = "replay", settings: Settings | None = No
 
             bundle = run("fetch", fetch)
             outputs["bundle"] = bundle
-            score: ScoreSet | None = run("score", lambda: score_company(bundle.facts, symbol, sic, load_sector_rules(), None))
+            score: ScoreSet | None = run("score", lambda: score_company(bundle.facts, symbol, sic, load_sector_rules(), None, sector=plan.sector_class))
             qual = run("qualitative", lambda: assess_qualitative(cik, symbol, outputs["retriever"], llm, trace))
             review = run("explain_and_verify", lambda: explain_and_verify(score, qual, retriever=outputs["retriever"], llm=llm, trace=trace))
             outputs.update(score=score, qual=qual, review=review)

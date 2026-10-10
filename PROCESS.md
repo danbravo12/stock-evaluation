@@ -84,6 +84,8 @@ flowchart TD
 | G6 | Moderate P/E | Price ≤ 15× avg EPS of last 3 years | Needs price (Finnhub). |
 | G7 | Price vs assets | P/E × P/B ≤ 22.5 | Needs price (Finnhub). |
 
+**Sector classes (ADR-057, ADR-058).** The class that drives the exceptions comes from the company's GICS sub-industry (per-CIK overrides for custody banks), with SIC as the fallback for tickers outside the S&P 500 snapshot: bank and insurer (G2 and B2 to B4 not applicable), utility (G2 variant), reit and other. **REITs are flagged, not exempted:** all rules apply unchanged and each REIT result carries the note "REIT: structurally debt-funded and required to distribute most taxable income; B1/B2 results reflect that structure."
+
 **Buffett — quantitative (4, Python).** Buffett published principles, not numbers; these are documented interpretations.
 
 | # | Criterion | Rule | Notes |

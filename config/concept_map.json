@@ -9,9 +9,12 @@
         "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax",
         "us-gaap:SalesRevenueNet",
         "us-gaap:RegulatedAndUnregulatedOperatingRevenue",
-        "us-gaap:SalesRevenueGoodsNet"
+        "us-gaap:SalesRevenueGoodsNet",
+        "us-gaap:RevenuesNetOfInterestExpense",
+        {"sum": ["us-gaap:InterestIncomeExpenseNet", "us-gaap:NoninterestIncome"], "note": "bank net revenue: net interest income plus noninterest income (ADR-061)"}
       ],
-      "_notes": "Companies switch tags over time (GOOGL, TSLA, DUK). Banks tag total net revenue as Revenues (JPM). SalesRevenueGoodsNet is last so it only fills years nothing else covers (KO 2007-2017)."
+      "component_guard": 0.5,
+      "_notes": "component_guard 0.5 (ADR-061): a candidate worth less than half of the largest candidate for the same year is a component (General Mills' `Revenues` was $2.0B against $19B total in 2019-2024, Hershey's $1.5B, Camden's fee line $0.01B), so it is skipped. Companies switch tags over time (GOOGL, TSLA, DUK). Banks tag total net revenue as Revenues (JPM). SalesRevenueGoodsNet is last so it only fills years nothing else covers (KO 2007-2017)."
     },
     "net_income": {
       "unit": "USD", "period": "duration",
@@ -72,7 +75,8 @@
     "dividends_per_share": {
       "unit": "USD/shares", "period": "duration",
       "concepts": ["us-gaap:CommonStockDividendsPerShareCashPaid", "us-gaap:CommonStockDividendsPerShareDeclared"],
-      "_notes": "CashPaid first, Declared as the per-year fallback (ADR-060). G4 asks whether a dividend was PAID. Prologis tags a small amount ($0.00 to $0.03 a year) as Declared and the real dividend ($1.76 to $4.04) as CashPaid, so Declared-first made G4 fail in 5 years in which it paid. KO reports only CashPaid."
+      "component_guard": 0.5,
+      "_notes": "CashPaid first, Declared as the per-year fallback (ADR-060). G4 asks whether a dividend was PAID. Prologis tags a small amount ($0.00 to $0.03 a year) as Declared and the real dividend ($1.76 to $4.04) as CashPaid, so Declared-first made G4 fail in 5 years in which it paid. KO reports only CashPaid. component_guard 0.5: if one of the two is below half of the other for a year it is a partial figure (Prologis' Declared $0.01 against $1.76 paid; Trane's CashPaid $0 against $1.40 declared in 2017-2018) and is skipped."
     },
     "diluted_shares": {
       "unit": "shares", "period": "duration",

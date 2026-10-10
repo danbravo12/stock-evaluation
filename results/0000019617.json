@@ -1,9 +1,9 @@
 {
- "schema_version": "1.0",
+ "schema_version": "1.1",
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "JPM-replay",
-  "engine_commit": "cda8af5",
+  "engine_commit": "ed8c529",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "replay",
   "generated_at": null,
@@ -40,6 +40,8 @@
     "reason": "need a price (Finnhub not yet integrated)"
    }
   ],
+  "sector_basis": "gics:Diversified Banks",
+  "sector_notes": [],
   "applicable": [
    "G1",
    "G3",
@@ -610,7 +612,7 @@
     "fiscal_year_end": "2011-12-31",
     "value": 1.0,
     "unit": "USD/shares",
-    "concept": "CommonStockDividendsPerShareDeclared",
+    "concept": "CommonStockDividendsPerShareCashPaid",
     "accession": "0000019617-14-000289",
     "source_url": "https://www.sec.gov/Archives/edgar/data/19617/000001961714000289/",
     "flags": []
@@ -621,7 +623,7 @@
     "fiscal_year_end": "2012-12-31",
     "value": 1.2,
     "unit": "USD/shares",
-    "concept": "CommonStockDividendsPerShareDeclared",
+    "concept": "CommonStockDividendsPerShareCashPaid",
     "accession": "0000019617-15-000272",
     "source_url": "https://www.sec.gov/Archives/edgar/data/19617/000001961715000272/",
     "flags": []
@@ -632,7 +634,7 @@
     "fiscal_year_end": "2013-12-31",
     "value": 1.44,
     "unit": "USD/shares",
-    "concept": "CommonStockDividendsPerShareDeclared",
+    "concept": "CommonStockDividendsPerShareCashPaid",
     "accession": "0000019617-16-000902",
     "source_url": "https://www.sec.gov/Archives/edgar/data/19617/000001961716000902/",
     "flags": []
@@ -643,7 +645,7 @@
     "fiscal_year_end": "2014-12-31",
     "value": 1.58,
     "unit": "USD/shares",
-    "concept": "CommonStockDividendsPerShareDeclared",
+    "concept": "CommonStockDividendsPerShareCashPaid",
     "accession": "0000019617-17-000314",
     "source_url": "https://www.sec.gov/Archives/edgar/data/19617/000001961717000314/",
     "flags": []
@@ -654,7 +656,7 @@
     "fiscal_year_end": "2015-12-31",
     "value": 1.72,
     "unit": "USD/shares",
-    "concept": "CommonStockDividendsPerShareDeclared",
+    "concept": "CommonStockDividendsPerShareCashPaid",
     "accession": "0000019617-18-000057",
     "source_url": "https://www.sec.gov/Archives/edgar/data/19617/000001961718000057/",
     "flags": []
@@ -665,9 +667,9 @@
     "fiscal_year_end": "2016-12-31",
     "value": 1.88,
     "unit": "USD/shares",
-    "concept": "CommonStockDividendsPerShareDeclared",
-    "accession": "0000019617-19-000054",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/19617/000001961719000054/",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000019617-18-000057",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/19617/000001961718000057/",
     "flags": []
    },
    {
@@ -676,9 +678,9 @@
     "fiscal_year_end": "2017-12-31",
     "value": 2.12,
     "unit": "USD/shares",
-    "concept": "CommonStockDividendsPerShareDeclared",
-    "accession": "0000019617-20-000257",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/19617/000001961720000257/",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000019617-18-000057",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/19617/000001961718000057/",
     "flags": []
    },
    {
@@ -1077,7 +1079,8 @@
     "source_url": "https://www.sec.gov/Archives/edgar/data/19617/000162828026008131/",
     "flags": []
    }
-  ]
+  ],
+  "sector_notes": []
  },
  "qualitative": [
   {
@@ -1968,18 +1971,6 @@
   },
   {
    "kind": "sec_filing",
-   "label": "Filing used for dividends_per_share 2016",
-   "url": "https://www.sec.gov/Archives/edgar/data/19617/000001961719000054/",
-   "as_of": null
-  },
-  {
-   "kind": "sec_filing",
-   "label": "Filing used for dividends_per_share 2017",
-   "url": "https://www.sec.gov/Archives/edgar/data/19617/000001961720000257/",
-   "as_of": null
-  },
-  {
-   "kind": "sec_filing",
    "label": "Filing used for dividends_per_share 2018",
    "url": "https://www.sec.gov/Archives/edgar/data/19617/000001961721000236/",
    "as_of": null
@@ -2012,6 +2003,18 @@
    "kind": "sec_filing",
    "label": "Filing used for dividends_per_share 2023",
    "url": "https://www.sec.gov/Archives/edgar/data/19617/000162828026008131/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for eps_diluted 2016",
+   "url": "https://www.sec.gov/Archives/edgar/data/19617/000001961719000054/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for eps_diluted 2017",
+   "url": "https://www.sec.gov/Archives/edgar/data/19617/000001961720000257/",
    "as_of": null
   }
  ],

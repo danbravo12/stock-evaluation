@@ -1,7 +1,7 @@
 # File Map
 
 What every file in this repo is for, and where planned files will go.
-Updated 2026-10-09 · after the orchestrator and CLI commit. **Rule:** update this file in the same commit as any file you add, move or delete.
+Updated 2026-10-09 · after the GICS sector classes and numeric run commit. **Rule:** update this file in the same commit as any file you add, move or delete.
 
 Status: **Built** = exists and tested · **Planned** = designed in `ARCHITECTURE.md`, not yet created.
 
@@ -32,7 +32,7 @@ StockEvaluation/
 |---|---|---|
 | `README.md` | Front door for a stranger: what the tool is, the not-financial-advice disclaimer, how to run tests and record fixtures. Will grow into the full README for v1. | Built (stub) |
 | `STATUS.md` | Where the project is: done, waiting on, next steps, notes for the next build step, milestone summaries. | Built |
-| `DECISIONS.md` | ADR log: every key decision with context, decision and trade-off (ADR-001 to ADR-056). | Built |
+| `DECISIONS.md` | ADR log: every key decision with context, decision and trade-off (ADR-001 to ADR-061). | Built |
 | `PROCESS.md` | The research workflow being automated: inputs, steps, decision points, criteria tables (G1–G7, B1–B4, four qualitative Buffett criteria), failure handling. | Built |
 | `ARCHITECTURE.md` | System view, agent hand-off sequence, component catalogue, run economics. | Built |
 | `FILEMAP.md` | This file. | Built |
@@ -87,7 +87,8 @@ The engine is a library, so the batch command, the tests and the future live app
 | `engine/planner.py` | `plan_for(ticker, universe, sic)`: scope check, sector class, which criteria apply or are not applicable (ADR-013), planned gaps (price), steps; out-of-scope tickers get a plan only (ADR-018). | Built |
 | `engine/orchestrator.py` | `analyse(ticker, mode=...)`: plan → fetch → score → qualitative → explain and verify → report for one company; timed and traced; failing steps degrade, dependants skip with a reason; quota, budget and missing-fixture errors propagate (ADR-055). | Built |
 | `engine/report.py` | `Result` (schema 1.0) and its parts, `write_result` (round-trip validation, Finnhub publish gate, `results/<CIK>.json`), `export_schema`, `cost_from_trace` (ADR-054). | Built |
-| `engine/batch.py` | `CompanyLedger` (`data/ledger/companies.json`), `run_batch` (resumable, stops cleanly on quota or cap), `progress_markdown` (ADR-056). | Built |
+| `engine/numeric.py` | `score_numeric(symbol, edgar=, universe=)`: fetch, normalise, split-adjust, classify and score one company with no 10-K and no model, plus `diagnose` (gaps, notes, split factors, restatements, plausibility flags) and `write_numeric` (ADR-059). | Built |
+| `engine/batch.py` | `CompanyLedger` (`data/ledger/companies.json`), `run_batch` (resumable, stops cleanly on quota or cap), `run_numeric_batch` (numeric-only; own ledger `numeric.json`; a crash is a failed row), `progress_markdown` (ADR-056, ADR-059). | Built |
 | `engine/cli.py` | `python -m engine.cli analyse | batch | status | schema`. | Built |
 | `engine/agents/__init__.py` | Package for the LLM agents. | Built |
 | `engine/agents/qualitative.py` | The Buffett qualitative agent: `assess_qualitative(cik, ticker, retriever, llm, trace)` runs one tool loop per criterion (seeded search, `search` / `get_passage` / `submit_finding`, 4-turn cap). Passages are shown as numbered sentences and cited by pointer; code builds the quote and exact offsets; "not assessed" is assigned from the stop reason (ADR-041 to ADR-047). | Built |
@@ -104,6 +105,8 @@ The engine is a library, so the batch command, the tests and the future live app
 | `scripts/sections_report.py` | Extracts sections from the 5 fixtures and writes `docs/sections_report.md` (status, opening text, top passages per criterion). | Built |
 | `scripts/qualitative_report.py` | Runs the qualitative agent on the 5 test tickers and writes `docs/qualitative_report.md`. `record` (live, free tier only, refuses in paid mode) or `replay` (offline, identical report); optional ticker arguments. Also writes the trace and the list of fixture hashes used (git-ignored, under `data/cache/trace/`). | Built |
 | `scripts/snapshot_universe.py` | Fetches the Wikipedia constituents table once (MediaWiki API), records the raw response in `fixtures/universe/`, writes `data/universe/sp500_<date>.csv`, validates it. `--offline` re-parses the recording. | Built |
+| `scripts/sector_class_report.py` | Offline: writes `docs/sector_class_review.md`, every company whose class changes against SIC and every financial left "other", with reasons (ADR-057). | Built |
+| `scripts/universe_scorecard_report.py` | Reads `results/scores/` and writes `docs/universe_scorecard_report.md`: run size, label distribution by criterion and class, data gaps, notes, anomaly lists. | Built |
 | `scripts/universe_report.py` | `--fetch-sic` (live, once) records each company's SIC code to `data/universe/sic_<date>.csv`; writes `docs/universe_report.md`: SIC against GICS sector classes. | Built |
 | `scripts/review_report.py` | Runs Explainer + Critic on the 5 tickers against the recorded qualitative run, injects 3 faults into the model check, and writes `docs/critic_report.md` (explanations, every check, retries, gold-set table, Critic scorecard, cost). `record` (free tier only) or `replay` (offline, identical). | Built |
 | `scripts/qualitative_variability.py` | Runs the 5 tickers N extra times live with the response store bypassed (`use_store=False`), compares with the recorded run and writes `docs/qualitative_variability.md`. Free tier only; stops if today's ledger count would pass 400. | Built |
@@ -117,6 +120,8 @@ The engine is a library, so the batch command, the tests and the future live app
 | `docs/scorecard_report.md` | Summary table and, per company, every criterion's result, figures, threshold, years, flags and source filings. | Built |
 | `docs/sections_report.md` | Per company and item: status, method, length, opening text; then the top 3 passages per qualitative criterion. Preview of what the agent sees. | Built |
 | `docs/qualitative_report.md` | Per company and criterion: verdict, rationale, quoted text with accession, item, passage and offsets, searches made, stop reason, calls, tokens and notional cost; summary table and calls and tokens per company. Verdicts are not frozen: they are reviewed by hand. | Built |
+| `docs/universe_scorecard_report.md` | The numeric run over the index: 497 scored, label distribution per criterion and sector class, data gaps by reason, the 15 most common normaliser notes, anomaly lists (G4, revenue jumps, EPS sign, restatements, splits). | Built |
+| `docs/sector_class_review.md` | GICS against SIC: the 38 class changes and the 34 financials left "other", with reasons, for review. | Built |
 | `docs/universe_report.md` | Snapshot size, dual classes, SIC-derived against GICS-implied sector classes (12 disagreements) and the 35 financials no exception covers. | Built |
 | `docs/critic_report.md` | Per company: rendered explanations, every Critic check with attempt and detail, retries and final statuses; then the gold-set table, the Critic scorecard (caught / false alarms / agreement after retry), fault injection and cost per company. | Built |
 | `docs/qualitative_variability.md` | Per company and criterion: verdicts of the recorded run and two live repeat runs, agreement, whether the cited passage changed; overall "identical in X of 20"; calls and tokens per run. Live result, not replayable. | Built |
@@ -132,7 +137,10 @@ The engine is a library, so the batch command, the tests and the future live app
 | `tests/test_score.py` | Synthetic-series tests per criterion: edges, labels, sector exceptions, never-assume-zero, G5 negative base, B4 missing years, G6/G7 with a price. | Built |
 | `tests/test_splits.py` | Split adjustment on synthetic cases and the GOOGL, TSLA, KO and DUK fixtures. | Built |
 | `tests/test_llm.py` | 34 offline tests with a fake transport and injected clock: request hashing, record/replay, cost maths, pacing, Pacific-midnight reset, quota and caps, 429/400/5xx handling, JSON repair, tool calls, trace, key-secrecy scans. | Built |
-| `tests/test_pld_dividends.py` | Prologis' recorded facts: cash-paid dividends win over the tiny declared amounts; G4 no longer reports unpaid years (ADR-060). | Built |
+| `tests/test_pld_dividends.py` | Prologis' and Trane's recorded facts: cash-paid dividends win over tiny declared amounts, and Trane's declared dividends survive a $0 cash-paid tag; G4 correct for both (ADR-060, ADR-061). | Built |
+| `tests/test_sector_classes.py` | GICS mapping, overrides, precedence, SIC only as fallback, no REIT/insurance/utility sub-industry unmapped, REIT note and unchanged labels, numeric-only path (no model, no 10-K, crash = failed row, CLI default live). | Built |
+| `tests/test_revenue_guard.py` | Component guard logic and recorded General Mills, Fifth Third, Goldman Sachs (ADR-061). | Built |
+| `tests/test_universe_counts.py` | The frozen label counts: consistency, tolerance logic, and the local run when `results/scores/` exists. | Built |
 | `tests/test_universe.py` | Parsing, validation (count, duplicates, CIK checks, dual-class primary rule), CSV round trip, and the committed snapshot against SEC's ticker file. | Built |
 | `tests/test_orchestrator.py` | Planner rules per sector class (and agreement with the scorers), out-of-scope ticker, step degradation and skip reasons, propagating errors, trace order, two replays byte-identical, JSON Schema validation, Finnhub gate, cost by agent, resumable batch, PROGRESS text, CLI. | Built |
 | `tests/stubs.py` | `StubLLM`: a scripted model client for Explainer and Critic tests. | Built |
@@ -155,6 +163,7 @@ The engine is a library, so the batch command, the tests and the future live app
 
 | Path | Function | Status |
 |---|---|---|
+| `results/scores/<CIK>.json` | Numeric-only results of the whole index (git-ignored, local). | Built |
 | `results/<CIK>.json`, `results/<CIK>.trace.jsonl` | One `Result` (schema 1.0) and its trace per analysed company. Git-ignored except the 5 test tickers (KO, JPM, GOOGL, TSLA, DUK), committed as site sample data (ADR-054). | Built |
 | `schema/result.schema.json` | JSON Schema of `Result`, exported by `python -m engine.cli schema`; a test fails if it is stale. | Built |
 | `PROGRESS.md` | Written by `status` and after every batch: done / warnings / failed / remaining, spend, measured calls per company, projection. | Built |
@@ -172,6 +181,8 @@ Committed, so LLM-using tests replay offline. The three smoke-test calls (JSON m
 | `eval/snapshot.py` | Reduces a `ScoreSet` to label + key figures (4 significant digits); `python -m eval.snapshot` rewrites the frozen file after a reviewed change. | Built |
 | `eval/expected_qualitative.json` | Gold set for the qualitative agent: per ticker and criterion the recorded agent verdict, the human-reviewed verdict and a note (reviewer line inside). Labels judge the filing under the current rubric; changes are kept in `label_history`. 1 of 20 labels differs from the agent's verdict. | Built |
 | `eval/qualitative_agreement.py` | Replays the recorded agent run and prints agreement with the gold set (19/20) and the disagreements; `agreement()` is reused by the Critic evaluation. | Built |
+| `eval/universe_label_counts.json` | Frozen per-criterion label counts (and per sector class) of the 497-company numeric run, with the tolerance rule. | Built |
+| `eval/universe_counts.py` | `count_labels`, `compare` (tolerance max(5, 2%)) and `--freeze`; run as `python -m eval.universe_counts`. | Built |
 | `eval/expected_scores.json` | Frozen, reviewed results for the 5 test companies and 11 criteria. | Built |
 
 ## Recorded data (`fixtures/`)

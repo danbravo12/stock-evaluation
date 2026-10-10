@@ -106,6 +106,7 @@ class ScoreSet(BaseModel):
     results: list[CriterionResult]
     summary: Summary
     inputs: list[InputRef]  # every distinct input used, once
+    sector_notes: list[str] = Field(default_factory=list)  # e.g. the REIT flag (ADR-058); rules are not changed by a note
 
 
 # ---------- 10-K sections, passages and search (ADR-035 to ADR-037) ----------
@@ -362,6 +363,8 @@ class RunPlan(BaseModel):
     universe_snapshot: str | None = None
     steps: list[str] = Field(default_factory=list)
     skipped: list[SkippedStep] = Field(default_factory=list)
+    sector_basis: str | None = None  # how the class was decided: override / gics:<sub-industry> / sic:<code> (ADR-057)
+    sector_notes: list[str] = Field(default_factory=list)
     applicable: list[str] = Field(default_factory=list)  # criterion ids that will be scored
     not_applicable: list[NotApplicable] = Field(default_factory=list)  # decided by the sector rules before scoring
     notes: list[str] = Field(default_factory=list)

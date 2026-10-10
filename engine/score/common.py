@@ -63,6 +63,25 @@ def sector_class(sic: int | str | None, rules: dict) -> str:
     return rules["default"]
 
 
+def resolve_sector(rules: dict, *, sic: int | str | None = None, gics_sub_industry: str | None = None, cik: str | None = None) -> tuple[str, str, str]:
+    """(class, basis, reason): per-CIK override, then the GICS sub-industry (a company in the snapshot with no rule for it is 'other'), then SIC ranges for tickers outside the snapshot, then the default (ADR-057)."""
+    if cik and cik in rules.get("cik_overrides", {}):
+        o = rules["cik_overrides"][cik]
+        return o["class"], f"override:{o.get('name', cik)}", o["why"]
+    if gics_sub_industry and gics_sub_industry in rules.get("gics_sub_industries", {}):
+        o = rules["gics_sub_industries"][gics_sub_industry]
+        return o["class"], f"gics:{gics_sub_industry}", o["why"]
+    if gics_sub_industry:  # a company in the snapshot with no exception rule for its sub-industry is an ordinary company: SIC is not consulted (ADR-057)
+        return rules["default"], f"gics:{gics_sub_industry} (no exception rule)", "no ADR-013 exception applies to this sub-industry"
+    cls = sector_class(sic, rules)  # not in the snapshot: SIC ranges are the fallback
+    return cls, f"sic:{sic}" if sic else "default", "SIC fallback (ticker not in the snapshot)" if sic else "no classification available"
+
+
+def sector_notes(cls: str, rules: dict) -> list[str]:
+    note = rules.get("notes", {}).get(cls)
+    return [note] if note else []
+
+
 def load_sector_rules(path: Path = SECTOR_RULES_PATH) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 

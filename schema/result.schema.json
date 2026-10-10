@@ -1002,6 +1002,18 @@
      "default": null,
      "title": "Out Of Scope Reason"
     },
+    "sector_basis": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Sector Basis"
+    },
     "sector_class": {
      "anyOf": [
       {
@@ -1013,6 +1025,13 @@
      ],
      "default": null,
      "title": "Sector Class"
+    },
+    "sector_notes": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Sector Notes",
+     "type": "array"
     },
     "skipped": {
      "items": {
@@ -1075,6 +1094,13 @@
     "sector_class": {
      "title": "Sector Class",
      "type": "string"
+    },
+    "sector_notes": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Sector Notes",
+     "type": "array"
     },
     "summary": {
      "$ref": "#/$defs/Summary"
@@ -1474,7 +1500,7 @@
    "$ref": "#/$defs/RunInfo"
   },
   "schema_version": {
-   "default": "1.0",
+   "default": "1.1",
    "title": "Schema Version",
    "type": "string"
   },

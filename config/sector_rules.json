@@ -1,12 +1,225 @@
 {
-  "_notes": "Sector class from the SEC SIC code in submissions.json (ADR-033). Drives the ADR-013 exceptions. The GICS sector from the S&P 500 snapshot (ADR-014) will confirm or override this later. Ranges are inclusive [low, high].",
+  "_notes": "Sector class for the ADR-013 exceptions (ADR-057, supersedes the SIC part of ADR-033). Precedence: per-CIK override, then GICS sub-industry (from the S&P 500 snapshot; a company in the snapshot whose sub-industry has no rule here is 'other' and SIC is not consulted), then the SIC ranges below (only for tickers outside the snapshot), then the default. Classes: bank, insurer (G2 and B2-B4 not applicable), utility (G2 variant), reit (rules unchanged, flagged, ADR-058), other. Anything not listed is 'other'; docs/sector_class_review.md lists every company whose class differs from the SIC class and every financial left as 'other'.",
   "default": "other",
+  "notes": {
+    "reit": "REIT: structurally debt-funded and required to distribute most taxable income; B1/B2 results reflect that structure."
+  },
+  "gics_sub_industries": {
+    "Diversified Banks": {
+      "class": "bank",
+      "why": "Commercial banks: no classified balance sheet, operating income or capex (ADR-013)."
+    },
+    "Regional Banks": {
+      "class": "bank",
+      "why": "Commercial banks (ADR-013)."
+    },
+    "Consumer Finance": {
+      "class": "bank",
+      "why": "Lenders (Capital One, Synchrony, American Express): the balance sheet is loans funded by deposits and debt, with no classified current assets (Daniel's decision, ADR-057)."
+    },
+    "Life & Health Insurance": {
+      "class": "insurer",
+      "why": "Insurers: same reporting shape as banks (ADR-013)."
+    },
+    "Multi-line Insurance": {
+      "class": "insurer",
+      "why": "Insurers (ADR-013)."
+    },
+    "Property & Casualty Insurance": {
+      "class": "insurer",
+      "why": "Insurers (ADR-013)."
+    },
+    "Reinsurance": {
+      "class": "insurer",
+      "why": "Insurers (ADR-013)."
+    },
+    "Insurance Brokers": {
+      "class": "insurer",
+      "why": "GICS groups brokers with insurance; their statements are closer to service firms, flagged in docs/sector_class_review.md for a decision (ADR-057)."
+    },
+    "Electric Utilities": {
+      "class": "utility",
+      "why": "GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013). Independent power producers are unregulated; flagged in docs/sector_class_review.md."
+    },
+    "Gas Utilities": {
+      "class": "utility",
+      "why": "GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013). Independent power producers are unregulated; flagged in docs/sector_class_review.md."
+    },
+    "Multi-Utilities": {
+      "class": "utility",
+      "why": "GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013). Independent power producers are unregulated; flagged in docs/sector_class_review.md."
+    },
+    "Water Utilities": {
+      "class": "utility",
+      "why": "GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013). Independent power producers are unregulated; flagged in docs/sector_class_review.md."
+    },
+    "Independent Power Producers & Energy Traders": {
+      "class": "utility",
+      "why": "GICS Utilities: G2 uses Graham's utility variant, debt <= 2x equity (ADR-013). Independent power producers are unregulated; flagged in docs/sector_class_review.md."
+    },
+    "Data Center REITs": {
+      "class": "reit",
+      "why": "Equity REIT: rules unchanged, results carry a sector note (ADR-058)."
+    },
+    "Health Care REITs": {
+      "class": "reit",
+      "why": "Equity REIT: rules unchanged, results carry a sector note (ADR-058)."
+    },
+    "Hotel & Resort REITs": {
+      "class": "reit",
+      "why": "Equity REIT: rules unchanged, results carry a sector note (ADR-058)."
+    },
+    "Industrial REITs": {
+      "class": "reit",
+      "why": "Equity REIT: rules unchanged, results carry a sector note (ADR-058)."
+    },
+    "Multi-Family Residential REITs": {
+      "class": "reit",
+      "why": "Equity REIT: rules unchanged, results carry a sector note (ADR-058)."
+    },
+    "Office REITs": {
+      "class": "reit",
+      "why": "Equity REIT: rules unchanged, results carry a sector note (ADR-058)."
+    },
+    "Other Specialized REITs": {
+      "class": "reit",
+      "why": "Equity REIT: rules unchanged, results carry a sector note (ADR-058)."
+    },
+    "Retail REITs": {
+      "class": "reit",
+      "why": "Equity REIT: rules unchanged, results carry a sector note (ADR-058)."
+    },
+    "Self-Storage REITs": {
+      "class": "reit",
+      "why": "Equity REIT: rules unchanged, results carry a sector note (ADR-058)."
+    },
+    "Single-Family Residential REITs": {
+      "class": "reit",
+      "why": "Equity REIT: rules unchanged, results carry a sector note (ADR-058)."
+    },
+    "Telecom Tower REITs": {
+      "class": "reit",
+      "why": "Equity REIT: rules unchanged, results carry a sector note (ADR-058)."
+    },
+    "Timber REITs": {
+      "class": "reit",
+      "why": "Equity REIT: rules unchanged, results carry a sector note (ADR-058)."
+    }
+  },
+  "cik_overrides": {
+    "0001390777": {
+      "name": "BNY",
+      "class": "bank",
+      "why": "Custody bank: the balance sheet is deposits and loans; GICS files it under Asset Management & Custody Banks."
+    },
+    "0000093751": {
+      "name": "State Street",
+      "class": "bank",
+      "why": "Custody bank (as BNY)."
+    },
+    "0000073124": {
+      "name": "Northern Trust",
+      "class": "bank",
+      "why": "Custody bank (as BNY)."
+    }
+  },
+  "sic_fallback": {
+    "_notes": "Sector class from the SEC SIC code in submissions.json (ADR-033). Drives the ADR-013 exceptions. The GICS sector from the S&P 500 snapshot (ADR-014) will confirm or override this later. Ranges are inclusive [low, high].",
+    "rules": [
+      {
+        "class": "bank",
+        "sic_ranges": [
+          [
+            6021,
+            6022
+          ],
+          [
+            6029,
+            6029
+          ],
+          [
+            6035,
+            6036
+          ]
+        ],
+        "why": "Commercial banks and savings institutions: no classified balance sheet, operating income or capex."
+      },
+      {
+        "class": "insurer",
+        "sic_ranges": [
+          [
+            6311,
+            6411
+          ]
+        ],
+        "why": "Life, accident, health, property-casualty and title insurers, and insurance agents: same reporting shape as banks."
+      },
+      {
+        "class": "utility",
+        "sic_ranges": [
+          [
+            4911,
+            4911
+          ],
+          [
+            4931,
+            4932
+          ],
+          [
+            4991,
+            4991
+          ]
+        ],
+        "why": "Electric, combined electric-gas and cogeneration utilities: Graham's G2 variant (debt <= 2x equity)."
+      }
+    ]
+  },
   "rules": [
-    {"class": "bank", "sic_ranges": [[6021, 6022], [6029, 6029], [6035, 6036]],
-     "why": "Commercial banks and savings institutions: no classified balance sheet, operating income or capex."},
-    {"class": "insurer", "sic_ranges": [[6311, 6411]],
-     "why": "Life, accident, health, property-casualty and title insurers, and insurance agents: same reporting shape as banks."},
-    {"class": "utility", "sic_ranges": [[4911, 4911], [4931, 4932], [4991, 4991]],
-     "why": "Electric, combined electric-gas and cogeneration utilities: Graham's G2 variant (debt <= 2x equity)."}
+    {
+      "class": "bank",
+      "sic_ranges": [
+        [
+          6021,
+          6022
+        ],
+        [
+          6029,
+          6029
+        ],
+        [
+          6035,
+          6036
+        ]
+      ],
+      "why": "Commercial banks and savings institutions: no classified balance sheet, operating income or capex."
+    },
+    {
+      "class": "insurer",
+      "sic_ranges": [
+        [
+          6311,
+          6411
+        ]
+      ],
+      "why": "Life, accident, health, property-casualty and title insurers, and insurance agents: same reporting shape as banks."
+    },
+    {
+      "class": "utility",
+      "sic_ranges": [
+        [
+          4911,
+          4911
+        ],
+        [
+          4931,
+          4932
+        ],
+        [
+          4991,
+          4991
+        ]
+      ],
+      "why": "Electric, combined electric-gas and cogeneration utilities: Graham's G2 variant (debt <= 2x equity)."
+    }
   ]
 }

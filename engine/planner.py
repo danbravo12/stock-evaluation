@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from engine.contracts import NotApplicable, RunPlan, SkippedStep
-from engine.score.common import FINANCIAL_CLASSES, load_sector_rules, sector_class
+from engine.score.common import FINANCIAL_CLASSES, load_sector_rules, resolve_sector, sector_notes
 from engine.universe import Universe, normalise_ticker
 
 STEPS = ["fetch", "score", "qualitative", "explain_and_verify", "report"]
@@ -23,12 +23,13 @@ def plan_for(ticker: str, universe: Universe, sic: str | int | None = None, rule
     notes = []
     if primary is not None and primary.symbol != row.symbol:
         notes.append(f"{row.symbol} is a second share class of {primary.security}; analysed once per company under {primary.symbol} (ADR-053)")
-    sector = sector_class(sic, rules or load_sector_rules())
+    rules = rules or load_sector_rules()
+    sector, basis, _ = resolve_sector(rules, sic=sic, gics_sub_industry=row.gics_sub_industry, cik=row.cik)
     na = [NotApplicable(id=i, reason=f"{sector} (ADR-013)") for i in FINANCIAL_NOT_APPLICABLE] if sector in FINANCIAL_CLASSES else []
     na_ids = {x.id for x in na}
     if sector == "utility":
         notes.append("G2 uses the utility variant: long-term debt <= 2x equity (ADR-013)")
     applicable = [i for i in GRAHAM + BUFFETT_QUANT if i not in na_ids]
     skipped = [SkippedStep(step="price", reason=PRICE_GAP), SkippedStep(step="criteria G6, G7", reason="need a price (Finnhub not yet integrated)")]
-    return RunPlan(ticker=t, cik=row.cik, name=row.security, gics_sector=row.gics_sector, sector_class=sector, in_scope=True,
+    return RunPlan(ticker=t, cik=row.cik, name=row.security, gics_sector=row.gics_sector, sector_class=sector, sector_basis=basis, sector_notes=sector_notes(sector, rules), in_scope=True,
                    universe_snapshot=universe.snapshot_date, steps=list(STEPS), skipped=skipped, applicable=applicable, not_applicable=na, notes=notes)

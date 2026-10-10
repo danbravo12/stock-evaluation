@@ -1,5 +1,7 @@
 # Architecture — Graham & Buffett Equity Research Tool (v1)
 
+> **Numeric path (ADR-059):** `engine.cli batch --universe --numeric-only` runs fetch → normalise → split-adjust → classify (GICS) → score for every constituent with no 10-K and no model; it writes `results/scores/<CIK>.json` and is the basis of a first criteria ranking (~35 s from the cache, ~5 min with the SEC download). The model path (qualitative agent, Explainer, Critic) is the expensive per-company step, run separately.
+>
 > **Built so far (2026-10-10):** everything on the laptop side of §1 except Finnhub and the static site: universe, planner, fetcher, normaliser, scorers, retriever, qualitative agent, Explainer, Critic, orchestrator, reporter, batch ledger and CLI. Next: rankings builder and site, Finnhub.
 
 > Research and analysis tool. **Not financial advice.**

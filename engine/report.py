@@ -15,7 +15,7 @@ from pydantic import BaseModel, Field
 from engine.contracts import (SEC_SOURCE, CriticReport, DataBundle, Explanation, InputRef, QualFinding, RunPlan, ScoreSet, Summary, TraceEvent)
 from engine.settings import REPO_ROOT
 
-SCHEMA_VERSION = "1.0"
+SCHEMA_VERSION = "1.1"  # 1.1: sector notes and sector basis (ADR-058); additive over 1.0
 DISCLAIMER = ("Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. "
               "Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.")
 SCHEMA_PATH = REPO_ROOT / "schema" / "result.schema.json"
@@ -60,6 +60,7 @@ class Scorecard(BaseModel):
     summary: Summary
     criteria: list[ScoredCriterion]
     inputs: list[InputRef]  # every distinct input once, each with concept, accession and URL
+    sector_notes: list[str] = Field(default_factory=list)  # e.g. the REIT flag (ADR-058)
 
 
 class QualItem(BaseModel):
@@ -138,7 +139,7 @@ def build_scorecard(score: ScoreSet, expl: dict[str, Explanation], status: dict[
     criteria = [ScoredCriterion(id=r.id, name=r.name, label=r.label, threshold=r.threshold, figures=r.figures, by_year=r.by_year, years=r.years, year_label=r.year_label,
                                 reason=r.reason, flags=r.flags, input_keys=sorted({f"{i.measure}:{i.fiscal_year}" for i in r.inputs}),
                                 explanation=expl.get(r.id), critic_status=status.get(r.id)) for r in score.results]
-    return Scorecard(as_of_year=score.as_of_year, sector_class=score.sector_class, summary=score.summary, criteria=criteria, inputs=score.inputs)
+    return Scorecard(as_of_year=score.as_of_year, sector_class=score.sector_class, summary=score.summary, criteria=criteria, inputs=score.inputs, sector_notes=score.sector_notes)
 
 
 def build_sources(cik: str, bundle: DataBundle | None, score: ScoreSet | None) -> list[Source]:

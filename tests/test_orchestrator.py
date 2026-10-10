@@ -28,17 +28,17 @@ PRIMARY = ["GOOGL", "FOXA", "NWSA"]
 
 
 def synthetic_universe():
-    def c(sym, cik, name=None):
-        return Constituent(symbol=sym, security=name or sym, gics_sector="X", gics_sub_industry="Y", cik=cik, date_added="")
-    return Universe([c("BNK", "0000000001"), c("INS", "0000000002"), c("UTL", "0000000003"), c("IND", "0000000004"), c("GOOG", "0001652044", "Alphabet C"),
-                     c("GOOGL", "0001652044", "Alphabet A")], "2026-01-01", PRIMARY)
+    def c(sym, cik, name=None, sub="Y"):
+        return Constituent(symbol=sym, security=name or sym, gics_sector="X", gics_sub_industry=sub, cik=cik, date_added="")
+    return Universe([c("BNK", "0000000001", sub="Diversified Banks"), c("INS", "0000000002", sub="Multi-line Insurance"), c("UTL", "0000000003", sub="Electric Utilities"),
+                     c("IND", "0000000004", sub="Industrial Conglomerates"), c("GOOG", "0001652044", "Alphabet C"), c("GOOGL", "0001652044", "Alphabet A")], "2026-01-01", PRIMARY)
 
 
 class TestPlanner(unittest.TestCase):
     def test_sector_classes_decide_which_criteria_apply(self):
         u = synthetic_universe()
         for sym, sic, cls, na in [("BNK", 6021, "bank", ["G2", "B2", "B3", "B4"]), ("INS", 6311, "insurer", ["G2", "B2", "B3", "B4"]),
-                                  ("UTL", 4911, "utility", []), ("IND", 3711, "other", []), ("IND", None, "other", [])]:
+                                  ("UTL", 4911, "utility", []), ("IND", 3711, "other", []), ("IND", 6021, "other", []), ("IND", None, "other", [])]:
             p = plan_for(sym, u, sic)
             self.assertEqual((p.sector_class, [x.id for x in p.not_applicable]), (cls, na), sym)
             self.assertEqual(sorted(p.applicable + na), sorted([f"G{i}" for i in range(1, 8)] + [f"B{i}" for i in range(1, 5)]))
@@ -106,7 +106,7 @@ class TestOrchestrator(Replay):
         self.assertEqual(sum(a.calls for a in r.cost.by_agent.values()), r.cost.llm_calls)
         self.assertEqual(r.data.price, None)
         self.assertIn(PRICE_GAP, r.data.gaps)
-        self.assertEqual((r.run.mode, r.run.generated_at, r.schema_version), ("replay", None, "1.0"))
+        self.assertEqual((r.run.mode, r.run.generated_at, r.schema_version), ("replay", None, "1.1"))
         self.assertIn("not financial advice", r.disclaimer)
         self.assertTrue(any("Wikipedia" in a and "CC BY-SA" in a for a in r.attribution))
         self.assertTrue(any(s.kind == "sec_filing" and s.url for s in r.sources))
