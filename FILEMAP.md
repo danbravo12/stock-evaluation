@@ -1,7 +1,7 @@
 # File Map
 
 What every file in this repo is for, and where planned files will go.
-Updated 2026-10-11 · after the rankings builder commit. **Rule:** update this file in the same commit as any file you add, move or delete.
+Updated 2026-10-12 · after the static site commit. **Rule:** update this file in the same commit as any file you add, move or delete.
 
 Status: **Built** = exists and tested · **Planned** = designed in `ARCHITECTURE.md`, not yet created.
 
@@ -32,7 +32,7 @@ StockEvaluation/
 |---|---|---|
 | `README.md` | Front door for a stranger: what the tool is, the not-financial-advice disclaimer, how to run tests and record fixtures. Will grow into the full README for v1. | Built (stub) |
 | `STATUS.md` | Where the project is: done, waiting on, next steps, notes for the next build step, milestone summaries. | Built |
-| `DECISIONS.md` | ADR log: every key decision with context, decision and trade-off (ADR-001 to ADR-064). | Built |
+| `DECISIONS.md` | ADR log: every key decision with context, decision and trade-off (ADR-001 to ADR-066). | Built |
 | `PROCESS.md` | The research workflow being automated: inputs, steps, decision points, criteria tables (G1–G7, B1–B4, four qualitative Buffett criteria), failure handling. | Built |
 | `ARCHITECTURE.md` | System view, agent hand-off sequence, component catalogue, run economics. | Built |
 | `FILEMAP.md` | This file. | Built |
@@ -92,12 +92,25 @@ The engine is a library, so the batch command, the tests and the future live app
 | `engine/batch.py` | `CompanyLedger` (`data/ledger/companies.json`), `run_batch` (resumable, stops cleanly on quota or cap), `run_numeric_batch` (numeric-only; own ledger `numeric.json`; a crash is a failed row), `progress_markdown` (ADR-056, ADR-059). | Built |
 | `engine/cli.py` | `python -m engine.cli analyse | batch | rankings | status | schema`. | Built |
 | `engine/successors.py` | Registrant successors and companies without a 10-K: `load_successors`, `has_annual_report`, `NoAnnualReport`, the message "No annual report (10-K) filed yet; listed since <date>." (ADR-063). | Built |
+| `engine/publish.py` | `build_site`: builds the git-ignored `site/` from `site_src/`, `site_data/` and `results/` (reduced score files, results, traces as arrays, cited passages, documents, manifest); Finnhub gate, banned phrases and SEC-link checks fail the build; `serve` (ADR-065). | Built |
 | `engine/rankings.py` | Rankings builder: `build_rankings(universe, scores_dir, results_dir)` → `Rankings` (criteria ranking with the decided ≥ 6 threshold and exact tie-breaks, insufficient-data group, empty analyst section, excluded companies), `write_rankings` (round-trip validation and the Finnhub gate), `export_rankings_schema` (ADR-062). | Built |
 | `engine/agents/__init__.py` | Package for the LLM agents. | Built |
 | `engine/agents/qualitative.py` | The Buffett qualitative agent: `assess_qualitative(cik, ticker, retriever, llm, trace)` runs one tool loop per criterion (seeded search, `search` / `get_passage` / `submit_finding`, 4-turn cap). Passages are shown as numbered sentences and cited by pointer; code builds the quote and exact offsets; "not assessed" is assigned from the stop reason (ADR-041 to ADR-047). | Built |
 | `engine/fetch/__init__.py` | Marks `fetch` as a package. | Built |
 | `engine/fetch/store.py` | `ResponseStore`: saves each raw response as gzip plus a `.meta.json` (URL, fetch time, SHA-256, size) and verifies the checksum on read. Backs both the cache and the fixtures (ADR-025). | Built |
 | `engine/fetch/edgar.py` | `EdgarClient`: the data fetcher's EDGAR tools. `company_tickers`, `lookup_cik`, `submissions`, `companyfacts`, `latest_filing` (skips 10-K/A; both read a registrant successor's predecessor, `source_for`, ADR-063), `filing_document`. Three modes: replay (fixtures only, no network), live (cache, fetch on miss), record (fetch and write fixtures). Declared User-Agent, ~6 requests/s, retries with `Retry-After`. | Built |
+
+## Static site (`site_src/`, built into `site/`)
+
+| Path | Function | Status |
+|---|---|---|
+| `site_src/index.html`, `assets/js/index.js` | Rankings: description, disclaimer, data as-of, coverage, showcase links, search, sector filter, sort, 11-mark strips, insufficient-data and excluded folds, pending analyst section, score footnote. | Built |
+| `site_src/company.html`, `assets/js/company.js` | Scorecard of one company with the evidence pane (figures, chart, inputs with SEC links, highlighted cited passages, second-reader checks); deep links; plain-language gap reasons. | Built |
+| `site_src/trace.html`, `assets/js/trace.js` | Replay of the recorded agent run: numbered steps grouped by agent, hand-over lines, play, step and arrow keys, running calls and cost. | Built |
+| `site_src/how-it-works.html`, `doc.html`, `assets/js/doc.js` | Process, architecture diagram (inline SVG), cost, evaluation, what it gets wrong, sources, production changes; a plain-text viewer for the linked repository documents. | Built |
+| `site_src/assets/js/common.js`, `assets/site.css`, `assets/fonts/`, `assets/img/architecture.svg` | Shared helpers (marks, formats, plain reasons), design tokens and layout, self-hosted Public Sans and Source Serif 4 (OFL licences beside them), the architecture drawing. | Built |
+| `site/` | Output of `python -m engine.cli publish` (git-ignored). | Local only |
+| `docs/screenshots/` | Review screenshots (git-ignored). | Local only |
 
 ## Scripts (`scripts/`)
 
@@ -145,6 +158,7 @@ The engine is a library, so the batch command, the tests and the future live app
 | `tests/test_revenue_guard.py` | Component guard logic and recorded General Mills, Fifth Third, Goldman Sachs (ADR-061). | Built |
 | `tests/test_decisions.py` | Financial classes and notes, G4 unknown years (synthetic and Federal Realty's recorded facts), Exxon successor (true accessions, note, evidence in the successor's own history), `no_annual_report` in the numeric batch and the full path (ADR-057, ADR-012, ADR-063). | Built |
 | `tests/test_coverage.py` | Validated derived difference (same filing and period, overlap proof, forward only), Boston Properties, Public Storage, Chevron and Ford on recorded facts, Camden lease revenue, capex concepts stay totals (ADR-064). | Built |
+| `tests/test_site.py` | Publish output deterministic, disclaimer on every page, planted Finnhub field / banned word / non-SEC link fail the build, links and data paths resolve, JSON validates against the schemas, no third-party requests, no `innerHTML` from data, index size (ADR-065). | Built |
 | `tests/test_rankings.py` | Score maths, threshold, exact ties, exclusions, caveat, analyst section, Finnhub gate, schema, determinism, CLI, and checks of the committed `site_data/rankings.json` (ADR-062). | Built |
 | `tests/test_universe_counts.py` | The frozen label counts: consistency, tolerance logic, and the local run when `results/scores/` exists. | Built |
 | `tests/test_universe.py` | Parsing, validation (count, duplicates, CIK checks, dual-class primary rule), CSV round trip, and the committed snapshot against SEC's ticker file. | Built |

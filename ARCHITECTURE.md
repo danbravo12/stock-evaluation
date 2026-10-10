@@ -2,7 +2,7 @@
 
 > **Numeric path (ADR-059):** `engine.cli batch --universe --numeric-only` runs fetch → normalise → split-adjust → classify (GICS) → score for every constituent with no 10-K and no model; it writes `results/scores/<CIK>.json` and is the basis of a first criteria ranking (~35 s from the cache, ~5 min with the SEC download). The model path (qualitative agent, Explainer, Critic) is the expensive per-company step, run separately.
 >
-> **Built so far (2026-10-11):** everything on the laptop side of §1 except Finnhub and the static site: universe, planner, fetcher (with registrant successors, ADR-063), normaliser, scorers, retriever, qualitative agent, Explainer, Critic, orchestrator, reporter, batch ledger, CLI and the rankings builder (`python -m engine.cli rankings` → `site_data/rankings.json`, ADR-062). Next: static site, Finnhub.
+> **Built so far (2026-10-11):** everything on the laptop side of §1 except Finnhub and the static site: universe, planner, fetcher (with registrant successors, ADR-063), normaliser, scorers, retriever, qualitative agent, Explainer, Critic, orchestrator, reporter, batch ledger, CLI and the rankings builder (`python -m engine.cli rankings` → `site_data/rankings.json`, ADR-062). The static site is built too (`site_src/` → `python -m engine.cli publish` → `site/`, ADR-065, ADR-066). Next: deploy it, Finnhub.
 
 > Research and analysis tool. **Not financial advice.**
 > Version: v1 draft · 2026-10-08 · Consistent with ADR-001 to ADR-023 (ADR-018 to ADR-023 introduced with this view, see §7).

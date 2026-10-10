@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Company analysis</title>
+<meta name="description" content="The criteria scorecard for one company, with the evidence behind every score.">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="preload" href="assets/fonts/public-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site"><div class="wrap">
+  <a class="name" href="index.html">Graham and Buffett research tool</a>
+  <nav aria-label="Main"><a href="index.html">Rankings</a><a href="how-it-works.html">How it works</a></nav>
+</div></header>
+<div class="disclaimer"><div class="wrap"><p><strong>This is a research tool, not financial advice.</strong> It reports what public SEC filings say and which published Graham and Buffett tests a company meets. It does not tell anyone to buy, sell or hold anything.</p></div></div>
+<main id="main" class="wrap">
+<p class="crumbs"><a href="index.html">All rankings</a></p>
+<div id="head"><h1>Loading the company</h1></div>
+<div class="cols" id="cols" hidden>
+  <div><ul class="crits" id="crits"></ul></div>
+  <div id="panehome"><aside class="pane" id="pane" aria-live="polite" aria-label="Evidence"><p class="empty">Select a test to see the evidence behind it.</p></aside></div>
+</div>
+<div id="foot"></div>
+</main>
+<footer class="site"><div class="wrap"><p>Data sources: U.S. Securities and Exchange Commission (EDGAR) and a Wikipedia constituents list.</p></div></footer>
+<script type="module" src="assets/js/company.js"></script>
+</body>
+</html>

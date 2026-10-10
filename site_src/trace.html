@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent run replay</title>
+<meta name="description" content="Step through the recorded run of the analysis agents for one company.">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="preload" href="assets/fonts/public-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site"><div class="wrap">
+  <a class="name" href="index.html">Graham and Buffett research tool</a>
+  <nav aria-label="Main"><a href="index.html">Rankings</a><a href="how-it-works.html">How it works</a></nav>
+</div></header>
+<div class="disclaimer"><div class="wrap"><p><strong>This is a research tool, not financial advice.</strong> It reports what public SEC filings say and which published Graham and Buffett tests a company meets. It does not tell anyone to buy, sell or hold anything.</p></div></div>
+<main id="main" class="wrap">
+<p class="crumbs" id="crumbs"><a href="index.html">All rankings</a></p>
+<h1 id="title">Loading the run</h1>
+<p class="lede" id="lede"></p>
+<div class="bar" id="bar" hidden>
+  <button class="btn" id="back" type="button">Step back</button>
+  <button class="btn" id="play" type="button" aria-pressed="false">Play</button>
+  <button class="btn" id="fwd" type="button">Step forward</button>
+  <span class="muted small">Left and right arrow keys also step.</span>
+  <span class="totals" id="totals" aria-live="polite"></span>
+</div>
+<div class="tr" id="tr" hidden>
+  <ol class="steps" id="steps" aria-label="Steps of the run"></ol>
+  <section class="detail" id="detail" aria-live="polite" aria-label="Selected step"></section>
+</div>
+</main>
+<footer class="site"><div class="wrap"><p>Data sources: U.S. Securities and Exchange Commission (EDGAR) and a Wikipedia constituents list.</p></div></footer>
+<script type="module" src="assets/js/trace.js"></script>
+</body>
+</html>

@@ -43,6 +43,8 @@ Usage and spend are counted in `data/ledger/usage.json` (daily quota resets at m
     .venv/bin/python scripts/universe_scorecard_report.py        # docs/universe_scorecard_report.md from results/scores/
     .venv/bin/python -m eval.universe_counts                     # compare with the frozen label counts
     .venv/bin/python -m engine.cli rankings                      # site_data/rankings.json: criteria ranking from results/scores/ (no model, no network)
+    .venv/bin/python -m engine.cli publish --serve               # build site/ and preview it at http://127.0.0.1:8000/ (Finnhub gate, banned phrases and SEC-link checks run first)
+    .venv/bin/python -m engine.cli publish                       # build site/ only (git-ignored; publish the folder to any static host)
     .venv/bin/python -m engine.cli status                        # writes PROGRESS.md
     .venv/bin/python -m engine.cli schema                        # writes schema/result.schema.json and schema/rankings.schema.json
     .venv/bin/python scripts/snapshot_universe.py                # S&P 500 snapshot (once, a quarter)

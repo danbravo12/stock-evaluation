@@ -18,3 +18,6 @@ results/*
 !results/0001652044.*
 !results/0001318605.*
 !results/0001326160.*
+site/
+site.building/
+docs/screenshots/

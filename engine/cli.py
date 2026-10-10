@@ -4,6 +4,7 @@
     python -m engine.cli batch [--tickers KO JPM | --universe] [--limit N] [--force] [--mode ...]
     python -m engine.cli batch --universe --numeric-only   # the whole index, scores only, live SEC data, no model
     python -m engine.cli rankings                           # site_data/rankings.json from results/scores/ (no model, no network)
+    python -m engine.cli publish [--serve]                  # build site/ from site_src/, site_data/ and results/ (Finnhub gate, banned phrases, link checks)
     python -m engine.cli status
     python -m engine.cli schema
 """
@@ -20,6 +21,7 @@ from engine.batch import CompanyLedger, progress_markdown, run_batch, run_numeri
 from engine.fetch.edgar import EdgarClient
 from engine.llm.budget import BudgetExceeded, QuotaReached
 from engine.orchestrator import analyse
+from engine.publish import SITE_OUT, build_site, serve
 from engine.rankings import OUTPUT_PATH, Rankings, build_rankings, export_rankings_schema, write_rankings
 from engine.report import export_schema
 from engine.settings import REPO_ROOT, Settings
@@ -46,6 +48,10 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--limit", type=int)
     b.add_argument("--force", action="store_true")
     b.add_argument("--numeric-only", action="store_true", help="fetch live, normalise and score only: no 10-K download, no model (ADR-059)")
+    pb = sub.add_parser("publish", help="build the static site into site/ (ADR-065)")
+    pb.add_argument("--serve", action="store_true", help="then serve it locally with http.server")
+    pb.add_argument("--port", type=int, default=8000)
+    pb.add_argument("--out", default=None)
     sub.add_parser("status")
     sub.add_parser("schema", help="write schema/result.schema.json and schema/rankings.schema.json")
     r = sub.add_parser("rankings", help="build site_data/rankings.json: criteria ranking from the numeric scores (ADR-062)")
@@ -57,6 +63,13 @@ def main(argv: list[str] | None = None) -> int:
         print("wrote", export_schema().relative_to(REPO_ROOT), "and", export_rankings_schema().relative_to(REPO_ROOT))
         return 0
     settings = Settings.from_env()
+    if a.cmd == "publish":
+        out = Path(a.out) if a.out else SITE_OUT
+        m = build_site(out, settings=settings)
+        print(f"built {out.relative_to(REPO_ROOT) if out.is_relative_to(REPO_ROOT) else out}: {m['counts']['scored']} company score files, {m['counts']['full_analysis']} full analyses, commit {m['build_commit']}")
+        if a.serve:
+            serve(out, a.port)
+        return 0
     if a.cmd == "rankings":
         results_dir = Path(a.results_dir) if a.results_dir else settings.results_dir
         out = write_rankings(build_rankings(load_universe(), results_dir / "scores", results_dir), Path(a.out) if a.out else OUTPUT_PATH, finnhub_public_ok=settings.finnhub_public_ok)
