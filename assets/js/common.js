@@ -112,13 +112,22 @@ const FIG = {
   avg_margin_3y: ["Average operating margin, last 3 years", (v) => pct(v)], avg_first_3y: ["Average owner earnings, first 3 years", usd], avg_last_3y: ["Average owner earnings, last 3 years", usd],
   years_positive: ["Years with positive owner earnings", String], years_with_depreciation_only: ["Years where only depreciation was reported (no amortisation)", years],
 };
+const EMPTY = { loss_years: "No loss years.", unpaid_years: "No years without a dividend.", unknown_years: "No years with missing dividend data.", years_with_depreciation_only: "No years where only depreciation was reported." };
+// Rows for the evidence pane: [label, value] for a figure, [sentence] for a list that is empty (never a label followed by "none").
 export function figures(c) {
   const out = [];
   for (const [k, v] of Object.entries(c.figures || {})) {
+    if (Array.isArray(v) && v.length === 0) { out.push([EMPTY[k] || `No ${k.replaceAll("_", " ")}.`]); continue; }
     const [label, f] = FIG[k] || [k.replaceAll("_", " "), (x) => String(x)];
     out.push([label, v == null ? "not available" : f(v)]);
   }
   return out;
+}
+
+// One line of key figures for a row without an agent explanation.
+export function figureSummary(c, limit = 3) {
+  return figures(c).filter((r) => r.length === 1 || !/^Years (on record|without|with)/.test(r[0])).slice(0, limit)
+    .map((r) => (r.length === 1 ? r[0].replace(/\.$/, "") : `${r[0].charAt(0).toUpperCase() + r[0].slice(1).toLowerCase()} ${r[1]}`)).join("; ");
 }
 
 const MEASURE = { operating_income: "operating income", revenue: "revenue", net_income: "net income", eps_diluted: "diluted earnings per share", current_assets: "current assets",
@@ -168,5 +177,6 @@ export function footer(m) {
   f.replaceChildren(
     el("p", { text: `Data as of ${m.data_as_of.sec_fetched_from}${m.data_as_of.sec_fetched_to !== m.data_as_of.sec_fetched_from ? " to " + m.data_as_of.sec_fetched_to : ""} for SEC filings; constituents list from ${m.data_as_of.constituents_snapshot}.` }),
     ...m.attribution.map((a) => el("p", { text: a })),
+    m.repo_url ? el("p", {}, el("a", { href: m.repo_url, rel: "noopener", text: "Code and recorded data on GitHub" })) : null,
     el("p", { text: `Built from commit ${m.build_commit || "unknown"}. Research tool, not financial advice.` }));
 }
