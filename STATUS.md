@@ -62,7 +62,7 @@
 1. **Finish variant B** after midnight Pacific (about 190 requests for the other 20 companies): `.venv/bin/python scripts/stability_run.py b`, then `.venv/bin/python scripts/stability_report.py --attach`, run the tests, commit the results and redeploy (`python -m engine.cli deploy`). Until then only the five dev companies show a stability record.
 2. **Daniel labels the packet:** `docs/labelling/heldout_packet.md` (24 items), blind, before looking at the site's verdicts for AAPL, MSFT, PG, NEE, CAT, JNJ; then `python scripts/label_packet.py --ingest docs/labelling/heldout_packet.md` and `python -m eval.agreement`. After that the rubric and prompts are not edited by looking at these labels (ADR-071).
 3. **Build 4b, the evaluation page** on the site: the dev and held-out agreement, the flip rates, threshold sensitivity (ADR-011), failure cases, the retrieval evaluation set (20 to 30 labelled questions, BM25 recall@5; ADR-022), Gemma 4 31B as model and as Critic (ADR-015, ADR-051).
-4. **Launch pass:** read the deployed site as a stranger would (rankings, three company pages, a trace, how it works), fix copy, check the repository front page, decide what to say about the failure modes (notes 24 to 27) where a visitor will see them.
+4. **Launch pass:** read the deployed site as a first-time reader would (rankings, three company pages, a trace, how it works), fix copy, check the repository front page, decide what to say about the failure modes (notes 24 to 27) where a visitor will see them.
 5. **Finnhub email and price fetcher** (ADR-007): send the permission email now that the site is live to show; price and analyst counts fill G6 and G7 and the analyst ranking, which the site already reserves.
 6. **More full analyses** only if wanted: the remaining 475 companies need about 11 days of free quota or about $5 on the paid tier (`PROGRESS.md`); before any paid run set the Google project spend cap to **$7** in AI Studio *before* enabling billing (engine cap $6.00, ADR-023); paid mode stays off until the evaluation harness passes.
 
@@ -88,27 +88,3 @@
 - `get_passage` was rarely called by the model (search results carry full passage text): never before prompt v2.1, 3 times in the v2.1 refresh (NEE, VST); the trace page renders it.
 - Run-to-run variability measured: identical at temperature 0 for identical prompts (20 of 20), but small prompt/rubric changes did move verdicts earlier, so wording sensitivity is the real risk (`docs/evaluation_notes.md` item 11).
 - Seeded search + `llm` and `trace` should share one `TraceRecorder`, so model calls and tool calls interleave (the script does).
-
-## Milestone 0 summary (interview-ready)
-- **Problem:** Value-investing analysis is slow, inconsistent and poorly sourced; analyst views and fundamentals are rarely seen side by side.
-- **Design choice:** Deterministic Python for every numeric criterion; LLM agents only for explanation, cited qualitative judgement and verification.
-- **Trade-off:** Licence-clean data (EDGAR public domain; Finnhub only with permission) over convenience, accepting possible data gaps.
-- **Result:** Scoped v1 with 24 logged decisions, a process map, architecture v1 and a clear $0 path.
-
-## Milestone 1 summary (interview-ready): deterministic engine
-- **Problem:** Turning public filings into 10 years of comparable figures is the hard, error-prone part of value analysis: companies tag the same item differently, switch tags, restate earlier years, and older per-share figures are never adjusted for later stock splits (Alphabet's 2016 EPS reads 27.85 against 2.93 for 2020).
-- **Design choice:** Recorded, checksummed SEC fixtures (no live calls in development); a reviewable concept map with per-value provenance (tag, filing, URL); explicit rules for annual periods, restatements and splits; pure-Python scorers for G1–G7 and B1–B4; results frozen in `eval/expected_scores.json` with a test that fails on any drift.
-- **Trade-off:** Report gaps instead of guessing (Alphabet B4 is a data gap; price-based G6/G7 wait for Finnhub); accept documented simplifications for v1 (ROE on total equity, sector class from SIC codes, depreciation-only D&A fallback) and list what the tool gets wrong in `docs/evaluation_notes.md`.
-- **Result:** Five test companies scored with every figure traceable to an SEC filing; 94 offline tests; 34 logged decisions; $0 spent. Results checked by hand against raw data before freezing (e.g. Duke's owner earnings negative in all 10 years).
-
-## Milestone 2a summary (interview-ready): agents
-- **Problem:** An LLM that writes about a company can invent a number, misquote a filing, or slide into advice; a reviewer cannot tell from the output alone.
-- **Design choice:** Make the unsafe things impossible rather than unlikely. The model *points* at filing sentences and *names* figures with placeholders; code builds the quotes (exact offsets) and writes the numbers. A rules-first Critic then re-verifies everything it can without a model (placeholders, stray digits, quotes against the re-loaded 10-K and its hash, banned language) and uses one narrow model check only for "does this quote support this verdict". Failures go back to their owner once, then show as warnings; the Critic never rewrites. A small human-reviewed gold set (20 labels) turns "the Critic works" into numbers.
-- **Trade-off:** Stiffer prose and a few mechanical limits (sentence boundaries decide the quote; one reviewer, 20 labels; same model as the agents; the Critic never looks at "insufficient evidence", so it cannot find false negatives).
-- **Result:** 0 mechanical citation failures (5 of 20 before sentence pointers); 0 wrong figures or stray numbers in 55 explanations; Critic caught 3/3 gold-set disagreements and 3/3 injected faults but also flagged 6 of 13 correct findings (5 real rationale overreach), and routed retries did not improve agreement (17/20 → 17/20); about 13.6 model calls and $0.012 notional per company, $0 actual on the free tier; 244 offline tests.
-
-## Milestone 2b summary (interview-ready): the engine end to end
-- **Problem:** Parts that each work are not a product: someone has to decide what runs for which company, survive one bad filing among 500, stop cleanly when the free quota runs out, and hand the website one trustworthy file per company.
-- **Design choice:** A rule-based planner and orchestrator over typed hand-offs; every step timed and traced; failures degrade with a named reason instead of aborting; quota and budget errors are the only ones that stop a batch, and the batch resumes from a per-company ledger. One versioned `Result` per company, validated against an exported JSON Schema, with the Finnhub publish gate enforced in code; replay writes byte-identical files.
-- **Trade-off:** A local JSON ledger and committed sample results rather than a database or a CI-built site; a SIC-based sector class kept despite 12 disagreements with GICS (documented, not hidden).
-- **Result:** 500-company S&P 500 snapshot validated; the 5 test companies analysed end to end offline (54 to 71 KB per result, 10.4 model calls and $0.0096 notional each, $0 actual); two unseen companies run live, which found a real bug and four data issues; 34 new tests (287 in all) for the universe, planner, orchestrator, batch, schema and gate.

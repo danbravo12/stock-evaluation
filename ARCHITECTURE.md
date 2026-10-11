@@ -217,14 +217,14 @@ Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). Measured over **
 
 ---
 
-## 5. Where the agentic behaviour is (interview framing)
+## 5. Where the agentic behaviour is
 
-| Behaviour | Where it lives | Why here |
+| Behaviour | Where it lives | Why it's designed this way |
 |---|---|---|
 | Planning | Planner builds a per-company `RunPlan` (sector exceptions, gaps, skipped steps) | Plans genuinely differ by company; rules make them reproducible |
 | Tool use | Data fetcher; qualitative agent choosing what to search in the 10-K | The agent decides which sections and queries to use, and when it has enough evidence |
 | Verification | Critic: rules for facts, LLM for judgement, retry routed to the step that failed | Cheap checks first; the LLM is used only where rules can't decide |
-| Traceability | Typed contracts at every hand-off, replayed on the site | A reviewer can see each step's inputs and outputs |
+| Traceability | Typed contracts at every hand-off, replayed on the site | Each step's inputs and outputs are recorded and can be replayed on the site |
 
 ---
 

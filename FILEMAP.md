@@ -30,7 +30,7 @@ StockEvaluation/
 
 | File | Function | Status |
 |---|---|---|
-| `README.md` | Front door for a stranger: what the tool is, the not-financial-advice disclaimer, how to run tests and record fixtures. Will grow into the full README for v1. | Built (stub) |
+| `README.md` | Front door for a first-time reader: what the tool is, the not-financial-advice disclaimer, how to run tests and record fixtures. Will grow into the full README for v1. | Built (stub) |
 | `STATUS.md` | Where the project is: done, waiting on, next steps, notes for the next build step, milestone summaries. | Built |
 | `DECISIONS.md` | ADR log: every key decision with context, decision and trade-off (ADR-001 to ADR-068). | Built |
 | `PROCESS.md` | The research workflow being automated: inputs, steps, decision points, criteria tables (G1–G7, B1–B4, four qualitative Buffett criteria), failure handling. | Built |
