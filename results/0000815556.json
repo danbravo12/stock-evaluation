@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "FAST-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:34:02+00:00",
+  "generated_at": "2026-10-11T13:36:29+00:00",
   "timings": {
-   "fetch": 0.819,
+   "fetch": 0.055,
    "score": 0.001,
-   "qualitative": 41.982,
-   "explain_and_verify": 19.662
+   "qualitative": 11.185,
+   "explain_and_verify": 16.215
   }
  },
  "plan": {
@@ -62,7 +62,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 0.819,
+   "seconds": 0.055,
    "reason": null
   },
   {
@@ -74,19 +74,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 41.982,
+   "seconds": 11.185,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 19.662,
+   "seconds": 16.215,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.072,
+   "seconds": 0.048,
    "reason": null
   }
  ],
@@ -1875,16 +1875,16 @@
   {
    "finding": {
     "criterion": "candid_management",
-    "verdict": "insufficient evidence",
-    "rationale": "The filing discusses risks and potential failures regarding acquisitions, such as the inability to achieve anticipated synergies or the diversion of management attention, but these are presented as general risk factors rather than specific, management-acknowledged setbacks or mistakes. A 10-K is a limited guide to candour, and the provided text does not contain a clear admission of a specific company-driven failure or missed target.",
+    "verdict": "evidence weak",
+    "rationale": "The filing acknowledges a \"gross margin headwind\" resulting from a \"continued shift toward larger customers,\" which the company notes typically generates lower gross margins. A 10-K is a limited guide to candour, and this disclosure is framed within a discussion of operational results.",
     "citations": [
      {
-      "passage_id": "0000815556-26-000009:1A:22",
+      "passage_id": "0000815556-26-000009:7:27",
       "accession": "0000815556-26-000009",
-      "item": "1A",
-      "char_start": 110524,
-      "char_end": 111194,
-      "quote": "Acquisitions involve numerous risks and challenges, including, among others, a risk of potential loss of key employees of an acquired business, inability to achieve identified operating and financial synergies anticipated to result from an acquisition, diversion of our capital and our management's attention from other business issues, and risks related to the integration of the acquired business, including unanticipated changes in our business, our industry, or general economic conditions that affect the assumptions underlying the acquisition. Any one or more of these factors could cause us to not realize the benefits anticipated to result from the acquisitions.",
+      "item": "7",
+      "char_start": 174265,
+      "char_end": 174561,
+      "quote": "Our gross profit, as a percentage of net sales, was 45.0% in 2025 and 45.1% in 2024. Our fastener expansion project and other supplier-focused initiatives offset the gross margin headwind of a continued shift toward larger customers, which typically generate higher volume at lower gross margins.",
       "sentences": [
        4,
        5
@@ -1923,13 +1923,13 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2838,
-     "completion_tokens": 149,
-     "total_tokens": 2987,
+     "prompt_tokens": 2891,
+     "completion_tokens": 123,
+     "total_tokens": 3014,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.000933
+    "notional_cost_usd": 0.00090725
    },
    "critic_status": "passed_after_retry",
    "stability": null
@@ -1937,21 +1937,9 @@
   {
    "finding": {
     "criterion": "rational_capital_allocation",
-    "verdict": "evidence found",
-    "rationale": "The filing quantifies specific uses of cash in 2025, including dividend payments, debt reduction, and capital expenditures for specific categories like FMI hardware and distribution facilities. It also outlines the company's capital spending categories and states that operating cash flow is expected to meet these liquidity and capital needs.",
+    "verdict": "evidence weak",
+    "rationale": "The filing categorizes capital spending into five specific areas and states that management believes operating cash flow will be adequate to meet these capital needs, but it does not articulate a policy or priority for how cash is allocated among these competing uses (e.g., dividends vs. reinvestment vs. debt reduction).",
     "citations": [
-     {
-      "passage_id": "0000815556-26-000009:7:41",
-      "accession": "0000815556-26-000009",
-      "item": "7",
-      "char_start": 188174,
-      "char_end": 188364,
-      "quote": "First, we had higher dividend payments. We increased regular dividend payments in 2025 by 12.4%. Second, we used more cash to reduce outstanding debt obligations in 2025 than we did in 2024.",
-      "sentences": [
-       4,
-       6
-      ]
-     },
      {
       "passage_id": "0000815556-26-000009:7:38",
       "accession": "0000815556-26-000009",
@@ -1962,6 +1950,18 @@
       "sentences": [
        1,
        1
+      ]
+     },
+     {
+      "passage_id": "0000815556-26-000009:7:43",
+      "accession": "0000815556-26-000009",
+      "item": "7",
+      "char_start": 189886,
+      "char_end": 190303,
+      "quote": "Our material cash requirements for known contractual obligations include capital expenditures, debt, and lease obligations, each of which are discussed in more detail earlier in this section. We believe that net cash provided by operating activities will be adequate to meet our liquidity and capital needs for these items in the short-term over the next 12 months and also in the long-term beyond the next 12 months.",
+      "sentences": [
+       1,
+       2
       ]
      }
     ],
@@ -1987,19 +1987,19 @@
       ]
      }
     ],
-    "llm_calls": 3,
-    "tool_calls": 3,
+    "llm_calls": 1,
+    "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5404,
-     "completion_tokens": 441,
-     "total_tokens": 5845,
+     "prompt_tokens": 2718,
+     "completion_tokens": 167,
+     "total_tokens": 2885,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0020125
+    "notional_cost_usd": 0.00093
    },
-   "critic_status": "warning",
+   "critic_status": "passed_after_retry",
    "stability": null
   }
  ],
@@ -2018,12 +2018,12 @@
    "char_start": 51175,
    "char_end": 52135
   },
-  "0000815556-26-000009:1A:22": {
-   "text": "We may not be successful in integrating acquisitions and achieving intended benefits and synergies. Historically, substantially all of our growth has been organic. However, we have completed several acquisitions over the last decade and expect to continue to pursue strategic acquisitions that we believe will either expand or complement our business in new or existing markets or further enhance the value and offerings we are able to provide to our existing or future potential customers. Acquisitions involve numerous risks and challenges, including, among others, a risk of potential loss of key employees of an acquired business, inability to achieve identified operating and financial synergies anticipated to result from an acquisition, diversion of our capital and our management's attention from other business issues, and risks related to the integration of the acquired business, including unanticipated changes in our business, our industry, or general economic conditions that affect the assumptions underlying the acquisition. Any one or more of these factors could cause us to not realize the benefits anticipated to result from the acquisitions.\nEquity Risks",
-   "item": "1A",
+  "0000815556-26-000009:7:27": {
+   "text": "Q1 | Q2 | Q3 | Q4 | Annual\n2025 | 45.1 | % | 45.3 | % | 45.3 | % | 44.3 | % | 45.0 | %\n2024 | 45.5 | % | 45.1 | % | 44.9 | % | 44.8 | % | 45.1 | %\nOur gross profit, as a percentage of net sales, was 45.0% in 2025 and 45.1% in 2024. Our fastener expansion project and other supplier-focused initiatives offset the gross margin headwind of a continued shift toward larger customers, which typically generate higher volume at lower gross margins.\nSG&A Expenses\nSG&A expenses, as a percentage of net sales, decreased to 24.8% in 2025 from 25.1% in 2024. We continued to invest in areas such as role specialization, technology, analytics personnel, and sales-related travel that we view as critical to supporting future growth. We managed expenses not directly related to customer acquisition and growth, which allowed us to leverage SG&A expenses in 2025.\nThe percentage change in employee-related, occupancy-related, and all other SG&A expenses compared to the same periods in the preceding year, is outlined in the table below.\nApproximate Percentage of Total SG&A Expenses | Twelve-month Period\n2025 | 2024",
+   "item": "7",
    "accession": "0000815556-26-000009",
-   "char_start": 110033,
-   "char_end": 111207
+   "char_start": 174118,
+   "char_end": 175223
   },
   "0000815556-26-000009:7:38": {
    "text": "Our capital spending typically falls into five categories: (1) purchases related to FMI hardware, (2) purchases of property and equipment related to expansion of and enhancements to distribution centers, owned or leased branch properties, and other company facilities, (3) spending on software and hardware for our information processing systems, (4) the addition of fleet vehicles, and (5) the addition of manufacturing equipment. Proceeds from the sales of property and equipment, typically for the planned disposition of pick-up trucks as well as distribution vehicles and trailers in the normal course of business, are netted against these purchases and additions.\nSet forth below is a recap of our 2025 and 2024 net capital expenditures in dollars and as a percentage of net sales and net income:\n2025 | 2024\nManufacturing, warehouse and packaging equipment, industrial vending equipment, and facilities | $ | 160.1 | 145.8\nShelving and related supplies for selling location openings and for product expansion at existing selling locations | 27.3 | 23.5\nData processing software and equipment | 34.7 | 25.5\nReal estate and improvements to branch locations | 6.9 | 8.7\nVehicles | 16.3 | 23.0\nPurchases of property and equipment | 245.3 | 226.5",
@@ -2032,12 +2032,12 @@
    "char_start": 184995,
    "char_end": 186242
   },
-  "0000815556-26-000009:7:41": {
-   "text": "% of net income | 6.0 | % | 5.2 | %\nNet cash used | $ | 1,054.9 | 913.7\nThe increase in net cash used in financing activities reflects two factors. First, we had higher dividend payments. We increased regular dividend payments in 2025 by 12.4%. Second, we used more cash to reduce outstanding debt obligations in 2025 than we did in 2024. These uses of cash were only partly offset by a decrease in the exercise of stock options.\nDividends\nWe declared a quarterly dividend of $0.240 per share on January 16, 2026. In 2025, we paid aggregate annual dividends per share of $0.875. In 2024, we paid aggregate annual dividends per share of $0.780.\nStock Purchases\nWe did not purchase any of our common stock in 2025 or 2024.\nWe have authority to purchase up to 12,400,000 shares of our common stock under the July 12, 2022 authorization. This authorization does not have an expiration date.\nDebt",
+  "0000815556-26-000009:7:43": {
+   "text": "Our material cash requirements for known contractual obligations include capital expenditures, debt, and lease obligations, each of which are discussed in more detail earlier in this section. We believe that net cash provided by operating activities will be adequate to meet our liquidity and capital needs for these items in the short-term over the next 12 months and also in the long-term beyond the next 12 months. We also have cash requirements for purchase orders and contracts for the purchase of inventory and other goods and services, which are based on current distribution needs and are fulfilled by our suppliers within short time horizons. We do not have significant agreements for the purchase of inventory or other goods or services specifying minimum order quantities. In addition, we may have liabilities for uncertain tax positions but we do not believe any of these liabilities will be material. A discussion of income taxes is contained in Note 7 of the Notes to Consolidated Financial Statements.\n40\nTable of Contents\nUnremitted Foreign Income",
    "item": "7",
    "accession": "0000815556-26-000009",
-   "char_start": 188026,
-   "char_end": 188917
+   "char_start": 189886,
+   "char_end": 190949
   }
  },
  "critic": {
@@ -2348,7 +2348,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing identifies the products (industrial/construction supplies), the customer base (B2B/manufacturing), and the distribution model (network of locations/vending/eBusiness).",
+    "detail": "supports_verdict=yes; The filing clearly identifies the products (industrial/construction supplies), the customers (B2B), and the distribution model (network of locations, vending/bin stock devices).",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2358,24 +2358,24 @@
     "check": "L1",
     "item": "candid_management",
     "status": "fail",
-    "detail": "supports_verdict=no; unsupported: management explicitly acknowledges that its incentive compensation programs failed; The quote describes a technical outcome of a compensation program rather than a management-acknowledged setback, mistake, or missed target.",
+    "detail": "supports_verdict=no; unsupported: performance shortfall; The quote describes a technical outcome of an incentive program rather than a business setback, mistake, or missed guidance.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": "verdict",
     "claims": [
-     "management explicitly acknowledges that its incentive compensation programs failed"
+     "performance shortfall"
     ]
    },
    {
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "fail",
-    "detail": "supports_verdict=yes; unsupported: operating cash flow is expected to meet these liquidity and capital needs; The filing quantifies dividend increases and debt reduction, and provides a clear policy/priority list for capital spending categories.",
+    "detail": "supports_verdict=overstated; unsupported: FMI hardware and distribution center enhancements; The filing quantifies actions but lacks a stated policy or priority explaining how cash is allocated.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": "rationale",
+    "kind": "verdict",
     "claims": [
-     "operating cash flow is expected to meet these liquidity and capital needs"
+     "FMI hardware and distribution center enhancements"
     ]
    },
    {
@@ -2402,7 +2402,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the 10-year positive net income requirement.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms positive net income over the 10-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2412,7 +2412,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the dividend record over the available 15-year period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that dividends were paid in all years on record, consistent with the partial pass label.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2422,7 +2422,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio between the two periods.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio against the threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2432,7 +2432,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly references the ROE threshold and frequency.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms the ROE performance over the 10-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2442,7 +2442,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares debt to the calculated limit based on average net income.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares debt to the 3-year average net income threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2462,7 +2462,7 @@
     "check": "L1",
     "item": "B4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares owner earnings averages across the specified periods.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms positive owner earnings and the growth between the first and last 3-year averages.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2510,15 +2510,23 @@
    },
    {
     "check": "L1",
-    "item": "rational_capital_allocation",
-    "status": "fail",
-    "detail": "supports_verdict=overstated; unsupported: 12.4%; The quotes mention a percentage increase but do not provide the specific dollar amount for dividends or debt repayment required by the definition of evidence found.",
+    "item": "candid_management",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The company identifies a specific operational headwind (customer mix shift) affecting 2025 margins, fitting the definition of explaining a decline via business-specific factors.",
     "owner": "qualitative",
     "attempt": 1,
-    "kind": "verdict",
-    "claims": [
-     "12.4%"
-    ]
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The filing lists categories of spending but lacks a stated policy, priority, or rationale for how cash is allocated among competing uses.",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
    }
   ],
   "final": {
@@ -2536,7 +2544,7 @@
    "understandable_business": "passed",
    "durable_competitive_advantage": "passed",
    "candid_management": "passed_after_retry",
-   "rational_capital_allocation": "warning"
+   "rational_capital_allocation": "passed_after_retry"
   },
   "repairs": [
    {
@@ -2548,35 +2556,35 @@
    },
    {
     "item": "rational_capital_allocation",
-    "path": "rationale_rewrite",
-    "outcome": "rejected_by_recheck",
-    "detail": "supports_verdict=overstated; unsupported: 12.4%; The quotes mention a percentage increase but do not provide the specific dollar amount for dividends or debt repayment required by the definition of evidence found.",
+    "path": "constrained_retry",
+    "outcome": "accepted",
+    "detail": "",
     "llm_calls": 1
    }
   ],
   "llm_calls": 2,
   "usage": {
-   "prompt_tokens": 3615,
-   "completion_tokens": 905,
-   "total_tokens": 4520,
+   "prompt_tokens": 4252,
+   "completion_tokens": 967,
+   "total_tokens": 5219,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.00226125
+  "notional_cost_usd": 0.0025135
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.009872,
+  "notional_cost_usd": 0.01096,
   "llm_calls": 11,
-  "input_tokens": 24494,
-  "output_tokens": 2499,
+  "input_tokens": 27724,
+  "output_tokens": 2686,
   "by_agent": {
    "critic": {
     "calls": 2,
-    "input_tokens": 3615,
-    "output_tokens": 905,
+    "input_tokens": 4252,
+    "output_tokens": 967,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002261
+    "notional_cost_usd": 0.002514
    },
    "explainer": {
     "calls": 1,
@@ -2587,10 +2595,10 @@
    },
    "qualitative": {
     "calls": 8,
-    "input_tokens": 18247,
-    "output_tokens": 1012,
+    "input_tokens": 20840,
+    "output_tokens": 1137,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00608
+    "notional_cost_usd": 0.006916
    }
   }
  },
@@ -2697,10 +2705,5 @@
   "Filings and XBRL data: U.S. Securities and Exchange Commission, EDGAR (public domain)"
  ],
  "trace_path": "results/0000815556.trace.jsonl",
- "warnings": [
-  {
-   "where": "rational_capital_allocation",
-   "message": "the Critic still objects after one repair: supports_verdict=overstated; unsupported: 12.4%; The quotes mention a percentage increase but do not provide the specific dollar amount for dividends or debt repayment required by the definition of evidence found."
-  }
- ]
+ "warnings": []
 }

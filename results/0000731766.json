@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "UNH-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:51:51+00:00",
+  "generated_at": "2026-10-11T13:42:12+00:00",
   "timings": {
-   "fetch": 0.541,
+   "fetch": 0.078,
    "score": 0.001,
-   "qualitative": 89.157,
-   "explain_and_verify": 42.804
+   "qualitative": 30.181,
+   "explain_and_verify": 14.028
   }
  },
  "plan": {
@@ -62,7 +62,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 0.541,
+   "seconds": 0.078,
    "reason": null
   },
   {
@@ -74,19 +74,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 89.157,
+   "seconds": 30.181,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 42.804,
+   "seconds": 14.028,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.077,
+   "seconds": 0.046,
    "reason": null
   }
  ],
@@ -1836,18 +1836,18 @@
    "finding": {
     "criterion": "candid_management",
     "verdict": "evidence found",
-    "rationale": "Management explicitly acknowledges that they observed medical care patterns \"above what we expected and contemplated in our pricing and benefits design,\" which directly attributes a financial setback to their own estimation and pricing decisions. This constitutes a candid admission of a shortfall in their internal processes.",
+    "rationale": "Management explicitly acknowledges that its pricing trends and health status assumptions for 2025 were \"well-short\" of actual medical cost trends, which significantly impacted earnings. This is a candid admission of a failure in internal estimation and execution.",
     "citations": [
      {
-      "passage_id": "0000731766-26-000062:7:11",
+      "passage_id": "0000731766-26-000062:7:8",
       "accession": "0000731766-26-000062",
       "item": "7",
-      "char_start": 139785,
-      "char_end": 140388,
-      "quote": "We have observed increased care patterns that are above what we expected and contemplated in our pricing and benefits design. We have also observed an increase in health care unit costs and in the intensity of services delivered, driven by increases in provider pricing and additional services bundled per visit. Additionally, the member profile of newly added patients under value-based care arrangements, additional people served by our Medicare Advantage plans in markets where other plans exited, and people served within our individual exchange business have contributed to increased medical costs.",
+      "char_start": 136719,
+      "char_end": 136887,
+      "quote": "For 2025, our pricing trends and patient and member health status assumptions were well-short of the medical cost trends incurred, significantly impacting our earnings.",
       "sentences": [
        3,
-       5
+       3
       ]
      }
     ],
@@ -1880,17 +1880,17 @@
      },
      {
       "queries": [
-       "results of operations discussion decline increase medical costs"
+       "results of operations 2025 medical costs pricing performance"
       ],
       "items": [
        "7"
       ],
       "seeded": false,
       "passage_ids": [
-       "0000731766-26-000062:7:1",
+       "0000731766-26-000062:7:8",
        "0000731766-26-000062:7:18",
-       "0000731766-26-000062:7:11",
-       "0000731766-26-000062:7:40"
+       "0000731766-26-000062:7:9",
+       "0000731766-26-000062:7:11"
       ]
      }
     ],
@@ -1898,13 +1898,13 @@
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5259,
-     "completion_tokens": 144,
-     "total_tokens": 5403,
+     "prompt_tokens": 5294,
+     "completion_tokens": 145,
+     "total_tokens": 5439,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00153075
+    "notional_cost_usd": 0.0015409999999999998
    },
    "critic_status": "passed",
    "stability": null
@@ -1912,8 +1912,8 @@
   {
    "finding": {
     "criterion": "rational_capital_allocation",
-    "verdict": "evidence found",
-    "rationale": "The filing states the company's policy of using cash flows for acquisitions, capital expenditures, debt repayment, dividends, and share repurchases. It also provides a concrete, quantified example of a capital allocation action by stating the Board increased the annual dividend rate to $8.84 per share in 2025.",
+    "verdict": "evidence weak",
+    "rationale": "The filing lists general categories for cash usage, such as acquisitions, capital expenditures, debt repayment, and shareholder returns. However, it does not provide specific financial data or allocations for these activities beyond a stated increase in the annual dividend rate.",
     "citations": [
      {
       "passage_id": "0000731766-26-000062:7:28",
@@ -1960,19 +1960,49 @@
        "0000731766-26-000062:7:38",
        "0000731766-26-000062:7:31"
       ]
+     },
+     {
+      "queries": [
+       "cash flow table dividends repurchases acquisitions capital expenditures 2025"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0000731766-26-000062:7:28",
+       "0000731766-26-000062:7:38",
+       "0000731766-26-000062:7:27",
+       "0000731766-26-000062:7:31"
+      ]
+     },
+     {
+      "queries": [
+       "\"Uses of cash\" 2025 table \"capital expenditures\" \"repurchases\" \"dividends\""
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0000731766-26-000062:7:28",
+       "0000731766-26-000062:7:38",
+       "0000731766-26-000062:7:27",
+       "0000731766-26-000062:7:31"
+      ]
      }
     ],
-    "llm_calls": 1,
-    "tool_calls": 2,
+    "llm_calls": 5,
+    "tool_calls": 5,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2683,
-     "completion_tokens": 173,
-     "total_tokens": 2856,
+     "prompt_tokens": 16048,
+     "completion_tokens": 352,
+     "total_tokens": 16400,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00093025
+    "notional_cost_usd": 0.00454
    },
    "critic_status": "passed_after_retry",
    "stability": null
@@ -2007,13 +2037,6 @@
    "char_start": 73473,
    "char_end": 74858
   },
-  "0000731766-26-000062:7:11": {
-   "text": "Medical Cost Trends. Our medical cost trends primarily relate to changes in unit costs, care activity and prescription drug costs. We have observed increased care patterns that are above what we expected and contemplated in our pricing and benefits design. We have also observed an increase in health care unit costs and in the intensity of services delivered, driven by increases in provider pricing and additional services bundled per visit. Additionally, the member profile of newly added patients under value-based care arrangements, additional people served by our Medicare Advantage plans in markets where other plans exited, and people served within our individual exchange business have contributed to increased medical costs. These trends may continue in future periods.\n26\nTable of Contents\nThe Inflation Reduction Act (IRA) altered the Medicare Part D model and benefits, shifting more risk to plans, which results in both increased premiums and medical costs. The IRA also changed the quarterly relationship of medical costs to premiums, altering the seasonal progression and creating a more consistent relationship between medical costs and premiums throughout the year.",
-   "item": "7",
-   "accession": "0000731766-26-000062",
-   "char_start": 139654,
-   "char_end": 140837
-  },
   "0000731766-26-000062:7:28": {
    "text": "Our nonregulated businesses also generate significant cash flows from operations available for general corporate use. Cash flows generated by these entities, combined with dividends from our regulated entities and financing through the issuance of long-term debt as well as issuance of commercial paper or the ability to draw under our committed credit facilities, further strengthen our operating and financial flexibility. We use these cash flows to expand our businesses through acquisitions, reinvest in our businesses through capital expenditures, repay debt and return capital to our shareholders through dividends and repurchases of our common stock.\n31\nTable of Contents\nSummary of our Major Sources and Uses of Cash and Cash Equivalents\nFor the Years Ended December 31, | Change\n(in millions) | 2025 | 2024 | 2023 | 2025 vs. 2024\nSources of cash:\nCash provided by operating activities | $ | 19,697 | $ | 24,204 | $ | 29,068 | $ | (4,507)\nIssuances of long-term debt and short-term borrowings, net of repayments | 726 | 14,660 | 4,280 | (13,934)\nProceeds from common share issuances | 827 | 1,846 | 1,353 | (1,019)\nCash received for dispositions | 561 | 2,041 | 685 | (1,480)",
    "item": "7",
@@ -2027,6 +2050,13 @@
    "accession": "0000731766-26-000062",
    "char_start": 168888,
    "char_end": 170075
+  },
+  "0000731766-26-000062:7:8": {
+   "text": "Pricing Trends. To price our health care benefits, products and services, we start with our view of expected future costs, including medical care patterns, the mix and health status of people served, inflation and labor market dynamics. For 2025, our pricing trends and patient and member health status assumptions were well-short of the medical cost trends incurred, significantly impacting our earnings. We continually evaluate and adjust our approach in each of the local markets we serve, considering relevant factors, such as product positioning, price competitiveness and environmental, competitive, legislative and regulatory considerations, including minimum medical loss ratio (MLR) thresholds and similar revenue adjustments. We seek to balance growth and profitability across all these dimensions.\nThe commercial risk market remains highly competitive in the small group, large group and individual segments. We expect broad-based competition to continue as the industry adapts to individual and employer needs. Continued increased medical costs may impact both future pricing and benefit design, including for our individual exchange products in markets where we choose to remain, and may result in shifts between product categories for our employer benefits. These potential changes, along with certain regulatory impacts, may result in decreased membership in future periods.",
+   "item": "7",
+   "accession": "0000731766-26-000062",
+   "char_start": 136482,
+   "char_end": 137871
   }
  },
  "critic": {
@@ -2337,7 +2367,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing clearly defines the business segments, the customer base, and the revenue models (premiums vs. administrative fees).",
+    "detail": "supports_verdict=yes; The filing clearly defines the business segments, the specific customer bases served, and the revenue models (premiums vs. administrative fees).",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2347,7 +2377,7 @@
     "check": "L1",
     "item": "candid_management",
     "status": "pass",
-    "detail": "supports_verdict=yes; Management explicitly links financial shortfalls to their own internal pricing and benefit design expectations.",
+    "detail": "supports_verdict=yes; Management explicitly attributes a significant earnings impact to internal failures in pricing and health status assumptions for the 2025 fiscal year.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2357,19 +2387,19 @@
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "fail",
-    "detail": "supports_verdict=overstated; unsupported: increase in the annual dividend rate in 2025; The quotes describe the policy and mention changes in activity, but do not provide the specific dollar amounts for the actions mentioned.",
+    "detail": "supports_verdict=yes; unsupported: Optum segments; The filing outlines capital allocation policies but lacks specific dollar amounts for the 2025 fiscal year, supporting the 'evidence weak' verdict.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": "verdict",
+    "kind": "rationale",
     "claims": [
-     "increase in the annual dividend rate in 2025"
+     "Optum segments"
     ]
    },
    {
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue and compares it to the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue and compares it against the threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2379,7 +2409,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure based on the provided metrics.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure based on the provided current ratio and debt metrics.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2389,7 +2419,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year net income requirement.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year net income stability.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2399,7 +2429,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the partial record length while confirming the dividend was paid in all available years.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the dividend record over the available 15-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2409,7 +2439,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio against the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio against the required threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2419,7 +2449,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the pass based on the 7 of 10 years requirement.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the ROE performance over the 10-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2429,7 +2459,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure based on the debt-to-income calculation.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure based on the debt-to-earnings calculation.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2449,7 +2479,7 @@
     "check": "L1",
     "item": "B4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the owner earnings averages.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the owner earnings trend and consistency.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2479,7 +2509,7 @@
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides a clear policy for cash usage and quantifies a specific capital allocation action regarding the dividend increase.",
+    "detail": "supports_verdict=yes; The filing lists general categories of cash usage without providing specific allocations or priorities for the latest fiscal year, fitting the definition of evidence weak.",
     "owner": "qualitative",
     "attempt": 1,
     "kind": null,
@@ -2506,7 +2536,7 @@
   "repairs": [
    {
     "item": "rational_capital_allocation",
-    "path": "constrained_retry",
+    "path": "rationale_rewrite",
     "outcome": "accepted",
     "detail": "",
     "llm_calls": 1
@@ -2514,27 +2544,27 @@
   ],
   "llm_calls": 2,
   "usage": {
-   "prompt_tokens": 3743,
-   "completion_tokens": 860,
-   "total_tokens": 4603,
+   "prompt_tokens": 3828,
+   "completion_tokens": 876,
+   "total_tokens": 4704,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.00222575
+  "notional_cost_usd": 0.002271
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.010487,
-  "llm_calls": 11,
-  "input_tokens": 26876,
-  "output_tokens": 2512,
+  "notional_cost_usd": 0.012287,
+  "llm_calls": 13,
+  "input_tokens": 35430,
+  "output_tokens": 2286,
   "by_agent": {
    "critic": {
     "calls": 2,
-    "input_tokens": 3743,
-    "output_tokens": 860,
+    "input_tokens": 3828,
+    "output_tokens": 876,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002226
+    "notional_cost_usd": 0.002271
    },
    "explainer": {
     "calls": 1,
@@ -2544,11 +2574,11 @@
     "notional_cost_usd": 0.001505
    },
    "qualitative": {
-    "calls": 8,
-    "input_tokens": 20538,
-    "output_tokens": 1081,
+    "calls": 10,
+    "input_tokens": 29007,
+    "output_tokens": 839,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.006756
+    "notional_cost_usd": 0.00851
    }
   }
  },

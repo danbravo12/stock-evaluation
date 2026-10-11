@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "MSFT-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:38:13+00:00",
+  "generated_at": "2026-10-11T13:37:30+00:00",
   "timings": {
-   "fetch": 0.469,
+   "fetch": 0.101,
    "score": 0.001,
-   "qualitative": 125.917,
-   "explain_and_verify": 43.624
+   "qualitative": 18.165,
+   "explain_and_verify": 7.79
   }
  },
  "plan": {
@@ -62,7 +62,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 0.469,
+   "seconds": 0.101,
    "reason": null
   },
   {
@@ -74,19 +74,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 125.917,
+   "seconds": 18.165,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 43.624,
+   "seconds": 7.79,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.07,
+   "seconds": 0.048,
    "reason": null
   }
  ],
@@ -1879,7 +1879,7 @@
    "finding": {
     "criterion": "candid_management",
     "verdict": "evidence weak",
-    "rationale": "The filing acknowledges that acquisitions and strategic partnerships may fail to meet expectations or require impairment charges if benefits are smaller than expected. However, a 10-K is a limited guide to candour, and these disclosures are framed as risk factors rather than specific accounts of past management execution failures.",
+    "rationale": "The filing acknowledges that acquisitions and strategic partnerships may fail to yield expected benefits, which could lead to impairment charges. A 10-K is a limited guide to candour, as these disclosures are framed as potential risks rather than specific accounts of past management execution failures.",
     "citations": [
      {
       "passage_id": "0001193125-26-323660:1A:15",
@@ -1926,13 +1926,13 @@
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5191,
-     "completion_tokens": 263,
-     "total_tokens": 5454,
+     "prompt_tokens": 5368,
+     "completion_tokens": 257,
+     "total_tokens": 5625,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00169225
+    "notional_cost_usd": 0.0017274999999999999
    },
    "critic_status": "passed",
    "stability": null
@@ -1940,34 +1940,9 @@
   {
    "finding": {
     "criterion": "rational_capital_allocation",
-    "verdict": "evidence found",
-    "rationale": "The filing quantifies past capital allocation actions, including $27.0 billion in dividends and $16.7 billion in share repurchases for fiscal year 2026. It also outlines a policy of returning capital to shareholders and investing in infrastructure, technology, and strategic acquisitions.",
-    "citations": [
-     {
-      "passage_id": "0001193125-26-323660:7:34",
-      "accession": "0001193125-26-323660",
-      "item": "7",
-      "char_start": 178622,
-      "char_end": 178754,
-      "quote": "During fiscal years 2026 and 2025, our Board of Directors declared dividends totaling $27.0 billion and $24.7 billion, respectively.",
-      "sentences": [
-       1,
-       1
-      ]
-     },
-     {
-      "passage_id": "0001193125-26-323660:7:33",
-      "accession": "0001193125-26-323660",
-      "item": "7",
-      "char_start": 178144,
-      "char_end": 178342,
-      "quote": "During fiscal years 2026 and 2025, we repurchased 36 million shares and 31 million shares of our common stock for $16.7 billion and $13.0 billion, respectively, through our share repurchase program.",
-      "sentences": [
-       11,
-       11
-      ]
-     }
-    ],
+    "verdict": "not assessed",
+    "rationale": "The cited sentence pointers were invalid twice, so no finding is recorded.",
+    "citations": [],
     "searches": [
      {
       "queries": [
@@ -1990,19 +1965,19 @@
       ]
      }
     ],
-    "llm_calls": 5,
-    "tool_calls": 7,
-    "stop_reason": "submitted",
+    "llm_calls": 3,
+    "tool_calls": 4,
+    "stop_reason": "invalid_citation",
     "usage": {
-     "prompt_tokens": 13699,
-     "completion_tokens": 939,
-     "total_tokens": 14638,
+     "prompt_tokens": 8423,
+     "completion_tokens": 637,
+     "total_tokens": 9060,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00483325
+    "notional_cost_usd": 0.0030612499999999997
    },
-   "critic_status": "warning",
+   "critic_status": "passed",
    "stability": null
   }
  ],
@@ -2041,20 +2016,6 @@
    "accession": "0001193125-26-323660",
    "char_start": 52661,
    "char_end": 53855
-  },
-  "0001193125-26-323660:7:33": {
-   "text": "Total | $ | 241,922 | $ | 501,899 | $ | 743,821\n(a)\nRefer to Note 10 – Debt of the Notes to Financial Statements (Part II, Item 8 of this Form 10-K).\n(b)\nRefer to Note 6 – Property and Equipment of the Notes to Financial Statements (Part II, Item 8 of this Form 10-K).\n(c)\nRefer to Note 13 – Leases of the Notes to Financial Statements (Part II, Item 8 of this Form 10-K).\n(d)\nPurchase commitments primarily relate to datacenters and include open purchase orders and take-or-pay contracts that are not presented as construction commitments above.\nShare Repurchases\nDuring fiscal years 2026 and 2025, we repurchased 36 million shares and 31 million shares of our common stock for $16.7 billion and $13.0 billion, respectively, through our share repurchase program. All repurchases were made using cash resources. As of June 30, 2026, $40.6 billion remained of our $60 billion share repurchase program. Refer to Note 15 – Stockholders' Equity of the Notes to Financial Statements (Part II, Item 8 of this Form 10-K).\n44\nPART II\nItem 7\nDividends",
-   "item": "7",
-   "accession": "0001193125-26-323660",
-   "char_start": 177579,
-   "char_end": 178621
-  },
-  "0001193125-26-323660:7:34": {
-   "text": "During fiscal years 2026 and 2025, our Board of Directors declared dividends totaling $27.0 billion and $24.7 billion, respectively. We intend to continue returning capital to shareholders in the form of dividends, subject to declaration by our Board of Directors. Refer to Note 15 – Stockholders' Equity of the Notes to Financial Statements (Part II, Item 8 of this Form 10-K).\nOther Planned Uses of Capital\nWe will continue to invest in sales, marketing, product support infrastructure, and existing and advanced areas of technology, as well as acquisitions that align with our business strategy. Additions to property and equipment will continue, including new facilities, datacenters, and computer systems for research and development, sales and marketing, support, and administrative staff. We will continue to invest in capital expenditures to support growth in our cloud offerings and our investments in AI training and other infrastructure. We have operating and finance leases for datacenters and related infrastructure, servers and network equipment, corporate offices, and research and development facilities. We have not engaged in any related party transactions or arrangements with unconsolidated entities or other persons that are reasonably likely to materially affect liquidity or the availability of capital resources.\nRECENT ACCOUNTING GUIDANCE",
-   "item": "7",
-   "accession": "0001193125-26-323660",
-   "char_start": 178622,
-   "char_end": 179985
   }
  },
  "critic": {
@@ -2365,7 +2326,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing clearly defines segments, specific products within those segments, and the revenue models associated with them.",
+    "detail": "supports_verdict=yes; The filing clearly defines the company's segments, the specific products within them, and the revenue models such as subscriptions, licensing, and cloud consumption.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2375,7 +2336,7 @@
     "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing asserts switching costs and installed base growth but lacks quantified evidence to prove these create a durable advantage.",
+    "detail": "supports_verdict=yes; The filing identifies switching costs as a competitive factor, which aligns with the definition of an asserted advantage without quantified measures.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2385,7 +2346,7 @@
     "check": "L1",
     "item": "candid_management",
     "status": "pass",
-    "detail": "supports_verdict=yes; The quote provided is a standard risk factor disclosure rather than a candid discussion of specific past management failures.",
+    "detail": "supports_verdict=yes; The disclosure regarding potential impairment of goodwill and intangible assets due to failed strategic benefits is a standard risk-based discussion of uncertainty.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2393,21 +2354,9 @@
    },
    {
     "check": "L1",
-    "item": "rational_capital_allocation",
-    "status": "fail",
-    "detail": "supports_verdict=overstated; unsupported: It also outlines a policy of returning capital to shareholders and investing in infrastructure, technology, and strategic acquisitions.; The quotes quantify past actions but do not contain the stated policy or rationale for capital allocation.",
-    "owner": "qualitative",
-    "attempt": 0,
-    "kind": "verdict",
-    "claims": [
-     "It also outlines a policy of returning capital to shareholders and investing in infrastructure, technology, and strategic acquisitions."
-    ]
-   },
-   {
-    "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares revenue to the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and confirms the company exceeds it.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2417,7 +2366,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the current ratio is below the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the current ratio and debt-to-asset requirements.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2427,7 +2376,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms positive net income for the required period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms the company maintained positive net income for the required 10-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2437,7 +2386,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the dividend record over the available period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that dividends were paid in all 15 years on record, justifying the partial pass.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2447,7 +2396,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio against the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio and confirms it exceeds the 1.33 threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2457,7 +2406,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the ROE performance over the 10-year period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms the ROE performance over the 10-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2467,7 +2416,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares debt to the calculated maximum.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares long-term debt against the calculated maximum debt threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2477,7 +2426,7 @@
     "check": "L1",
     "item": "B3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin to the 10-year average.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms positive margins and the required 3-year to 10-year average ratio.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2487,43 +2436,11 @@
     "check": "L1",
     "item": "B4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares owner earnings averages.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms the owner earnings frequency and the growth between the first and last 3-year averages.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
     "claims": []
-   },
-   {
-    "check": "R2",
-    "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "R3",
-    "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "L1",
-    "item": "rational_capital_allocation",
-    "status": "fail",
-    "detail": "supports_verdict=overstated; unsupported: share repurchases; The filing quantifies dividends but does not quantify share repurchases. The rationale incorrectly claims share repurchases were quantified.",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": "verdict",
-    "claims": [
-     "share repurchases"
-    ]
    }
   ],
   "final": {
@@ -2541,40 +2458,32 @@
    "understandable_business": "passed",
    "durable_competitive_advantage": "passed",
    "candid_management": "passed",
-   "rational_capital_allocation": "warning"
+   "rational_capital_allocation": "passed"
   },
-  "repairs": [
-   {
-    "item": "rational_capital_allocation",
-    "path": "constrained_retry",
-    "outcome": "rejected_by_recheck",
-    "detail": "supports_verdict=overstated; unsupported: share repurchases; The filing quantifies dividends but does not quantify share repurchases. The rationale incorrectly claims share repurchases were quantified.",
-    "llm_calls": 3
-   }
-  ],
-  "llm_calls": 2,
+  "repairs": [],
+  "llm_calls": 1,
   "usage": {
-   "prompt_tokens": 4160,
-   "completion_tokens": 925,
-   "total_tokens": 5085,
+   "prompt_tokens": 3003,
+   "completion_tokens": 808,
+   "total_tokens": 3811,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.0024275
+  "notional_cost_usd": 0.00196275
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.013949,
-  "llm_calls": 14,
-  "input_tokens": 35953,
-  "output_tokens": 3307,
+  "notional_cost_usd": 0.011747,
+  "llm_calls": 11,
+  "input_tokens": 29697,
+  "output_tokens": 2882,
   "by_agent": {
    "critic": {
-    "calls": 2,
-    "input_tokens": 4160,
-    "output_tokens": 925,
+    "calls": 1,
+    "input_tokens": 3003,
+    "output_tokens": 808,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002427
+    "notional_cost_usd": 0.001963
    },
    "explainer": {
     "calls": 1,
@@ -2584,11 +2493,11 @@
     "notional_cost_usd": 0.001533
    },
    "qualitative": {
-    "calls": 11,
-    "input_tokens": 29145,
-    "output_tokens": 1801,
+    "calls": 9,
+    "input_tokens": 24046,
+    "output_tokens": 1493,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.009988
+    "notional_cost_usd": 0.008251
    }
   }
  },
@@ -2698,7 +2607,7 @@
  "warnings": [
   {
    "where": "rational_capital_allocation",
-   "message": "the Critic still objects after one repair: supports_verdict=overstated; unsupported: share repurchases; The filing quantifies dividends but does not quantify share repurchases. The rationale incorrectly claims share repurchases were quantified."
+   "message": "not assessed (invalid_citation): The cited sentence pointers were invalid twice, so no finding is recorded."
   }
  ]
 }

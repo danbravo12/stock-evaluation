@@ -3,7 +3,7 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "DUK-replay",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "replay",
   "generated_at": null,
@@ -1741,7 +1741,14 @@
     "notional_cost_usd": 0.001695
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence found",
+     "a": "evidence found",
+     "b": "evidence found"
+    }
+   }
   },
   {
    "finding": {
@@ -1800,36 +1807,31 @@
     "notional_cost_usd": 0.000691
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence found",
+     "a": "evidence found",
+     "b": "evidence found"
+    }
+   }
   },
   {
    "finding": {
     "criterion": "candid_management",
-    "verdict": "evidence found",
-    "rationale": "Management explicitly identifies and quantifies specific charges and impairments related to its own business decisions, such as the implementation of a new customer system, joint venture electric transmission projects, and renewable natural gas investments. These are presented as distinct items impacting financial results rather than being obscured by external factors.",
+    "verdict": "evidence weak",
+    "rationale": "The filing acknowledges that progress toward the company's energy modernization strategy and net-zero carbon emissions target \"will not be linear,\" but this is a general statement rather than an account of a specific setback or mistake. A 10-K is a limited guide to candour, and the provided text does not contain the specific, candid admissions of management-driven errors or missed targets required for an \"evidence found\" verdict.",
     "citations": [
      {
-      "passage_id": "0001326160-26-000014:7:36",
+      "passage_id": "0001326160-26-000014:7:29",
       "accession": "0001326160-26-000014",
       "item": "7",
-      "char_start": 236474,
-      "char_end": 237166,
-      "quote": "•Regulatory Matters primarily represents net impairment charges related to Duke Energy Carolinas' and Duke Energy Progress' 2024 South Carolina rate case orders and charges related to Duke Energy Indiana post-retirement benefits.\n•System Post-Implementation Costs represents the net impact of charges related to nonrecurring customer billing adjustments as a result of implementation of a new customer system.\n•Preferred Redemption Costs represents charges related to the redemption of Series B Preferred Stock.\n•Noncore Asset Sales and Net Impairments primarily represents charges related to certain joint venture electric transmission projects and certain renewable natural gas investments.",
+      "char_start": 229194,
+      "char_end": 229361,
+      "quote": "As we continue to execute on our energy modernization strategy, and target net-zero carbon emissions from electric generation by 2050, our progress will not be linear.",
       "sentences": [
-       1,
-       4
-      ]
-     },
-     {
-      "passage_id": "0001326160-26-000014:7:38",
-      "accession": "0001326160-26-000014",
-      "item": "7",
-      "char_start": 239619,
-      "char_end": 240008,
-      "quote": "In addition to the drivers below, the increase in GAAP Reported Earnings/EPS was primarily due to impairments related to the 2024 South Carolina rate case and charges related to Duke Energy Indiana post-retirement benefits in the prior year, as well as charges related to certain joint venture electric transmission projects and certain renewable natural gas investments in the prior year.",
-      "sentences": [
-       8,
-       8
+       3,
+       3
       ]
      }
     ],
@@ -1859,43 +1861,35 @@
        "0001326160-26-000014:7:29",
        "0001326160-26-000014:1A:19"
       ]
-     },
-     {
-      "queries": [
-       "impairment charge write-down project failure"
-      ],
-      "items": [
-       "7"
-      ],
-      "seeded": false,
-      "passage_ids": [
-       "0001326160-26-000014:7:36",
-       "0001326160-26-000014:7:38",
-       "0001326160-26-000014:7:46",
-       "0001326160-26-000014:7:73"
-      ]
      }
     ],
-    "llm_calls": 2,
-    "tool_calls": 3,
+    "llm_calls": 1,
+    "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5605,
-     "completion_tokens": 191,
-     "total_tokens": 5796,
+     "prompt_tokens": 2254,
+     "completion_tokens": 153,
+     "total_tokens": 2407,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00168775
+    "notional_cost_usd": 0.000793
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "borderline",
+    "verdicts": {
+     "main": "evidence weak",
+     "a": "evidence weak",
+     "b": "insufficient evidence"
+    }
+   }
   },
   {
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing identifies capital expenditures, debt repayment, and dividends as primary uses of cash, providing specific 2025 expenditure amounts for these categories. It also states a policy of targeting a dividend payout ratio of 60% to 70% of adjusted EPS.",
+    "rationale": "The filing identifies the company's primary capital requirements as capital expenditures, debt repayment, and dividend payments, and provides concrete figures for 2025 capital expenditures and financing activities.",
     "citations": [
      {
       "passage_id": "0001326160-26-000014:7:80",
@@ -1910,15 +1904,15 @@
       ]
      },
      {
-      "passage_id": "0001326160-26-000014:7:90",
+      "passage_id": "0001326160-26-000014:7:100",
       "accession": "0001326160-26-000014",
       "item": "7",
-      "char_start": 295630,
-      "char_end": 295722,
-      "quote": "Duke Energy targets a dividend payout ratio of between 60% and 70%, based upon adjusted EPS.",
+      "char_start": 306564,
+      "char_end": 306693,
+      "quote": "Capital, investment and acquisition expenditures, net of return of investment capital | $ | (14,002) | $ | (12,263) | $ | (1,739)",
       "sentences": [
-       1,
-       1
+       6,
+       6
       ]
      }
     ],
@@ -1942,37 +1936,29 @@
        "0001326160-26-000014:7:95",
        "0001326160-26-000014:7:80"
       ]
-     },
-     {
-      "queries": [
-       "dividend policy rationale"
-      ],
-      "items": [
-       "7"
-      ],
-      "seeded": false,
-      "passage_ids": [
-       "0001326160-26-000014:7:89",
-       "0001326160-26-000014:7:90",
-       "0001326160-26-000014:7:102",
-       "0001326160-26-000014:7:91"
-      ]
      }
     ],
-    "llm_calls": 5,
-    "tool_calls": 7,
+    "llm_calls": 1,
+    "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 16656,
-     "completion_tokens": 826,
-     "total_tokens": 17482,
+     "prompt_tokens": 2648,
+     "completion_tokens": 145,
+     "total_tokens": 2793,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.005403
+    "notional_cost_usd": 0.0008795
    },
-   "critic_status": "warning",
-   "stability": null
+   "critic_status": "passed",
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence found",
+     "a": "evidence found",
+     "b": "evidence found"
+    }
+   }
   }
  ],
  "passages": {
@@ -1990,19 +1976,19 @@
    "char_start": 35163,
    "char_end": 36328
   },
-  "0001326160-26-000014:7:36": {
-   "text": "•Regulatory Matters primarily represents net impairment charges related to Duke Energy Carolinas' and Duke Energy Progress' 2024 South Carolina rate case orders and charges related to Duke Energy Indiana post-retirement benefits.\n•System Post-Implementation Costs represents the net impact of charges related to nonrecurring customer billing adjustments as a result of implementation of a new customer system.\n•Preferred Redemption Costs represents charges related to the redemption of Series B Preferred Stock.\n•Noncore Asset Sales and Net Impairments primarily represents charges related to certain joint venture electric transmission projects and certain renewable natural gas investments.\n•Captive Storm Deductible represents charges related to an insurance deductible for Hurricane Helene property losses.\nDiscontinued operations primarily represents the results from Duke Energy's Commercial Renewables Disposal Groups.\nDuke Energy's adjusted earnings and adjusted EPS may not be comparable to similarly titled measures of another company because other companies may not calculate the measures in the same manner.\n44\nMD&A | DUKE ENERGY\nReconciliation of GAAP Reported Amounts to Adjusted Amounts\nThe following table presents a reconciliation of adjusted earnings and adjusted EPS to the most directly comparable GAAP measures.\nYears Ended December 31,\n2025 | 2024",
+  "0001326160-26-000014:7:100": {
+   "text": "•a $1,767 million decrease in cash inflow due to net working capital and changes in other assets and liabilities, primarily due to lower recovery of deferred fuel costs and the timing of accruals and payments, including higher current year payments related to restoration activities from the 2024 storm season.\nINVESTING CASH FLOWS\nThe following table summarizes key components of Duke Energy's investing cash flows for the two most recently completed fiscal years.\nYears Ended December 31,\n(in millions) | 2025 | 2024 | Variance\nCapital, investment and acquisition expenditures, net of return of investment capital | $ | (14,002) | $ | (12,263) | $ | (1,739)\nDebt and equity securities, net | 117 | 100 | 17\nProceeds from the sales of Commercial Renewables Disposal Groups and other assets, net of cash divested | 626 | 49 | 577\nOther investing items | (1,079) | (1,009) | (70)\nNet cash used in investing activities | $ | (14,338) | $ | (13,123) | $ | (1,215)\nThe variance is driven by higher capital expenditures within the EU&I segment, partially offset by proceeds received in the current year from the sale of the Commercial Renewables Disposal Groups.",
    "item": "7",
    "accession": "0001326160-26-000014",
-   "char_start": 236474,
-   "char_end": 237843
+   "char_start": 306034,
+   "char_end": 307191
   },
-  "0001326160-26-000014:7:38": {
-   "text": "(b) Net of tax benefit of $5 million. $17 million recorded within Operating Revenues, $1 million recorded within Operation, maintenance and other, and $3 million recorded within Other income and expenses.\n(c) Recorded within Preferred Redemption Costs.\n(d) Net of $11 million tax benefit. $69 million recorded within Equity in (losses) earnings of unconsolidated affiliates and $4 million recorded within Gains on sales of other assets and other, net.\n(e) Net of $5 million tax benefit. $23 million recorded within Operation, maintenance and other.\n(f) Recorded in Income (Loss) from Discontinued Operations, net of tax, and Net Income Attributable to NCI.\nYear Ended December 31, 2025, as compared to 2024\nGAAP Reported EPS was $6.31 for the year ended December 31, 2025, compared to $5.71 for the year ended December 31, 2024. In addition to the drivers below, the increase in GAAP Reported Earnings/EPS was primarily due to impairments related to the 2024 South Carolina rate case and charges related to Duke Energy Indiana post-retirement benefits in the prior year, as well as charges related to certain joint venture electric transmission projects and certain renewable natural gas investments in the prior year.",
+  "0001326160-26-000014:7:29": {
+   "text": "As we transition our business to meet anticipated increased long-term demand, we are also focused on creating sustainable value for our customers and shareholders by leveraging business transformation to exceed customer expectations, optimizing investments to drive attractive shareholder returns and providing new product offerings and solutions that deliver growth and customer value. Our approach enables us to meet our customers' needs while also mitigating our impact on the environment. As we continue to execute on our energy modernization strategy, and target net-zero carbon emissions from electric generation by 2050, our progress will not be linear. To achieve these objectives, we are partnering with stakeholders, championing public policy that advances innovation, and continuing to leverage regulatory models that support the delivery of reliable energy, ensure timely cost recovery and promote cost stability for customers.\nMatters Impacting Future Results\nThe matters discussed herein could materially impact the future operating results, financial condition and cash flows of the Duke Energy Registrants.\nRegulatory Matters\nCoal Ash Costs",
    "item": "7",
    "accession": "0001326160-26-000014",
-   "char_start": 238790,
-   "char_end": 240008
+   "char_start": 228701,
+   "char_end": 229857
   },
   "0001326160-26-000014:7:80": {
    "text": "Duke Energy relies primarily upon cash flows from operations, debt and equity issuances and its existing cash and cash equivalents to fund its liquidity and capital requirements. Duke Energy's capital requirements arise primarily from capital and investment expenditures, repaying long-term debt and paying dividends to shareholders. Additionally, due to its existing tax attributes and projected tax credits to be generated, Duke Energy does not expect to be a significant federal cash taxpayer until around 2030. Duke Energy Carolinas, Duke Energy Progress and Duke Energy Florida are monetizing tax credits in the transferability markets established by the IRA and are working with the state utility commissions on the appropriate regulatory process to pass the net realizable value back to customers over time. See Note 24 to the Consolidated Financial Statements, \"Income Taxes,\" for further information.\nIn 2025, Duke Energy executed several equity forward sales agreements as part of the prior ATM program. Settlement of the forward sales agreements is expected to occur by December 31, 2026. See Note 20 to the Consolidated Financial Statements, \"Stockholders' Equity,\" for further details.",
@@ -2010,13 +1996,6 @@
    "accession": "0001326160-26-000014",
    "char_start": 284630,
    "char_end": 285828
-  },
-  "0001326160-26-000014:7:90": {
-   "text": "Duke Energy targets a dividend payout ratio of between 60% and 70%, based upon adjusted EPS. Duke Energy increased the dividend by approximately 2% annually in both 2025 and 2024, and the Company remains committed to continued growth of the dividend.\n59\nMD&A | LIQUIDITY AND CAPITAL RESOURCES\nDividend and Other Funding Restrictions of Duke Energy Subsidiaries",
-   "item": "7",
-   "accession": "0001326160-26-000014",
-   "char_start": 295630,
-   "char_end": 295990
   }
  },
  "critic": {
@@ -2327,7 +2306,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The quotes clearly define the company's business as a regulated utility, its service area, customer base, and the mechanism for earning revenue through commission-approved rates.",
+    "detail": "supports_verdict=yes; The filing clearly defines the business as a regulated utility, identifies the service area and customer base, and explains the revenue model via commission-approved rates.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2337,7 +2316,7 @@
     "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing identifies the regulated service territory as a source of advantage, which functions as a legal barrier to entry for competitors.",
+    "detail": "supports_verdict=yes; The filing identifies a regulated exclusive service territory as the source of advantage, which is a checkable specific for a utility business.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2347,7 +2326,7 @@
     "check": "L1",
     "item": "candid_management",
     "status": "pass",
-    "detail": "supports_verdict=yes; Management explicitly identifies and discusses specific charges related to internal decisions, such as customer system implementation and investment choices, rather than blaming external factors.",
+    "detail": "supports_verdict=yes; The quote provided is a generic forward-looking statement, which aligns with the definition of the 'evidence weak' verdict.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2356,20 +2335,18 @@
    {
     "check": "L1",
     "item": "rational_capital_allocation",
-    "status": "fail",
-    "detail": "supports_verdict=overstated; unsupported: providing specific 2025 expenditure amounts for these categories; The quotes state the categories of capital requirements and a dividend policy, but they do not contain the specific 2025 expenditure amounts mentioned in the rationale.",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The filing provides a specific capital expenditure figure for the fiscal year and outlines the company's primary capital requirements and funding sources.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": "verdict",
-    "claims": [
-     "providing specific 2025 expenditure amounts for these categories"
-    ]
+    "kind": null,
+    "claims": []
    },
    {
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and confirms the company meets it.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue and compares it to the threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2379,7 +2356,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly applies the utility-specific debt-to-equity ratio test.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the ratio and compares it to the utility-specific threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2389,7 +2366,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the requirement for consistent positive net income.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the consistency of positive net income over the 10-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2399,7 +2376,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the partial record and confirms dividends were paid in all years on record.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the dividend record and clarifies the partial nature of the data.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2409,7 +2386,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio based on the 3-year averages.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the growth ratio and compares it to the required threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2429,7 +2406,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares long-term debt against the defined multiple of average net income.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the debt level against the calculated maximum allowed debt.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2439,7 +2416,7 @@
     "check": "L1",
     "item": "B3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin against the 10-year average.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin to the 10-year average.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2454,39 +2431,6 @@
     "attempt": 0,
     "kind": null,
     "claims": []
-   },
-   {
-    "check": "R2",
-    "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "R3",
-    "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "L1",
-    "item": "rational_capital_allocation",
-    "status": "fail",
-    "detail": "supports_verdict=overstated; unsupported: 2025 actual expenditure amount | dividend payout ratio of 60% to 70% of adjusted EPS; The quotes provide a capital expenditure figure but do not contain the dividend payout ratio policy or confirm the fiscal year of the expenditure.",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": "verdict",
-    "claims": [
-     "2025 actual expenditure amount",
-     "dividend payout ratio of 60% to 70% of adjusted EPS"
-    ]
    }
   ],
   "final": {
@@ -2504,40 +2448,32 @@
    "understandable_business": "passed",
    "durable_competitive_advantage": "passed",
    "candid_management": "passed",
-   "rational_capital_allocation": "warning"
+   "rational_capital_allocation": "passed"
   },
-  "repairs": [
-   {
-    "item": "rational_capital_allocation",
-    "path": "constrained_retry",
-    "outcome": "rejected_by_recheck",
-    "detail": "supports_verdict=overstated; unsupported: 2025 actual expenditure amount | dividend payout ratio of 60% to 70% of adjusted EPS; The quotes provide a capital expenditure figure but do not contain the dividend payout ratio policy or confirm the fiscal year of the expenditure.",
-    "llm_calls": 2
-   }
-  ],
-  "llm_calls": 2,
+  "repairs": [],
+  "llm_calls": 1,
   "usage": {
-   "prompt_tokens": 4105,
-   "completion_tokens": 1002,
-   "total_tokens": 5107,
+   "prompt_tokens": 3250,
+   "completion_tokens": 842,
+   "total_tokens": 4092,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.0025292500000000002
+  "notional_cost_usd": 0.0020755
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.01353,
-  "llm_calls": 13,
-  "input_tokens": 35724,
-  "output_tokens": 3066,
+  "notional_cost_usd": 0.007658,
+  "llm_calls": 7,
+  "input_tokens": 17510,
+  "output_tokens": 2187,
   "by_agent": {
    "critic": {
-    "calls": 2,
-    "input_tokens": 4105,
-    "output_tokens": 1002,
+    "calls": 1,
+    "input_tokens": 3250,
+    "output_tokens": 842,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002529
+    "notional_cost_usd": 0.002076
    },
    "explainer": {
     "calls": 1,
@@ -2547,11 +2483,11 @@
     "notional_cost_usd": 0.001524
    },
    "qualitative": {
-    "calls": 10,
-    "input_tokens": 29009,
-    "output_tokens": 1483,
+    "calls": 5,
+    "input_tokens": 11650,
+    "output_tokens": 764,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.009477
+    "notional_cost_usd": 0.004058
    }
   }
  },
@@ -2646,10 +2582,5 @@
   "Filings and XBRL data: U.S. Securities and Exchange Commission, EDGAR (public domain)"
  ],
  "trace_path": "results/0001326160.trace.jsonl",
- "warnings": [
-  {
-   "where": "rational_capital_allocation",
-   "message": "the Critic still objects after one repair: supports_verdict=overstated; unsupported: 2025 actual expenditure amount | dividend payout ratio of 60% to 70% of adjusted EPS; The quotes provide a capital expenditure figure but do not contain the dividend payout ratio policy or confirm the fiscal year of the expenditure."
-  }
- ]
+ "warnings": []
 }

@@ -31,6 +31,8 @@ results/*
 !results/0000063908.*
 !results/0000018230.*
 !results/0002115436.*
+# the stability runs (paraphrases A and B, build 4a, ADR-072)
+!results/stability/
 !results/0001067983.*
 !results/0000731766.*
 !results/0001099219.*

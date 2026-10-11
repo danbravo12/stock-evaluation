@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "CAT-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:46:08+00:00",
+  "generated_at": "2026-10-11T13:41:06+00:00",
   "timings": {
-   "fetch": 0.747,
+   "fetch": 0.115,
    "score": 0.001,
-   "qualitative": 45.455,
-   "explain_and_verify": 38.745
+   "qualitative": 16.17,
+   "explain_and_verify": 13.253
   }
  },
  "plan": {
@@ -62,7 +62,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 0.747,
+   "seconds": 0.115,
    "reason": null
   },
   {
@@ -74,19 +74,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 45.455,
+   "seconds": 16.17,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 38.745,
+   "seconds": 13.253,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.064,
+   "seconds": 0.044,
    "reason": null
   }
  ],
@@ -1694,7 +1694,7 @@
    "finding": {
     "criterion": "understandable_business",
     "verdict": "evidence found",
-    "rationale": "Caterpillar manufactures construction and mining equipment, engines, turbines, and locomotives. The company generates revenue by selling these products to customers globally through an extensive network of dealers and distributors.",
+    "rationale": "Caterpillar manufactures construction and mining equipment, engines, turbines, and locomotives. The company generates revenue by selling these products globally through a network of independent dealers and directly to other manufacturers.",
     "citations": [
      {
       "passage_id": "0000018230-26-000008:1:1",
@@ -1713,11 +1713,11 @@
       "accession": "0000018230-26-000008",
       "item": "1",
       "char_start": 33062,
-      "char_end": 33698,
-      "quote": "We distribute our machines principally through a worldwide organization of dealers (dealer network), 41 located in the United States and 109 located outside the United States, serving 190 countries. We sell reciprocating engines principally through the dealer network and to other manufacturers for use in products. We also sell some of the reciprocating engines manufactured by our subsidiary Perkins Engines Company Limited through its worldwide network of 86 distributors covering 183 countries. We sell the FG Wilson branded electric power generation systems through its worldwide network of 108 distributors covering 159 countries.",
+      "char_end": 33377,
+      "quote": "We distribute our machines principally through a worldwide organization of dealers (dealer network), 41 located in the United States and 109 located outside the United States, serving 190 countries. We sell reciprocating engines principally through the dealer network and to other manufacturers for use in products.",
       "sentences": [
        1,
-       4
+       2
       ]
      }
     ],
@@ -1746,9 +1746,9 @@
     "tool_calls": 4,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 7828,
-     "completion_tokens": 564,
-     "total_tokens": 8392,
+     "prompt_tokens": 7816,
+     "completion_tokens": 566,
+     "total_tokens": 8382,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
@@ -1819,28 +1819,16 @@
   {
    "finding": {
     "criterion": "candid_management",
-    "verdict": "evidence weak",
-    "rationale": "The filing discusses potential setbacks such as excess inventory and goodwill impairment, but these are presented as generic risks or external dependencies rather than specific, management-acknowledged failures or mistakes. A 10-K is a limited guide to candour, and the provided text does not meet the threshold for \"evidence found.\"",
+    "verdict": "insufficient evidence",
+    "rationale": "The filing discusses potential risks and accounting policies for impairments but does not provide a candid account of specific setbacks or mistakes in the 2025 fiscal year; in fact, it explicitly states that the 2025 annual goodwill impairment tests resulted in no impairment charges. A 10-K is a limited guide to candour.",
     "citations": [
      {
-      "passage_id": "0000018230-26-000008:1A:9",
-      "accession": "0000018230-26-000008",
-      "item": "1A",
-      "char_start": 53701,
-      "char_end": 54325,
-      "quote": "On the other hand, in circumstances where demand for our products is less than we expect, we may experience excess inventories and be forced to incur additional costs and our profitability may suffer. Our business, competitive position, results of operations or financial condition could be negatively impacted if supply is insufficient for our operations, if significant transportation delays interfere with deliveries, if we experience excess inventories or if we are unable to adjust our production schedules or our purchases from suppliers to reflect changes in customer demand and market fluctuations on a timely basis.",
-      "sentences": [
-       3,
-       4
-      ]
-     },
-     {
-      "passage_id": "0000018230-26-000008:7:62",
+      "passage_id": "0000018230-26-000008:7:61",
       "accession": "0000018230-26-000008",
       "item": "7",
-      "char_start": 181415,
-      "char_end": 181773,
-      "quote": "An unfavorable change in our expectations for the financial performance of our reporting units, particularly long-term growth and profitability, would reduce the fair value of our reporting units. The demand for our equipment and related parts is highly cyclical and significantly impacted by commodity prices, although the impact may vary by reporting unit.",
+      "char_start": 181029,
+      "char_end": 181289,
+      "quote": "The Company completed its annual goodwill impairment tests in the fourth quarter of 2025. Based on those tests, the fair value of each reporting unit was substantially above its respective carrying value, including goodwill, resulting in no impairment charges.",
       "sentences": [
        1,
        2
@@ -1873,19 +1861,34 @@
        "0000018230-26-000008:1A:4",
        "0000018230-26-000008:7:38"
       ]
+     },
+     {
+      "queries": [
+       "\"restructuring\" \"impairment\" \"charge\" \"loss\" \"2025\""
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0000018230-26-000008:7:61",
+       "0000018230-26-000008:7:57",
+       "0000018230-26-000008:7:62",
+       "0000018230-26-000008:7:59"
+      ]
      }
     ],
     "llm_calls": 2,
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 4652,
-     "completion_tokens": 345,
-     "total_tokens": 4997,
+     "prompt_tokens": 5243,
+     "completion_tokens": 177,
+     "total_tokens": 5420,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0016805000000000001
+    "notional_cost_usd": 0.00157625
    },
    "critic_status": "passed",
    "stability": null
@@ -1894,7 +1897,7 @@
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing outlines a clear resource allocation framework prioritizing a strong financial position, operational and strategic growth investments, and returning capital to shareholders. It also quantifies specific past actions, such as $2.749 billion in dividends paid in 2025.",
+    "rationale": "The filing outlines a resource allocation framework that prioritizes maintaining a strong financial position, funding operational commitments and growth, and returning capital to shareholders. It also quantifies specific actions taken in 2025, such as $2.749 billion in dividends paid.",
     "citations": [
      {
       "passage_id": "0000018230-26-000008:7:49",
@@ -1947,13 +1950,13 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2338,
-     "completion_tokens": 160,
-     "total_tokens": 2498,
+     "prompt_tokens": 2401,
+     "completion_tokens": 162,
+     "total_tokens": 2563,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0008245
+    "notional_cost_usd": 0.00084325
    },
    "critic_status": "passed",
    "stability": null
@@ -1981,13 +1984,6 @@
    "char_start": 34058,
    "char_end": 35267
   },
-  "0000018230-26-000008:1A:9": {
-   "text": "We rely on suppliers to produce or secure material required for the manufacture of our products. Production challenges at suppliers (including suppliers of semiconductors), a disruption in deliveries to or from suppliers or decreased availability of raw materials or commodities could have an adverse effect on our ability to meet our commitments to customers or increase our operating costs. On the other hand, in circumstances where demand for our products is less than we expect, we may experience excess inventories and be forced to incur additional costs and our profitability may suffer. Our business, competitive position, results of operations or financial condition could be negatively impacted if supply is insufficient for our operations, if significant transportation delays interfere with deliveries, if we experience excess inventories or if we are unable to adjust our production schedules or our purchases from suppliers to reflect changes in customer demand and market fluctuations on a timely basis.\nChanges in government monetary or fiscal policies may negatively impact our results.",
-   "item": "1A",
-   "accession": "0000018230-26-000008",
-   "char_start": 53308,
-   "char_end": 54410
-  },
   "0000018230-26-000008:7:49": {
    "text": "Net cash used by investing activities in 2025 was $2.870 billion, compared with net cash provided of $133 million in 2024. The change was primarily due to lower proceeds from maturities and sale of securities, primarily due to time deposit maturities in 2024; increased activity related to intercompany lending with Financial Products; and an increase in capital expenditures.\nNet cash used for financing activities during 2025 was $6.184 billion, compared with $11.417 billion in 2024. The change was primarily due to lower payments to repurchase common stock, higher proceeds from debt issued and lower payments on debt in 2025 compared to 2024.\nWhile our short-term priorities for the use of cash may vary from time to time as business needs and conditions dictate, our resource allocation framework is focused on the following priorities. Our top priority is to maintain a strong financial position in support of a mid-A rating. Next, we intend to fund operational commitments and strategic growth initiatives assessed using the Operating & Execution Model. Then, we intend to return capital to shareholders through dividend growth and share repurchases. Additional information on the resource allocation framework is as follows:",
    "item": "7",
@@ -2002,12 +1998,12 @@
    "char_start": 172420,
    "char_end": 173378
   },
-  "0000018230-26-000008:7:62": {
-   "text": "An unfavorable change in our expectations for the financial performance of our reporting units, particularly long-term growth and profitability, would reduce the fair value of our reporting units. The demand for our equipment and related parts is highly cyclical and significantly impacted by commodity prices, although the impact may vary by reporting unit. The energy and mining industries are major users of our products, including the mineral extraction, oil and natural gas industries. Decisions to purchase our products are dependent upon the performance of those industries, which in turn are dependent in part on commodity prices. Lower commodity prices or industry specific circumstances that have a negative impact to the valuation assumptions may reduce the fair value of our reporting units. Should such events occur and it becomes more likely than not that a reporting unit's fair value has fallen below its carrying value, we will perform an interim goodwill impairment test(s), in addition to the annual impairment test. Future impairment tests may result in a goodwill impairment, depending on the outcome of the quantitative impairment test. We would report a goodwill impairment as a non-cash charge to earnings.",
+  "0000018230-26-000008:7:61": {
+   "text": "The Company completed its annual goodwill impairment tests in the fourth quarter of 2025. Based on those tests, the fair value of each reporting unit was substantially above its respective carrying value, including goodwill, resulting in no impairment charges. Caterpillar's market capitalization has remained significantly above the net book value of the Company.\n42\nTable of Contents",
    "item": "7",
    "accession": "0000018230-26-000008",
-   "char_start": 181415,
-   "char_end": 182645
+   "char_start": 181029,
+   "char_end": 181414
   }
  },
  "critic": {
@@ -2318,29 +2314,19 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "fail",
-    "detail": "supports_verdict=yes; unsupported: it also notes that the company earns revenue through financing services for these products.; The filing clearly identifies products, markets, and the distribution model. The rationale mentions financing services, which is not present in the provided quotes.",
+    "detail": "supports_verdict=yes; unsupported: the company earns revenue through financing services for these products; The quotes identify the products, the dealer network distribution model, and the global market, satisfying the requirements for a clear business description.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": "rationale",
     "claims": [
-     "it also notes that the company earns revenue through financing services for these products."
+     "the company earns revenue through financing services for these products"
     ]
    },
    {
     "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The quotes only provide a specific market share for one region, which does not constitute a broad, durable competitive advantage as defined.",
-    "owner": "qualitative",
-    "attempt": 0,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "L1",
-    "item": "candid_management",
-    "status": "pass",
-    "detail": "supports_verdict=yes; The quotes describe generic risks and cyclicality rather than specific management-acknowledged failures, supporting the weak evidence verdict.",
+    "detail": "supports_verdict=yes; The filing asserts a specific asset (dealership ownership) but lacks a quantified measure of its impact, fitting the definition of weak evidence.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2350,7 +2336,7 @@
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides both a clear strategic framework for capital allocation and a specific, quantified expenditure for dividends.",
+    "detail": "supports_verdict=yes; The filing provides a clear capital allocation framework and quantifies a specific 2025 action (dividend payment), meeting the criteria.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2360,7 +2346,7 @@
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue and confirms it meets the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue figure and confirms it meets the threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2370,7 +2356,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the company failed both components of the financial strength test.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the current ratio and debt-to-assets requirements.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2380,7 +2366,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the 10-year positive net income requirement.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure due to a loss in 2016.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2390,7 +2376,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that dividends were paid in all years on record, justifying the partial pass.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that dividends were paid in all 15 years on record.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2410,7 +2396,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the ROE threshold was met in 8 of 10 years.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the frequency of meeting the ROE threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2440,7 +2426,7 @@
     "check": "L1",
     "item": "B4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms both the consistency and the growth of owner earnings.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms positive owner earnings and the required growth in averages.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2470,7 +2456,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing clearly identifies the products, the global dealer-based distribution model, and the revenue-generating activities, meeting all requirements for the claimed verdict.",
+    "detail": "supports_verdict=yes; The quotes clearly identify the products, the distribution model via dealers, and the customer base, meeting all requirements for the verdict.",
     "owner": "qualitative",
     "attempt": 1,
     "kind": null,
@@ -2505,27 +2491,27 @@
   ],
   "llm_calls": 2,
   "usage": {
-   "prompt_tokens": 4114,
-   "completion_tokens": 954,
-   "total_tokens": 5068,
+   "prompt_tokens": 3702,
+   "completion_tokens": 879,
+   "total_tokens": 4581,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.0024595
+  "notional_cost_usd": 0.002244
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.010032,
+  "notional_cost_usd": 0.009731,
   "llm_calls": 11,
-  "input_tokens": 23683,
-  "output_tokens": 2741,
+  "input_tokens": 23913,
+  "output_tokens": 2502,
   "by_agent": {
    "critic": {
     "calls": 2,
-    "input_tokens": 4114,
-    "output_tokens": 954,
+    "input_tokens": 3702,
+    "output_tokens": 879,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002459
+    "notional_cost_usd": 0.002244
    },
    "explainer": {
     "calls": 1,
@@ -2536,10 +2522,10 @@
    },
    "qualitative": {
     "calls": 8,
-    "input_tokens": 16965,
-    "output_tokens": 1198,
+    "input_tokens": 17607,
+    "output_tokens": 1034,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.006038
+    "notional_cost_usd": 0.005953
    }
   }
  },

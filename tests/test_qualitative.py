@@ -302,7 +302,7 @@ class TestWordCapPromptV2(AgentCase):
     def test_v2_is_the_active_version_and_v1_stays_available(self):
         from engine.prompts import active
         self.pin_v1.stop()  # look at the real configuration, not the v1 pin of the synthetic tests
-        self.assertEqual(active("qualitative"), "v2")
+        self.assertEqual(active("qualitative"), "v2.1")  # v2.1 (build 4a) keeps v2's word cap and adds the year rule and the word counts
         self.assertIsNone(prompt_parts()[3])  # no sentence cap: the word cap applies
         self.assertEqual(prompt_parts("v1")[3], 3)
 

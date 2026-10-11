@@ -12,6 +12,7 @@ from unittest import mock
 from engine.agents.critic import SYSTEM_PROMPT, SYSTEM_PROMPT_V21, llm_payload, load_rubric
 from engine.agents.qualitative import check_citations, load_criteria
 from engine.contracts import Passage
+from engine.prompts import year_rule_text
 from engine.fetch.edgar import EdgarClient
 from engine.publish import MissingPassageError, build_site
 from engine.report import Result
@@ -87,13 +88,15 @@ class TestYearRule(AgentCase):
         self.assertTrue(rules["candid_management"] and rules["rational_capital_allocation"])
         self.assertEqual(rules["candid_management"], rules["rational_capital_allocation"])
         self.assertIn("latest fiscal year", rules["rational_capital_allocation"])
-        self.assertIn("prior-year", rules["rational_capital_allocation"])
+        self.assertIn("prior-year comparative", rules["rational_capital_allocation"])
         self.assertIsNone(rules["understandable_business"])
 
     def test_the_agent_sees_the_rule_from_v21(self):
-        rule = load_criteria()["candid_management"]["year_rule"]
+        rule = year_rule_text(load_criteria()["candid_management"], "2025-12-31")
+        self.assertIn("the one that ended 2025-12-31", rule)
         self.assertIn(rule, self.first_message(version="v2.1"))
-        self.assertNotIn(rule, self.first_message(version="v2"))  # the recorded v2 requests are unchanged
+        self.assertNotIn("latest fiscal year", self.first_message(version="v2"))  # the recorded v2 requests are unchanged
+        self.assertEqual(year_rule_text(load_criteria()["candid_management"], None).count("{"), 0)  # no date known: the clause is dropped, no placeholder left
 
     def test_the_critic_sees_the_same_line_from_v21(self):
         rubric = load_rubric()
@@ -101,8 +104,9 @@ class TestYearRule(AgentCase):
         f = QualFinding(criterion="rational_capital_allocation", verdict="evidence found", rationale="r", stop_reason="submitted",
                         citations=[Citation(passage_id="a:7:1", accession="a", item="7", char_start=0, char_end=3, quote="abc", sentences=[1, 1])])
         with v21():
-            payload = llm_payload([f], rubric)[0]
-        self.assertEqual(payload["year_rule"], rubric["rational_capital_allocation"]["year_rule"])
+            payload = llm_payload([f], rubric, "2025-12-31")[0]
+        self.assertEqual(payload["year_rule"], year_rule_text(rubric["rational_capital_allocation"], "2025-12-31"))
+        self.assertIn("ended 2025-12-31", payload["year_rule"])
         with mock.patch("engine.prompts.active", lambda agent: "v2"):
             self.assertNotIn("year_rule", llm_payload([f], rubric)[0])
         self.assertIn("year_rule", SYSTEM_PROMPT_V21)

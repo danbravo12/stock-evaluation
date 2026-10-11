@@ -1,7 +1,7 @@
 # File Map
 
 What every file in this repo is for, and where planned files will go.
-Updated 2026-10-12 · after the static site commit. **Rule:** update this file in the same commit as any file you add, move or delete.
+Updated 2026-10-12 · after build 4a (evaluation harness, stability runs). **Rule:** update this file in the same commit as any file you add, move or delete.
 
 Status: **Built** = exists and tested · **Planned** = designed in `ARCHITECTURE.md`, not yet created.
 
@@ -53,11 +53,12 @@ StockEvaluation/
 | `config/sector_rules.json` | Sector class by GICS sub-industry with per-CIK overrides, each with a reason and an optional `note` that travels with the results; SIC ranges only for tickers outside the snapshot (ADR-057, amended 2026-10-11). | Built |
 | `config/registrant_successors.json` | Successor CIK → predecessor CIK(s) with the evidence filing (form, accession, URL, quote), reason and the visible note; Exxon (ADR-063). | Built |
 | `config/models.json` | Model profiles (base URL, model id, key variable, prices, free-tier limits, source note) and the budget caps (ADR-039, ADR-040). | Built |
-| `config/prompt_versions.json` | Active prompt version per agent; v2 is written but waits for the re-record (ADR-046 and ADR-048 amendments). | Built |
+| `config/prompt_versions.json` | Active prompt version per agent: qualitative v2.1, Explainer v2, Critic v2.1 (latest-fiscal-year rule, word counts in the cap error; ADR-069 amendment). | Built |
 | `config/universe_primary.json` | Primary symbol of each dual share class (GOOGL, FOXA, NWSA): one analysis per CIK (ADR-053). | Built |
 | `config/figure_formats.json` | Figure key → display format for the Explainer's placeholders (usd_billions, usd_millions, ratio_2dp, percent_1dp, count, per_share_usd, years); a test checks every key the scorers produce (ADR-048). | Built |
 | `config/banned_phrases.json` | Advice and valuation phrases the Critic's R3 forbids (regex, reason each) and an allowlist for ordinary vocabulary such as "share buyback" (ADR-049). | Built |
 | `config/search_terms.json` | Per qualitative Buffett criterion: items to search first, starting queries and why (ADR-037), plus the rubric: `question`, `found_means`, `weak_means`, `insufficient_means` (ADR-043). | Built |
+| `config/qualitative_paraphrases.json` | Two paraphrases (A, B) of each qualitative criterion's question and three verdict definitions, meaning unchanged, for the stability runs (ADR-072). | Built |
 | `config/label_packet.json` | The packet's generic queries and passages per criterion (ADR-071). | Built |
 | `config/test_tickers.json` | The five test companies (KO, JPM, GOOGL, TSLA, DUK). Used by the record script now and the evaluation harness later. Rationale per ticker: ADR-024. | Built |
 
@@ -89,7 +90,7 @@ The engine is a library, so the batch command, the tests and the future live app
 | `engine/agents/critic.py` | The Critic's checks: pure functions `check_explanation` (R1), `check_citations` (R2, independent of the agent's checker), `banned_hits` (R3), `llm_review` (L1: findings and explanation meaning in one call), and the `Critic` class that runs them against the re-loaded 10-K (ADR-049). | Built |
 | `engine/agents/repair.py` | `rewrite_rationale`: the cheap repair for a finding whose verdict stands but whose rationale says more than its quotes; one call, sees only the question, verdict, quotes and problems (ADR-052). | Built |
 | `engine/agents/review.py` | `explain_and_verify(scoreset, qual, ...)`: Explainer, Critic, one repair per failed item by the path that fits (explanation retry, rationale rewrite, constrained retry), re-check; a failed repair keeps the original with a warning; returns `ReviewResult` (explanations, qualitative findings, `CriticReport`). No orchestrator yet. | Built |
-| `engine/prompts.py` | `active(agent)`: which prompt version (v1 recorded, v2 pending re-record) an agent uses, from `config/prompt_versions.json`. | Built |
+| `engine/prompts.py` | `active(agent)`, `at_least(agent, version)`: which prompt version an agent uses, from `config/prompt_versions.json`; `year_rule_text` fills the fiscal-year end date into a criterion's year rule. | Built |
 | `engine/planner.py` | `plan_for(ticker, universe, sic)`: scope check, sector class, which criteria apply or are not applicable (ADR-013), planned gaps (price), steps; out-of-scope tickers get a plan only (ADR-018). | Built |
 | `engine/orchestrator.py` | `analyse(ticker, mode=...)`: plan → fetch → score → qualitative → explain and verify → report for one company; timed and traced; failing steps degrade, dependants skip with a reason; quota, budget and missing-fixture errors propagate (ADR-055). | Built |
 | `engine/report.py` | `Result` (schema 1.0) and its parts, `write_result` (round-trip validation, Finnhub publish gate, `results/<CIK>.json`), `export_schema`, `cost_from_trace` (ADR-054). | Built |
@@ -99,6 +100,7 @@ The engine is a library, so the batch command, the tests and the future live app
 | `engine/successors.py` | Registrant successors and companies without a 10-K: `load_successors`, `has_annual_report`, `NoAnnualReport`, the message "No annual report (10-K) filed yet; listed since <date>." (ADR-063). | Built |
 | `engine/deploy.py` | `deploy`: build, every gate, secret scan, then the `gh-pages` push through a git worktree; `--dry-run` prints what would be pushed; refuses without a remote or on any finding (ADR-068). | Built |
 | `engine/secrets_scan.py` | Secret scan over files and over every blob and commit message of the git history (gzip unpacked), key shapes plus the exact values of `.env`, redacted findings (ADR-068). | Built |
+| `engine/stability.py` | Paraphrases and `variant_criteria`, `classify` (stable / borderline), `attach` (writes `stability` onto the main results), `collect`, `flip_stats`, `pair_flips`, `dev_correlation` with a Fisher exact test (ADR-072). | Built |
 | `engine/trace_render.py` | `render_trace` (events → numbered plain-language steps, groups, hand-offs, running totals) and `critic_notes` (the Critic's checks, the agent's work and the cost as sentences), `plural`, `money` (ADR-067). | Built |
 | `engine/publish.py` | `build_site`: builds the git-ignored `site/` from `site_src/`, `site_data/` and `results/` (reduced score files, results, traces as arrays, cited passages, documents, manifest); Finnhub gate, banned phrases and SEC-link checks fail the build; `serve` (ADR-065). | Built |
 | `engine/rankings.py` | Rankings builder: `build_rankings(universe, scores_dir, results_dir)` → `Rankings` (criteria ranking with the decided ≥ 6 threshold and exact tie-breaks, insufficient-data group, empty analyst section, excluded companies), `write_rankings` (round-trip validation and the Finnhub gate), `export_rankings_schema` (ADR-062). | Built |
@@ -118,6 +120,8 @@ The engine is a library, so the batch command, the tests and the future live app
 | `site_src/how-it-works.html`, `doc.html`, `assets/js/doc.js` | Process, architecture diagram (inline SVG), cost, evaluation, what it gets wrong, sources, production changes; a plain-text viewer for the linked repository documents. | Built |
 | `site_src/assets/js/common.js`, `assets/site.css`, `assets/fonts/`, `assets/img/architecture.svg` | Shared helpers (marks, formats, plain reasons), design tokens and layout, self-hosted Public Sans and Source Serif 4 (OFL licences beside them), the architecture drawing. | Built |
 | `site/` | Output of `python -m engine.cli publish` (git-ignored). | Local only |
+| `results/stability/{a,b}/` | Full results and traces of the paraphrase runs (run ids `<SYMBOL>-live-a`, `-b`); never replace the main results (ADR-072). | Built |
+| `docs/stability_report.md` | Flip rates, borderline findings, the dev-set correlation and the paraphrases side by side. Shown in the site's document viewer. | Built |
 | `docs/screenshots/` | Review screenshots (git-ignored). | Local only |
 
 ## Scripts (`scripts/`)
@@ -135,6 +139,8 @@ The engine is a library, so the batch command, the tests and the future live app
 | `scripts/review_report.py` | Runs Explainer + Critic on the 5 tickers against the recorded qualitative run, injects 3 faults into the model check, and writes `docs/critic_report.md` (explanations, every check, retries, gold-set table, Critic scorecard, cost). `record` (free tier only) or `replay` (offline, identical). | Built |
 | `scripts/qualitative_variability.py` | Runs the 5 tickers N extra times live with the response store bypassed (`use_store=False`), compares with the recorded run and writes `docs/qualitative_variability.md`. Free tier only; stops if today's ledger count would pass 400. | Built |
 | `scripts/sections_audit.py` | Offline: runs the section extractor over every analysed company's 10-K (fixtures, then the local cache) and prints found / not_found per item; `--save` / `--compare` give a before → after (build 4a). | Built |
+| `scripts/stability_run.py` | `refresh` (the 20 showcase companies with the active prompts), `a` and `b` (paraphrase runs over the 25 analysed companies, results in `results/stability/<variant>/`); resumable across Pacific days, free tier only (ADR-072). | Built |
+| `scripts/stability_report.py` | Writes `docs/stability_report.md` from the main and variant results (`--attach` also writes `stability` onto the main results). | Built |
 | `scripts/label_packet.py` | Writes the blind labelling packet for the held-out companies (`docs/labelling/heldout_packet.md`, git-ignored) from their 10-Ks only, or `--ingest` a filled packet into `eval/heldout_labels.json` (ADR-071). | Built |
 | `scripts/backfill_passages.py` | Offline: adds the cited passages' text to results written before schema 1.2 and re-exports `schema/result.schema.json`; nothing else in a result changes (build 4a). | Built |
 | `scripts/score_report.py` | Scores the 5 fixtures (replay) and writes `docs/scorecard_report.md`. | Built |
@@ -186,6 +192,8 @@ The engine is a library, so the batch command, the tests and the future live app
 | `tests/test_sentences.py` | Segmentation rules on synthetic text (bullets, newlines, abbreviations, decimals, long-sentence cuts, nothing lost) and exact round trip of every passage of the 5 recorded filings. | Built |
 | `tests/test_qualitative.py` | 29 offline tests of the agent with scripted model replies through the real client (fake transport) on a synthetic 10-K: seeded search, search / get_passage / submit, unchanged assistant messages and tool-call ids, turn cap and last-turn tools, pointer citations (exact quote from sentence numbers, out-of-range, last before first, over 3 sentences, over 120 words, never-retrieved passage, one correction then `invalid_citation`, one extra turn), verdict per stop reason, malformed arguments, section_missing, quota and budget propagation, totals and trace order. | Built |
 | `tests/test_qualitative_fixtures.py` | Replay of all 5 real runs with zero network: four findings each, every cited span equals `document_text[start:end]` and its sentence offsets, no mechanical citation failures, no advice words, totals add up. Structural only; verdicts not frozen. | Built |
+| `tests/test_stability.py` | Paraphrase structure and anchors, the variant rubric reaching the agent and the Critic, classification (stable / borderline / not assessed), attach, flip rates, dev correlation, Fisher exact, the committed stability records against the runs they came from. | Built |
+| `tests/test_stability_copy.py` | The company page's borderline sentence and rows, run with node. | Built |
 | `tests/test_heldout.py` | The frozen held-out list, the packet (structure, eight passages per criterion, deterministic, no agent output), the ingest round trip and the agreement maths on synthetic cases including a hand-computed weighted kappa (ADR-071). | Built |
 | `tests/test_build4a.py` | Build 4a: the citation cap message with per-sentence words (incl. the recorded O and MetLife rejections), the latest-fiscal-year rule reaching the agent and the Critic only from v2.1, results carrying their cited passages, publish from a clean checkout and its failure on a missing passage text, schema 1.2 additive. | Built |
 | `tests/test_sections.py` | Synthetic-filing tests: HTML normalisation, TOC not chosen, combined headings, title fallback and stub handling, not_found reasons, passage offsets and determinism, BM25, the Retriever and its text cache. | Built |

@@ -63,23 +63,37 @@ class TestRenderers(unittest.TestCase):
         for s in (missing, kept):
             self.assertIsNone(RAW.search(s["title"]))
 
+    def test_a_get_passage_call_is_a_plain_step(self):
+        """The model asked for a whole passage for the first time in the v2.1 runs (NEE, VST)."""
+        from engine.trace_render import Renderer
+        r = Renderer({})
+        ev = lambda summ, out: {"type": "tool_call", "agent": "qualitative/candid_management", "input_summary": summ, "output": out, "step": 1}  # noqa: E731
+        ok = r.one(ev('get_passage({"passage_id": "0000753308-26-000015:7:20"})', "[0000753308-26-000015:7:20] Item 7 [1] In 2025, ..."))
+        self.assertEqual(ok["title"], "Read passage 7:20 in full")
+        bad = r.one(ev('get_passage({"passage_id": "0000753308-26-000015:7:999"})', "Tool error: unknown passage id '0000753308-26-000015:7:999' in filing 0000753308-26-000015. Use ids returned by search."))
+        self.assertEqual(bad["title"], "Asked to read passage 7:999: not available")
+        for s in (ok, bad):
+            self.assertIsNone(RAW.search(s["title"]))
+            self.assertNotEqual(s["kind"], "unknown")
+
     def test_titles_for_the_main_event_types(self):
         events, res = load(SAMPLES["JPM"])
         steps = {s["n"]: s for s in render_trace(events, res)["steps"]}
         self.assertEqual(steps[1]["title"], "Planned the run for JPM")  # prompt v2 recording of 2026-10-12
         self.assertIn("Tests that do not apply to this kind of company: G2, B2, B3, B4.", steps[1]["details"])
-        self.assertEqual(steps[30]["title"], 'Planned: search Item 7 first, starting queries: "share repurchases buyback", "dividends", "acquisitions", and others')
-        self.assertEqual(steps[31]["title"], 'Searched Item 7 for "share repurchases buyback", "dividends", "acquisitions", and others: 4 passages')
-        self.assertEqual(steps[32]["title"], "Model call 1 for rational capital allocation: 2,383 tokens in, 191 out, ~$0.0009 at paid rates")
+        self.assertEqual(steps[30]["title"], "Model call 1 for rational capital allocation: 2,446 tokens in, 24 out, ~$0.0006 at paid rates")  # prompt v2.1 recording (build 4a)
+        self.assertEqual(steps[31]["title"], 'Searched the whole filing for "common stock repurchases amount 2025"')
+        self.assertEqual(steps[32]["title"], "Model call 2 for rational capital allocation: 3,734 tokens in, 204 out, ~$0.0012 at paid rates")
         self.assertEqual(steps[11]["title"], "Pointer check: quote built from the filing and verified")
         self.assertEqual(steps[12]["title"], "Model submitted: evidence found, citing passage 7:56 sentences 4 to 9; passage 7:88 sentences 5 to 6")  # prompt v2 allows a long range
         self.assertEqual(steps[33]["title"], "Model submission malformed: it gave more than 2 citations")
         self.assertEqual(steps[40]["title"], "Explainer wrote 11 lines; figures filled in by code from the scorecard")
         self.assertEqual(steps[42]["title"], "Critic: explanation check passed for 11 items")
-        self.assertEqual(steps[46]["title"], "Critic: second-model review found 2 problems in 8 items")
+        self.assertEqual(steps[46]["title"], "Critic: second-model review found 2 problems in 7 items")
         self.assertEqual(steps[47]["title"], "Critic sent 2 findings back for repair")
-        self.assertEqual(steps[48]["title"].split(":")[0], "Rationale rewrite for understandable business")
-        self.assertEqual(steps[60]["title"], "Critic: explanation check had nothing to judge")
+        self.assertTrue(steps[48]["title"].startswith("Planned: search Item 1 first"))  # the constrained retry of understandable business
+        self.assertEqual(steps[54]["title"].split(":")[0], "Rationale rewrite for rational capital allocation")
+        self.assertEqual(steps[56]["title"], "Critic: explanation check had nothing to judge")
 
     def test_the_submitted_step_shows_the_built_quote(self):
         events, res = load(SAMPLES["KO"])
@@ -89,9 +103,9 @@ class TestRenderers(unittest.TestCase):
         self.assertIn("Our finished product operations generate net operating revenues", sub[0]["quote"])
 
     def test_the_critic_objection_is_a_sentence(self):
-        events, res = load(SAMPLES["KO"])
+        events, res = load(SAMPLES["JPM"])
         step = next(s for s in render_trace(events, res)["steps"] if s["title"].startswith("Critic: second-model review found"))
-        self.assertEqual(step["details"], ["The Critic objected to the understandable business rationale: it says \"direct-to-consumer retail stores\", which the quoted sentences don't show."])
+        self.assertEqual(step["details"][1], "The Critic objected to the rational capital allocation rationale: it says \"2025\", which the quoted sentences don't show.")
 
     def test_hand_offs_are_only_the_real_ones(self):
         for t, r in self.rendered.items():
@@ -105,8 +119,9 @@ class TestRenderers(unittest.TestCase):
                     self.assertTrue(g["handoff"].startswith("Hand-off: "), t)
             self.assertEqual(lanes[:2], ["orchestrator", "scorers"], t)
             self.assertEqual(lanes[-1], "reporter", t)
-        ko = [g["handoff"] for g in self.rendered["KO"]["groups"] if g["handoff"]]
+        ko = [g["handoff"] for g in self.rendered["JPM"]["groups"] if g["handoff"]]  # JPM has repairs; a run without one has two hand-offs fewer
         self.assertEqual(len(ko), 9)
+        self.assertEqual(len([g["handoff"] for g in self.rendered["KO"]["groups"] if g["handoff"]]), 7)
         self.assertIn("the Critic sends the findings that failed back", ko[5])
         self.assertIn("the repaired findings go back to the Critic", ko[6])
         self.assertEqual(handoff("critic", "reporter"), "Hand-off: critic hands over to reporter.")
@@ -153,17 +168,17 @@ class TestCriticSentences(unittest.TestCase):
                     self.assertIsNone(re.search(r"supports_verdict|\w=\w|\{", sentence), f"{t} {item}: {sentence}")
 
     def test_repaired_rationale_in_words(self):
-        _, res = load(SAMPLES["KO"])
-        v = critic_notes(res)["critic"]["understandable_business"]
+        _, res = load(SAMPLES["JPM"])
+        v = critic_notes(res)["critic"]["rational_capital_allocation"]
         self.assertEqual(v["status"], "Passed after one repair")
-        self.assertEqual(v["sentences"], ["The Critic objected to the understandable business rationale: it says \"direct-to-consumer retail stores\", which the quoted sentences don't show.",
+        self.assertEqual(v["sentences"], ["The Critic objected to the rational capital allocation rationale: it says \"2025\", which the quoted sentences don't show.",
                                           "The rationale was rewritten from the quotes and passed the re-check."])
         self.assertTrue(v["objected"])
         plain = critic_notes(res)["critic"]["G1"]
         self.assertEqual((plain["status"], plain["objected"]), ("Passed all checks", False))
 
     def test_verdict_objection_in_words(self):
-        _, res = load(SAMPLES["JPM"])
+        _, res = load(SAMPLES["TSLA"])
         v = critic_notes(res)["critic"]["rational_capital_allocation"]
         self.assertTrue(v["sentences"][0].startswith("The Critic objected to the rational capital allocation verdict: the quoted sentences don't fully support it"))
         self.assertEqual(v["status"], "Still objected to after one repair")  # prompt v2 recording: the repair did not satisfy the Critic
@@ -172,7 +187,7 @@ class TestCriticSentences(unittest.TestCase):
     def test_agent_and_cost_sentences_use_real_plurals(self):
         _, res = load(SAMPLES["KO"])
         n = critic_notes(res)
-        self.assertEqual(n["cost"], "The agents made 11 model calls and read 24,760 tokens, writing 2,311. On the free tier that cost $0.00; at paid rates it would have cost about $0.0097.")
+        self.assertEqual(n["cost"], "The agents made 9 model calls and read 24,506 tokens, writing 2,234. On the free tier that cost $0.00; at paid rates it would have cost about $0.0095.")
         self.assertRegex(n["qualitative"]["rational_capital_allocation"], r"^The agent made 1 model call and \d+ tool calls?, including 1 search of the filing")
         self.assertIn("2 searches", n["qualitative"]["durable_competitive_advantage"])
 

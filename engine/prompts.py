@@ -17,3 +17,11 @@ def active(agent: str) -> str:
 def at_least(agent: str, version: str) -> bool:
     """True if the active version of `agent` is `version` or later."""
     return ORDER.index(active(agent)) >= ORDER.index(version)
+
+
+def year_rule_text(spec: dict, period_end: str | None) -> str | None:
+    """The criterion's year rule with the filing's fiscal-year end date filled in (or the clause dropped when the date is unknown)."""
+    rule = spec.get("year_rule")
+    if not rule:
+        return None
+    return rule.replace("{period_end}", period_end) if period_end else rule.replace(", the one that ended {period_end}", "")

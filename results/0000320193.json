@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "AAPL-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:39:07+00:00",
+  "generated_at": "2026-10-11T13:38:11+00:00",
   "timings": {
-   "fetch": 0.231,
+   "fetch": 0.074,
    "score": 0.001,
-   "qualitative": 20.183,
-   "explain_and_verify": 33.566
+   "qualitative": 18.833,
+   "explain_and_verify": 22.648
   }
  },
  "plan": {
@@ -62,7 +62,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 0.231,
+   "seconds": 0.074,
    "reason": null
   },
   {
@@ -74,19 +74,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 20.183,
+   "seconds": 18.833,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 33.566,
+   "seconds": 22.648,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.069,
+   "seconds": 0.047,
    "reason": null
   }
  ],
@@ -1727,7 +1727,7 @@
    "finding": {
     "criterion": "understandable_business",
     "verdict": "evidence found",
-    "rationale": "The filing specifies that the company designs, manufactures, and markets hardware (smartphones, computers, tablets, wearables) and services, selling them to consumer, business, and government markets. It further explains that revenue is generated through both direct channels (retail/online stores and direct sales force) and indirect channels (cellular carriers and resellers).",
+    "rationale": "The filing specifies that the company designs, manufactures, and markets hardware and services, selling them to consumer, business, and government markets. It further explains that it earns revenue through direct channels (retail/online stores, direct sales force) and indirect channels (third-party carriers and resellers).",
     "citations": [
      {
       "passage_id": "0000320193-25-000079:1:1",
@@ -1779,13 +1779,13 @@
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5135,
-     "completion_tokens": 383,
-     "total_tokens": 5518,
+     "prompt_tokens": 5144,
+     "completion_tokens": 375,
+     "total_tokens": 5519,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00185825
+    "notional_cost_usd": 0.0018484999999999999
    },
    "critic_status": "passed_after_retry",
    "stability": null
@@ -1853,7 +1853,7 @@
    "finding": {
     "criterion": "candid_management",
     "verdict": "insufficient evidence",
-    "rationale": "The provided text consists of standard risk factor disclosures regarding potential future failures of business strategies and investments, rather than an account of specific past setbacks or mistakes. A 10-K is a limited guide to candour.",
+    "rationale": "The filing discusses potential adverse impacts from tariffs and trade disputes, but these are attributed to external geopolitical and macroeconomic factors rather than management's own decisions or execution. The 10-K provides no specific account of internal setbacks or missed targets, and as a limited guide to candour, it does not meet the criteria for \"evidence found.\"",
     "citations": [],
     "searches": [
      {
@@ -1881,19 +1881,34 @@
        "0000320193-25-000079:1A:61",
        "0000320193-25-000079:1A:44"
       ]
+     },
+     {
+      "queries": [
+       "results of operations discussion decline decrease setback mistake"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0000320193-25-000079:7:1",
+       "0000320193-25-000079:7:16",
+       "0000320193-25-000079:7:10",
+       "0000320193-25-000079:7:3"
+      ]
      }
     ],
-    "llm_calls": 1,
-    "tool_calls": 2,
+    "llm_calls": 2,
+    "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2288,
-     "completion_tokens": 113,
-     "total_tokens": 2401,
+     "prompt_tokens": 6119,
+     "completion_tokens": 163,
+     "total_tokens": 6282,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0007415
+    "notional_cost_usd": 0.0017742500000000002
    },
    "critic_status": "passed",
    "stability": null
@@ -1902,7 +1917,7 @@
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing quantifies share repurchases ($89.3 billion) and dividend payments ($15.4 billion) made during fiscal year 2025, and describes a capital return program that includes an authorized share repurchase program and a policy to increase dividends annually.",
+    "rationale": "The filing quantifies 2025 share repurchases ($89.3 billion) and dividends ($15.4 billion) and states that management believes its cash balances and ongoing operations will be sufficient to satisfy its cash requirements and capital return program, which reflects the company's approach to managing its liquidity and capital allocation.",
     "citations": [
      {
       "passage_id": "0000320193-25-000079:7:13",
@@ -1917,15 +1932,15 @@
       ]
      },
      {
-      "passage_id": "0000320193-25-000079:7:12",
+      "passage_id": "0000320193-25-000079:7:10",
       "accession": "0000320193-25-000079",
       "item": "7",
-      "char_start": 117109,
-      "char_end": 117482,
-      "quote": "In addition to its contractual cash requirements, the Company has an authorized share repurchase program. The program does not obligate the Company to acquire a minimum amount of shares. As of September 27, 2025, the Company's quarterly cash dividend was $0.26 per share. The Company intends to increase its dividend on an annual basis, subject to declaration by the Board.",
+      "char_start": 114609,
+      "char_end": 114983,
+      "quote": "Liquidity and Capital Resources\nThe Company believes its balances of cash, cash equivalents and marketable securities, which totaled $132.4 billion as of September 27, 2025, along with cash generated by ongoing operations and continued access to debt markets, will be sufficient to satisfy its cash requirements and capital return program over the next 12 months and beyond.",
       "sentences": [
-       8,
-       11
+       3,
+       4
       ]
      }
     ],
@@ -1955,15 +1970,15 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2505,
-     "completion_tokens": 164,
-     "total_tokens": 2669,
+     "prompt_tokens": 2843,
+     "completion_tokens": 175,
+     "total_tokens": 3018,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00087225
+    "notional_cost_usd": 0.00097325
    },
-   "critic_status": "passed",
+   "critic_status": "passed_after_retry",
    "stability": null
   }
  ],
@@ -1989,12 +2004,12 @@
    "char_start": 37825,
    "char_end": 39096
   },
-  "0000320193-25-000079:7:12": {
-   "text": "Other Purchase Obligations\nThe Company's other purchase obligations primarily consist of noncancelable obligations to acquire capital assets, including assets related to product manufacturing, and noncancelable obligations related to supplier arrangements, licensed intellectual property and content, and distribution rights. As of September 27, 2025, the Company had other purchase obligations of $14.8 billion, with $7.0 billion payable within 12 months.\nDeemed Repatriation Tax Payable\nAs of September 27, 2025, the balance of the deemed repatriation tax payable imposed by the U.S. Tax Cuts and Jobs Act of 2017 (\"TCJA\") was $8.8 billion, which was payable within 12 months.\nApple Inc. | 2025 Form 10-K | 25\nCapital Return Program\nIn addition to its contractual cash requirements, the Company has an authorized share repurchase program. The program does not obligate the Company to acquire a minimum amount of shares. As of September 27, 2025, the Company's quarterly cash dividend was $0.26 per share. The Company intends to increase its dividend on an annual basis, subject to declaration by the Board.",
+  "0000320193-25-000079:7:10": {
+   "text": "The Company's effective tax rate for 2025 was lower than the statutory federal income tax rate primarily due to a lower effective tax rate on foreign earnings, including the impact of changes in unrecognized tax benefits, the impact of the U.S. federal R&D credit, and tax benefits from share-based compensation, partially offset by a change in valuation allowance and state income taxes.\nThe Company's effective tax rate for 2025 was lower compared to 2024 due to a $10.7 billion year-over-year decrease in the provision for income taxes related to the State Aid Decision (refer to Note 7, \"Income Taxes\" in the Notes to Consolidated Financial Statements in Part II, Item 8 of this Form 10-K) and the impact of changes in unrecognized tax benefits, partially offset by a change in valuation allowance and a higher effective tax rate on foreign earnings.\nLiquidity and Capital Resources\nThe Company believes its balances of cash, cash equivalents and marketable securities, which totaled $132.4 billion as of September 27, 2025, along with cash generated by ongoing operations and continued access to debt markets, will be sufficient to satisfy its cash requirements and capital return program over the next 12 months and beyond.",
    "item": "7",
    "accession": "0000320193-25-000079",
-   "char_start": 116374,
-   "char_end": 117482
+   "char_start": 113754,
+   "char_end": 114983
   },
   "0000320193-25-000079:7:13": {
    "text": "In May 2025, the Company announced a new share repurchase program of up to $100 billion and raised its quarterly dividend from $0.25 to $0.26 per share beginning in May 2025. During 2025, the Company repurchased $89.3 billion of its common stock and paid dividends and dividend equivalents of $15.4 billion.\nRecent Accounting Pronouncements\nInternal-Use Software\nIn September 2025, the Financial Accounting Standards Board (\"FASB\") issued Accounting Standards Update (\"ASU\") No. 2025-06, Intangibles—Goodwill and Other—Internal-Use Software (Subtopic 350-40): Targeted Improvements to the Accounting for Internal-Use Software (\"ASU 2025-06\"), which modernizes the accounting for internal-use software. ASU 2025-06 removes all references to software development stages and requires capitalization of software costs when management has committed to the software project and it is probable the software will be completed and perform its intended use. ASU 2025-06 will be effective for the Company in its first quarter of 2029, and early adoption is permitted. The Company is currently evaluating the timing and method of its adoption of ASU 2025-06.\nDisaggregation of Income Statement Expenses",
@@ -2312,23 +2327,25 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "fail",
-    "detail": "supports_verdict=overstated; unsupported: distribution channels, including direct retail/online stores and indirect third-party resellers; The quotes identify products and customers but do not mention the distribution channels or sales model described in the rationale.",
+    "detail": "supports_verdict=overstated; unsupported: It also describes its distribution channels, including direct retail/online stores and indirect third-party resellers.; The quotes identify products and customers but do not mention the distribution channels or sales model described in the rationale.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": "verdict",
     "claims": [
-     "distribution channels, including direct retail/online stores and indirect third-party resellers"
+     "It also describes its distribution channels, including direct retail/online stores and indirect third-party resellers."
     ]
    },
    {
     "check": "L1",
     "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "supports_verdict=yes; The quotes provide specific dollar amounts for repurchases and dividends and state a policy regarding dividend increases.",
+    "status": "fail",
+    "detail": "supports_verdict=overstated; unsupported: states an intention to increase dividends annually; The quotes quantify 2025 actions but do not contain a stated policy or rationale for capital allocation, only the announcement of the program.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": null,
-    "claims": []
+    "kind": "verdict",
+    "claims": [
+     "states an intention to increase dividends annually"
+    ]
    },
    {
     "check": "L1",
@@ -2344,7 +2361,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the current ratio and debt metrics relative to the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the metrics and compares them to the threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2354,7 +2371,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the 10-year positive net income record.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the performance over the 10-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2364,7 +2381,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the dividend payment history.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the dividend history and compares it to the requirement.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2374,7 +2391,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the EPS growth ratio.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the growth ratio and compares it to the threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2394,7 +2411,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the debt-to-income relationship.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the debt and income metrics and compares them to the threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2404,7 +2421,7 @@
     "check": "L1",
     "item": "B3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the operating margin comparison.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the margin averages and compares them to the threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2414,7 +2431,7 @@
     "check": "L1",
     "item": "B4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the owner earnings trend.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the owner earnings performance and compares the averages.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2423,6 +2440,16 @@
    {
     "check": "R2",
     "item": "understandable_business",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R2",
+    "item": "rational_capital_allocation",
     "status": "pass",
     "detail": "",
     "owner": "qualitative",
@@ -2441,10 +2468,30 @@
     "claims": []
    },
    {
+    "check": "R3",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
+   },
+   {
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing clearly identifies the products, the target customer segments, and the distribution channels used to generate revenue.",
+    "detail": "supports_verdict=yes; The filing clearly identifies the products, the target customer segments, and the direct and indirect distribution channels used to generate revenue.",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The filing quantifies 2025 share repurchases and dividends and outlines a clear policy of maintaining liquidity to support ongoing operations and a capital return program.",
     "owner": "qualitative",
     "attempt": 1,
     "kind": null,
@@ -2466,7 +2513,7 @@
    "understandable_business": "passed_after_retry",
    "durable_competitive_advantage": "passed",
    "candid_management": "passed",
-   "rational_capital_allocation": "passed"
+   "rational_capital_allocation": "passed_after_retry"
   },
   "repairs": [
    {
@@ -2475,31 +2522,38 @@
     "outcome": "accepted",
     "detail": "",
     "llm_calls": 2
+   },
+   {
+    "item": "rational_capital_allocation",
+    "path": "constrained_retry",
+    "outcome": "accepted",
+    "detail": "",
+    "llm_calls": 1
    }
   ],
   "llm_calls": 2,
   "usage": {
-   "prompt_tokens": 3315,
-   "completion_tokens": 771,
-   "total_tokens": 4086,
+   "prompt_tokens": 3860,
+   "completion_tokens": 900,
+   "total_tokens": 4760,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.00198525
+  "notional_cost_usd": 0.002315
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.009168,
-  "llm_calls": 10,
-  "input_tokens": 22784,
-  "output_tokens": 2315,
+  "notional_cost_usd": 0.01242,
+  "llm_calls": 13,
+  "input_tokens": 32876,
+  "output_tokens": 2801,
   "by_agent": {
    "critic": {
     "calls": 2,
-    "input_tokens": 3315,
-    "output_tokens": 771,
+    "input_tokens": 3860,
+    "output_tokens": 900,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001985
+    "notional_cost_usd": 0.002315
    },
    "explainer": {
     "calls": 1,
@@ -2509,11 +2563,11 @@
     "notional_cost_usd": 0.001534
    },
    "qualitative": {
-    "calls": 7,
-    "input_tokens": 16826,
-    "output_tokens": 962,
+    "calls": 10,
+    "input_tokens": 26373,
+    "output_tokens": 1319,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.005649
+    "notional_cost_usd": 0.008572
    }
   }
  },

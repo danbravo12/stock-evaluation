@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "META-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:41:41+00:00",
+  "generated_at": "2026-10-11T13:39:09+00:00",
   "timings": {
-   "fetch": 0.3,
+   "fetch": 0.061,
    "score": 0.001,
-   "qualitative": 46.42,
-   "explain_and_verify": 19.56
+   "qualitative": 13.713,
+   "explain_and_verify": 14.199
   }
  },
  "plan": {
@@ -62,7 +62,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 0.3,
+   "seconds": 0.061,
    "reason": null
   },
   {
@@ -74,19 +74,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 46.42,
+   "seconds": 13.713,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 19.56,
+   "seconds": 14.199,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.067,
+   "seconds": 0.047,
    "reason": null
   }
  ],
@@ -1722,19 +1722,31 @@
   {
    "finding": {
     "criterion": "candid_management",
-    "verdict": "evidence weak",
-    "rationale": "Management acknowledges that AI may not develop as expected, that market acceptance of its products is uncertain, and that its product and investment decisions may not produce the long-term benefits expected. However, a 10-K is a limited guide to candour, and these statements are framed as forward-looking risk disclosures rather than specific accounts of past execution failures.",
+    "verdict": "evidence found",
+    "rationale": "Management explicitly identifies and quantifies a $14.03 billion valuation allowance charge taken in 2025, which it attributes to the enactment of the One Big Beautiful Bill Act and its own accounting policy regarding the realizability of deferred tax assets. This demonstrates an acknowledgment of a specific financial impact resulting from the interaction of legislative changes and company-specific accounting decisions.",
     "citations": [
      {
-      "passage_id": "0001628280-26-003942:1A:36",
+      "passage_id": "0001628280-26-003942:7:6",
       "accession": "0001628280-26-003942",
-      "item": "1A",
-      "char_start": 81402,
-      "char_end": 82126,
-      "quote": "In addition, AI may not develop in accordance with our expectations, and market acceptance of features, products, or services we build is uncertain. We regularly evaluate our product roadmaps and make significant changes as our understanding of the technological challenges and market landscape of AI, as well as our product ideas and designs, continue to evolve. As a result of these or other factors, our AI strategy and investments may not be successful in the foreseeable future, or at all, which could adversely affect our business, reputation, or financial results.\nWe make product and investment decisions that may not prioritize short-term financial results and may not produce the long-term benefits that we expect.",
+      "item": "7",
+      "char_start": 293671,
+      "char_end": 293815,
+      "quote": "Absent the valuation allowance charge as of the enactment date, our 2025 effective tax rate would have decreased by 17 percentage points to 13%.",
       "sentences": [
-       5,
-       8
+       4,
+       4
+      ]
+     },
+     {
+      "passage_id": "0001628280-26-003942:7:47",
+      "accession": "0001628280-26-003942",
+      "item": "7",
+      "char_start": 335879,
+      "char_end": 336208,
+      "quote": "As a result, we recorded a $15.93 billion charge in the third quarter of 2025, of which $14.03 billion was a valuation allowance against our U.S. federal deferred tax assets as of the enactment date of OBBBA, and the remaining was mostly related to the reduction of the benefit of the foreign-derived intangible income deduction.",
+      "sentences": [
+       4,
+       4
       ]
      }
     ],
@@ -1764,19 +1776,34 @@
        "0001628280-26-003942:1A:36",
        "0001628280-26-003942:7:29"
       ]
+     },
+     {
+      "queries": [
+       "impairment charge write-down loss 2025"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0001628280-26-003942:7:29",
+       "0001628280-26-003942:7:6",
+       "0001628280-26-003942:7:47",
+       "0001628280-26-003942:7:59"
+      ]
      }
     ],
-    "llm_calls": 1,
-    "tool_calls": 2,
+    "llm_calls": 2,
+    "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2204,
-     "completion_tokens": 140,
-     "total_tokens": 2344,
+     "prompt_tokens": 5677,
+     "completion_tokens": 213,
+     "total_tokens": 5890,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.000761
+    "notional_cost_usd": 0.0017387499999999998
    },
    "critic_status": "passed",
    "stability": null
@@ -1785,18 +1812,18 @@
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing quantifies capital expenditures and provides the rationale that these investments are made to support the company's AI efforts and core business.",
+    "rationale": "The filing quantifies 2025 capital expenditures ($72.22 billion), share repurchases ($26.26 billion), and dividends ($5.32 billion). It also explains the rationale for capital expenditures as supporting AI efforts and the core business, and notes the board's authorization of the share repurchase program.",
     "citations": [
      {
-      "passage_id": "0001628280-26-003942:7:53",
+      "passage_id": "0001628280-26-003942:7:51",
       "accession": "0001628280-26-003942",
       "item": "7",
-      "char_start": 341196,
-      "char_end": 341527,
-      "quote": "Cash used in investing activities during 2025 mostly consisted of $69.69 billion of purchases of property and equipment as we continued to invest in servers, data centers, and network infrastructure, and $18.33 billion of purchases of non-marketable equity investments, and $10.05 billion of net purchases of marketable securities.",
+      "char_start": 339719,
+      "char_end": 340201,
+      "quote": "These increases were partially offset by $72.22 billion of capital expenditures, which includes purchases of property and equipment and principal payments on finance leases; $31.57 billion of capital returns for repurchases of our Class A common stock and payments of dividends and dividend equivalents; $18.40 billion of taxes paid related to net share settlement of employee restricted stock unit (RSU) awards; and $18.33 billion of purchases of non-marketable equity investments.",
       "sentences": [
-       1,
-       1
+       6,
+       6
       ]
      },
      {
@@ -1834,19 +1861,19 @@
       ]
      }
     ],
-    "llm_calls": 1,
-    "tool_calls": 2,
+    "llm_calls": 3,
+    "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 3047,
-     "completion_tokens": 134,
-     "total_tokens": 3181,
+     "prompt_tokens": 6111,
+     "completion_tokens": 453,
+     "total_tokens": 6564,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00096275
+    "notional_cost_usd": 0.00220725
    },
-   "critic_status": "passed_after_retry",
+   "critic_status": "warning",
    "stability": null
   }
  ],
@@ -1858,12 +1885,19 @@
    "char_start": 25384,
    "char_end": 26318
   },
-  "0001628280-26-003942:1A:36": {
-   "text": "It is not possible to predict all of the risks related to the use of AI and changes in laws, rules, directives, and regulations or other regulatory developments regarding the use of AI, including restrictions around the collection and use of\n19\nTable of Contents\ndata, may adversely affect our ability to develop and use AI or subject us to legal liability. In addition, AI may not develop in accordance with our expectations, and market acceptance of features, products, or services we build is uncertain. We regularly evaluate our product roadmaps and make significant changes as our understanding of the technological challenges and market landscape of AI, as well as our product ideas and designs, continue to evolve. As a result of these or other factors, our AI strategy and investments may not be successful in the foreseeable future, or at all, which could adversely affect our business, reputation, or financial results.\nWe make product and investment decisions that may not prioritize short-term financial results and may not produce the long-term benefits that we expect.",
-   "item": "1A",
+  "0001628280-26-003942:7:47": {
+   "text": "On July 4, 2025, the One Big Beautiful Bill Act (OBBBA) was enacted, introducing several significant U.S. income tax provisions that reduced our U.S. federal cash tax payments for the remainder of 2025 and future years. The provisions include the immediate expensing of domestic research and development costs and certain capital expenditures beginning in 2025, as well as an enhanced deduction for foreign-derived intangible income effective in 2026. The benefits from these provisions are limited by the 15% Corporate Alternative Minimum Tax (CAMT). As a result, we recorded a $15.93 billion charge in the third quarter of 2025, of which $14.03 billion was a valuation allowance against our U.S. federal deferred tax assets as of the enactment date of OBBBA, and the remaining was mostly related to the reduction of the benefit of the foreign-derived intangible income deduction. In determining the valuation allowance, our accounting policy incorporates the expected impact of future years' CAMT in assessing the realizability of our deferred tax assets.",
+   "item": "7",
    "accession": "0001628280-26-003942",
-   "char_start": 81044,
-   "char_end": 82126
+   "char_start": 335327,
+   "char_end": 336384
+  },
+  "0001628280-26-003942:7:51": {
+   "text": "Our principal sources of liquidity are our cash, cash equivalents, marketable securities, and cash generated from operations. Cash, cash equivalents, and marketable securities are comprised of cash on deposit with banks, time deposits, money market funds, U.S. government and agency securities, investment grade corporate debt securities, and marketable equity securities. As part of our cash management strategy, we concentrate cash deposits with large financial institutions and our investment holdings are in diversified highly rated securities. Cash, cash equivalents, and marketable securities were $81.59 billion as of December 31, 2025, an increase of $3.78 billion from December 31, 2024. The increase was due to $115.80 billion of cash generated from operations and $29.91 billion of net proceeds from the issuance of fixed-rate senior unsecured notes (the Notes) in November 2025. These increases were partially offset by $72.22 billion of capital expenditures, which includes purchases of property and equipment and principal payments on finance leases; $31.57 billion of capital returns for repurchases of our Class A common stock and payments of dividends and dividend equivalents; $18.40 billion of taxes paid related to net share settlement of employee restricted stock unit (RSU) awards; and $18.33 billion of purchases of non-marketable equity investments.",
+   "item": "7",
+   "accession": "0001628280-26-003942",
+   "char_start": 338828,
+   "char_end": 340201
   },
   "0001628280-26-003942:7:53": {
    "text": "Cash used in investing activities during 2025 mostly consisted of $69.69 billion of purchases of property and equipment as we continued to invest in servers, data centers, and network infrastructure, and $18.33 billion of purchases of non-marketable equity investments, and $10.05 billion of net purchases of marketable securities. The increase in cash used in investing activities during 2025 compared to 2024 was mostly due to increases in purchases of property and equipment and non-marketable equity investments.\nWe anticipate making capital expenditures of approximately $115 billion to $135 billion in 2026 to support our AI efforts and core business.\n77\nTable of Contents\nCash Used in Financing Activities\nCash used in financing activities during 2025 mostly consisted of $26.25 billion for repurchases of our Class A common stock, $18.40 billion of taxes paid related to net share settlement of RSUs, and $5.32 billion of payments of dividends and dividend equivalents, partially offset by $29.91 billion net proceeds from the issuance of the Notes in November 2025. The decrease in cash used in financing activities during 2025 compared to 2024, was mostly due to an increase in net proceeds from the Notes.\nFree Cash Flow",
@@ -1871,6 +1905,13 @@
    "accession": "0001628280-26-003942",
    "char_start": 341196,
    "char_end": 342427
+  },
+  "0001628280-26-003942:7:6": {
+   "text": "•Long-term debt was $58.74 billion as of December 31, 2025.\n•Effective tax rate was 30% for the year ended December 31, 2025. This includes the effects of the implementation of the One Big Beautiful Bill Act during the third quarter of 2025. Absent the valuation allowance charge as of the enactment date, our 2025 effective tax rate would have decreased by 17 percentage points to 13%.\n•Headcount was 78,865 as of December 31, 2025, an increase of 6% year-over-year.\nFamily of Apps Metrics\n•Family daily active people (DAP) was 3.58 billion on average for December 2025, an increase of 7% year-over-year.\n•Ad impressions delivered across our Family of Apps increased by 12% year-over-year in 2025.\n•Average price per ad increased by 9% year-over-year in 2025.\nDevelopments in Advertising",
+   "item": "7",
+   "accession": "0001628280-26-003942",
+   "char_start": 293429,
+   "char_end": 294217
   }
  },
  "critic": {
@@ -2181,7 +2222,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing explicitly identifies the two business segments, the primary revenue source (advertising), the customer base (marketers), and the nature of hardware/software sales.",
+    "detail": "supports_verdict=yes; The filing clearly defines the two business segments, the primary revenue source (advertising), and the nature of the hardware/software revenue.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2191,7 +2232,7 @@
     "check": "L1",
     "item": "candid_management",
     "status": "pass",
-    "detail": "supports_verdict=yes; The quotes are standard forward-looking risk disclosures, which fit the definition of the claimed verdict (generic caution/uncertainty) rather than specific accounts of past failures.",
+    "detail": "supports_verdict=yes; Management explicitly quantifies a $14.03 billion charge and links it to the company's accounting policy regarding deferred tax assets.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2201,12 +2242,14 @@
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "fail",
-    "detail": "supports_verdict=overstated; unsupported: It also explains the rationale for capital expenditures (supporting AI efforts and core business); The quotes provide figures for capital expenditures and repurchases but do not contain the rationale for capital expenditures mentioned in the rationale.",
+    "detail": "supports_verdict=yes; unsupported: share repurchases ($26.26 billion) | dividends ($5.32 billion) | board's authorization of the share repurchase program; The filing quantifies capital expenditures and provides a rationale for them, though the rationale mentions figures not present in the provided quotes.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": "verdict",
+    "kind": "rationale",
     "claims": [
-     "It also explains the rationale for capital expenditures (supporting AI efforts and core business)"
+     "share repurchases ($26.26 billion)",
+     "dividends ($5.32 billion)",
+     "board's authorization of the share repurchase program"
     ]
    },
    {
@@ -2233,7 +2276,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year net income requirement.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year net income stability requirement.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2243,7 +2286,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the dividend record failed the 15-year consistency requirement.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the dividend consistency requirement.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2253,7 +2296,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio based on the 3-year averages.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio based on the 3-year average EPS.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2263,7 +2306,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly evaluates the ROE performance against the 10-year requirement.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the ROE performance against the 10-year requirement.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2273,7 +2316,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares long-term debt against the calculated maximum allowed debt.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares debt against the 4x average net income threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2293,7 +2336,7 @@
     "check": "L1",
     "item": "B4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the owner earnings averages over the specified periods.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly evaluates owner earnings consistency and growth.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2322,12 +2365,14 @@
    {
     "check": "L1",
     "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "supports_verdict=yes; The filing quantifies 2025 capital expenditures and explicitly states the rationale for these investments, satisfying both requirements of the claimed verdict.",
+    "status": "fail",
+    "detail": "supports_verdict=no; unsupported: The filing details cash usage for capital expenditures, share repurchases, dividend payments, taxes related to employee stock awards, and equity investments.; The quotes provided describe prior-year comparatives, not the fiscal year ending 2025-12-31. No quantified actions for the latest fiscal year are provided.",
     "owner": "qualitative",
     "attempt": 1,
-    "kind": null,
-    "claims": []
+    "kind": "verdict",
+    "claims": [
+     "The filing details cash usage for capital expenditures, share repurchases, dividend payments, taxes related to employee stock awards, and equity investments."
+    ]
    }
   ],
   "final": {
@@ -2345,40 +2390,40 @@
    "understandable_business": "passed",
    "durable_competitive_advantage": "passed",
    "candid_management": "passed",
-   "rational_capital_allocation": "passed_after_retry"
+   "rational_capital_allocation": "warning"
   },
   "repairs": [
    {
     "item": "rational_capital_allocation",
-    "path": "constrained_retry",
-    "outcome": "accepted",
-    "detail": "",
+    "path": "rationale_rewrite",
+    "outcome": "rejected_by_recheck",
+    "detail": "supports_verdict=no; unsupported: The filing details cash usage for capital expenditures, share repurchases, dividend payments, taxes related to employee stock awards, and equity investments.; The quotes provided describe prior-year comparatives, not the fiscal year ending 2025-12-31. No quantified actions for the latest fiscal year are provided.",
     "llm_calls": 1
    }
   ],
   "llm_calls": 2,
   "usage": {
-   "prompt_tokens": 3730,
-   "completion_tokens": 904,
-   "total_tokens": 4634,
+   "prompt_tokens": 4018,
+   "completion_tokens": 952,
+   "total_tokens": 4970,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.0022885
+  "notional_cost_usd": 0.0024325
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.012191,
-  "llm_calls": 12,
-  "input_tokens": 33924,
-  "output_tokens": 2473,
+  "notional_cost_usd": 0.012578,
+  "llm_calls": 13,
+  "input_tokens": 35198,
+  "output_tokens": 2519,
   "by_agent": {
    "critic": {
     "calls": 2,
-    "input_tokens": 3730,
-    "output_tokens": 904,
+    "input_tokens": 4018,
+    "output_tokens": 952,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002289
+    "notional_cost_usd": 0.002433
    },
    "explainer": {
     "calls": 1,
@@ -2388,11 +2433,11 @@
     "notional_cost_usd": 0.001554
    },
    "qualitative": {
-    "calls": 9,
-    "input_tokens": 27513,
-    "output_tokens": 980,
+    "calls": 10,
+    "input_tokens": 28499,
+    "output_tokens": 978,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.008348
+    "notional_cost_usd": 0.008592
    }
   }
  },
@@ -2475,5 +2520,10 @@
   "Filings and XBRL data: U.S. Securities and Exchange Commission, EDGAR (public domain)"
  ],
  "trace_path": "results/0001326801.trace.jsonl",
- "warnings": []
+ "warnings": [
+  {
+   "where": "rational_capital_allocation",
+   "message": "the Critic still objects after one repair: supports_verdict=no; unsupported: The filing details cash usage for capital expenditures, share repurchases, dividend payments, taxes related to employee stock awards, and equity investments.; The quotes provided describe prior-year comparatives, not the fiscal year ending 2025-12-31. No quantified "
+  }
+ ]
 }

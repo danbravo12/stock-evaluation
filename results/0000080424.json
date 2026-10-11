@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "PG-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:44:09+00:00",
+  "generated_at": "2026-10-11T13:40:02+00:00",
   "timings": {
-   "fetch": 0.237,
+   "fetch": 0.078,
    "score": 0.001,
-   "qualitative": 50.826,
-   "explain_and_verify": 22.935
+   "qualitative": 17.359,
+   "explain_and_verify": 3.741
   }
  },
  "plan": {
@@ -62,7 +62,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 0.237,
+   "seconds": 0.078,
    "reason": null
   },
   {
@@ -74,19 +74,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 50.826,
+   "seconds": 17.359,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 22.935,
+   "seconds": 3.741,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.066,
+   "seconds": 0.045,
    "reason": null
   }
  ],
@@ -1838,30 +1838,30 @@
    "finding": {
     "criterion": "candid_management",
     "verdict": "evidence weak",
-    "rationale": "The filing discusses potential setbacks and operational disruptions primarily in the context of external factors such as geopolitical conflicts and supply chain interruptions. A 10-K is a limited guide to candour, and the provided text does not contain management's own account of specific internal mistakes or missed targets.",
+    "rationale": "Management explicitly attributes declines in net earnings, gross margins, and market share to specific internal and external factors, such as unfavorable category/product mix, increased marketing spending, and competitive activity. While these explanations are provided, the 10-K remains a limited guide to candour as it is a highly structured and reviewed document.",
     "citations": [
      {
-      "passage_id": "0000080424-26-000103:1A:12",
+      "passage_id": "0000080424-26-000103:7:49",
       "accession": "0000080424-26-000103",
-      "item": "1A",
-      "char_start": 33100,
-      "char_end": 33798,
-      "quote": "Our ability to meet our customers' needs and achieve cost targets depends on our ability to maintain key manufacturing and supply arrangements, including execution of supply chain optimizations and certain sole supplier or sole manufacturing plant arrangements. The loss or disruption of such manufacturing and supply arrangements, including for issues such as labor disputes or controversies, loss or impairment of key manufacturing sites, discontinuity or disruptions in our internal information and data systems or those of our suppliers, cybersecurity incidents including but not limited to ransomware attacks, misuse of artificial intelligence (AI) and machine learning technologies, inability",
+      "item": "7",
+      "char_start": 128017,
+      "char_end": 128558,
+      "quote": "Net earnings decreased 2% to $3.9 billion due to a 50 basis-point decline in net earnings margin, partially offset by an increase in net sales. Net earnings margin decreased due to a decrease in gross margin and an increase in SG&A as a percentage of net sales. Gross margin decreased 40 basis points due to unfavorable category mix, partially offset by lower commodity costs and productivity savings. SG&A as a percentage of net sales increased due to an increase in marketing spending, partially offset by a reduction in overhead spending.",
       "sentences": [
        1,
-       2
+       4
       ]
      },
      {
-      "passage_id": "0000080424-26-000103:1A:9",
+      "passage_id": "0000080424-26-000103:7:48",
       "accession": "0000080424-26-000103",
-      "item": "1A",
-      "char_start": 29992,
-      "char_end": 30303,
-      "quote": "For example, the ongoing war between Russia and Ukraine has negatively impacted, and the situation it generates may continue to negatively impact, our operations. Future impacts to the Company are difficult to predict due to the high level of uncertainty as to how the overall situation will continue to evolve.",
+      "item": "7",
+      "char_start": 127675,
+      "char_end": 128016,
+      "quote": "•Net sales in Family Care, which is predominantly a North American business, decreased low single digits driven by lower pricing (due to merchandising investments) and a unit volume decrease (due to competitive activity). Organic sales also decreased low single digits. North America's share of the family care category decreased 0.7 points.",
       "sentences": [
-       1,
-       2
+       5,
+       7
       ]
      }
     ],
@@ -1891,19 +1891,34 @@
        "0000080424-26-000103:1A:9",
        "0000080424-26-000103:1A:36"
       ]
+     },
+     {
+      "queries": [
+       "results of operations 2026 decline decrease lower"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0000080424-26-000103:7:49",
+       "0000080424-26-000103:7:48",
+       "0000080424-26-000103:7:44",
+       "0000080424-26-000103:7:46"
+      ]
      }
     ],
     "llm_calls": 2,
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5066,
-     "completion_tokens": 336,
-     "total_tokens": 5402,
+     "prompt_tokens": 5912,
+     "completion_tokens": 203,
+     "total_tokens": 6115,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0017705
+    "notional_cost_usd": 0.0017824999999999998
    },
    "critic_status": "passed",
    "stability": null
@@ -1912,7 +1927,7 @@
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing states a clear priority for cash usage, noting that excess operating cash is used first for dividends, followed by discretionary uses like share repurchases and acquisitions. It also provides concrete figures for capital expenditures ($4.409 billion) and adjusted free cash flow ($15.835 billion) for the 2026 fiscal year.",
+    "rationale": "The filing states that excess operating cash is used first for dividends, followed by discretionary uses such as share repurchases and acquisitions. It also quantifies capital expenditures ($4.4 billion) for the 2026 fiscal year.",
     "citations": [
      {
       "passage_id": "0000080424-26-000103:7:52",
@@ -1965,13 +1980,13 @@
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 4794,
-     "completion_tokens": 400,
-     "total_tokens": 5194,
+     "prompt_tokens": 4906,
+     "completion_tokens": 361,
+     "total_tokens": 5267,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0017985
+    "notional_cost_usd": 0.001768
    },
    "critic_status": "passed",
    "stability": null
@@ -1985,26 +2000,26 @@
    "char_start": 12761,
    "char_end": 13543
   },
-  "0000080424-26-000103:1A:12": {
-   "text": "Our ability to meet our customers' needs and achieve cost targets depends on our ability to maintain key manufacturing and supply arrangements, including execution of supply chain optimizations and certain sole supplier or sole manufacturing plant arrangements. The loss or disruption of such manufacturing and supply arrangements, including for issues such as labor disputes or controversies, loss or impairment of key manufacturing sites, discontinuity or disruptions in our internal information and data systems or those of our suppliers, cybersecurity incidents including but not limited to ransomware attacks, misuse of artificial intelligence (AI) and machine learning technologies, inability to procure sufficient raw or input materials (including water, recycled materials and materials that meet our labor standards), significant changes in trade policy, natural disasters, increasing severity or frequency of extreme weather events due to climate change or otherwise, acts of war or terrorism, disease outbreaks (including epidemics, pandemics or similar widespread public health concerns) or other external factors over which we have no control, have at times interrupted and could interrupt product supply and, if not effectively managed and remedied, have an adverse impact on our business, financial condition, results of operations or cash flows.",
-   "item": "1A",
-   "accession": "0000080424-26-000103",
-   "char_start": 33100,
-   "char_end": 34461
-  },
-  "0000080424-26-000103:1A:9": {
-   "text": "For example, the ongoing war between Russia and Ukraine has negatively impacted, and the situation it generates may continue to negatively impact, our operations. Future impacts to the Company are difficult to predict due to the high level of uncertainty as to how the overall situation will continue to evolve. We may reduce further or discontinue our operations in Russia due to significant and cumulative sanctions and export controls and counter-sanctions, monetary, currency or payment controls, restrictions on data transfers or access to financial institutions and services, supply and transportation challenges or other circumstances and considerations. In addition to operational disruptions, these factors could result in loss of assets or impairments of our manufacturing plants and fixed assets or write-downs of other operating assets and working capital.\nThe conflict in the Middle East could also adversely impact our financial results and operations due to, for example, volatility in global energy markets, supply chain disruptions, inflationary pressures or trade restrictions.",
-   "item": "1A",
-   "accession": "0000080424-26-000103",
-   "char_start": 29992,
-   "char_end": 31087
-  },
   "0000080424-26-000103:7:11": {
    "text": "Sector Business Units\nThe Company's product categories are organized into five SBUs and five reportable segments (under U.S. GAAP): Beauty; Grooming; Health Care; Fabric & Home Care; and Baby, Feminine & Family Care. The SBUs are responsible for global brand strategy, product upgrades and innovation, marketing plans and supply chain. They have direct profit responsibility for markets (referred to as Focus Markets) representing the large majority of the Company's sales and earnings and are also responsible for innovation plans, supply plans and operating frameworks to drive growth and value creation in the remaining markets (referred to as Enterprise Markets). Throughout the MD&A, we reference business results by region, which are comprised of North America, Europe, Greater China, Latin America, Asia Pacific and India, Middle East and Africa (IMEA).\n16 The Procter & Gamble Company\nThe following provides additional detail on our reportable segments and the product categories and brand composition within each segment.\nReportable Segments | % of Net Sales (1) | % of Net Earnings (1) | Product Categories (Sub-Categories) | Major Brands\nBeauty | 19% | 17% | Hair Care (Conditioners, Shampoos, Styling Aids, Treatments) | Head & Shoulders, Herbal Essences, Pantene, Rejoice",
    "item": "7",
    "accession": "0000080424-26-000103",
    "char_start": 85687,
    "char_end": 86971
+  },
+  "0000080424-26-000103:7:48": {
+   "text": "•Feminine Care net sales increased low single digits driven by positive impacts of favorable foreign exchange, favorable geographic mix and higher pricing (primarily in North America), partially offset by a decrease in unit volume. The unit volume decrease was driven by IMEA and Europe (both due to competitive activity) and Greater China (due to market contraction). Organic sales were unchanged as low single-digit growth in North America was offset by a high single-digit decline in IMEA and a low single-digit decline in Europe. Market share of the feminine care category decreased 0.2 points.\n•Net sales in Family Care, which is predominantly a North American business, decreased low single digits driven by lower pricing (due to merchandising investments) and a unit volume decrease (due to competitive activity). Organic sales also decreased low single digits. North America's share of the family care category decreased 0.7 points.",
+   "item": "7",
+   "accession": "0000080424-26-000103",
+   "char_start": 127076,
+   "char_end": 128016
+  },
+  "0000080424-26-000103:7:49": {
+   "text": "Net earnings decreased 2% to $3.9 billion due to a 50 basis-point decline in net earnings margin, partially offset by an increase in net sales. Net earnings margin decreased due to a decrease in gross margin and an increase in SG&A as a percentage of net sales. Gross margin decreased 40 basis points due to unfavorable category mix, partially offset by lower commodity costs and productivity savings. SG&A as a percentage of net sales increased due to an increase in marketing spending, partially offset by a reduction in overhead spending.\nCORPORATE\n($ millions) | 2026 | 2025 | Change vs. 2025\nNet sales | $919 | $794 | 16%\nNet earnings/(loss) | $(23) | $(527) | N/A",
+   "item": "7",
+   "accession": "0000080424-26-000103",
+   "char_start": 128017,
+   "char_end": 128686
   },
   "0000080424-26-000103:7:52": {
    "text": "Savings generated from the Company's restructuring program are difficult to estimate, given the nature of the activities, the timing of the execution and the degree of reinvestment. In addition to our restructuring programs, we have additional ongoing savings efforts in our supply chain, marketing and overhead areas that yield additional benefits to our operating margins. Refer to Note 3 to the Consolidated Financial Statements for more details on the restructuring program.\nCASH FLOW, FINANCIAL CONDITION AND LIQUIDITY\nWe believe our financial condition continues to be of high quality, as evidenced by our ability to generate substantial cash from operations and to readily access capital markets at competitive rates.\nOperating cash flow provides the primary source of cash to fund operating needs and capital expenditures. Excess operating cash is used first to fund shareholder dividends. Other discretionary uses include share repurchases and acquisitions to complement our portfolio of businesses, brands and geographies. As necessary, we may supplement operating cash flow with debt to fund these activities. The overall cash position of the Company reflects our strong business results and a global cash management strategy that takes into account liquidity management, economic factors and tax considerations.\nCash Flow Analysis",
@@ -2336,7 +2351,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing identifies the five reportable segments and explicitly states that revenue is generated from the sale of finished products to customers.",
+    "detail": "supports_verdict=yes; The filing identifies the five reportable segments and explains that revenue is generated from the sale of finished products to customers.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2346,7 +2361,7 @@
     "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing asserts a leadership position but provides no specific data or measures to substantiate the claim, fitting the definition of weak evidence.",
+    "detail": "supports_verdict=yes; The filing asserts a leadership position but provides no specific data or measures to quantify the advantage, fitting the definition of weak evidence.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2356,7 +2371,7 @@
     "check": "L1",
     "item": "candid_management",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing attributes setbacks to external factors like geopolitical conflict and supply chain issues, which aligns with the definition of weak evidence.",
+    "detail": "supports_verdict=yes; Management provides specific, quantified explanations for declines in earnings, margins, and market share, moving beyond generic boilerplate.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2366,7 +2381,7 @@
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing outlines a clear priority for cash usage and provides specific figures for capital expenditures and free cash flow.",
+    "detail": "supports_verdict=yes; The filing outlines a clear priority for cash usage (dividends first, then buybacks/acquisitions) and quantifies capital expenditures for the 2026 fiscal year.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2376,7 +2391,7 @@
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue figure and compares it to the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and confirms the company meets it.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2386,7 +2401,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the current ratio and debt-to-asset requirements.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the current ratio and debt-to-assets criteria.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2396,7 +2411,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms positive net income for the required 10-year period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year positive net income requirement.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2406,7 +2421,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the dividend record over the 15-year period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the dividend record over the available 15-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2416,7 +2431,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio based on the 3-year averages.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio against the required threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2446,7 +2461,7 @@
     "check": "L1",
     "item": "B3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the ratio of the 3-year average margin to the 10-year average.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin against the 10-year average.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2456,7 +2471,7 @@
     "check": "L1",
     "item": "B4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms positive owner earnings and the growth between the initial and recent 3-year averages.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly evaluates owner earnings consistency and growth.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2483,27 +2498,27 @@
   "repairs": [],
   "llm_calls": 1,
   "usage": {
-   "prompt_tokens": 3075,
-   "completion_tokens": 856,
-   "total_tokens": 3931,
+   "prompt_tokens": 3243,
+   "completion_tokens": 849,
+   "total_tokens": 4092,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.00205275
+  "notional_cost_usd": 0.00208425
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.009435,
+  "notional_cost_usd": 0.009448,
   "llm_calls": 9,
-  "input_tokens": 23051,
-  "output_tokens": 2448,
+  "input_tokens": 24177,
+  "output_tokens": 2269,
   "by_agent": {
    "critic": {
     "calls": 1,
-    "input_tokens": 3075,
-    "output_tokens": 856,
+    "input_tokens": 3243,
+    "output_tokens": 849,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002053
+    "notional_cost_usd": 0.002084
    },
    "explainer": {
     "calls": 1,
@@ -2514,10 +2529,10 @@
    },
    "qualitative": {
     "calls": 7,
-    "input_tokens": 17365,
-    "output_tokens": 1022,
+    "input_tokens": 18323,
+    "output_tokens": 850,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.005874
+    "notional_cost_usd": 0.005856
    }
   }
  },

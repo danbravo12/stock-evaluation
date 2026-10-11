@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "O-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:57:39+00:00",
+  "generated_at": "2026-10-11T13:44:42+00:00",
   "timings": {
-   "fetch": 0.356,
+   "fetch": 0.066,
    "score": 0.0,
-   "qualitative": 57.995,
-   "explain_and_verify": 48.374
+   "qualitative": 20.392,
+   "explain_and_verify": 30.336
   }
  },
  "plan": {
@@ -64,7 +64,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 0.356,
+   "seconds": 0.066,
    "reason": null
   },
   {
@@ -76,19 +76,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 57.995,
+   "seconds": 20.392,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 48.374,
+   "seconds": 30.336,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.068,
+   "seconds": 0.049,
    "reason": null
   }
  ],
@@ -1105,9 +1105,34 @@
   {
    "finding": {
     "criterion": "understandable_business",
-    "verdict": "not assessed",
-    "rationale": "The cited sentence pointers were invalid twice, so no finding is recorded.",
-    "citations": [],
+    "verdict": "evidence found",
+    "rationale": "The company acquires and manages freestanding commercial properties, leasing them to a diverse base of creditworthy operators under long-term net lease agreements. It generates revenue through contractually defined rental payments, which often include embedded rent escalations.",
+    "citations": [
+     {
+      "passage_id": "0000726728-26-000011:1:2",
+      "accession": "0000726728-26-000011",
+      "item": "1",
+      "char_start": 7918,
+      "char_end": 8209,
+      "quote": "Our primary business is the acquisition, ownership, and active management of freestanding commercial properties leased under long‑term net lease agreements to a diversified base of operators, including a blend of investment grade, investment grade equivalent, and other creditworthy clients.",
+      "sentences": [
+       1,
+       1
+      ]
+     },
+     {
+      "passage_id": "0000726728-26-000011:1:2",
+      "accession": "0000726728-26-000011",
+      "item": "1",
+      "char_start": 8545,
+      "char_end": 8848,
+      "quote": "Under a net lease structure, clients are typically responsible for most or all property-level operating expenses, including real estate taxes, insurance, and maintenance, while we are entitled to receive contractually defined rental payments, many of which include embedded contractual rent escalations.",
+      "sentences": [
+       4,
+       4
+      ]
+     }
+    ],
     "searches": [
      {
       "queries": [
@@ -1129,19 +1154,19 @@
       ]
      }
     ],
-    "llm_calls": 3,
+    "llm_calls": 4,
     "tool_calls": 4,
-    "stop_reason": "invalid_citation",
+    "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 8042,
-     "completion_tokens": 482,
-     "total_tokens": 8524,
+     "prompt_tokens": 8461,
+     "completion_tokens": 576,
+     "total_tokens": 9037,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0027335
+    "notional_cost_usd": 0.0029792499999999997
    },
-   "critic_status": "passed",
+   "critic_status": "passed_after_retry",
    "stability": null
   },
   {
@@ -1218,9 +1243,22 @@
   {
    "finding": {
     "criterion": "candid_management",
-    "verdict": "insufficient evidence",
-    "rationale": "The provided 10-K text attributes financial setbacks, such as impairments and credit losses, primarily to external factors like client bankruptcy and financial distress, rather than the company's own decisions or execution. As a 10-K is a limited guide to candour, and no evidence of management acknowledging its own mistakes or missed targets was found, the verdict is insufficient evidence.",
-    "citations": [],
+    "verdict": "evidence weak",
+    "rationale": "The filing acknowledges a $115.5 million increase in real estate impairment provisions, attributing this to properties sold or likely to be sold and properties leased to clients in bankruptcy or financial distress. A 10-K is a limited guide to candour, and this disclosure is a standard accounting explanation of financial results rather than a candid discussion of management's own strategic mistakes or execution failures.",
+    "citations": [
+     {
+      "passage_id": "0000726728-26-000011:7:46",
+      "accession": "0000726728-26-000011",
+      "item": "7",
+      "char_start": 186339,
+      "char_end": 186678,
+      "quote": "Provisions for impairment of real estate increased by $115.5 million during the year ended December 31, 2025 as compared to the same period in 2024, primarily due to properties that were sold or are more likely than not to be sold in the next twelve months and properties leased to clients in bankruptcy or experiencing financial distress.",
+      "sentences": [
+       6,
+       6
+      ]
+     }
+    ],
     "searches": [
      {
       "queries": [
@@ -1253,22 +1291,22 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2572,
-     "completion_tokens": 105,
-     "total_tokens": 2677,
+     "prompt_tokens": 2367,
+     "completion_tokens": 147,
+     "total_tokens": 2514,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0008005
+    "notional_cost_usd": 0.00081225
    },
-   "critic_status": "passed_after_retry",
+   "critic_status": "passed",
    "stability": null
   },
   {
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The company states its primary goal is to provide increasing monthly dividends to stockholders. Additionally, the filing quantifies a specific share repurchase of 1.8 million shares for $101.9 million.",
+    "rationale": "The filing states a primary goal of delivering dependable monthly dividends that increase over time and quantifies the total distributions paid to common stockholders in 2025 as $2,920,895 thousand.",
     "citations": [
      {
       "passage_id": "0000726728-26-000011:7:16",
@@ -1283,15 +1321,15 @@
       ]
      },
      {
-      "passage_id": "0000726728-26-000011:7:18",
+      "passage_id": "0000726728-26-000011:7:71",
       "accession": "0000726728-26-000011",
       "item": "7",
-      "char_start": 158033,
-      "char_end": 158151,
-      "quote": "In January 2026, we repurchased approximately 1.8 million shares of our common stock for approximately $101.9 million.",
+      "char_start": 211850,
+      "char_end": 211923,
+      "quote": "Distributions paid to common stockholders | $ | 2,920,895 | $ | 2,691,719",
       "sentences": [
-       5,
-       5
+       11,
+       11
       ]
      }
     ],
@@ -1315,25 +1353,45 @@
        "0000726728-26-000011:7:6",
        "0000726728-26-000011:7:18"
       ]
+     },
+     {
+      "queries": [
+       "distributions paid to common stockholders 2025"
+      ],
+      "items": null,
+      "seeded": false,
+      "passage_ids": [
+       "0000726728-26-000011:7:33",
+       "0000726728-26-000011:7:67",
+       "0000726728-26-000011:7:71",
+       "0000726728-26-000011:7:65"
+      ]
      }
     ],
-    "llm_calls": 3,
+    "llm_calls": 2,
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5474,
-     "completion_tokens": 414,
-     "total_tokens": 5888,
+     "prompt_tokens": 7005,
+     "completion_tokens": 172,
+     "total_tokens": 7177,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0019895
+    "notional_cost_usd": 0.0020092499999999998
    },
    "critic_status": "passed_after_retry",
    "stability": null
   }
  ],
  "passages": {
+  "0000726728-26-000011:1:2": {
+   "text": "Our primary business is the acquisition, ownership, and active management of freestanding commercial properties leased under long‑term net lease agreements to a diversified base of operators, including a blend of investment grade, investment grade equivalent, and other creditworthy clients. We focus on clients with strong business models, resilient cash flow characteristics, and locations that are strategically important to their operations and aligned with our long‑term investment objectives. These activities are supported by data‑driven analytics that inform client selection, site quality, and portfolio construction.\nUnder a net lease structure, clients are typically responsible for most or all property-level operating expenses, including real estate taxes, insurance, and maintenance, while we are entitled to receive contractually defined rental payments, many of which include embedded contractual rent escalations. This structure, together with our analytics‑supported underwriting, is designed to generate a stable and predictable revenue stream, provide built‑in growth over time, and reduce our exposure to variable operating costs, contributing to the durability and consistency of our cash flows across market cycles.",
+   "item": "1",
+   "accession": "0000726728-26-000011",
+   "char_start": 7918,
+   "char_end": 9156
+  },
   "0000726728-26-000011:1:3": {
    "text": "Our asset management approach includes ongoing monitoring of client performance, property‑level oversight, proactive leasing and disposition strategies, and maintaining strong client relationships. Together, these capabilities support long‑term occupancy, favorable leasing and releasing outcomes, and help preserve and enhance the value of our portfolio. We use internal analytics to prioritize actions that support occupancy, re‑leasing outcomes, and value creation.\nAs a net lease real estate investment trust (\"REIT\"), we finance our business through a combination of long‑term debt, equity, retained cash flow and capital recycling through dispositions. We manage our balance sheet with a focus on maintaining financial flexibility, access to multiple forms of capital, and a conservative leverage profile. These attributes, combined with our scale and cost‑of‑capital advantages, position us to pursue high‑quality investment opportunities and have enabled us to deliver consistent long‑term value to our stockholders.",
    "item": "1",
@@ -1355,12 +1413,19 @@
    "char_start": 155463,
    "char_end": 156729
   },
-  "0000726728-26-000011:7:18": {
-   "text": "In February 2025, our Board of Directors authorized a share repurchase program for up to $2.0 billion in shares of our common stock, which will expire in January 2028. Repurchases under the repurchase program may be made at management's discretion from time to time using a variety of methods, which may include open market purchases, privately negotiated transactions, Rule 10b5-1 plans or otherwise, all in accordance with the rules of the SEC and other applicable legal requirements. The repurchase program does not obligate us to acquire any particular amount of common stock, and the repurchase program may be suspended or discontinued at any time at our discretion. No shares were repurchased in 2025. In January 2026, we repurchased approximately 1.8 million shares of our common stock for approximately $101.9 million. See note 23, Subsequent Events, to the consolidated financial statements for further details.\nATM Program",
+  "0000726728-26-000011:7:46": {
+   "text": "Years ended December 31,\n2025 | 2024 | Change\nProvisions for impairment of real estate | $ | 434,497 | $ | 319,032 | $ | 115,465\nProvisions for credit losses | 36,838 | 106,801 | (69,963)\nProvisions for impairment | $ | 471,335 | $ | 425,833 | $ | 45,502\nProvisions for impairment of real estate increased by $115.5 million during the year ended December 31, 2025 as compared to the same period in 2024, primarily due to properties that were sold or are more likely than not to be sold in the next twelve months and properties leased to clients in bankruptcy or experiencing financial distress.\nProvisions for credit losses decreased by $70.0 million during the year ended December 31, 2025 as compared to the same period in 2024, primarily due to lower credit losses recognized on financing receivables related to distressed clients accounted for under sales leaseback transactions.\nMerger, Transaction, and Other Costs, Net\nDuring the year ended December 31, 2025, we incurred $24.2 million of merger, transaction, and other costs, net consisting primarily of placement fees incurred in fundraising for the Fund.",
    "item": "7",
    "accession": "0000726728-26-000011",
-   "char_start": 157325,
-   "char_end": 158257
+   "char_start": 186084,
+   "char_end": 187198
+  },
+  "0000726728-26-000011:7:71": {
+   "text": "Deferred tax expense | 603 | 3,552\nProportionate share of adjustments for unconsolidated entities | (2,991) | (2,078)\nExcess of redemption value over carrying value of preferred shares redeemed | — | 5,116\nOther adjustments (3) | 20,193 | 7,035\nAFFO available to common stockholders | $ | 3,885,898 | $ | 3,621,437\nAFFO allocable to dilutive noncontrolling interests | 9,323 | 6,599\nDiluted AFFO | $ | 3,895,221 | $ | 3,628,036\nAFFO per common share:\nBasic | $ | 4.28 | $ | 4.20\nDiluted | $ | 4.28 | $ | 4.19\nDistributions paid to common stockholders | $ | 2,920,895 | $ | 2,691,719\nAFFO after distributions | $ | 965,003 | $ | 929,718\nWeighted average number of common shares used for AFFO:\nBasic | 907,169 | 862,959\nDiluted | 911,015 | 865,842\n(1)See reconciling items for Normalized FFO presented under \"Funds from Operations Available to Common Stockholders and Normalized Funds from Operations Available to Common Stockholders\".\n(2)Includes the amortization of the purchase price allocated to interest rate swaps acquired in the Merger.",
+   "item": "7",
+   "accession": "0000726728-26-000011",
+   "char_start": 211341,
+   "char_end": 212382
   }
  },
  "critic": {
@@ -1669,9 +1734,23 @@
    },
    {
     "check": "L1",
+    "item": "understandable_business",
+    "status": "fail",
+    "detail": "supports_verdict=yes; unsupported: grocery | convenience stores | home improvement; The quotes clearly define the business model of acquiring and leasing commercial properties under net lease agreements to creditworthy clients.",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": "rationale",
+    "claims": [
+     "grocery",
+     "convenience stores",
+     "home improvement"
+    ]
+   },
+   {
+    "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing asserts scale and cost advantages and explains why they are difficult to replicate, fitting the definition of an asserted advantage without concrete metrics.",
+    "detail": "supports_verdict=yes; The filing asserts scale and cost-of-capital advantages without providing metrics, fitting the definition of an asserted advantage.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -1680,32 +1759,30 @@
    {
     "check": "L1",
     "item": "candid_management",
-    "status": "fail",
-    "detail": "supports_verdict=no; unsupported: A 10-K is a limited guide to candour; The impairment is attributed to external client financial distress and bankruptcy, not the company's own decisions or execution, failing the definition of the claimed verdict.",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The disclosure explains the impairment charge as a standard accounting consequence of client distress and property sales, fitting the definition of external factor explanation.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": "verdict",
-    "claims": [
-     "A 10-K is a limited guide to candour"
-    ]
+    "kind": null,
+    "claims": []
    },
    {
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "fail",
-    "detail": "supports_verdict=yes; unsupported: provides the specific dividend amount per share; The filing provides a clear dividend policy and quantifies a specific share repurchase action, meeting the requirements for the verdict.",
+    "detail": "supports_verdict=overstated; unsupported: provides the specific dividend amount paid in 2025; The quotes state a dividend policy but do not provide the specific dividend amount paid in 2025, failing the quantification requirement.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": "rationale",
+    "kind": "verdict",
     "claims": [
-     "provides the specific dividend amount per share"
+     "provides the specific dividend amount paid in 2025"
     ]
    },
    {
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies the revenue and compares it against the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies the revenue figure and confirms it meets the stated threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1715,7 +1792,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text clearly states the performance over the required 10-year period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text accurately describes the 10-year net income performance against the criterion.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1725,7 +1802,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text explains the partial pass status based on the available record.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly explains the partial pass based on the available 15-year record.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1735,7 +1812,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly calculates the ratio and compares it to the required growth threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly calculates the ratio and explains why the test failed.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1745,7 +1822,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text accurately reports the failure to meet the ROE threshold over the specified period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text accurately reports the number of years the threshold was met.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1753,7 +1830,7 @@
    },
    {
     "check": "R2",
-    "item": "candid_management",
+    "item": "understandable_business",
     "status": "pass",
     "detail": "",
     "owner": "qualitative",
@@ -1773,7 +1850,7 @@
    },
    {
     "check": "R3",
-    "item": "candid_management",
+    "item": "understandable_business",
     "status": "pass",
     "detail": "",
     "owner": "qualitative",
@@ -1793,9 +1870,19 @@
    },
    {
     "check": "L1",
+    "item": "understandable_business",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The filing clearly identifies the products (commercial properties), the customers (operators), and the revenue model (net lease agreements with rental payments).",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
     "item": "rational_capital_allocation",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides a specific quantified share repurchase amount and explicitly states a policy regarding the prioritization of monthly dividends.",
+    "detail": "supports_verdict=yes; The filing states a clear dividend policy and provides the specific dollar amount of distributions paid to common stockholders for the 2025 fiscal year.",
     "owner": "qualitative",
     "attempt": 1,
     "kind": null,
@@ -1814,50 +1901,50 @@
    "B2": "passed",
    "B3": "passed",
    "B4": "passed",
-   "understandable_business": "passed",
+   "understandable_business": "passed_after_retry",
    "durable_competitive_advantage": "passed",
-   "candid_management": "passed_after_retry",
+   "candid_management": "passed",
    "rational_capital_allocation": "passed_after_retry"
   },
   "repairs": [
    {
-    "item": "candid_management",
-    "path": "constrained_retry",
+    "item": "understandable_business",
+    "path": "rationale_rewrite",
     "outcome": "accepted",
     "detail": "",
     "llm_calls": 1
    },
    {
     "item": "rational_capital_allocation",
-    "path": "rationale_rewrite",
+    "path": "constrained_retry",
     "outcome": "accepted",
     "detail": "",
-    "llm_calls": 1
+    "llm_calls": 2
    }
   ],
   "llm_calls": 2,
   "usage": {
-   "prompt_tokens": 2946,
-   "completion_tokens": 653,
-   "total_tokens": 3599,
+   "prompt_tokens": 3882,
+   "completion_tokens": 801,
+   "total_tokens": 4683,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.001716
+  "notional_cost_usd": 0.002172
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.009647,
-  "llm_calls": 12,
-  "input_tokens": 25069,
-  "output_tokens": 2253,
+  "notional_cost_usd": 0.011438,
+  "llm_calls": 13,
+  "input_tokens": 30716,
+  "output_tokens": 2506,
   "by_agent": {
    "critic": {
     "calls": 2,
-    "input_tokens": 2946,
-    "output_tokens": 653,
+    "input_tokens": 3882,
+    "output_tokens": 801,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001716
+    "notional_cost_usd": 0.002172
    },
    "explainer": {
     "calls": 1,
@@ -1867,11 +1954,11 @@
     "notional_cost_usd": 0.000914
    },
    "qualitative": {
-    "calls": 9,
-    "input_tokens": 20352,
-    "output_tokens": 1286,
+    "calls": 10,
+    "input_tokens": 25063,
+    "output_tokens": 1391,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.007017
+    "notional_cost_usd": 0.008352
    }
   }
  },
@@ -1978,10 +2065,5 @@
   "Filings and XBRL data: U.S. Securities and Exchange Commission, EDGAR (public domain)"
  ],
  "trace_path": "results/0000726728.trace.jsonl",
- "warnings": [
-  {
-   "where": "understandable_business",
-   "message": "not assessed (invalid_citation): The cited sentence pointers were invalid twice, so no finding is recorded."
-  }
- ]
+ "warnings": []
 }

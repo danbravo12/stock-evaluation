@@ -1,7 +1,7 @@
 # Status
 
 **Phase:** 1 — Build (data layer, normaliser, scorers, retriever, LLM layer, qualitative agent, Explainer, Critic, universe, orchestrator, reporter, CLI and rankings builder done)
-**Last session:** 2026-10-11
+**Last session:** 2026-10-12
 
 ## How we work (agreed 2026-10-09)
 1. **Plan here:** design and decisions happen in the Claude project chat. For each build step, Claude writes one Claude Code prompt (scope, design rules, tests, verification, doc updates, commit message).
@@ -51,16 +51,20 @@
 
 - **Prompt v2 re-record and the showcase (2026-10-12, free tier, $0.00 actual):** prompt v2 is active for both agents; the five test companies were re-recorded (61 requests; sample results regenerated offline, replay byte-identical; 54 orphaned fixtures pruned; ADR-069). Agreement with the gold set fell from 19/20 to 14/20 (four over-generous, two too strict, all borderline; the Critic's first pass flagged one of the four). 20 showcase companies analysed live, 20 of 20, 225 requests, notional $0.20 (ADR-070): the rankings page lists them with a reason each, the results and traces are committed. Measured over the 25: 10.9 model calls, 27.1k input + 2.4k output tokens, $0.0104 notional per company; Critic flagged 27 of 375 items, repaired 21, 6 warnings (all on capital allocation); 3 of 100 findings not assessed (one missing Item 1, two over-long citations). Failure modes and counts: `docs/evaluation_notes.md` items 24 and 25.
 
+- **Build 4a: evaluation harness, held-out set, stability (2026-10-12, free tier, $0.00 actual; ADR-071, ADR-072):** (1) McDonald's Item 1 found (the section finder now ends a title-found section at the next section title: 74 → 75 of 75 items over the 25 analysed 10-Ks); the citation cap error lists the words of each sentence; capital allocation and candid management judge the latest fiscal year (the year rule names the date the year ended); results carry the text of every cited passage (schema 1.2), so publish never reads the local 10-K. These are prompt v2.1, active since the refresh. (2) Held-out set frozen in `eval/heldout.json` (AAPL, MSFT, PG, NEE, CAT, JNJ, 24 items) with a blind labelling packet (`scripts/label_packet.py`, written to the git-ignored `docs/labelling/heldout_packet.md`, no agent output in it) and `python -m eval.agreement` (exact, within one level, direction, per criterion, weighted kappa; dev and held-out apart). (3) Stability: two paraphrases per criterion (`config/qualitative_paraphrases.json`), results in `results/stability/{a,b}/`, `stability` on each qualitative item (borderline / stable), `docs/stability_report.md`. Main refresh done for all 25 (500 requests on 2026-10-11 Pacific including both variants); variant A done for 25 companies; **variant B done for the five dev companies only: the free-tier limit stopped it**. Dev agreement under v2.1: 15 of 20 exact (16 agent-only), 19 within one level, kappa 0.59; main against A differs on 23% of findings (candid management 52%); all five dev disagreements are borderline findings. (4) The company page marks borderline verdicts. Lesson on dev/test overlap: `docs/evaluation_notes.md` items 26 and 27.
+
 ## Waiting on
 - Finnhub: written permission to display price and analyst data publicly. Email deferred (2026-10-08): send once first platform results exist, so the request can show what will be displayed. Must be sent and answered before publishing.
   - OK to use Finnhub for development and testing now.
   - **Publish blocker:** no Finnhub data on any public URL until a written reply is received. If refused, apply the ADR-007 fallback before publishing.
 
 ## Next
-1. **Evaluation page and harness:** the rubric and the Critic are where v2 lost agreement (14/20, over-generous capital allocation and candid management): a larger gold set (the 25 analysed companies are candidates), threshold sensitivity (ADR-011), failure cases, retrieval evaluation set (20–30 labelled questions, BM25 recall@5; ADR-022), Gemma 4 31B as model and as Critic (ADR-015, ADR-051); a page on the site for the results.
-2. **Launch pass:** read the deployed site as a stranger would (rankings, three company pages, a trace, how it works), fix copy, check the repository front page (README top, licence, screenshots), and decide what to say about the failure modes (notes 24 and 25) where a visitor will see them.
-3. **Finnhub email and price fetcher** (ADR-007): send the permission email now that the site is live to show; price and analyst counts fill G6 and G7 (they leave `pending`) and the analyst ranking, which the site already reserves.
-4. **More full analyses** only if wanted: the remaining 475 companies need about 11 days of free quota or about $5 on the paid tier (`PROGRESS.md`); before any paid run set the Google project spend cap to **$7** in AI Studio *before* enabling billing (engine cap $6.00, ADR-023); paid mode stays off until the evaluation harness passes.
+1. **Finish variant B** after midnight Pacific (about 190 requests for the other 20 companies): `.venv/bin/python scripts/stability_run.py b`, then `.venv/bin/python scripts/stability_report.py --attach`, run the tests, commit the results and redeploy (`python -m engine.cli deploy`). Until then only the five dev companies show a stability record.
+2. **Daniel labels the packet:** `docs/labelling/heldout_packet.md` (24 items), blind, before looking at the site's verdicts for AAPL, MSFT, PG, NEE, CAT, JNJ; then `python scripts/label_packet.py --ingest docs/labelling/heldout_packet.md` and `python -m eval.agreement`. After that the rubric and prompts are not edited by looking at these labels (ADR-071).
+3. **Build 4b, the evaluation page** on the site: the dev and held-out agreement, the flip rates, threshold sensitivity (ADR-011), failure cases, the retrieval evaluation set (20 to 30 labelled questions, BM25 recall@5; ADR-022), Gemma 4 31B as model and as Critic (ADR-015, ADR-051).
+4. **Launch pass:** read the deployed site as a stranger would (rankings, three company pages, a trace, how it works), fix copy, check the repository front page, decide what to say about the failure modes (notes 24 to 27) where a visitor will see them.
+5. **Finnhub email and price fetcher** (ADR-007): send the permission email now that the site is live to show; price and analyst counts fill G6 and G7 and the analyst ranking, which the site already reserves.
+6. **More full analyses** only if wanted: the remaining 475 companies need about 11 days of free quota or about $5 on the paid tier (`PROGRESS.md`); before any paid run set the Google project spend cap to **$7** in AI Studio *before* enabling billing (engine cap $6.00, ADR-023); paid mode stays off until the evaluation harness passes.
 
 ## Later (v2, only after v1 ships)
 1. Read-only MCP server over the published results JSON (`DECISIONS.md` V2-1). First v2 item: $0, reuses the v1 results schema.
@@ -81,7 +85,7 @@
 - Recorded with the free tier only (`PAID_MODE_ENABLED` unset). The replay report is byte-identical across runs; `fixtures/llm/` holds exactly what `scripts/qualitative_report.py replay` uses, plus the three smoke fixtures. Changing the system prompt, tool schemas, rubric text or `search_terms.json` queries changes request hashes: re-record (about 35 requests) and prune orphaned fixtures (list of used hashes: `data/cache/trace/qualitative_used_hashes.txt`).
 - Citations are sentence pointers (ADR-046); the only mechanical failure mode left is the model pointing at a passage it was not shown or a bad range (one correction, then `invalid_citation` → "not assessed"). Quota use: 7 requests per company, so about 55 companies a day on the free tier for this agent alone.
 - Changing the segmenter (`engine/sentences.py`) changes the numbers the model sees: re-record too.
-- `get_passage` was never called by the model (search results carry full passage text); it stays as a tool for models that ask for it.
+- `get_passage` was rarely called by the model (search results carry full passage text): never before prompt v2.1, 3 times in the v2.1 refresh (NEE, VST); the trace page renders it.
 - Run-to-run variability measured: identical at temperature 0 for identical prompts (20 of 20), but small prompt/rubric changes did move verdicts earlier, so wording sensitivity is the real risk (`docs/evaluation_notes.md` item 11).
 - Seeded search + `llm` and `trace` should share one `TraceRecorder`, so model calls and tool calls interleave (the script does).
 

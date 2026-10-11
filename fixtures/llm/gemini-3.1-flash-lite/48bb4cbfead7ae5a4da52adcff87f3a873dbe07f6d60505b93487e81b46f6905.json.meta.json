@@ -1,0 +1,7 @@
+{
+  "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+  "fetched_at": "2026-10-11T13:51:47+00:00",
+  "sha256": "3c8153ed3b73ed7ecd44d57a2821cc7cd686112dcc4818aa5f7169b4f57a88c2",
+  "bytes": 18635,
+  "content_type": "application/json"
+}

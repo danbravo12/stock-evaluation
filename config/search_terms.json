@@ -63,7 +63,7 @@
       "weak_means": "Declines or charges explained only by external factors (interest rates, currency, weather, regulation, the economy, product mix, litigation outcomes), even when quantified; or generic caution ('results may fluctuate', 'we face risks'); or a setback mentioned without explanation.",
       "insufficient_means": "The retrieved text is promotional or boilerplate and gives nothing to judge candour either way, or MD&A and Risk Factors are missing. If the retrieved text argues against the criterion, this is the verdict, and the rationale says so.",
       "rationale_note": "Limitation: 10-K text is reviewed by lawyers, and candour is better judged from shareholder letters (outside this tool's scope). Do not read polished or detailed prose as candour; if your verdict is not \"evidence found\", say in the rationale that a 10-K is a limited guide to candour.",
-      "year_rule": "Judge the company's latest fiscal year, the year this 10-K reports on. Sentences about the prior-year comparative (the year before) count only as context: they cannot be the evidence for the verdict unless the filing says the same of the latest year."
+      "year_rule": "Judge the company's latest fiscal year, the one that ended {period_end}. Sentences about earlier periods, including the prior-year comparative, count only as context: they cannot be the evidence for the verdict unless the filing says the same of the latest year."
     },
     "rational_capital_allocation": {
       "items": [
@@ -82,7 +82,7 @@
       "found_means": "The filing quantifies at least one past action in the fiscal year (share repurchases, dividends, acquisitions, capital expenditure or debt repayment, with an amount) AND states a policy, priority or rationale for how cash is used. Not every action needs an amount.",
       "weak_means": "Forward-looking plans only; or actions with no amount at all; or amounts with no stated policy, priority or rationale.",
       "insufficient_means": "The retrieved text does not say what was done with cash, or MD&A is missing. If the retrieved text argues against the criterion, this is the verdict, and the rationale says so.",
-      "year_rule": "Judge the company's latest fiscal year, the year this 10-K reports on. Sentences about the prior-year comparative (the year before) count only as context: they cannot be the evidence for the verdict unless the filing says the same of the latest year."
+      "year_rule": "Judge the company's latest fiscal year, the one that ended {period_end}. Sentences about earlier periods, including the prior-year comparative, count only as context: they cannot be the evidence for the verdict unless the filing says the same of the latest year."
     }
   }
 }

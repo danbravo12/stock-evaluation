@@ -3,7 +3,7 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "GOOGL-replay",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "replay",
   "generated_at": null,
@@ -1410,7 +1410,14 @@
     "notional_cost_usd": 0.00081725
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence found",
+     "a": "evidence found",
+     "b": "evidence found"
+    }
+   }
   },
   {
    "finding": {
@@ -1422,11 +1429,11 @@
       "passage_id": "0001652044-26-000018:1A:15",
       "accession": "0001652044-26-000018",
       "item": "1A",
-      "char_start": 51201,
+      "char_start": 51312,
       "char_end": 51719,
-      "quote": "Any significant impairment of our intellectual property rights could harm our business and ability to compete. Protecting our intellectual property rights is costly and time consuming; any increase in unauthorized use could make it more expensive to do business and harm our financial condition and operating results.\nOur business depends on strong brands, and failing to maintain and enhance our brands would hurt our ability to expand our base of users, advertisers, customers, content providers, and other partners.",
+      "quote": "Protecting our intellectual property rights is costly and time consuming; any increase in unauthorized use could make it more expensive to do business and harm our financial condition and operating results.\nOur business depends on strong brands, and failing to maintain and enhance our brands would hurt our ability to expand our base of users, advertisers, customers, content providers, and other partners.",
       "sentences": [
-       7,
+       8,
        9
       ]
      },
@@ -1435,11 +1442,11 @@
       "accession": "0001652044-26-000018",
       "item": "1",
       "char_start": 27481,
-      "char_end": 28168,
-      "quote": "•users, for whom other products and services are literally one click away, on the basis of the relevance of our advertising, as well as the general usefulness, security, and availability of our products and services;\n•advertisers, primarily based on our ability to generate sales leads, and ultimately customers, and to deliver their advertisements in an efficient and effective manner across a variety of distribution channels even as trends in advertising mediums and user preferences change; and\n•content providers, primarily based on the quality of our advertiser base, our ability to help these partners generate revenues from advertising, and the terms of our agreements with them.",
+      "char_end": 27979,
+      "quote": "•users, for whom other products and services are literally one click away, on the basis of the relevance of our advertising, as well as the general usefulness, security, and availability of our products and services;\n•advertisers, primarily based on our ability to generate sales leads, and ultimately customers, and to deliver their advertisements in an efficient and effective manner across a variety of distribution channels even as trends in advertising mediums and user preferences change; and",
       "sentences": [
        8,
-       10
+       9
       ]
      }
     ],
@@ -1487,23 +1494,43 @@
     "tool_calls": 4,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 9493,
-     "completion_tokens": 370,
-     "total_tokens": 9863,
+     "prompt_tokens": 9615,
+     "completion_tokens": 369,
+     "total_tokens": 9984,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0029282500000000003
+    "notional_cost_usd": 0.00295725
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "borderline",
+    "verdicts": {
+     "main": "evidence weak",
+     "a": "insufficient evidence",
+     "b": "evidence weak"
+    }
+   }
   },
   {
    "finding": {
     "criterion": "candid_management",
-    "verdict": "insufficient evidence",
-    "rationale": "The provided 10-K text focuses on potential risks, accounting policies, and external regulatory changes rather than providing a management-attributed account of a specific past failure or missed target. As a 10-K is a limited guide to candour, the evidence is insufficient to meet the criterion.",
-    "citations": [],
+    "verdict": "evidence weak",
+    "rationale": "The filing acknowledges that the company's devices have experienced and may continue to experience quality issues resulting from design, manufacturing, or operations, which could harm the business. A 10-K is a limited guide to candour, as these disclosures are standard risk factors.",
+    "citations": [
+     {
+      "passage_id": "0001652044-26-000018:1A:22",
+      "accession": "0001652044-26-000018",
+      "item": "1A",
+      "char_start": 56728,
+      "char_end": 57415,
+      "quote": "Our devices have had, and in the future may have, quality issues resulting from design, manufacturing, or operations. Sometimes, these issues may be caused by components we purchase from other manufacturers or suppliers. In addition, quality issues with equipment used in our technical infrastructure could constrain our capacity to support the delivery and continued development of our products and services. If the quality of our products and services does not meet expectations, we lack the capacity to deliver them, or our products or services are defective or require a corrective action or recall, it could harm our business, reputation, financial condition, and operating results.",
+      "sentences": [
+       1,
+       4
+      ]
+     }
+    ],
     "searches": [
      {
       "queries": [
@@ -1536,22 +1563,29 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2585,
-     "completion_tokens": 89,
-     "total_tokens": 2674,
+     "prompt_tokens": 2351,
+     "completion_tokens": 123,
+     "total_tokens": 2474,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00077975
+    "notional_cost_usd": 0.00077225
    },
-   "critic_status": "passed_after_retry",
-   "stability": null
+   "critic_status": "passed",
+   "stability": {
+    "status": "borderline",
+    "verdicts": {
+     "main": "evidence weak",
+     "a": "insufficient evidence",
+     "b": "insufficient evidence"
+    }
+   }
   },
   {
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing quantifies specific capital allocation actions in 2025, including $45.4 billion in share repurchases and $91.4 billion in capital expenditures. It also states that the primary use of capital is to invest for long-term growth and that management regularly evaluates the size, pace, and form of capital returns to stockholders.",
+    "rationale": "The filing quantifies specific capital allocation actions for 2025, including $45.4 billion in share repurchases and $91.4 billion in capital expenditures. It also states that the primary use of capital is to invest for long-term growth and that management regularly evaluates the size, pace, and form of capital returns to stockholders.",
     "citations": [
      {
       "passage_id": "0001652044-26-000018:7:20",
@@ -1600,20 +1634,27 @@
       ]
      }
     ],
-    "llm_calls": 1,
-    "tool_calls": 2,
+    "llm_calls": 2,
+    "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2354,
-     "completion_tokens": 180,
-     "total_tokens": 2534,
+     "prompt_tokens": 5094,
+     "completion_tokens": 400,
+     "total_tokens": 5494,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0008585
+    "notional_cost_usd": 0.0018735
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence found",
+     "a": "evidence found",
+     "b": "evidence found"
+    }
+   }
   }
  ],
  "passages": {
@@ -1644,6 +1685,13 @@
    "accession": "0001652044-26-000018",
    "char_start": 50517,
    "char_end": 51719
+  },
+  "0001652044-26-000018:1A:22": {
+   "text": "Our devices have had, and in the future may have, quality issues resulting from design, manufacturing, or operations. Sometimes, these issues may be caused by components we purchase from other manufacturers or suppliers. In addition, quality issues with equipment used in our technical infrastructure could constrain our capacity to support the delivery and continued development of our products and services. If the quality of our products and services does not meet expectations, we lack the capacity to deliver them, or our products or services are defective or require a corrective action or recall, it could harm our business, reputation, financial condition, and operating results.",
+   "item": "1A",
+   "accession": "0001652044-26-000018",
+   "char_start": 56728,
+   "char_end": 57415
   },
   "0001652044-26-000018:7:20": {
    "text": "•Changes to U.S. tax law enacted on July 4, 2025, allow, among other things, for immediate expensing of domestic research and experimentation costs and accelerated depreciation on eligible capital expenditures, the effects of which are included in operating cash flows for the year ended December 31, 2025.\n•Repurchases of Class A and Class C shares were $6.5 billion and $38.9 billion, respectively, totaling $45.4 billion for the year ended December 31, 2025.\n•Operating cash flow was $164.7 billion for the year ended December 31, 2025.\n•Capital expenditures, which primarily reflected investments in technical infrastructure, were $91.4 billion for the year ended December 31, 2025.\n•As of December 31, 2025, we had 190,820 employees.\nWe are monitoring ongoing developments surrounding international trade and the macroeconomic environment. As a result of volatility in international trade and financial markets, we may experience direct and indirect effects on our business, operations, and financial results. Our past results may not be indicative of our future performance, and our financial results may differ materially from historical trends.\nFinancial Results\nRevenues\nThe following table presents revenues by type (in millions):\nYear Ended December 31,\n2024 | 2025",
@@ -1968,7 +2016,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing clearly identifies revenue streams from cloud services, advertising, subscriptions, app sales, and hardware, while specifying the customer base.",
+    "detail": "supports_verdict=yes; The filing clearly identifies products, services, revenue streams, and customer segments.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -1978,7 +2026,7 @@
     "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing acknowledges the importance of brands and IP but explicitly highlights the ease with which users can switch to competitors, supporting the weak evidence verdict.",
+    "detail": "supports_verdict=yes; The filing asserts the importance of brand and IP while explicitly noting the ease with which users can switch to competitors.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -1987,18 +2035,18 @@
    {
     "check": "L1",
     "item": "candid_management",
-    "status": "fail",
-    "detail": "supports_verdict=overstated; The quote describes potential risks and general quality issues rather than a specific, management-attributed past failure or missed target as required by the definition.",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The filing acknowledges specific operational and quality risks that could harm the business, meeting the criteria for the claimed verdict.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": "verdict",
+    "kind": null,
     "claims": []
    },
    {
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides specific dollar amounts for share repurchases and capital expenditures while stating a clear policy of investing for long-term growth.",
+    "detail": "supports_verdict=yes; The filing provides 2025 figures for share repurchases and capital expenditures alongside a stated policy for long-term capital allocation.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2008,7 +2056,7 @@
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and compares the company's performance against it.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and the company's performance.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2018,7 +2066,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the financial strength criteria and provides the relevant figures.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the current ratio and debt levels against the criteria.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2028,7 +2076,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation accurately reflects the earnings stability test over the 10-year period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year net income stability requirement.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2038,7 +2086,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the dividend record requirement.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the dividend consistency requirement.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2048,7 +2096,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio based on the 3-year average EPS.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio against the required threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2058,7 +2106,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation accurately states the ROE performance against the defined threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the ROE performance over the 10-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2068,7 +2116,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares long-term debt to the calculated maximum debt threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares long-term debt to the 3-year average net income.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2081,26 +2129,6 @@
     "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin to the 10-year average.",
     "owner": "explainer",
     "attempt": 0,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "R2",
-    "item": "candid_management",
-    "status": "pass",
-    "detail": "no citations to check",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "R3",
-    "item": "candid_management",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
     "kind": null,
     "claims": []
    }
@@ -2119,41 +2147,33 @@
    "B4": "passed",
    "understandable_business": "passed",
    "durable_competitive_advantage": "passed",
-   "candid_management": "passed_after_retry",
+   "candid_management": "passed",
    "rational_capital_allocation": "passed"
   },
-  "repairs": [
-   {
-    "item": "candid_management",
-    "path": "constrained_retry",
-    "outcome": "accepted",
-    "detail": "",
-    "llm_calls": 1
-   }
-  ],
+  "repairs": [],
   "llm_calls": 1,
   "usage": {
-   "prompt_tokens": 3213,
-   "completion_tokens": 794,
-   "total_tokens": 4007,
+   "prompt_tokens": 3316,
+   "completion_tokens": 768,
+   "total_tokens": 4084,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.00199425
+  "notional_cost_usd": 0.001981
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.009514,
+  "notional_cost_usd": 0.009778,
   "llm_calls": 9,
-  "input_tokens": 24592,
-  "output_tokens": 2244,
+  "input_tokens": 25035,
+  "output_tokens": 2346,
   "by_agent": {
    "critic": {
     "calls": 1,
-    "input_tokens": 3213,
-    "output_tokens": 794,
+    "input_tokens": 3316,
+    "output_tokens": 768,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001994
+    "notional_cost_usd": 0.001981
    },
    "explainer": {
     "calls": 1,
@@ -2164,10 +2184,10 @@
    },
    "qualitative": {
     "calls": 7,
-    "input_tokens": 18987,
-    "output_tokens": 931,
+    "input_tokens": 19327,
+    "output_tokens": 1059,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.006143
+    "notional_cost_usd": 0.00642
    }
   }
  },

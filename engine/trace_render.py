@@ -210,6 +210,13 @@ class Renderer:
                 n = len(hits) if hits else None
                 s.update(kind="search", title=f"Searched {items_text(a.get('items'))} for \"{q}\"" + (f": {plural(n, 'passage')}" if n is not None else ""))
                 s["details"] = ["The model chose this search itself."] + self.hit_lines(hits, ids)
+            elif typ == "tool_call" and summ.startswith("get_passage("):
+                a = _json_in(summ)
+                pid = a.get("passage_id", "")
+                if text.startswith("Tool error"):
+                    s.update(kind="search", title=f"Asked to read {short_passage(pid)}: not available", details=["The model was told the passage does not exist in this filing."])
+                else:
+                    s.update(kind="search", title=f"Read {short_passage(pid)} in full", details=["The model asked for the whole passage, with its sentences numbered, before deciding what to cite."])
             elif typ == "llm_call":
                 self.model_calls[agent] = self.model_calls.get(agent, 0) + 1
                 u = usage or {}

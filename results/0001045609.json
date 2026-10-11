@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "PLD-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:55:52+00:00",
+  "generated_at": "2026-10-11T13:43:51+00:00",
   "timings": {
-   "fetch": 0.082,
+   "fetch": 0.081,
    "score": 0.0,
-   "qualitative": 39.052,
-   "explain_and_verify": 18.127
+   "qualitative": 12.86,
+   "explain_and_verify": 12.78
   }
  },
  "plan": {
@@ -64,7 +64,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 0.082,
+   "seconds": 0.081,
    "reason": null
   },
   {
@@ -76,19 +76,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 39.052,
+   "seconds": 12.86,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 18.127,
+   "seconds": 12.78,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.078,
+   "seconds": 0.056,
    "reason": null
   }
  ],
@@ -1514,7 +1514,7 @@
    "finding": {
     "criterion": "candid_management",
     "verdict": "evidence weak",
-    "rationale": "The filing discusses potential setbacks such as development projects not being completed as planned due to defects, properties performing below budgeted levels, and the risk of impairment charges if land sales do not recover investments. However, these are presented as forward-looking risk factors rather than an account of specific past mistakes or setbacks, and a 10-K is a limited guide to candour.",
+    "rationale": "The filing discusses potential setbacks such as development projects exceeding cost estimates or failing to stabilize as planned, and properties performing below budgeted levels. However, these are presented as forward-looking risks rather than specific, candid admissions of past mistakes or failures in the latest fiscal year. A 10-K is a limited guide to candour.",
     "citations": [
      {
       "passage_id": "0001193125-26-051453:1A:22",
@@ -1533,11 +1533,11 @@
       "accession": "0001193125-26-051453",
       "item": "1A",
       "char_start": 79554,
-      "char_end": 79859,
-      "quote": "we may have properties that perform below anticipated levels, producing cash flows below budgeted amounts;\n•\nwe may seek to sell certain land parcels and not be able to find a third party to acquire such land or the sales price will not allow us to recover our investment, resulting in impairment charges;",
+      "char_end": 79660,
+      "quote": "we may have properties that perform below anticipated levels, producing cash flows below budgeted amounts;",
       "sentences": [
        7,
-       9
+       7
       ]
      }
     ],
@@ -1573,13 +1573,13 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2323,
-     "completion_tokens": 184,
-     "total_tokens": 2507,
+     "prompt_tokens": 2386,
+     "completion_tokens": 176,
+     "total_tokens": 2562,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00085675
+    "notional_cost_usd": 0.0008605
    },
    "critic_status": "passed",
    "stability": null
@@ -1588,7 +1588,7 @@
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing quantifies past actions including debt repayments and states a dividend policy of distributing cash flow to meet REIT requirements while retaining cash for capital deployment and investment activities.",
+    "rationale": "The company maintains a dividend policy to meet IRC requirements while retaining cash for capital deployment and investment activities. Additionally, the filing quantifies cash investments in unconsolidated entities for property acquisitions, development, and venture debt repayment.",
     "citations": [
      {
       "passage_id": "0001193125-26-051453:7:47",
@@ -1603,15 +1603,15 @@
       ]
      },
      {
-      "passage_id": "0001193125-26-051453:7:44",
+      "passage_id": "0001193125-26-051453:7:42",
       "accession": "0001193125-26-051453",
       "item": "7",
-      "char_start": 174698,
-      "char_end": 174955,
-      "quote": "Repurchase of and payments on debt (including extinguishment costs)\nRegularly scheduled debt principal payments and payments at maturity | $ | 337 | $ | 330\nSecured mortgage debt | - | 89\nSenior notes | 365 | -\nTerm loans | - | 500\nTotal | $ | 702 | $ | 919",
+      "char_start": 172604,
+      "char_end": 172900,
+      "quote": "Investments in and advances to our unconsolidated entities. We invested cash in our unconsolidated entities of $312 million and $541 million in 2025 and 2024, respectively, representing our proportionate share, for the acquisition of properties, development and repayment of debt by the ventures.",
       "sentences": [
-       6,
-       11
+       7,
+       8
       ]
      }
     ],
@@ -1637,19 +1637,19 @@
       ]
      }
     ],
-    "llm_calls": 2,
+    "llm_calls": 3,
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 4906,
-     "completion_tokens": 330,
-     "total_tokens": 5236,
+     "prompt_tokens": 5442,
+     "completion_tokens": 418,
+     "total_tokens": 5860,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0017215
+    "notional_cost_usd": 0.0019874999999999997
    },
-   "critic_status": "passed",
+   "critic_status": "passed_after_retry",
    "stability": null
   }
  ],
@@ -1682,12 +1682,12 @@
    "char_start": 78660,
    "char_end": 79861
   },
-  "0001193125-26-051453:7:44": {
-   "text": "Cash provided by and used in financing activities is principally driven by proceeds from and payments on credit facilities, commercial paper and other debt, along with dividends paid on common and preferred stock and noncontrolling interest contributions and distributions. Our credit facilities and our commercial paper support our cash needs for general corporate purposes on a short-term basis. The maturities of the borrowings under the credit facilities and the notes under the commercial paper programs generally range from overnight to three months.\nOur repurchase of and payments on debt and proceeds from the issuance of debt consisted of the following activity (in millions):\n2025 | 2024\nRepurchase of and payments on debt (including extinguishment costs)\nRegularly scheduled debt principal payments and payments at maturity | $ | 337 | $ | 330\nSecured mortgage debt | - | 89\nSenior notes | 365 | -\nTerm loans | - | 500\nTotal | $ | 702 | $ | 919\nProceeds from the issuance of debt\nSecured mortgage debt | $ | 4 | $ | 7\nSenior notes | 3,431 | 4,149\nTerm loans | 26 | 350\nTotal | $ | 3,461 | $ | 4,506",
+  "0001193125-26-051453:7:42": {
+   "text": "Cash provided by investing activities is driven by proceeds from the sale of real estate assets that include the contribution of properties we developed to our unconsolidated co-investment ventures as well as the sale of data centers and non-strategic operating properties. Cash used in investing activities is principally driven by our capital deployment activities of investing in the development of operating properties and data centers, acquisitions and capital expenditures as discussed above. Acquisition activity includes operating properties, real estate portfolios, land for future development and other real estate assets that we acquired with the intent to redevelop in the future. See Note 3 to the Consolidated Financial Statements for further information on these activities. In addition, the following significant transactions also impacted our cash used in and provided by investing activities:\n•\nInvestments in and advances to our unconsolidated entities. We invested cash in our unconsolidated entities of $312 million and $541 million in 2025 and 2024, respectively, representing our proportionate share, for the acquisition of properties, development and repayment of debt by the ventures. See Note 4 to the Consolidated Financial Statements for more detail on our unconsolidated co-investment ventures.\n•",
    "item": "7",
    "accession": "0001193125-26-051453",
-   "char_start": 174000,
-   "char_end": 175109
+   "char_start": 171691,
+   "char_end": 173016
   },
   "0001193125-26-051453:7:47": {
    "text": "Our dividend policy on our common stock is to distribute a percentage of our cash flow to ensure that we will meet the dividend requirements of the Internal Revenue Code (\"IRC\"), relative to maintaining our REIT status, while still allowing us to retain cash to fund our capital deployment and other investment activities.\nUnder the IRC, REITs may be subject to certain federal income and excise taxes on undistributed taxable income.\n42\nTable of Contents\nOutstanding Common Shares and Units Eligible for Dividends and Distributions\nAt December 31, 2025 the total outstanding shares of the Parent's common stock and common limited partnership units in the OP eligible for dividends and distributions were as follows (in thousands):\nShares/Units\nCommon shares outstanding | 929,153\nCommon limited partnership units outstanding | 21,758\nTotal outstanding common shares and units eligible for dividends and distributions | 950,911",
@@ -2005,7 +2005,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing clearly identifies revenue sources, including rental operations and various management services, and specifies the business model for each.",
+    "detail": "supports_verdict=yes; The filing clearly defines the primary revenue source (rent from operating leases) and secondary services (asset/property management) for its ventures.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2015,7 +2015,7 @@
     "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing quantifies the scale of its portfolio (1.3 billion square feet) as a specific source of competitive advantage.",
+    "detail": "supports_verdict=yes; The filing quantifies the scale of its portfolio (1.3 billion square feet) as a specific basis for its competitive advantage.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2025,7 +2025,7 @@
     "check": "L1",
     "item": "candid_management",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing discusses risks and potential setbacks, which aligns with the definition of evidence weak as it focuses on forward-looking risks rather than past mistakes.",
+    "detail": "supports_verdict=yes; The filing acknowledges specific operational risks and potential for underperformance, fitting the definition of evidence weak for candid management.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2034,18 +2034,20 @@
    {
     "check": "L1",
     "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides quantified debt repayment figures and explicitly states the dividend policy and rationale for capital retention.",
+    "status": "fail",
+    "detail": "supports_verdict=yes; unsupported: debt repayments ($702 million); The filing provides a clear dividend policy and quantifies 2025 investments in unconsolidated entities.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": null,
-    "claims": []
+    "kind": "rationale",
+    "claims": [
+     "debt repayments ($702 million)"
+    ]
    },
    {
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies the revenue threshold and confirms the company meets it.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies that the revenue figure meets the specified threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2055,7 +2057,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly interprets the requirement for positive net income over the 10-year period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text accurately describes the stability of net income over the required period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2065,7 +2067,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly explains that the dividend record is sufficient for the available history.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly explains that the dividend record meets the requirement for the available history.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2075,7 +2077,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly calculates the ratio and identifies that it falls just short of the 1.33 threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies the failure to meet the growth threshold based on the calculated ratio.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2085,7 +2087,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly states the failure to meet the ROE threshold in the required number of years.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly states the failure to meet the ROE threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2095,7 +2097,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly compares the long-term debt against the calculated maximum allowed debt.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies that the debt level exceeds the calculated maximum threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2105,9 +2107,39 @@
     "check": "L1",
     "item": "B3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly calculates the ratio of the 3-year average margin to the 10-year average margin.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly calculates the margin stability ratio and confirms it meets the threshold.",
     "owner": "explainer",
     "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R2",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The filing provides a clear dividend policy and quantifies specific capital deployment actions for the 2025 fiscal year, satisfying both requirements of the definition.",
+    "owner": "qualitative",
+    "attempt": 1,
     "kind": null,
     "claims": []
    }
@@ -2127,32 +2159,40 @@
    "understandable_business": "passed",
    "durable_competitive_advantage": "passed",
    "candid_management": "passed",
-   "rational_capital_allocation": "passed"
+   "rational_capital_allocation": "passed_after_retry"
   },
-  "repairs": [],
-  "llm_calls": 1,
+  "repairs": [
+   {
+    "item": "rational_capital_allocation",
+    "path": "rationale_rewrite",
+    "outcome": "accepted",
+    "detail": "",
+    "llm_calls": 1
+   }
+  ],
+  "llm_calls": 2,
   "usage": {
-   "prompt_tokens": 2875,
-   "completion_tokens": 738,
-   "total_tokens": 3613,
+   "prompt_tokens": 3985,
+   "completion_tokens": 821,
+   "total_tokens": 4806,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.00182575
+  "notional_cost_usd": 0.00222775
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.007116,
-  "llm_calls": 7,
-  "input_tokens": 16720,
-  "output_tokens": 1957,
+  "notional_cost_usd": 0.007787,
+  "llm_calls": 9,
+  "input_tokens": 18429,
+  "output_tokens": 2120,
   "by_agent": {
    "critic": {
-    "calls": 1,
-    "input_tokens": 2875,
-    "output_tokens": 738,
+    "calls": 2,
+    "input_tokens": 3985,
+    "output_tokens": 821,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001826
+    "notional_cost_usd": 0.002228
    },
    "explainer": {
     "calls": 1,
@@ -2162,11 +2202,11 @@
     "notional_cost_usd": 0.001196
    },
    "qualitative": {
-    "calls": 5,
-    "input_tokens": 11665,
-    "output_tokens": 785,
+    "calls": 6,
+    "input_tokens": 12264,
+    "output_tokens": 865,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.004094
+    "notional_cost_usd": 0.004363
    }
   }
  },

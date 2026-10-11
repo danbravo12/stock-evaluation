@@ -19,6 +19,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 from engine import prompts
+from engine.prompts import year_rule_text
 from engine.agents.explainer import PLACEHOLDER, load_formats, render, templated_line, usable_keys
 from engine.contracts import CheckResult, CriterionResult, Explanation, Explanations, Passage, QualFinding, ScoreSet, Usage, FilingSection
 from engine.filing_text import html_to_text
@@ -158,14 +159,14 @@ def rubric_lines(criterion: str, verdict: str, rubric: dict) -> tuple[str, str]:
     return (spec["found_means"], spec["weak_means"]) if verdict == "evidence found" else (spec["weak_means"], spec["insufficient_means"])
 
 
-def llm_payload(findings: list[QualFinding], rubric: dict) -> list[dict]:
+def llm_payload(findings: list[QualFinding], rubric: dict, period_end: str | None = None) -> list[dict]:
     out = []
     for f in findings:
         claimed, below = rubric_lines(f.criterion, f.verdict, rubric)
         out.append({"criterion": f.criterion, "question": rubric[f.criterion]["question"], "claimed_verdict": f.verdict,
                     "definition_of_claimed_verdict": claimed, "definition_of_the_verdict_below": below,
                     "quotes": [c.quote for c in f.citations], "rationale": f.rationale,
-                    **({"year_rule": rubric[f.criterion]["year_rule"]} if rubric[f.criterion].get("year_rule") and prompts.at_least("critic", "v2.1") else {})})
+                    **({"year_rule": year_rule_text(rubric[f.criterion], period_end)} if rubric[f.criterion].get("year_rule") and prompts.at_least("critic", "v2.1") else {})})
     return out
 
 
@@ -174,10 +175,10 @@ def explanation_payload(items: list[tuple[CriterionResult, Explanation]]) -> lis
 
 
 def llm_review(findings: list[QualFinding], explanations: list[tuple[CriterionResult, Explanation]], llm, ticker: str,
-               rubric: dict | None = None) -> CriticVerdicts:
+               rubric: dict | None = None, period_end: str | None = None) -> CriticVerdicts:
     """The Critic's one model call per company: found/weak findings and the written explanations together."""
     rubric = rubric or load_rubric()
-    body = {"findings": llm_payload(findings, rubric), "explanations": explanation_payload(explanations)}
+    body = {"findings": llm_payload(findings, rubric, period_end), "explanations": explanation_payload(explanations)}
     return llm.complete_json([{"role": "system", "content": SYSTEM_PROMPT_V21 if prompts.at_least("critic", "v2.1") else SYSTEM_PROMPT},
                               {"role": "user", "content": "To review:\n" + json.dumps(body, indent=1, ensure_ascii=False)}],
                              CriticVerdicts, agent="critic", company=ticker, temperature=0.0)
@@ -266,7 +267,8 @@ class Critic:
         reviewed = [(r, by_expl[r.id]) for r in scoreset.results
                     if r.id in by_expl and not by_expl[r.id].templated and (only_explanations is None or r.id in only_explanations)]
         if judged or reviewed:
-            out = llm_review(judged, reviewed, self.llm, scoreset.ticker, self.rubric)
+            period_end = getattr(self.retriever.client.latest_filing(scoreset.cik, "10-K"), "report_date", None) if judged else None
+            out = llm_review(judged, reviewed, self.llm, scoreset.ticker, self.rubric, period_end)
             verdicts = {c.criterion: c for c in out.checks}
             ex_checks = {c.criterion: c for c in out.explanation_checks}
             for f in judged:

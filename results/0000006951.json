@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "AMAT-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:32:59+00:00",
+  "generated_at": "2026-10-11T13:36:01+00:00",
   "timings": {
-   "fetch": 1.085,
+   "fetch": 0.088,
    "score": 0.001,
-   "qualitative": 50.972,
-   "explain_and_verify": 88.667
+   "qualitative": 24.305,
+   "explain_and_verify": 4.98
   }
  },
  "plan": {
@@ -62,7 +62,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 1.085,
+   "seconds": 0.088,
    "reason": null
   },
   {
@@ -74,19 +74,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 50.972,
+   "seconds": 24.305,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 88.667,
+   "seconds": 4.98,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.068,
+   "seconds": 0.04,
    "reason": null
   }
  ],
@@ -1782,13 +1782,13 @@
     "tool_calls": 4,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 8333,
+     "prompt_tokens": 8378,
      "completion_tokens": 375,
-     "total_tokens": 8708,
+     "total_tokens": 8753,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00264575
+    "notional_cost_usd": 0.002657
    },
    "critic_status": "passed",
    "stability": null
@@ -1855,18 +1855,18 @@
   {
    "finding": {
     "criterion": "candid_management",
-    "verdict": "evidence weak",
-    "rationale": "The filing attributes potential goodwill impairments to factors such as \"changes in our strategies or product portfolio,\" but does not explicitly acknowledge these as management's own poor decisions or missed internal targets. A 10-K is a limited guide to candour, and the provided text does not meet the threshold for \"evidence found.\"",
+    "verdict": "evidence found",
+    "rationale": "Management explicitly acknowledges a specific impairment of goodwill and the implementation of a workforce reduction plan in the fourth quarter of fiscal 2025, providing concrete evidence of internal actions taken in response to business conditions. A 10-K is a limited guide to candour, but these disclosures represent specific, management-led actions rather than generic risk warnings.",
     "citations": [
      {
-      "passage_id": "0001628280-25-056742:1A:53",
+      "passage_id": "0001628280-25-056742:7:15",
       "accession": "0001628280-25-056742",
-      "item": "1A",
-      "char_start": 96886,
-      "char_end": 97169,
-      "quote": "Factors that could lead to impairment of goodwill and intangible assets include adverse industry or economic trends, reduced estimates of future cash flows, declines in the market price of our common stock, changes in our strategies or product portfolio and restructuring activities.",
+      "item": "7",
+      "char_start": 129968,
+      "char_end": 130702,
+      "quote": "General and administrative expenses in fiscal 2025 decreased primarily due to lower spending on professional services, partially offset by an impairment of goodwill of $41 million recognized during the fourth quarter of fiscal 2025.\nIn the fourth quarter of fiscal 2025, we approved a workforce reduction plan (Fiscal 2025 Restructuring Plan) to position us for continued growth as a more competitive and productive organization and expect approximately 4% of our global workforce to be impacted under this plan. In the fourth quarter of fiscal 2025, we recognized $181 million of restructuring charges consisting primarily of severance and other employment termination benefits to be paid in cash, and other non-cash related charges.",
       "sentences": [
-       4,
+       2,
        4
       ]
      }
@@ -1903,48 +1903,23 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2753,
-     "completion_tokens": 133,
-     "total_tokens": 2886,
+     "prompt_tokens": 2457,
+     "completion_tokens": 138,
+     "total_tokens": 2595,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00088775
+    "notional_cost_usd": 0.00082125
    },
-   "critic_status": "passed_after_retry",
+   "critic_status": "passed",
    "stability": null
   },
   {
    "finding": {
     "criterion": "rational_capital_allocation",
-    "verdict": "evidence found",
-    "rationale": "The filing quantifies capital expenditures ($2.3 billion) and cash dividends ($1.4 billion) for fiscal 2025, while also detailing the board's policy and discretion regarding dividend payments and share repurchase programs.",
-    "citations": [
-     {
-      "passage_id": "0001628280-25-056742:7:24",
-      "accession": "0001628280-25-056742",
-      "item": "7",
-      "char_start": 140309,
-      "char_end": 140403,
-      "quote": "Capital expenditures in fiscal 2025 and 2024 were $2.3 billion and $1.2 billion, respectively.",
-      "sentences": [
-       7,
-       7
-      ]
-     },
-     {
-      "passage_id": "0001628280-25-056742:7:27",
-      "accession": "0001628280-25-056742",
-      "item": "7",
-      "char_start": 142838,
-      "char_end": 142967,
-      "quote": "During each of fiscal 2025 and 2024, we paid four quarterly cash dividends, totaling $1.4 billion and $1.2 billion, respectively.",
-      "sentences": [
-       1,
-       1
-      ]
-     }
-    ],
+    "verdict": "not assessed",
+    "rationale": "No finding was submitted within 4 turns.",
+    "citations": [],
     "searches": [
      {
       "queries": [
@@ -1965,21 +1940,66 @@
        "0001628280-25-056742:7:26",
        "0001628280-25-056742:7:30"
       ]
+     },
+     {
+      "queries": [
+       "capital allocation strategy priority cash flow"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0001628280-25-056742:7:34",
+       "0001628280-25-056742:7:27",
+       "0001628280-25-056742:7:22",
+       "0001628280-25-056742:7:24"
+      ]
+     },
+     {
+      "queries": [
+       "\"capital allocation\" \"priorities\" \"cash\""
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0001628280-25-056742:7:27",
+       "0001628280-25-056742:7:22",
+       "0001628280-25-056742:7:24",
+       "0001628280-25-056742:7:23"
+      ]
+     },
+     {
+      "queries": [
+       "\"capital allocation\" \"repurchase\" \"dividend\" \"strategy\""
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0001628280-25-056742:7:26",
+       "0001628280-25-056742:7:27",
+       "0001628280-25-056742:7:25",
+       "0001628280-25-056742:7:3"
+      ]
      }
     ],
     "llm_calls": 4,
-    "tool_calls": 6,
-    "stop_reason": "submitted",
+    "tool_calls": 5,
+    "stop_reason": "turn_cap",
     "usage": {
-     "prompt_tokens": 10575,
-     "completion_tokens": 555,
-     "total_tokens": 11130,
+     "prompt_tokens": 15643,
+     "completion_tokens": 325,
+     "total_tokens": 15968,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00347625
+    "notional_cost_usd": 0.004398249999999999
    },
-   "critic_status": "warning",
+   "critic_status": "passed",
    "stability": null
   }
  ],
@@ -2005,26 +2025,12 @@
    "char_start": 12019,
    "char_end": 13282
   },
-  "0001628280-25-056742:1A:53": {
-   "text": "We have a significant amount of goodwill and other acquired intangible assets related to acquisitions. Goodwill and purchased intangible assets with indefinite useful lives are not amortized but are reviewed for impairment annually during the fourth quarter of each fiscal year and more frequently when events or changes in circumstances indicate the carrying value of an asset may not be recoverable. The review compares the fair value for each of our reporting units to its associated carrying value, including goodwill. Factors that could lead to impairment of goodwill and intangible assets include adverse industry or economic trends, reduced estimates of future cash flows, declines in the market price of our common stock, changes in our strategies or product portfolio and restructuring activities. Our valuation methodology for assessing impairment requires management to make judgments and assumptions based on historical experience and projections of future operating performance. We have recorded charges to earnings, and may in the future be required to record charges to earnings, when impairments of goodwill or intangible assets have been determined to exist.\nWe may not continue to declare cash dividends or repurchase our shares.",
-   "item": "1A",
-   "accession": "0001628280-25-056742",
-   "char_start": 96363,
-   "char_end": 97610
-  },
-  "0001628280-25-056742:7:24": {
-   "text": "Our working capital was $12.9 billion at October 26, 2025 and $12.8 billion at October 27, 2024.\nDays sales outstanding of our accounts receivable at the end of fiscal 2025 and 2024 was 69 days and 68 days, respectively. Days sales outstanding varies due to the timing of shipments and payment terms. The slight increase in days sales outstanding was primarily due to unfavorable revenue linearity.\nInvesting Activities\nWe used $2.8 billion and $2.3 billion of cash in investing activities in fiscal 2025 and 2024, respectively. Capital expenditures in fiscal 2025 and 2024 were $2.3 billion and $1.2 billion, respectively. Capital expenditures were primarily for investments in real property and improvements, demonstration and testing equipment, manufacturing and network equipment. Purchases of investments, net of proceeds from sales and maturities of investments, for 2025 and 2024 were $526 million and $1.1 billion, respectively. Net proceeds from asset sale were $33 million, and net cash paid for acquisition was $29 million in fiscal 2025. Investing activities also included investments in technology to allow us to access new market opportunities or emerging technologies.",
+  "0001628280-25-056742:7:15": {
+   "text": "Marketing and selling expenses for fiscal 2025 increased primarily due to higher employee related expenses.\nGeneral and administrative expenses in fiscal 2025 decreased primarily due to lower spending on professional services, partially offset by an impairment of goodwill of $41 million recognized during the fourth quarter of fiscal 2025.\nIn the fourth quarter of fiscal 2025, we approved a workforce reduction plan (Fiscal 2025 Restructuring Plan) to position us for continued growth as a more competitive and productive organization and expect approximately 4% of our global workforce to be impacted under this plan. In the fourth quarter of fiscal 2025, we recognized $181 million of restructuring charges consisting primarily of severance and other employment termination benefits to be paid in cash, and other non-cash related charges. We expect to complete the plan in fiscal 2026.\nInterest Expense and Interest and Other Income (expense), net\nInterest expense and interest and other income (expense), net for the periods presented were as follows:\nChange\n2025 | 2024 | 2025 over 2024\n(In millions)\nInterest expense | $ | 269 | $ | 247 | $ | 22",
    "item": "7",
    "accession": "0001628280-25-056742",
-   "char_start": 139780,
-   "char_end": 140963
-  },
-  "0001628280-25-056742:7:27": {
-   "text": "During each of fiscal 2025 and 2024, we paid four quarterly cash dividends, totaling $1.4 billion and $1.2 billion, respectively. We currently anticipate that cash dividends will continue to be paid on a quarterly basis, although the declaration of any future cash dividend is at the discretion of the Board of Directors and will depend on our financial condition, results of operations, capital requirements, business conditions and other factors, as well as a determination by the Board of Directors that cash dividends are in the best interests of our stockholders.",
-   "item": "7",
-   "accession": "0001628280-25-056742",
-   "char_start": 142838,
-   "char_end": 143406
+   "char_start": 129860,
+   "char_end": 131012
   }
  },
  "critic": {
@@ -2345,7 +2351,7 @@
     "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing mentions a large patent portfolio but explicitly states the business is not materially dependent on any single patent, supporting the weak evidence verdict.",
+    "detail": "supports_verdict=yes; The filing names a specific asset (patents) but explicitly notes the business is not dependent on them and faces high competitive pressure, supporting the 'evidence weak' verdict.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2354,30 +2360,18 @@
    {
     "check": "L1",
     "item": "candid_management",
-    "status": "fail",
-    "detail": "supports_verdict=overstated; The quotes show a goodwill impairment and restructuring, but do not explicitly attribute these to management's own poor decisions or missed internal targets.",
+    "status": "pass",
+    "detail": "supports_verdict=yes; Management explicitly discusses a goodwill impairment and a restructuring plan initiated in the latest fiscal year, which are internal decisions rather than external market factors.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": "verdict",
+    "kind": null,
     "claims": []
-   },
-   {
-    "check": "L1",
-    "item": "rational_capital_allocation",
-    "status": "fail",
-    "detail": "supports_verdict=overstated; unsupported: detailing the board's policy and discretion regarding dividend payments and share repurchase programs; The quotes provide quantitative data on expenditures and dividends but do not contain the stated policy or rationale for capital allocation.",
-    "owner": "qualitative",
-    "attempt": 0,
-    "kind": "verdict",
-    "claims": [
-     "detailing the board's policy and discretion regarding dividend payments and share repurchase programs"
-    ]
    },
    {
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and compares it to the reported figure.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue figure and compares it against the threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2397,7 +2391,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms the 10-year positive net income requirement.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly summarizes the 10-year earnings performance.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2407,7 +2401,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the dividend record over the available 15-year period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the dividend history over the available record.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2417,7 +2411,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio and compares it to the required threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio based on the 3-year averages.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2427,7 +2421,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly evaluates the ROE performance against the 10-year requirement.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the ROE performance over the 10-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2437,7 +2431,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares long-term debt to the calculated limit based on average net income.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares debt against the calculated 3-year average net income limit.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2447,7 +2441,7 @@
     "check": "L1",
     "item": "B3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin to the 10-year average.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin against the 10-year average.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2457,73 +2451,11 @@
     "check": "L1",
     "item": "B4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly evaluates both the frequency of positive owner earnings and the growth between periods.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly evaluates owner earnings consistency and growth.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
     "claims": []
-   },
-   {
-    "check": "R2",
-    "item": "candid_management",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "R2",
-    "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "R3",
-    "item": "candid_management",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "R3",
-    "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "L1",
-    "item": "candid_management",
-    "status": "pass",
-    "detail": "supports_verdict=yes; The quote provides only generic risk factors regarding potential impairments, which aligns with the definition of evidence weak.",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "L1",
-    "item": "rational_capital_allocation",
-    "status": "fail",
-    "detail": "supports_verdict=no; unsupported: The filing quantifies capital expenditures, dividends, and share repurchases; The provided quotes do not contain any specific dollar amounts for capital expenditures, dividends, or share repurchases, failing the requirement for quantification.",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": "verdict",
-    "claims": [
-     "The filing quantifies capital expenditures, dividends, and share repurchases"
-    ]
    }
   ],
   "final": {
@@ -2540,48 +2472,33 @@
    "B4": "passed",
    "understandable_business": "passed",
    "durable_competitive_advantage": "passed",
-   "candid_management": "passed_after_retry",
-   "rational_capital_allocation": "warning"
+   "candid_management": "passed",
+   "rational_capital_allocation": "passed"
   },
-  "repairs": [
-   {
-    "item": "candid_management",
-    "path": "constrained_retry",
-    "outcome": "accepted",
-    "detail": "",
-    "llm_calls": 1
-   },
-   {
-    "item": "rational_capital_allocation",
-    "path": "constrained_retry",
-    "outcome": "rejected_by_recheck",
-    "detail": "supports_verdict=no; unsupported: The filing quantifies capital expenditures, dividends, and share repurchases; The provided quotes do not contain any specific dollar amounts for capital expenditures, dividends, or share repurchases, failing the requirement for quantification.",
-    "llm_calls": 2
-   }
-  ],
-  "llm_calls": 2,
+  "repairs": [],
+  "llm_calls": 1,
   "usage": {
-   "prompt_tokens": 4413,
-   "completion_tokens": 1054,
-   "total_tokens": 5467,
+   "prompt_tokens": 3006,
+   "completion_tokens": 779,
+   "total_tokens": 3785,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.00268425
+  "notional_cost_usd": 0.00192
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.0128,
-  "llm_calls": 13,
-  "input_tokens": 33168,
-  "output_tokens": 3005,
+  "notional_cost_usd": 0.012039,
+  "llm_calls": 11,
+  "input_tokens": 34184,
+  "output_tokens": 2329,
   "by_agent": {
    "critic": {
-    "calls": 2,
-    "input_tokens": 4413,
-    "output_tokens": 1054,
+    "calls": 1,
+    "input_tokens": 3006,
+    "output_tokens": 779,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002684
+    "notional_cost_usd": 0.00192
    },
    "explainer": {
     "calls": 1,
@@ -2591,11 +2508,11 @@
     "notional_cost_usd": 0.001532
    },
    "qualitative": {
-    "calls": 10,
-    "input_tokens": 26121,
-    "output_tokens": 1369,
+    "calls": 9,
+    "input_tokens": 28544,
+    "output_tokens": 968,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.008584
+    "notional_cost_usd": 0.008588
    }
   }
  },
@@ -2705,7 +2622,7 @@
  "warnings": [
   {
    "where": "rational_capital_allocation",
-   "message": "the Critic still objects after one repair: supports_verdict=no; unsupported: The filing quantifies capital expenditures, dividends, and share repurchases; The provided quotes do not contain any specific dollar amounts for capital expenditures, dividends, or share repurchases, failing the requirement for quantification."
+   "message": "not assessed (turn_cap): No finding was submitted within 4 turns."
   }
  ]
 }

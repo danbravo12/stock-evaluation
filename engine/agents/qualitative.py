@@ -20,7 +20,7 @@ from dataclasses import dataclass, field
 from engine.contracts import (QUAL_CRITERIA, Citation, LLMCall, Passage, QualFinding, QualFindings, QualTotals, SearchHit,
                               SearchRecord, Usage)
 from engine import prompts
-from engine.prompts import active as active_prompt
+from engine.prompts import active as active_prompt, year_rule_text
 from engine.retrieve import FilingIndex, Retriever
 from engine.settings import REPO_ROOT
 from engine.trace import TraceRecorder
@@ -165,6 +165,7 @@ class _CriterionLoop:
         self.constraint = constraint  # set for a Critic-routed constrained retry (ADR-052)
         self.retriever, self.idx, self.accession, self.llm, self.trace = retriever, idx, accession, llm, trace
         self.max_turns, self.agent = max_turns, f"qualitative/{name}"
+        self.period_end = getattr(retriever.client.latest_filing(cik, "10-K"), "report_date", None) if spec.get("year_rule") else None
         self.run = _Run()
 
     # ---------- result ----------
@@ -255,7 +256,7 @@ class _CriterionLoop:
         if s.get("rationale_note"):
             lines.append(s["rationale_note"])
         if s.get("year_rule") and prompts.at_least("qualitative", "v2.1"):
-            lines.append(s["year_rule"])
+            lines.append(year_rule_text(s, self.period_end))
         if self.constraint:
             f = self.constraint.finding
             cited = "\n".join(f"- {c.passage_id} sentences {c.sentences[0]}-{c.sentences[1]}: {c.quote}" for c in f.citations) or "- (none)"

@@ -1,0 +1,1962 @@
+{
+ "schema_version": "1.2",
+ "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
+ "run": {
+  "run_id": "BRK-B-live-a",
+  "engine_commit": "53b0fe5",
+  "model_profile": "gemini-3.1-flash-lite",
+  "mode": "live",
+  "generated_at": "2026-10-11T14:06:07+00:00",
+  "timings": {
+   "fetch": 0.067,
+   "score": 0.0,
+   "qualitative": 22.875,
+   "explain_and_verify": 19.373
+  }
+ },
+ "plan": {
+  "ticker": "BRK-B",
+  "cik": "0001067983",
+  "name": "Berkshire Hathaway",
+  "gics_sector": "Financials",
+  "sector_class": "other",
+  "in_scope": true,
+  "out_of_scope_reason": null,
+  "universe_snapshot": "2026-10-10",
+  "steps": [
+   "fetch",
+   "score",
+   "qualitative",
+   "explain_and_verify",
+   "report"
+  ],
+  "skipped": [
+   {
+    "step": "price",
+    "reason": "price: Finnhub not yet integrated (publish gate, ADR-021)"
+   },
+   {
+    "step": "criteria G6, G7",
+    "reason": "need a price (Finnhub not yet integrated)"
+   }
+  ],
+  "sector_basis": "override:Berkshire Hathaway",
+  "sector_notes": [
+   "Conglomerate with large insurance operations; consolidated figures mix insurance and industrial balance sheets."
+  ],
+  "applicable": [
+   "G1",
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6",
+   "G7",
+   "B1",
+   "B2",
+   "B3",
+   "B4"
+  ],
+  "not_applicable": [],
+  "notes": []
+ },
+ "steps": [
+  {
+   "step": "fetch",
+   "status": "done",
+   "seconds": 0.067,
+   "reason": null
+  },
+  {
+   "step": "score",
+   "status": "done",
+   "seconds": 0.0,
+   "reason": null
+  },
+  {
+   "step": "qualitative",
+   "status": "done",
+   "seconds": 22.875,
+   "reason": null
+  },
+  {
+   "step": "explain_and_verify",
+   "status": "done",
+   "seconds": 19.373,
+   "reason": null
+  },
+  {
+   "step": "report",
+   "status": "done",
+   "seconds": 0.069,
+   "reason": null
+  }
+ ],
+ "data": {
+  "cik": "0001067983",
+  "ticker": "BRK-B",
+  "entity_name": "BERKSHIRE HATHAWAY INC",
+  "sic": "6331",
+  "filing": {
+   "accession": "0001193125-26-083899",
+   "form": "10-K",
+   "filing_date": "2026-03-02",
+   "report_date": "2025-12-31",
+   "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/brka-20251231.htm"
+  },
+  "price": null,
+  "gaps": [
+   "price: Finnhub not yet integrated (publish gate, ADR-021)"
+  ],
+  "as_of": {
+   "companyfacts": "2026-10-10",
+   "submissions": "2026-10-09",
+   "10-K": "2026-03-02"
+  }
+ },
+ "scorecard": {
+  "as_of_year": 2025,
+  "sector_class": "other",
+  "summary": {
+   "graham_met": 1,
+   "graham_applicable": 3,
+   "buffett_met": 1,
+   "buffett_applicable": 2,
+   "data_gaps": 6,
+   "not_meaningful": 0,
+   "not_applicable": 0,
+   "percent_met": 0.4
+  },
+  "criteria": [
+   {
+    "id": "G1",
+    "name": "Size",
+    "label": "pass",
+    "threshold": "revenue >= $1B",
+    "figures": {
+     "revenue": 371444000000.0
+    },
+    "by_year": {},
+    "years": [
+     2025
+    ],
+    "year_label": null,
+    "reason": null,
+    "flags": [],
+    "input_keys": [
+     "revenue:2025"
+    ],
+    "explanation": {
+     "criterion": "G1",
+     "raw": "Revenue in 2025 was {revenue}, which is above the minimum size (test: {threshold}).",
+     "text": "Revenue in 2025 was $371.44 billion, which is above the minimum size (test: revenue >= $1B).",
+     "placeholders_used": [
+      "revenue",
+      "threshold"
+     ],
+     "templated": false
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "G2",
+    "name": "Financial strength",
+    "label": "data_gap",
+    "threshold": "current ratio >= 2 and long-term debt <= net current assets",
+    "figures": {},
+    "by_year": {},
+    "years": [
+     2025
+    ],
+    "year_label": null,
+    "reason": "missing: current_assets [2025]; current_liabilities [2025]; long_term_debt [2025]",
+    "flags": [],
+    "input_keys": [],
+    "explanation": {
+     "criterion": "G2",
+     "raw": "Cannot be scored: missing: current_assets [2025]; current_liabilities [2025]; long_term_debt [2025].",
+     "text": "Cannot be scored: missing: current_assets [2025]; current_liabilities [2025]; long_term_debt [2025].",
+     "placeholders_used": [],
+     "templated": true
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "G3",
+    "name": "Earnings stability",
+    "label": "fail",
+    "threshold": "net income > 0 in every year of the last 10",
+    "figures": {
+     "years_on_record": 10,
+     "loss_years": [
+      2022
+     ]
+    },
+    "by_year": {
+     "2016": 24074000000.0,
+     "2017": 44940000000.0,
+     "2018": 4021000000.0,
+     "2019": 81417000000.0,
+     "2020": 42521000000.0,
+     "2021": 89937000000.0,
+     "2022": -22759000000.0,
+     "2023": 96223000000.0,
+     "2024": 88995000000.0,
+     "2025": 66968000000.0
+    },
+    "years": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024,
+     2025
+    ],
+    "year_label": null,
+    "reason": null,
+    "flags": [],
+    "input_keys": [
+     "net_income:2016",
+     "net_income:2017",
+     "net_income:2018",
+     "net_income:2019",
+     "net_income:2020",
+     "net_income:2021",
+     "net_income:2022",
+     "net_income:2023",
+     "net_income:2024",
+     "net_income:2025"
+    ],
+    "explanation": {
+     "criterion": "G3",
+     "raw": "Net income was positive in {profit_year_count} of the {years_on_record} years on record, with a loss recorded in {loss_years} (test: {threshold}).",
+     "text": "Net income was positive in 9 of the 10 years on record, with a loss recorded in 2022 (test: net income > 0 in every year of the last 10).",
+     "placeholders_used": [
+      "profit_year_count",
+      "years_on_record",
+      "loss_years",
+      "threshold"
+     ],
+     "templated": false
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "G4",
+    "name": "Dividend record",
+    "label": "fail",
+    "threshold": "dividend paid in every year on record in the last 15",
+    "figures": {
+     "years_on_record": 15,
+     "unpaid_years": [
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+     ]
+    },
+    "by_year": {
+     "2011": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     },
+     "2012": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     },
+     "2013": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     },
+     "2014": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     },
+     "2015": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     },
+     "2016": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     },
+     "2017": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     },
+     "2018": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     },
+     "2019": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     },
+     "2020": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     },
+     "2021": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     },
+     "2022": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     },
+     "2023": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     },
+     "2024": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     },
+     "2025": {
+      "paid": false,
+      "source": "none",
+      "value": null
+     }
+    },
+    "years": [
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024,
+     2025
+    ],
+    "year_label": null,
+    "reason": null,
+    "flags": [],
+    "input_keys": [],
+    "explanation": {
+     "criterion": "G4",
+     "raw": "Dividends were paid in {paid_year_count} of the {years_on_record} years on record and were not paid in {unpaid_year_count} years (test: {threshold}).",
+     "text": "Dividends were paid in 0 of the 15 years on record and were not paid in 15 years (test: dividend paid in every year on record in the last 15).",
+     "placeholders_used": [
+      "paid_year_count",
+      "years_on_record",
+      "unpaid_year_count",
+      "threshold"
+     ],
+     "templated": false
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "G5",
+    "name": "Earnings growth",
+    "label": "data_gap",
+    "threshold": "3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)",
+    "figures": {},
+    "by_year": {},
+    "years": [
+     2016,
+     2017,
+     2018,
+     2023,
+     2024,
+     2025
+    ],
+    "year_label": null,
+    "reason": "missing: eps_diluted [2016, 2017, 2018, 2023, 2024, 2025]",
+    "flags": [],
+    "input_keys": [],
+    "explanation": {
+     "criterion": "G5",
+     "raw": "Cannot be scored: missing: eps_diluted [2016, 2017, 2018, 2023, 2024, 2025].",
+     "text": "Cannot be scored: missing: eps_diluted [2016, 2017, 2018, 2023, 2024, 2025].",
+     "placeholders_used": [],
+     "templated": true
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "G6",
+    "name": "Moderate P/E",
+    "label": "data_gap",
+    "threshold": "price <= 15 x avg diluted EPS of the last 3 years",
+    "figures": {},
+    "by_year": {},
+    "years": [],
+    "year_label": null,
+    "reason": "price not available (Finnhub, ADR-007)",
+    "flags": [],
+    "input_keys": [],
+    "explanation": {
+     "criterion": "G6",
+     "raw": "Cannot be scored: price not available (Finnhub, ADR-007).",
+     "text": "Cannot be scored: price not available (Finnhub, ADR-007).",
+     "placeholders_used": [],
+     "templated": true
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "G7",
+    "name": "Price vs assets",
+    "label": "data_gap",
+    "threshold": "P/E x P/B <= 22.5",
+    "figures": {},
+    "by_year": {},
+    "years": [],
+    "year_label": null,
+    "reason": "price not available (Finnhub, ADR-007)",
+    "flags": [],
+    "input_keys": [],
+    "explanation": {
+     "criterion": "G7",
+     "raw": "Cannot be scored: price not available (Finnhub, ADR-007).",
+     "text": "Cannot be scored: price not available (Finnhub, ADR-007).",
+     "placeholders_used": [],
+     "templated": true
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "B1",
+    "name": "Return on equity",
+    "label": "fail",
+    "threshold": "ROE >= 15% in at least 7 of the last 10 years",
+    "figures": {
+     "years_at_or_above_15pct": 3
+    },
+    "by_year": {
+     "2016": 0.0895576801458279,
+     "2017": 0.1425838322498358,
+     "2018": 0.01153803663993779,
+     "2019": 0.21051747007733737,
+     "2020": 0.09871077749159342,
+     "2021": 0.19075970241851242,
+     "2022": -0.046464813504787046,
+     "2023": 0.1859926142629195,
+     "2024": 0.1470212887222554,
+     "2025": 0.09799332302692372
+    },
+    "years": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024,
+     2025
+    ],
+    "year_label": null,
+    "reason": null,
+    "flags": [],
+    "input_keys": [
+     "net_income:2016",
+     "net_income:2017",
+     "net_income:2018",
+     "net_income:2019",
+     "net_income:2020",
+     "net_income:2021",
+     "net_income:2022",
+     "net_income:2023",
+     "net_income:2024",
+     "net_income:2025",
+     "stockholders_equity:2015",
+     "stockholders_equity:2016",
+     "stockholders_equity:2017",
+     "stockholders_equity:2018",
+     "stockholders_equity:2019",
+     "stockholders_equity:2020",
+     "stockholders_equity:2021",
+     "stockholders_equity:2022",
+     "stockholders_equity:2023",
+     "stockholders_equity:2024",
+     "stockholders_equity:2025"
+    ],
+    "explanation": {
+     "criterion": "B1",
+     "raw": "Return on equity was at or above the threshold in {years_at_or_above_15pct} of the last 10 years (test: {threshold}).",
+     "text": "Return on equity was at or above the threshold in 3 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years).",
+     "placeholders_used": [
+      "years_at_or_above_15pct",
+      "threshold"
+     ],
+     "templated": false
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "B2",
+    "name": "Conservative debt",
+    "label": "data_gap",
+    "threshold": "long-term debt <= 4 x avg net income of the last 3 years",
+    "figures": {},
+    "by_year": {},
+    "years": [
+     2025
+    ],
+    "year_label": null,
+    "reason": "missing: long_term_debt [2025]",
+    "flags": [],
+    "input_keys": [],
+    "explanation": {
+     "criterion": "B2",
+     "raw": "Cannot be scored: missing: long_term_debt [2025].",
+     "text": "Cannot be scored: missing: long_term_debt [2025].",
+     "placeholders_used": [],
+     "templated": true
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "B3",
+    "name": "Stable margins",
+    "label": "data_gap",
+    "threshold": "operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg",
+    "figures": {},
+    "by_year": {},
+    "years": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024,
+     2025
+    ],
+    "year_label": null,
+    "reason": "missing: operating_income [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]",
+    "flags": [],
+    "input_keys": [],
+    "explanation": {
+     "criterion": "B3",
+     "raw": "Cannot be scored: missing: operating_income [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025].",
+     "text": "Cannot be scored: missing: operating_income [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025].",
+     "placeholders_used": [],
+     "templated": true
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "B4",
+    "name": "Owner earnings",
+    "label": "pass",
+    "threshold": "net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg",
+    "figures": {
+     "years_positive": 8,
+     "avg_first_3y": 20568000000.0,
+     "avg_last_3y": 77230333333.33333,
+     "years_with_depreciation_only": []
+    },
+    "by_year": {
+     "2016": 20021000000.0,
+     "2017": 42420000000.0,
+     "2018": -737000000.0,
+     "2019": 75502000000.0,
+     "2020": 40105000000.0,
+     "2021": 87379000000.0,
+     "2022": -27324000000.0,
+     "2023": 89300000000.0,
+     "2024": 82874000000.0,
+     "2025": 59517000000.0
+    },
+    "years": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024,
+     2025
+    ],
+    "year_label": null,
+    "reason": null,
+    "flags": [],
+    "input_keys": [
+     "capex:2016",
+     "capex:2017",
+     "capex:2018",
+     "capex:2019",
+     "capex:2020",
+     "capex:2021",
+     "capex:2022",
+     "capex:2023",
+     "capex:2024",
+     "capex:2025",
+     "depreciation_amortization:2016",
+     "depreciation_amortization:2017",
+     "depreciation_amortization:2018",
+     "depreciation_amortization:2019",
+     "depreciation_amortization:2020",
+     "depreciation_amortization:2021",
+     "depreciation_amortization:2022",
+     "depreciation_amortization:2023",
+     "depreciation_amortization:2024",
+     "depreciation_amortization:2025",
+     "net_income:2016",
+     "net_income:2017",
+     "net_income:2018",
+     "net_income:2019",
+     "net_income:2020",
+     "net_income:2021",
+     "net_income:2022",
+     "net_income:2023",
+     "net_income:2024",
+     "net_income:2025"
+    ],
+    "explanation": {
+     "criterion": "B4",
+     "raw": "Owner earnings were positive in {years_positive} of the last 10 years, and the average of the last 3 years of {avg_last_3y} exceeded the average of the first 3 years of {avg_first_3y} (test: {threshold}).",
+     "text": "Owner earnings were positive in 8 of the last 10 years, and the average of the last 3 years of $77.23 billion exceeded the average of the first 3 years of $20.57 billion (test: net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg).",
+     "placeholders_used": [
+      "years_positive",
+      "avg_last_3y",
+      "avg_first_3y",
+      "threshold"
+     ],
+     "templated": false
+    },
+    "critic_status": "passed"
+   }
+  ],
+  "inputs": [
+   {
+    "measure": "capex",
+    "fiscal_year": 2016,
+    "fiscal_year_end": "2016-12-31",
+    "value": 12954000000.0,
+    "unit": "USD",
+    "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+    "accession": "0001193125-19-048926",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312519048926/",
+    "flags": []
+   },
+   {
+    "measure": "capex",
+    "fiscal_year": 2017,
+    "fiscal_year_end": "2017-12-31",
+    "value": 11708000000.0,
+    "unit": "USD",
+    "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+    "accession": "0001564590-20-005874",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459020005874/",
+    "flags": []
+   },
+   {
+    "measure": "capex",
+    "fiscal_year": 2018,
+    "fiscal_year_end": "2018-12-31",
+    "value": 14537000000.0,
+    "unit": "USD",
+    "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+    "accession": "0001564590-21-009611",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459021009611/",
+    "flags": []
+   },
+   {
+    "measure": "capex",
+    "fiscal_year": 2019,
+    "fiscal_year_end": "2019-12-31",
+    "value": 15979000000.0,
+    "unit": "USD",
+    "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+    "accession": "0001564590-22-007322",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459022007322/",
+    "flags": []
+   },
+   {
+    "measure": "capex",
+    "fiscal_year": 2020,
+    "fiscal_year_end": "2020-12-31",
+    "value": 13012000000.0,
+    "unit": "USD",
+    "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+    "accession": "0000950170-23-004451",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017023004451/",
+    "flags": []
+   },
+   {
+    "measure": "capex",
+    "fiscal_year": 2021,
+    "fiscal_year_end": "2021-12-31",
+    "value": 13276000000.0,
+    "unit": "USD",
+    "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+    "accession": "0000950170-24-019719",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017024019719/",
+    "flags": []
+   },
+   {
+    "measure": "capex",
+    "fiscal_year": 2022,
+    "fiscal_year_end": "2022-12-31",
+    "value": 15464000000.0,
+    "unit": "USD",
+    "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+    "accession": "0000950170-25-025210",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017025025210/",
+    "flags": []
+   },
+   {
+    "measure": "capex",
+    "fiscal_year": 2023,
+    "fiscal_year_end": "2023-12-31",
+    "value": 19409000000.0,
+    "unit": "USD",
+    "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+    "accession": "0001193125-26-083899",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/",
+    "flags": []
+   },
+   {
+    "measure": "capex",
+    "fiscal_year": 2024,
+    "fiscal_year_end": "2024-12-31",
+    "value": 18976000000.0,
+    "unit": "USD",
+    "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+    "accession": "0001193125-26-083899",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/",
+    "flags": []
+   },
+   {
+    "measure": "capex",
+    "fiscal_year": 2025,
+    "fiscal_year_end": "2025-12-31",
+    "value": 20927000000.0,
+    "unit": "USD",
+    "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+    "accession": "0001193125-26-083899",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/",
+    "flags": []
+   },
+   {
+    "measure": "depreciation_amortization",
+    "fiscal_year": 2016,
+    "fiscal_year_end": "2016-12-31",
+    "value": 8901000000.0,
+    "unit": "USD",
+    "concept": "DepreciationDepletionAndAmortization",
+    "accession": "0001193125-19-048926",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312519048926/",
+    "flags": []
+   },
+   {
+    "measure": "depreciation_amortization",
+    "fiscal_year": 2017,
+    "fiscal_year_end": "2017-12-31",
+    "value": 9188000000.0,
+    "unit": "USD",
+    "concept": "DepreciationDepletionAndAmortization",
+    "accession": "0001564590-20-005874",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459020005874/",
+    "flags": []
+   },
+   {
+    "measure": "depreciation_amortization",
+    "fiscal_year": 2018,
+    "fiscal_year_end": "2018-12-31",
+    "value": 9779000000.0,
+    "unit": "USD",
+    "concept": "DepreciationDepletionAndAmortization",
+    "accession": "0001564590-21-009611",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459021009611/",
+    "flags": []
+   },
+   {
+    "measure": "depreciation_amortization",
+    "fiscal_year": 2019,
+    "fiscal_year_end": "2019-12-31",
+    "value": 10064000000.0,
+    "unit": "USD",
+    "concept": "DepreciationDepletionAndAmortization",
+    "accession": "0001564590-22-007322",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459022007322/",
+    "flags": []
+   },
+   {
+    "measure": "depreciation_amortization",
+    "fiscal_year": 2020,
+    "fiscal_year_end": "2020-12-31",
+    "value": 10596000000.0,
+    "unit": "USD",
+    "concept": "DepreciationDepletionAndAmortization",
+    "accession": "0000950170-23-004451",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017023004451/",
+    "flags": []
+   },
+   {
+    "measure": "depreciation_amortization",
+    "fiscal_year": 2021,
+    "fiscal_year_end": "2021-12-31",
+    "value": 10718000000.0,
+    "unit": "USD",
+    "concept": "DepreciationDepletionAndAmortization",
+    "accession": "0000950170-24-019719",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017024019719/",
+    "flags": []
+   },
+   {
+    "measure": "depreciation_amortization",
+    "fiscal_year": 2022,
+    "fiscal_year_end": "2022-12-31",
+    "value": 10899000000.0,
+    "unit": "USD",
+    "concept": "DepreciationDepletionAndAmortization",
+    "accession": "0000950170-25-025210",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017025025210/",
+    "flags": []
+   },
+   {
+    "measure": "depreciation_amortization",
+    "fiscal_year": 2023,
+    "fiscal_year_end": "2023-12-31",
+    "value": 12486000000.0,
+    "unit": "USD",
+    "concept": "DepreciationDepletionAndAmortization",
+    "accession": "0001193125-26-083899",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/",
+    "flags": []
+   },
+   {
+    "measure": "depreciation_amortization",
+    "fiscal_year": 2024,
+    "fiscal_year_end": "2024-12-31",
+    "value": 12855000000.0,
+    "unit": "USD",
+    "concept": "DepreciationDepletionAndAmortization",
+    "accession": "0001193125-26-083899",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/",
+    "flags": []
+   },
+   {
+    "measure": "depreciation_amortization",
+    "fiscal_year": 2025,
+    "fiscal_year_end": "2025-12-31",
+    "value": 13476000000.0,
+    "unit": "USD",
+    "concept": "DepreciationDepletionAndAmortization",
+    "accession": "0001193125-26-083899",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2016,
+    "fiscal_year_end": "2016-12-31",
+    "value": 24074000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0001193125-19-048926",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312519048926/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2017,
+    "fiscal_year_end": "2017-12-31",
+    "value": 44940000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0001564590-20-005874",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459020005874/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2018,
+    "fiscal_year_end": "2018-12-31",
+    "value": 4021000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0001564590-21-009611",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459021009611/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2019,
+    "fiscal_year_end": "2019-12-31",
+    "value": 81417000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0001564590-22-007322",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459022007322/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2020,
+    "fiscal_year_end": "2020-12-31",
+    "value": 42521000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0000950170-23-004451",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017023004451/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2021,
+    "fiscal_year_end": "2021-12-31",
+    "value": 89937000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0000950170-24-019719",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017024019719/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2022,
+    "fiscal_year_end": "2022-12-31",
+    "value": -22759000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0000950170-25-025210",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017025025210/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2023,
+    "fiscal_year_end": "2023-12-31",
+    "value": 96223000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0001193125-26-083899",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2024,
+    "fiscal_year_end": "2024-12-31",
+    "value": 88995000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0001193125-26-083899",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2025,
+    "fiscal_year_end": "2025-12-31",
+    "value": 66968000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0001193125-26-083899",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/",
+    "flags": []
+   },
+   {
+    "measure": "revenue",
+    "fiscal_year": 2025,
+    "fiscal_year_end": "2025-12-31",
+    "value": 371444000000.0,
+    "unit": "USD",
+    "concept": "Revenues",
+    "accession": "0001193125-26-083899",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2015,
+    "fiscal_year_end": "2015-12-31",
+    "value": 255550000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0001193125-17-056969",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312517056969/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2016,
+    "fiscal_year_end": "2016-12-31",
+    "value": 282070000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0001193125-18-057033",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312518057033/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2017,
+    "fiscal_year_end": "2017-12-31",
+    "value": 348296000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0001193125-19-048926",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312519048926/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2018,
+    "fiscal_year_end": "2018-12-31",
+    "value": 348703000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0001564590-20-005874",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459020005874/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2019,
+    "fiscal_year_end": "2019-12-31",
+    "value": 424791000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0001564590-21-009611",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459021009611/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2020,
+    "fiscal_year_end": "2021-01-01",
+    "value": 436736000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000950170-24-019719",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017024019719/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2021,
+    "fiscal_year_end": "2021-12-31",
+    "value": 506199000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000950170-23-004451",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017023004451/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2022,
+    "fiscal_year_end": "2022-12-31",
+    "value": 473424000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000950170-24-019719",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017024019719/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2023,
+    "fiscal_year_end": "2023-12-31",
+    "value": 561273000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000950170-25-025210",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017025025210/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2024,
+    "fiscal_year_end": "2024-12-31",
+    "value": 649368000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0001193125-26-083899",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2025,
+    "fiscal_year_end": "2025-12-31",
+    "value": 717419000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0001193125-26-083899",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/",
+    "flags": []
+   }
+  ],
+  "sector_notes": [
+   "Conglomerate with large insurance operations; consolidated figures mix insurance and industrial balance sheets."
+  ]
+ },
+ "qualitative": [
+  {
+   "finding": {
+    "criterion": "understandable_business",
+    "verdict": "not assessed",
+    "rationale": "The cited sentence pointers were invalid twice, so no finding is recorded.",
+    "citations": [],
+    "searches": [
+     {
+      "queries": [
+       "principal products services",
+       "how we generate revenue",
+       "segments",
+       "customers",
+       "business model"
+      ],
+      "items": [
+       "1"
+      ],
+      "seeded": true,
+      "passage_ids": [
+       "0001193125-26-083899:1:94",
+       "0001193125-26-083899:1:61",
+       "0001193125-26-083899:1:57",
+       "0001193125-26-083899:1:39"
+      ]
+     }
+    ],
+    "llm_calls": 2,
+    "tool_calls": 3,
+    "stop_reason": "invalid_citation",
+    "usage": {
+     "prompt_tokens": 4642,
+     "completion_tokens": 346,
+     "total_tokens": 4988,
+     "reasoning_tokens": 0
+    },
+    "actual_cost_usd": 0.0,
+    "notional_cost_usd": 0.0016795
+   },
+   "critic_status": "passed",
+   "stability": null
+  },
+  {
+   "finding": {
+    "criterion": "durable_competitive_advantage",
+    "verdict": "evidence found",
+    "rationale": "The filing provides a specific market share figure for GEICO (11.6% of the private passenger automobile insurance market), which serves as a concrete measure of its competitive position.",
+    "citations": [
+     {
+      "passage_id": "0001193125-26-083899:1:15",
+      "accession": "0001193125-26-083899",
+      "item": "1",
+      "char_start": 21823,
+      "char_end": 22089,
+      "quote": "According to the A.M. Best data for 2024 published in 2025, the five largest private passenger automobile insurers had a combined market share of approximately 63.6% based on written premiums, with GEICO's market share being the third largest at approximately 11.6%.",
+      "sentences": [
+       2,
+       2
+      ]
+     }
+    ],
+    "searches": [
+     {
+      "queries": [
+       "competition competitive",
+       "brand",
+       "market share",
+       "pricing power price increases",
+       "switching costs",
+       "patents intellectual property",
+       "scale cost advantage",
+       "network"
+      ],
+      "items": [
+       "1",
+       "1A"
+      ],
+      "seeded": true,
+      "passage_ids": [
+       "0001193125-26-083899:1A:8",
+       "0001193125-26-083899:1:54",
+       "0001193125-26-083899:1:57",
+       "0001193125-26-083899:1:15"
+      ]
+     }
+    ],
+    "llm_calls": 1,
+    "tool_calls": 2,
+    "stop_reason": "submitted",
+    "usage": {
+     "prompt_tokens": 2201,
+     "completion_tokens": 103,
+     "total_tokens": 2304,
+     "reasoning_tokens": 0
+    },
+    "actual_cost_usd": 0.0,
+    "notional_cost_usd": 0.00070475
+   },
+   "critic_status": "passed",
+   "stability": null
+  },
+  {
+   "finding": {
+    "criterion": "candid_management",
+    "verdict": "evidence weak",
+    "rationale": "The filing acknowledges $8.3 billion in after-tax impairment losses on equity method investments for 2025. However, a 10-K is a limited guide to candour, and this disclosure is a standard financial reporting requirement rather than a candid management discussion of specific mistakes or execution failures.",
+    "citations": [
+     {
+      "passage_id": "0001193125-26-083899:7:86",
+      "accession": "0001193125-26-083899",
+      "item": "7",
+      "char_start": 261698,
+      "char_end": 261930,
+      "quote": "Net earnings attributable to Berkshire shareholders were $67.0 billion for 2025 and included after-tax investment gains of approximately $30.7 billion and after-tax impairment losses of $8.3 billion on our equity method investments.",
+      "sentences": [
+       3,
+       3
+      ]
+     }
+    ],
+    "searches": [
+     {
+      "queries": [
+       "challenges",
+       "did not meet",
+       "below our expectations",
+       "we did not achieve",
+       "lessons",
+       "write-down of our investment",
+       "impairment",
+       "material weakness",
+       "restatement",
+       "decline decreased",
+       "we expect headwinds"
+      ],
+      "items": [
+       "7",
+       "1A"
+      ],
+      "seeded": true,
+      "passage_ids": [
+       "0001193125-26-083899:7:111",
+       "0001193125-26-083899:7:40",
+       "0001193125-26-083899:7:86",
+       "0001193125-26-083899:1A:7"
+      ]
+     }
+    ],
+    "llm_calls": 1,
+    "tool_calls": 2,
+    "stop_reason": "submitted",
+    "usage": {
+     "prompt_tokens": 2399,
+     "completion_tokens": 130,
+     "total_tokens": 2529,
+     "reasoning_tokens": 0
+    },
+    "actual_cost_usd": 0.0,
+    "notional_cost_usd": 0.00079475
+   },
+   "critic_status": "passed",
+   "stability": null
+  },
+  {
+   "finding": {
+    "criterion": "rational_capital_allocation",
+    "verdict": "evidence found",
+    "rationale": "The filing reports specific 2025 capital expenditures of $20.9 billion and outlines a policy for share repurchases, which are prioritized based on intrinsic value and liquidity constraints. It also notes the acquisition of OxyChem for $9.5 billion in early 2026, demonstrating the company's approach to capital allocation.",
+    "citations": [
+     {
+      "passage_id": "0001193125-26-083899:7:90",
+      "accession": "0001193125-26-083899",
+      "item": "7",
+      "char_start": 265369,
+      "char_end": 265661,
+      "quote": "In 2025, our diverse group of businesses generated net operating cash flows of $46.0 billion. Our consolidated capital expenditures for property, plant and equipment and equipment held for lease were $20.9 billion in 2025, which included capital expenditures of $14.4 billion by BNSF and BHE.",
+      "sentences": [
+       1,
+       2
+      ]
+     },
+     {
+      "passage_id": "0001193125-26-083899:7:86",
+      "accession": "0001193125-26-083899",
+      "item": "7",
+      "char_start": 262089,
+      "char_end": 262674,
+      "quote": "Berkshire's common stock repurchase program permits Berkshire to repurchase its Class A and Class B shares at prices below Berkshire's intrinsic value, as conservatively determined by Berkshire's Chief Executive Officer after consultation with the Chairman of the Board. We are not committed to a minimum or subject to a maximum repurchase amount. We will not repurchase our stock if it reduces our consolidated cash, cash equivalents and U.S. Treasury Bills holdings to below $30 billion. Financial strength and redundant liquidity will always be of paramount importance at Berkshire.",
+      "sentences": [
+       5,
+       8
+      ]
+     }
+    ],
+    "searches": [
+     {
+      "queries": [
+       "share repurchases buyback",
+       "dividends",
+       "acquisitions",
+       "capital expenditures",
+       "return on invested capital",
+       "debt reduction"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": true,
+      "passage_ids": [
+       "0001193125-26-083899:7:86",
+       "0001193125-26-083899:7:90",
+       "0001193125-26-083899:7:27",
+       "0001193125-26-083899:7:91"
+      ]
+     }
+    ],
+    "llm_calls": 4,
+    "tool_calls": 6,
+    "stop_reason": "submitted",
+    "usage": {
+     "prompt_tokens": 10934,
+     "completion_tokens": 760,
+     "total_tokens": 11694,
+     "reasoning_tokens": 0
+    },
+    "actual_cost_usd": 0.0,
+    "notional_cost_usd": 0.0038735
+   },
+   "critic_status": "warning",
+   "stability": null
+  }
+ ],
+ "passages": {
+  "0001193125-26-083899:1:15": {
+   "text": "GEICO competes for private passenger automobile insurance customers in the preferred, standard and non-standard risk markets with other companies that sell directly to the customer and with companies that use agency sales forces, including State Farm, Progressive, Allstate and USAA. According to the A.M. Best data for 2024 published in 2025, the five largest private passenger automobile insurers had a combined market share of approximately 63.6% based on written premiums, with GEICO's market share being the third largest at approximately 11.6%.\nSeasonal variations in GEICO's insurance business are not significant. However, extraordinary weather conditions or other events and factors may have a significant effect upon the frequency or severity of automobile claims.\nGEICO's insurance policies are written on an admitted basis. State insurance departments stringently regulate private passenger auto insurance policies and rates. Competition for private passenger automobile insurance tends to focus on price and level of customer service provided. GEICO's cost-efficient direct response marketing methods and emphasis on customer satisfaction enable it to offer competitive rates and value to its customers. GEICO primarily uses its own claims staff to manage and settle claims. GEICO's name and other trademarks are considered material assets and are protected through appropriate registrations.\nK-3",
+   "item": "1",
+   "accession": "0001193125-26-083899",
+   "char_start": 21539,
+   "char_end": 22948
+  },
+  "0001193125-26-083899:7:86": {
+   "text": "Our Consolidated Balance Sheet continues to reflect significant liquidity and a very strong capital base. Berkshire's shareholders' equity at December 31, 2025 was $717.4 billion, an increase of $68.1 billion since December 31, 2024. Net earnings attributable to Berkshire shareholders were $67.0 billion for 2025 and included after-tax investment gains of approximately $30.7 billion and after-tax impairment losses of $8.3 billion on our equity method investments. Investment gains and losses from changes in the market prices of our investments in equity securities usually produce significant volatility in our earnings.\nBerkshire's common stock repurchase program permits Berkshire to repurchase its Class A and Class B shares at prices below Berkshire's intrinsic value, as conservatively determined by Berkshire's Chief Executive Officer after consultation with the Chairman of the Board. We are not committed to a minimum or subject to a maximum repurchase amount. We will not repurchase our stock if it reduces our consolidated cash, cash equivalents and U.S. Treasury Bills holdings to below $30 billion. Financial strength and redundant liquidity will always be of paramount importance at Berkshire. There were no share repurchases in 2025.",
+   "item": "7",
+   "accession": "0001193125-26-083899",
+   "char_start": 261464,
+   "char_end": 262715
+  },
+  "0001193125-26-083899:7:90": {
+   "text": "In 2025, our diverse group of businesses generated net operating cash flows of $46.0 billion. Our consolidated capital expenditures for property, plant and equipment and equipment held for lease were $20.9 billion in 2025, which included capital expenditures of $14.4 billion by BNSF and BHE. BNSF and BHE maintain very large investments in capital assets (property, plant and equipment) and regularly make significant capital expenditures in the normal course of business. BHE and BNSF forecast capital expenditures in 2026 of approximately $15 billion. On January 2, 2026, Berkshire acquired Occidental's chemicals business (\"OxyChem\") for approximately $9.5 billion.\nContractual Obligations",
+   "item": "7",
+   "accession": "0001193125-26-083899",
+   "char_start": 265369,
+   "char_end": 266062
+  }
+ },
+ "critic": {
+  "cik": "0001067983",
+  "ticker": "BRK-B",
+  "checks": [
+   {
+    "check": "R1",
+    "item": "G1",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "G2",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "G3",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "G4",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "G5",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "G6",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "G7",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "B1",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "B2",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "B3",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "B4",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R2",
+    "item": "understandable_business",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R2",
+    "item": "durable_competitive_advantage",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R2",
+    "item": "candid_management",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R2",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "G1",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "G2",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "G3",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "G4",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "G5",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "G6",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "G7",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "B1",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "B2",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "B3",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "B4",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "understandable_business",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "durable_competitive_advantage",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "candid_management",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "durable_competitive_advantage",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The filing provides a specific market share percentage for GEICO, meeting the requirement for a checkable measure of competitive position.",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "candid_management",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The filing reports impairment losses as a financial fact without providing a candid management discussion of the underlying mistakes or execution failures.",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "rational_capital_allocation",
+    "status": "fail",
+    "detail": "supports_verdict=overstated; unsupported: It also notes the acquisition of OxyChem for $9.5 billion in early 2026, demonstrating the company's approach to capital allocation.; The filing provides 2025 capital expenditure figures and a repurchase policy, but the rationale includes an acquisition occurring in 2026, which falls outside the 2025 fiscal year rule.",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": "verdict",
+    "claims": [
+     "It also notes the acquisition of OxyChem for $9.5 billion in early 2026, demonstrating the company's approach to capital allocation."
+    ]
+   },
+   {
+    "check": "L1",
+    "item": "G1",
+    "status": "pass",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and confirms the company meets the criteria.",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "G3",
+    "status": "pass",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the 10-year positive net income requirement.",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "G4",
+    "status": "pass",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the dividend payment requirement.",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "B1",
+    "status": "pass",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the ROE threshold for the required number of years.",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "B4",
+    "status": "pass",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the company meets both the frequency and the growth requirements for owner earnings.",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R2",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "rational_capital_allocation",
+    "status": "fail",
+    "detail": "supports_verdict=overstated; unsupported: the policy that repurchases are only permitted when the price is below intrinsic value and consolidated cash remains above $30 billion; The quotes provide specific capital expenditure amounts but do not contain the stated policy or rationale for capital allocation mentioned in the rationale.",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": "verdict",
+    "claims": [
+     "the policy that repurchases are only permitted when the price is below intrinsic value and consolidated cash remains above $30 billion"
+    ]
+   }
+  ],
+  "final": {
+   "G1": "passed",
+   "G2": "passed",
+   "G3": "passed",
+   "G4": "passed",
+   "G5": "passed",
+   "G6": "passed",
+   "G7": "passed",
+   "B1": "passed",
+   "B2": "passed",
+   "B3": "passed",
+   "B4": "passed",
+   "understandable_business": "passed",
+   "durable_competitive_advantage": "passed",
+   "candid_management": "passed",
+   "rational_capital_allocation": "warning"
+  },
+  "repairs": [
+   {
+    "item": "rational_capital_allocation",
+    "path": "constrained_retry",
+    "outcome": "rejected_by_recheck",
+    "detail": "supports_verdict=overstated; unsupported: the policy that repurchases are only permitted when the price is below intrinsic value and consolidated cash remains above $30 billion; The quotes provide specific capital expenditure amounts but do not contain the stated policy or rationale for capital allocation mentioned in the rationale.",
+    "llm_calls": 3
+   }
+  ],
+  "llm_calls": 2,
+  "usage": {
+   "prompt_tokens": 3401,
+   "completion_tokens": 715,
+   "total_tokens": 4116,
+   "reasoning_tokens": 0
+  },
+  "actual_cost_usd": 0.0,
+  "notional_cost_usd": 0.00192275
+ },
+ "cost": {
+  "actual_cost_usd": 0.0,
+  "notional_cost_usd": 0.008975,
+  "llm_calls": 10,
+  "input_tokens": 23577,
+  "output_tokens": 2054,
+  "by_agent": {
+   "critic": {
+    "calls": 2,
+    "input_tokens": 3401,
+    "output_tokens": 715,
+    "actual_cost_usd": 0.0,
+    "notional_cost_usd": 0.001923
+   },
+   "qualitative": {
+    "calls": 8,
+    "input_tokens": 20176,
+    "output_tokens": 1339,
+    "actual_cost_usd": 0.0,
+    "notional_cost_usd": 0.007053
+   }
+  }
+ },
+ "sources": [
+  {
+   "kind": "sec_filing",
+   "label": "Form 10-K 0001193125-26-083899",
+   "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/brka-20251231.htm",
+   "as_of": "2026-03-02"
+  },
+  {
+   "kind": "sec_xbrl",
+   "label": "XBRL company facts",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001067983.json",
+   "as_of": "2026-10-10"
+  },
+  {
+   "kind": "sec_submissions",
+   "label": "Filing history",
+   "url": "https://data.sec.gov/submissions/CIK0001067983.json",
+   "as_of": "2026-10-09"
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for capex 2016",
+   "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312519048926/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for capex 2017",
+   "url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459020005874/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for capex 2018",
+   "url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459021009611/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for capex 2019",
+   "url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459022007322/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for capex 2020",
+   "url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017023004451/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for capex 2021",
+   "url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017024019719/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for capex 2022",
+   "url": "https://www.sec.gov/Archives/edgar/data/1067983/000095017025025210/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for capex 2023",
+   "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for stockholders_equity 2015",
+   "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312517056969/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for stockholders_equity 2016",
+   "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312518057033/",
+   "as_of": null
+  }
+ ],
+ "attribution": [
+  "Constituents: Wikipedia, as of 2026-10-10 (CC BY-SA)",
+  "Filings and XBRL data: U.S. Securities and Exchange Commission, EDGAR (public domain)"
+ ],
+ "trace_path": "results/stability/a/0001067983.trace.jsonl",
+ "warnings": [
+  {
+   "where": "rational_capital_allocation",
+   "message": "the Critic still objects after one repair: supports_verdict=overstated; unsupported: the policy that repurchases are only permitted when the price is below intrinsic value and consolidated cash remains above $30 billion; The quotes provide specific capital expenditure amounts but do not contain the stated policy or rationale for capital allo"
+  },
+  {
+   "where": "understandable_business",
+   "message": "not assessed (invalid_citation): The cited sentence pointers were invalid twice, so no finding is recorded."
+  }
+ ]
+}

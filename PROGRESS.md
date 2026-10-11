@@ -2,7 +2,7 @@
 
 S&P 500 coverage of the analysis engine. Constituents: Wikipedia, as of 2026-10-10 (CC BY-SA). Research output, not financial advice.
 
-Last company finished: 2026-10-11T03:05:49+00:00. Universe: 500 companies (one per CIK).
+Last company finished: 2026-10-11T13:53:19+00:00. Universe: 500 companies (one per CIK).
 
 | Status | Companies |
 |---|---|
@@ -14,26 +14,26 @@ Last company finished: 2026-10-11T03:05:49+00:00. Universe: 500 companies (one p
 
 ## Spend
 
-- Actual: **$0.0000** (free-tier calls cost nothing). Notional at paid rates ($0.25 / $1.50 per million input / output tokens): **$0.2599**.
+- Actual: **$0.0000** (free-tier calls cost nothing). Notional at paid rates ($0.25 / $1.50 per million input / output tokens): **$0.2647**.
 - Engine cap: $6.00 (config/models.json).
 
 ## Measured per company
 
-- Mean model calls: 10.9; mean tokens: 27,060 in / 2,422 out; mean notional cost $0.0104.
+- Mean model calls: 11.0; mean tokens: 28,159 in / 2,365 out; mean notional cost $0.0106.
 
 ## Projection for the remaining companies
 
-- Free tier: 5,187 calls at ~490 requests a day is about **11 days**.
-- All on the paid tier: about **$4.94** (under the cap).
+- Free tier: 5,206 calls at ~490 requests a day is about **11 days**.
+- All on the paid tier: about **$5.03** (under the cap).
 
 ## Done with warnings
 
 - AMAT: 1 warning(s)
-- DUK: 1 warning(s)
-- FAST: 1 warning(s)
+- COST: 1 warning(s)
+- JNJ: 1 warning(s)
 - JPM: 1 warning(s)
-- MCD: 1 warning(s)
 - MET: 1 warning(s)
+- META: 1 warning(s)
 - MSFT: 1 warning(s)
 - NVDA: 1 warning(s)
-- O: 1 warning(s)
+- TSLA: 1 warning(s)

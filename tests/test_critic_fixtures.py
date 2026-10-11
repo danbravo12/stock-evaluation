@@ -73,14 +73,14 @@ class TestCriticFixtures(unittest.TestCase):
             self.assertTrue(llm_failed(check), (desc, check))
 
     def test_recorded_scorecard_what_the_critic_flagged_of_the_gold_set_disagreements(self):
-        """Measured with prompt v2 (2026-10-12): of the four over-generous disagreements the Critic's first pass flagged one (GOOGL candid management, which its repair then
-        over-corrected to insufficient). With prompt v1 it flagged all three. Frozen here so a change shows up."""
+        """Measured with prompt v2.1 (build 4a): of the three over-generous disagreements the Critic's first pass flagged one (TSLA capital allocation, which stays 'found' with a
+        visible Critic warning after its repair). With prompt v2 it flagged one of four, with v1 all three. Frozen here so a change shows up."""
         gold = load_gold()
         flagged = {(t, c.item) for t, r in self.results.items() for c in r.critic.checks if c.attempt == 0 and c.status == "fail"}
         over = {(t, crit) for t, crits in gold["gold"].items() for crit, rec in crits.items()
                 if rec["agent_verdict"] != rec["human_verdict"] and RANK[rec["agent_verdict"]] > RANK[rec["human_verdict"]]}
-        self.assertEqual(over, {("JPM", "candid_management"), ("GOOGL", "durable_competitive_advantage"), ("GOOGL", "candid_management"), ("DUK", "candid_management")})
-        self.assertEqual(over & flagged, {("GOOGL", "candid_management")})
+        self.assertEqual(over, {("KO", "candid_management"), ("GOOGL", "durable_competitive_advantage"), ("TSLA", "rational_capital_allocation")})
+        self.assertEqual(over & flagged, {("TSLA", "rational_capital_allocation")})
         after = agreement({t: {f.criterion: f.verdict for f in r.qual.findings} for t, r in self.results.items()}, gold)
         self.assertEqual(after["total"], 20)
         print(f"\nCritic: agent-only {agreement(verdicts_of(self.findings), gold)['agree']}/20 -> after the Critic {after['agree']}/20")

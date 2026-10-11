@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "XOM-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:48:09+00:00",
+  "generated_at": "2026-10-11T13:35:03+00:00",
   "timings": {
-   "fetch": 0.616,
+   "fetch": 0.064,
    "score": 0.001,
-   "qualitative": 59.786,
-   "explain_and_verify": 60.466
+   "qualitative": 13.676,
+   "explain_and_verify": 11.769
   }
  },
  "plan": {
@@ -64,7 +64,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 0.616,
+   "seconds": 0.064,
    "reason": null
   },
   {
@@ -76,19 +76,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 59.786,
+   "seconds": 13.676,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 60.466,
+   "seconds": 11.769,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.1,
+   "seconds": 0.065,
    "reason": null
   }
  ],
@@ -382,15 +382,16 @@
     ],
     "explanation": {
      "criterion": "G4",
-     "raw": "Dividends were paid in every one of the {paid_year_count} years on record, which covers the full history available for this test (test: {threshold}).",
-     "text": "Dividends were paid in every one of the 15 years on record, which covers the full history available for this test (test: dividend paid in every year on record in the last 15).",
+     "raw": "Dividends were paid in all {paid_year_count} of the {years_on_record} years on record, meeting the requirement for the history available (test: {threshold}).",
+     "text": "Dividends were paid in all 15 of the 15 years on record, meeting the requirement for the history available (test: dividend paid in every year on record in the last 15).",
      "placeholders_used": [
       "paid_year_count",
+      "years_on_record",
       "threshold"
      ],
      "templated": false
     },
-    "critic_status": "passed"
+    "critic_status": "passed_after_retry"
    },
    {
     "id": "G5",
@@ -1552,18 +1553,18 @@
   {
    "finding": {
     "criterion": "candid_management",
-    "verdict": "evidence weak",
-    "rationale": "The filing acknowledges a $2.0 billion after-tax impairment in 2025, which included a write-down of assets held for sale and charges associated with the optimization of materials and supply inventory. A 10-K is a limited guide to candour, and this disclosure provides a factual account of asset impairments without explicitly attributing them to internal management failures.",
+    "verdict": "evidence found",
+    "rationale": "Management explicitly discloses $2.0 billion in after-tax impairments for 2025, specifically identifying write-downs of Upstream oil and gas assets held for sale and charges related to the optimization of materials and supply inventory. A 10-K is a limited guide to candour, but this provides a concrete acknowledgment of specific financial setbacks.",
     "citations": [
      {
       "passage_id": "0000034088-26-000045:7:99",
       "accession": "0000034088-26-000045",
       "item": "7",
-      "char_start": 241419,
+      "char_start": 241399,
       "char_end": 241632,
-      "quote": "Impairments in 2025 totaled $2.0 billion after-tax, including a write-down to fair value of Upstream oil and gas assets held for sale and charges associated with the optimization of materials and supply inventory.",
+      "quote": "Recent Impairments. Impairments in 2025 totaled $2.0 billion after-tax, including a write-down to fair value of Upstream oil and gas assets held for sale and charges associated with the optimization of materials and supply inventory.",
       "sentences": [
-       6,
+       5,
        6
       ]
      }
@@ -1600,45 +1601,45 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2519,
-     "completion_tokens": 143,
-     "total_tokens": 2662,
+     "prompt_tokens": 2345,
+     "completion_tokens": 139,
+     "total_tokens": 2484,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00084425
+    "notional_cost_usd": 0.00079475
    },
-   "critic_status": "passed_after_retry",
+   "critic_status": "passed",
    "stability": null
   },
   {
    "finding": {
     "criterion": "rational_capital_allocation",
-    "verdict": "evidence weak",
-    "rationale": "The filing quantifies specific uses of cash, including dividends, share repurchases, capital expenditures, and debt repayment. However, it lacks an explicit statement of the policy or priority rationale guiding these capital allocation decisions.",
+    "verdict": "evidence found",
+    "rationale": "The filing quantifies 2025 share repurchases ($20 billion) and states a policy of continuing this program at a $20 billion annual pace through 2026. It also describes a strategy of being selective in investments to maximize shareholder value and mitigate risks.",
     "citations": [
      {
       "passage_id": "0000034088-26-000045:7:72",
       "accession": "0000034088-26-000045",
       "item": "7",
-      "char_start": 209765,
-      "char_end": 210106,
-      "quote": "Dividend payments on common shares increased to $3.84 per share from $3.68 per share and totaled $16.7 billion. During 2024, the Corporation utilized cash to repay debt of $5.9 billion.\nDuring 2024, the Corporation continued its share repurchase program, including the purchase of 167 million shares at a book value of $19.1 billion in 2024.",
-      "sentences": [
-       7,
-       9
-      ]
-     },
-     {
-      "passage_id": "0000034088-26-000045:7:62",
-      "accession": "0000034088-26-000045",
-      "item": "7",
-      "char_start": 199828,
-      "char_end": 200514,
-      "quote": "The major sources of funds in 2024 were net income including noncontrolling interests of $35.1 billion, the adjustment for the noncash provision of $23.4 billion for depreciation and depletion, proceeds from asset sales of $5.0 billion, and other investing activities of $1.9 billion, and cash acquired from mergers and acquisitions of $0.8 billion. The major uses of funds included spending for additions to property, plant, and equipment of $24.3 billion; dividends to shareholders of $16.7 billion; the purchase of ExxonMobil stock of $19.6 billion; debt repayment of $5.9 billion; additional investments and advances of $3.3 billion; and a change in working capital of $1.8 billion.",
+      "char_start": 209149,
+      "char_end": 209550,
+      "quote": "In its 2025 Corporate Plan Update released December 9, 2025, the Corporation stated that it is expected to continue its share repurchase program with a $20 billion repurchase pace per year through 2026, assuming reasonable market conditions. The stock repurchase program does not obligate the Company to acquire any particular amount of common stock, and it may be discontinued or resumed at any time.",
       "sentences": [
        2,
        3
+      ]
+     },
+     {
+      "passage_id": "0000034088-26-000045:7:33",
+      "accession": "0000034088-26-000045",
+      "item": "7",
+      "char_start": 165612,
+      "char_end": 166245,
+      "quote": "ExxonMobil has a diverse growth portfolio of exploration and development opportunities, which allows the Corporation to be selective in our investments, maximizing shareholder value, and mitigating political and technical risks. ExxonMobil's competitive strengths enable the Upstream's business strategy, which is focused on developing an industry-leading portfolio underpinned by advantaged growth projects, applying ExxonMobil's technology to enhance value and improve development efficiency, and leveraging the unique capabilities of the Company's Global Projects organization to deliver projects on time and in line with budgets.",
+      "sentences": [
+       1,
+       2
       ]
      }
     ],
@@ -1677,21 +1678,36 @@
        "0000034088-26-000045:7:2",
        "0000034088-26-000045:7:73"
       ]
+     },
+     {
+      "queries": [
+       "\"capital allocation\" priority strategy"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0000034088-26-000045:7:2",
+       "0000034088-26-000045:7:100",
+       "0000034088-26-000045:7:33",
+       "0000034088-26-000045:7:96"
+      ]
      }
     ],
-    "llm_calls": 2,
-    "tool_calls": 3,
+    "llm_calls": 3,
+    "tool_calls": 4,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 6833,
-     "completion_tokens": 175,
-     "total_tokens": 7008,
+     "prompt_tokens": 11162,
+     "completion_tokens": 216,
+     "total_tokens": 11378,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00197075
+    "notional_cost_usd": 0.0031145
    },
-   "critic_status": "passed_after_retry",
+   "critic_status": "passed",
    "stability": null
   }
  ],
@@ -1710,12 +1726,12 @@
    "char_start": 8220,
    "char_end": 9018
   },
-  "0000034088-26-000045:7:62": {
-   "text": "Total cash and cash equivalents were $23.2 billion at the end of 2024, down $8.4 billion from the prior year. The major sources of funds in 2024 were net income including noncontrolling interests of $35.1 billion, the adjustment for the noncash provision of $23.4 billion for depreciation and depletion, proceeds from asset sales of $5.0 billion, and other investing activities of $1.9 billion, and cash acquired from mergers and acquisitions of $0.8 billion. The major uses of funds included spending for additions to property, plant, and equipment of $24.3 billion; dividends to shareholders of $16.7 billion; the purchase of ExxonMobil stock of $19.6 billion; debt repayment of $5.9 billion; additional investments and advances of $3.3 billion; and a change in working capital of $1.8 billion.",
+  "0000034088-26-000045:7:33": {
+   "text": "ExxonMobil has a diverse growth portfolio of exploration and development opportunities, which allows the Corporation to be selective in our investments, maximizing shareholder value, and mitigating political and technical risks. ExxonMobil's competitive strengths enable the Upstream's business strategy, which is focused on developing an industry-leading portfolio underpinned by advantaged growth projects, applying ExxonMobil's technology to enhance value and improve development efficiency, and leveraging the unique capabilities of the Company's Global Projects organization to deliver projects on time and in line with budgets.",
    "item": "7",
    "accession": "0000034088-26-000045",
-   "char_start": 199718,
-   "char_end": 200514
+   "char_start": 165612,
+   "char_end": 166245
   },
   "0000034088-26-000045:7:72": {
    "text": "During 2025, the Corporation continued its share repurchase program, including the purchase of 180.1 million shares at a book value of $20 billion in 2025. In its 2025 Corporate Plan Update released December 9, 2025, the Corporation stated that it is expected to continue its share repurchase program with a $20 billion repurchase pace per year through 2026, assuming reasonable market conditions. The stock repurchase program does not obligate the Company to acquire any particular amount of common stock, and it may be discontinued or resumed at any time. The timing and amount of shares actually purchased in the future will depend on market, business, and other factors.\n2024\nCash used in financing activities was $42.8 billion in 2024, $8.5 billion higher than 2023. Dividend payments on common shares increased to $3.84 per share from $3.68 per share and totaled $16.7 billion. During 2024, the Corporation utilized cash to repay debt of $5.9 billion.\nDuring 2024, the Corporation continued its share repurchase program, including the purchase of 167 million shares at a book value of $19.1 billion in 2024.\nContractual Obligations",
@@ -2040,7 +2056,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing clearly defines the company's principal business activities, including exploration, production, manufacturing, and sales of energy products.",
+    "detail": "supports_verdict=yes; The filing clearly defines the company's activities, products, and sectors, satisfying the requirement for plain-term explanation of the business model.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2050,7 +2066,7 @@
     "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing acknowledges the existence of patents but explicitly states that profitability is not dependent on them, supporting the weak evidence verdict.",
+    "detail": "supports_verdict=yes; The filing explicitly states that profitability is not dependent on any individual patent or asset, supporting the verdict that the advantage is not clearly established.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2059,30 +2075,28 @@
    {
     "check": "L1",
     "item": "candid_management",
-    "status": "fail",
-    "detail": "supports_verdict=overstated; The quote attributes the charge to external regulatory challenges rather than the company's own decisions or execution, which does not meet the definition for 'evidence found'.",
+    "status": "pass",
+    "detail": "supports_verdict=yes; Management explicitly identifies specific 2025 impairments and attributes them to internal decisions regarding asset optimization and inventory management.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": "verdict",
+    "kind": null,
     "claims": []
    },
    {
     "check": "L1",
     "item": "rational_capital_allocation",
-    "status": "fail",
-    "detail": "supports_verdict=overstated; unsupported: environmental investment priorities; The filing quantifies actions but fails to explicitly state a policy or rationale for how cash is used, which is required for the 'evidence found' verdict.",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The filing quantifies the 2025 share repurchase program and outlines a clear strategic rationale for investment selectivity and capital deployment.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": "verdict",
-    "claims": [
-     "environmental investment priorities"
-    ]
+    "kind": null,
+    "claims": []
    },
    {
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the revenue exceeds the $1B threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and confirms the company meets the criteria.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2092,7 +2106,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the company failed the current ratio and debt-to-assets tests.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet both the current ratio and debt-to-assets requirements.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2102,7 +2116,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the company failed the 10-year positive net income test due to a loss in 2020.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the 10-year positive net income requirement was not met due to a loss in 2020.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2111,8 +2125,8 @@
    {
     "check": "L1",
     "item": "G4",
-    "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that dividends were paid in all 15 years of the available record.",
+    "status": "fail",
+    "detail": "agrees_with_label=no; reads_correctly=no; The label 'partial_pass' contradicts the text which states dividends were paid in every year on record, implying a full pass for the available history.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2142,7 +2156,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the debt level is within the conservative limit.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares debt to the calculated maximum based on average net income.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2152,68 +2166,38 @@
     "check": "L1",
     "item": "B4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that owner earnings were positive and grew over the period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms both the 10-year positive owner earnings and the growth in 3-year averages.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
     "claims": []
    },
    {
-    "check": "R2",
-    "item": "candid_management",
+    "check": "R1",
+    "item": "G4",
     "status": "pass",
     "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "R2",
-    "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
+    "owner": "explainer",
     "attempt": 1,
     "kind": null,
     "claims": []
    },
    {
     "check": "R3",
-    "item": "candid_management",
+    "item": "G4",
     "status": "pass",
     "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "R3",
-    "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
+    "owner": "explainer",
     "attempt": 1,
     "kind": null,
     "claims": []
    },
    {
     "check": "L1",
-    "item": "candid_management",
+    "item": "G4",
     "status": "pass",
-    "detail": "supports_verdict=yes; The quote provides a factual statement of impairments without explaining the underlying causes or management's role, fitting the definition of explaining charges without internal context.",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "L1",
-    "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides concrete amounts for cash usage but lacks the stated policy or strategic rationale for these allocations, supporting the 'evidence weak' verdict.",
-    "owner": "qualitative",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the dividend requirement was met for the entire available record, justifying the partial pass label.",
+    "owner": "explainer",
     "attempt": 1,
     "kind": null,
     "claims": []
@@ -2223,7 +2207,7 @@
    "G1": "passed",
    "G2": "passed",
    "G3": "passed",
-   "G4": "passed",
+   "G4": "passed_after_retry",
    "G5": "passed",
    "G6": "passed",
    "G7": "passed",
@@ -2233,62 +2217,55 @@
    "B4": "passed",
    "understandable_business": "passed",
    "durable_competitive_advantage": "passed",
-   "candid_management": "passed_after_retry",
-   "rational_capital_allocation": "passed_after_retry"
+   "candid_management": "passed",
+   "rational_capital_allocation": "passed"
   },
   "repairs": [
    {
-    "item": "candid_management",
-    "path": "constrained_retry",
+    "item": "G4",
+    "path": "explanation_retry",
     "outcome": "accepted",
-    "detail": "",
-    "llm_calls": 1
-   },
-   {
-    "item": "rational_capital_allocation",
-    "path": "constrained_retry",
-    "outcome": "accepted",
-    "detail": "",
-    "llm_calls": 2
+    "detail": "[L1] agrees_with_label=no; reads_correctly=no; The label 'partial_pass' contradicts the text which states dividends were paid in every year on record, implying a full pass for the available history.",
+    "llm_calls": 0
    }
   ],
   "llm_calls": 2,
   "usage": {
-   "prompt_tokens": 4295,
-   "completion_tokens": 990,
-   "total_tokens": 5285,
+   "prompt_tokens": 3822,
+   "completion_tokens": 917,
+   "total_tokens": 4739,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.0025587500000000003
+  "notional_cost_usd": 0.0023309999999999997
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.011783,
-  "llm_calls": 12,
-  "input_tokens": 30585,
-  "output_tokens": 2758,
+  "notional_cost_usd": 0.009423,
+  "llm_calls": 10,
+  "input_tokens": 25122,
+  "output_tokens": 2095,
   "by_agent": {
    "critic": {
     "calls": 2,
-    "input_tokens": 4295,
-    "output_tokens": 990,
+    "input_tokens": 3822,
+    "output_tokens": 917,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002559
+    "notional_cost_usd": 0.002331
    },
    "explainer": {
-    "calls": 1,
-    "input_tokens": 2371,
-    "output_tokens": 520,
+    "calls": 2,
+    "input_tokens": 3504,
+    "output_tokens": 595,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001373
+    "notional_cost_usd": 0.001769
    },
    "qualitative": {
-    "calls": 9,
-    "input_tokens": 23919,
-    "output_tokens": 1248,
+    "calls": 6,
+    "input_tokens": 17796,
+    "output_tokens": 583,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.007852
+    "notional_cost_usd": 0.005324
    }
   }
  },

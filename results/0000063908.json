@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "MCD-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:44:43+00:00",
+  "generated_at": "2026-10-11T13:40:36+00:00",
   "timings": {
-   "fetch": 0.374,
+   "fetch": 0.083,
    "score": 0.001,
-   "qualitative": 26.152,
-   "explain_and_verify": 6.861
+   "qualitative": 27.284,
+   "explain_and_verify": 6.366
   }
  },
  "plan": {
@@ -62,7 +62,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 0.374,
+   "seconds": 0.083,
    "reason": null
   },
   {
@@ -74,19 +74,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 26.152,
+   "seconds": 27.284,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 6.861,
+   "seconds": 6.366,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.069,
+   "seconds": 0.042,
    "reason": null
   }
  ],
@@ -1674,21 +1674,66 @@
   {
    "finding": {
     "criterion": "understandable_business",
-    "verdict": "not assessed",
-    "rationale": "Item 1 not found in the filing (no 'Item 1' heading gives a section of 2000+ chars (longest 26); no title line gives one either (longest 0)).",
-    "citations": [],
-    "searches": [],
-    "llm_calls": 0,
-    "tool_calls": 0,
-    "stop_reason": "section_missing",
+    "verdict": "evidence found",
+    "rationale": "The filing explains that the company operates and franchises restaurants serving food and beverages to customers globally. It generates revenue primarily through rent and royalties paid by franchisees based on a percentage of their sales.",
+    "citations": [
+     {
+      "passage_id": "0000063908-26-000035:1:1",
+      "accession": "0000063908-26-000035",
+      "item": "1",
+      "char_start": 7766,
+      "char_end": 8037,
+      "quote": "The Company franchises and owns and operates McDonald's restaurants, which serve a locally relevant menu of quality food and beverages in communities across more than 100 countries. Of the 45,356 McDonald's restaurants at year-end 2025, approximately 95% were franchised.",
+      "sentences": [
+       6,
+       7
+      ]
+     },
+     {
+      "passage_id": "0000063908-26-000035:1:5",
+      "accession": "0000063908-26-000035",
+      "item": "1",
+      "char_start": 12427,
+      "char_end": 12890,
+      "quote": "Conventional franchisees contribute to the Company's revenue, primarily through the payment of rent and royalties based upon a percent of sales, with specified minimum rent payments, along with initial fees paid upon the opening of a new restaurant or grant of a new franchise. The Company's heavily franchised business model is designed to generate stable and predictable revenue, which is largely a function of franchisee sales, and resulting cash flow streams.",
+      "sentences": [
+       7,
+       8
+      ]
+     }
+    ],
+    "searches": [
+     {
+      "queries": [
+       "principal products services",
+       "how we generate revenue",
+       "segments",
+       "customers",
+       "business model"
+      ],
+      "items": [
+       "1"
+      ],
+      "seeded": true,
+      "passage_ids": [
+       "0000063908-26-000035:1:1",
+       "0000063908-26-000035:1:5",
+       "0000063908-26-000035:1:20",
+       "0000063908-26-000035:1:7"
+      ]
+     }
+    ],
+    "llm_calls": 1,
+    "tool_calls": 2,
+    "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 0,
-     "completion_tokens": 0,
-     "total_tokens": 0,
+     "prompt_tokens": 2152,
+     "completion_tokens": 142,
+     "total_tokens": 2294,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0
+    "notional_cost_usd": 0.000751
    },
    "critic_status": "passed",
    "stability": null
@@ -1696,19 +1741,19 @@
   {
    "finding": {
     "criterion": "durable_competitive_advantage",
-    "verdict": "evidence weak",
-    "rationale": "The filing asserts the existence of a global scale, iconic brand, and local market presence as competitive advantages, but it does not provide concrete, checkable metrics (such as specific market share percentages or quantified scale figures) to substantiate these claims.",
+    "verdict": "evidence found",
+    "rationale": "The filing states that the company owns approximately 56% of the land and 80% of the buildings for restaurants in its consolidated markets, which is a concrete measure of its real estate scale and asset position. While the filing discusses the importance of its brand and intellectual property, it does not provide a quantified measure of the brand's competitive advantage.",
     "citations": [
      {
-      "passage_id": "0000063908-26-000035:1A:2",
+      "passage_id": "0000063908-26-000035:7:42",
       "accession": "0000063908-26-000035",
-      "item": "1A",
-      "char_start": 97267,
-      "char_end": 97556,
-      "quote": "•capitalize on our global scale, iconic brand and local market presence to build upon our historic strengths and competitive advantages, including by maximizing our marketing, committing to our core menu items, and doubling down on digital, delivery, drive thru and restaurant development;",
+      "item": "7",
+      "char_start": 72181,
+      "char_end": 72346,
+      "quote": "As of December 31, 2025 and 2024, the Company owned approximately 56% of the land and approximately 80% of the buildings for restaurants in its consolidated markets.",
       "sentences": [
-       9,
-       9
+       4,
+       4
       ]
      }
     ],
@@ -1731,23 +1776,36 @@
       "seeded": true,
       "passage_ids": [
        "0000063908-26-000035:1A:12",
+       "0000063908-26-000035:1:20",
        "0000063908-26-000035:1A:55",
-       "0000063908-26-000035:1A:2",
        "0000063908-26-000035:1A:7"
+      ]
+     },
+     {
+      "queries": [
+       "\"number of restaurants\" \"total restaurants\" \"global footprint\""
+      ],
+      "items": null,
+      "seeded": false,
+      "passage_ids": [
+       "0000063908-26-000035:7:63",
+       "0000063908-26-000035:1:21",
+       "0000063908-26-000035:1:6",
+       "0000063908-26-000035:7:42"
       ]
      }
     ],
-    "llm_calls": 1,
-    "tool_calls": 2,
+    "llm_calls": 2,
+    "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2146,
-     "completion_tokens": 115,
-     "total_tokens": 2261,
+     "prompt_tokens": 5462,
+     "completion_tokens": 165,
+     "total_tokens": 5627,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.000709
+    "notional_cost_usd": 0.0016129999999999999
    },
    "critic_status": "passed",
    "stability": null
@@ -1756,7 +1814,7 @@
    "finding": {
     "criterion": "candid_management",
     "verdict": "evidence weak",
-    "rationale": "The filing notes a decrease in interest income in 2025, which management attributes to lower average cash balances and lower average interest rates. A 10-K is a limited guide to candour, and this disclosure is a standard explanation of financial results rather than a candid discussion of management-driven setbacks or mistakes.",
+    "rationale": "The filing mentions specific declines in interest income due to lower cash balances and interest rates, and acknowledges ongoing inflationary challenges. However, these are standard financial disclosures rather than a candid discussion of management-driven setbacks or mistakes, and a 10-K is a limited guide to candour.",
     "citations": [
      {
       "passage_id": "0000063908-26-000035:7:39",
@@ -1768,6 +1826,18 @@
       "sentences": [
        3,
        3
+      ]
+     },
+     {
+      "passage_id": "0000063908-26-000035:7:60",
+      "accession": "0000063908-26-000035",
+      "item": "7",
+      "char_start": 90195,
+      "char_end": 90326,
+      "quote": "Although broader inflationary pressures in the economy continue to ease, the challenges of an inflationary environment still exist.",
+      "sentences": [
+       1,
+       1
       ]
      }
     ],
@@ -1793,9 +1863,9 @@
       "seeded": true,
       "passage_ids": [
        "0000063908-26-000035:1A:46",
-       "0000063908-26-000035:7:110",
        "0000063908-26-000035:7:51",
-       "0000063908-26-000035:7:65"
+       "0000063908-26-000035:1A:1",
+       "0000063908-26-000035:1A:2"
       ]
      },
      {
@@ -1807,10 +1877,10 @@
       ],
       "seeded": false,
       "passage_ids": [
-       "0000063908-26-000035:7:95",
-       "0000063908-26-000035:7:80",
        "0000063908-26-000035:7:39",
-       "0000063908-26-000035:7:84"
+       "0000063908-26-000035:7:60",
+       "0000063908-26-000035:7:1",
+       "0000063908-26-000035:7:51"
       ]
      }
     ],
@@ -1818,13 +1888,13 @@
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5560,
-     "completion_tokens": 167,
-     "total_tokens": 5727,
+     "prompt_tokens": 5909,
+     "completion_tokens": 199,
+     "total_tokens": 6108,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0016405
+    "notional_cost_usd": 0.00177575
    },
    "critic_status": "passed",
    "stability": null
@@ -1833,20 +1903,8 @@
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing outlines a capital allocation philosophy of investing in business growth, prioritizing dividends, and repurchasing shares with remaining free cash flow. It also quantifies 2025 actions, including $3.4 billion in capital expenditures and $7.1 billion returned to shareholders through dividends and share repurchases.",
+    "rationale": "The filing quantifies 2025 capital expenditures ($3.4 billion) and total shareholder returns ($7.1 billion through dividends and share repurchases), and explicitly states a capital allocation philosophy of investing in business growth, prioritizing dividends, and repurchasing shares with remaining free cash flow.",
     "citations": [
-     {
-      "passage_id": "0000063908-26-000035:7:16",
-      "accession": "0000063908-26-000035",
-      "item": "7",
-      "char_start": 45486,
-      "char_end": 45844,
-      "quote": "Our Strategy is aligned with the Company's capital allocation philosophy of: (i) invest in opportunities to grow the business and drive strong returns, including both capital expenditures as well as investments in technology, digital, and our GBS organization, (ii) prioritize our dividend and (iii) repurchase shares with remaining free cash flow over time.",
-      "sentences": [
-       4,
-       4
-      ]
-     },
      {
       "passage_id": "0000063908-26-000035:7:6",
       "accession": "0000063908-26-000035",
@@ -1857,6 +1915,18 @@
       "sentences": [
        4,
        8
+      ]
+     },
+     {
+      "passage_id": "0000063908-26-000035:7:16",
+      "accession": "0000063908-26-000035",
+      "item": "7",
+      "char_start": 45486,
+      "char_end": 45844,
+      "quote": "Our Strategy is aligned with the Company's capital allocation philosophy of: (i) invest in opportunities to grow the business and drive strong returns, including both capital expenditures as well as investments in technology, digital, and our GBS organization, (ii) prioritize our dividend and (iii) repurchase shares with remaining free cash flow over time.",
+      "sentences": [
+       4,
+       4
       ]
      }
     ],
@@ -1886,25 +1956,32 @@
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5178,
-     "completion_tokens": 380,
-     "total_tokens": 5558,
+     "prompt_tokens": 5300,
+     "completion_tokens": 373,
+     "total_tokens": 5673,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0018644999999999998
+    "notional_cost_usd": 0.0018844999999999999
    },
    "critic_status": "passed",
    "stability": null
   }
  ],
  "passages": {
-  "0000063908-26-000035:1A:2": {
-   "text": "SEC. The risks described below are not the only risks we face. Additional risks not currently known to us or that we currently deem to be immaterial may also significantly adversely affect our business. If any of these risks were to materialize or intensify, our expectations (or the underlying assumptions) may change and our performance may be adversely affected.\nSTRATEGY AND BRAND\nIf we do not successfully evolve and execute against our business strategies, we may not be able to drive business growth.\nTo drive Systemwide sales, operating income and free cash flow growth, our business strategies – including the components of our Accelerating the Arches growth strategy – must be effective in maintaining and strengthening customer appeal and capturing additional market share. Whether these strategies are successful depends mainly on our System's continued ability to:\n•capitalize on our global scale, iconic brand and local market presence to build upon our historic strengths and competitive advantages, including by maximizing our marketing, committing to our core menu items, and doubling down on digital, delivery, drive thru and restaurant development;",
-   "item": "1A",
+  "0000063908-26-000035:1:1": {
+   "text": "BUSINESS SUMMARY\nGENERAL\nFor the year ended December 31, 2025, there were no material changes to the Company's corporate structure or in its method of conducting business. Refer to the Segment and Geographic Information section on page 51 of this Form 10-K for additional information.\nDESCRIPTION OF THE BUSINESS\nThe Company franchises and owns and operates McDonald's restaurants, which serve a locally relevant menu of quality food and beverages in communities across more than 100 countries. Of the 45,356 McDonald's restaurants at year-end 2025, approximately 95% were franchised.\nThe Company's reporting segments are aligned with its strategic priorities and reflect how management reviews and evaluates operating performance. Significant reportable segments include the United States (\"U.S.\") and International Operated Markets. In addition, the International Developmental Licensed Markets & Corporate includes the results of over 75 countries as well as Corporate activities.",
+   "item": "1",
    "accession": "0000063908-26-000035",
-   "char_start": 96389,
-   "char_end": 97556
+   "char_start": 7453,
+   "char_end": 8436
+  },
+  "0000063908-26-000035:1:5": {
+   "text": "Franchisees are responsible for reinvesting capital in their businesses over time. In addition, to accelerate implementation of certain initiatives, the Company may co-invest with franchisees to fund improvements to their restaurants or operating systems. These investments, developed in collaboration with franchisees, are designed to cater to consumer preferences, improve local business performance and increase the value of the McDonald's brand through the development of modernized, more attractive and higher revenue generating restaurants.\nMcDonald's Corporation 2025 Annual Report 3\nThe Company requires franchisees to meet rigorous standards and generally does not work with passive investors. The business relationship with franchisees is designed to facilitate consistency and high quality at all McDonald's restaurants. Conventional franchisees contribute to the Company's revenue, primarily through the payment of rent and royalties based upon a percent of sales, with specified minimum rent payments, along with initial fees paid upon the opening of a new restaurant or grant of a new franchise. The Company's heavily franchised business model is designed to generate stable and predictable revenue, which is largely a function of franchisee sales, and resulting cash flow streams.\nDevelopmental License or Affiliate",
+   "item": "1",
+   "accession": "0000063908-26-000035",
+   "char_start": 11595,
+   "char_end": 12925
   },
   "0000063908-26-000035:7:16": {
    "text": "•Restaurant: The Company is building the easiest and most efficient restaurant operating platform which enables the Company and franchisees to run restaurants more efficiently and utilize the latest cloud-based technology to make it easier for restaurant crew to deliver exceptional customer service. The Company intends to deploy new, universal software that all McDonald's restaurants will run on, enabling restaurants to roll out innovation even faster, with less complexity and more reliability; and customers will enjoy a more familiar, consistent experience.\n•Company: The Company is building a modern company platform, through our Global Business Services (GBS) organization, that unlocks speed and innovation throughout the organization, to enable further growth as it modernizes the way it works by focusing on becoming faster, more innovative and more efficient at solving problems for its customers and people.\nOur Strategy is aligned with the Company's capital allocation philosophy of: (i) invest in opportunities to grow the business and drive strong returns, including both capital expenditures as well as investments in technology, digital, and our GBS organization, (ii) prioritize our dividend and (iii) repurchase shares with remaining free cash flow over time.",
@@ -1920,12 +1997,26 @@
    "char_start": 68242,
    "char_end": 69335
   },
+  "0000063908-26-000035:7:42": {
+   "text": "New restaurant investments in all years presented were concentrated in markets with strong returns and/or opportunities for long-term growth. Average development costs vary widely by market depending on the types of restaurants built and the real estate and construction costs within each market. These costs, which include land, buildings and equipment, are managed through the use of optimally-sized restaurants, construction and design efficiencies, as well as leveraging the Company's global sourcing network and best practices.\nAs of December 31, 2025 and 2024, the Company owned approximately 56% of the land and approximately 80% of the buildings for restaurants in its consolidated markets.\nSHARE REPURCHASES AND DIVIDENDS\nIn 2025, the Company returned approximately $7.1 billion to shareholders through a combination of dividends paid and shares repurchased.\nShares repurchased and dividends\nIn millions, except per share data | 2025 | 2024 | 2023\nNumber of shares repurchased | 6.7 | 10.1 | 11.1\nShares outstanding at year end | 711 | 715 | 723\nDividends declared per share | $ | 7.17 | $ | 6.78 | $ | 6.23\nTreasury stock purchases (in Shareholders' equity) | $ | 2,016 | $ | 2,826 | $ | 3,105",
+   "item": "7",
+   "accession": "0000063908-26-000035",
+   "char_start": 71648,
+   "char_end": 72851
+  },
   "0000063908-26-000035:7:6": {
    "text": "•Operating margin, defined as operating income as a percent of total revenues, increased from 45.2% in 2024 to 46.1% in 2025.\n•Diluted earnings per share of $11.95 increased 5% (4% in constant currencies).\n•Cash provided by operations was $10.6 billion, a 12% increase from the prior year.\n•Capital expenditures of $3.4 billion were mainly allocated to new restaurant openings and, to a lesser extent, to reinvestment in existing restaurants.\n•Free cash flow was $7.2 billion, an 8% increase from the prior year.\n•Across the System, nearly 2,300 new restaurants (including those in our developmental licensee and affiliated markets) were opened.\n•The Company increased its quarterly cash dividend per share by 5% to $1.86 for the fourth quarter, equivalent to an annual dividend of $7.44 per share. The Company returned a total of $7.1 billion to shareholders through dividends and share repurchases in 2025.\nMcDonald's Corporation 2025 Annual Report 8\nSTRATEGIC DIRECTION",
    "item": "7",
    "accession": "0000063908-26-000035",
    "char_start": 36037,
    "char_end": 37009
+  },
+  "0000063908-26-000035:7:60": {
+   "text": "Although broader inflationary pressures in the economy continue to ease, the challenges of an inflationary environment still exist. The Company has demonstrated an ability to manage these inflationary pressures effectively through its rapid inventory turnover, ability to adjust menu prices, cost controls and substantial property holdings, many of which are at fixed costs.\nMcDonald's Corporation 2025 Annual Report 24\nOther Key Information\nSTOCK PERFORMANCE GRAPH\nAt least annually, McDonald's considers which companies comprise a readily identifiable investment peer group. The Company is included in published restaurant indices; however, unlike most other companies included in these indices, which have no or limited international operations, McDonald's does business in more than 100 countries and a substantial portion of its revenues and income is generated outside the U.S. In addition, because of its size, McDonald's inclusion in those indices tends to skew the results. Therefore, the Company believes that such a comparison is not meaningful.",
+   "item": "7",
+   "accession": "0000063908-26-000035",
+   "char_start": 90195,
+   "char_end": 91251
   }
  },
  "critic": {
@@ -2234,9 +2325,19 @@
    },
    {
     "check": "L1",
+    "item": "understandable_business",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The filing clearly identifies the business model (franchising/operating restaurants), the product (food/beverages), and the revenue sources (rent, royalties, fees).",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing asserts advantages like scale and brand without providing specific metrics to substantiate them, fitting the definition of evidence weak.",
+    "detail": "supports_verdict=yes; The filing provides specific, quantified percentages of land and building ownership, which serves as a measurable indicator of the company's scale and asset-based competitive position.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2246,7 +2347,7 @@
     "check": "L1",
     "item": "candid_management",
     "status": "pass",
-    "detail": "supports_verdict=yes; The explanation for the income decrease is attributed to external market factors, which aligns with the definition of evidence weak.",
+    "detail": "supports_verdict=yes; The filing acknowledges specific declines in interest income and ongoing inflationary pressures, meeting the definition for this verdict.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2256,7 +2357,7 @@
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides both a clear capital allocation policy and specific, quantified figures for capital expenditures and shareholder returns.",
+    "detail": "supports_verdict=yes; The filing quantifies 2025 capital expenditures and shareholder returns while explicitly stating the company's capital allocation philosophy.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2266,7 +2367,7 @@
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies the revenue threshold and confirms the company meets the criteria.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue figure and compares it against the threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2276,7 +2377,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies the failure to meet the current ratio and debt-to-assets requirements.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet both the current ratio and debt-to-assets criteria.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2286,7 +2387,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies the positive net income requirement over the 10-year period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year net income stability requirement.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2296,7 +2397,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies that dividends were paid in all years on record, supporting the partial pass.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the dividend record over the available 15-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2306,7 +2407,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly calculates the growth ratio and confirms it meets the 1.33 threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio and compares it to the 1.33 threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2316,7 +2417,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly explains why the test is not meaningful due to negative equity.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the test is not meaningful due to negative equity.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2326,7 +2427,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies that the debt exceeds the calculated maximum allowed threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the debt level against the calculated maximum allowed debt.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2336,7 +2437,7 @@
     "check": "L1",
     "item": "B3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies that the margin stability requirements were met.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly evaluates the operating margin stability and the 3-year vs 10-year average comparison.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2346,7 +2447,7 @@
     "check": "L1",
     "item": "B4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies that owner earnings were positive and grew over the specified period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly evaluates both the frequency of positive owner earnings and the growth between the start and end periods.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2373,27 +2474,27 @@
   "repairs": [],
   "llm_calls": 1,
   "usage": {
-   "prompt_tokens": 2756,
-   "completion_tokens": 773,
-   "total_tokens": 3529,
+   "prompt_tokens": 3362,
+   "completion_tokens": 871,
+   "total_tokens": 4233,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.0018485
+  "notional_cost_usd": 0.002147
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.00753,
-  "llm_calls": 7,
-  "input_tokens": 18233,
-  "output_tokens": 1981,
+  "notional_cost_usd": 0.009638,
+  "llm_calls": 9,
+  "input_tokens": 24778,
+  "output_tokens": 2296,
   "by_agent": {
    "critic": {
     "calls": 1,
-    "input_tokens": 2756,
-    "output_tokens": 773,
+    "input_tokens": 3362,
+    "output_tokens": 871,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001849
+    "notional_cost_usd": 0.002147
    },
    "explainer": {
     "calls": 1,
@@ -2403,11 +2504,11 @@
     "notional_cost_usd": 0.001467
    },
    "qualitative": {
-    "calls": 5,
-    "input_tokens": 12884,
-    "output_tokens": 662,
+    "calls": 7,
+    "input_tokens": 18823,
+    "output_tokens": 879,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.004214
+    "notional_cost_usd": 0.006024
    }
   }
  },
@@ -2514,10 +2615,5 @@
   "Filings and XBRL data: U.S. Securities and Exchange Commission, EDGAR (public domain)"
  ],
  "trace_path": "results/0000063908.trace.jsonl",
- "warnings": [
-  {
-   "where": "understandable_business",
-   "message": "not assessed (section_missing): Item 1 not found in the filing (no 'Item 1' heading gives a section of 2000+ chars (longest 26); no title line gives one either (longest 0))."
-  }
- ]
+ "warnings": []
 }

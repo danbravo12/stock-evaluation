@@ -3,7 +3,7 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "KO-replay",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "replay",
   "generated_at": null,
@@ -1706,7 +1706,7 @@
    "finding": {
     "criterion": "understandable_business",
     "verdict": "evidence found",
-    "rationale": "The company generates revenue by selling finished beverages and fountain syrups to retailers, distributors, and wholesalers. These customers then sell the products or use the syrups to produce beverages for immediate consumption.",
+    "rationale": "The filing explains that the company generates revenue by selling sparkling soft drinks and other finished beverages to retailers, distributors, and wholesalers, as well as through direct-to-consumer retail stores and the sale of fountain syrups to fountain retailers.",
     "citations": [
      {
       "passage_id": "0001628280-26-010047:1:8",
@@ -1754,20 +1754,27 @@
       ]
      }
     ],
-    "llm_calls": 3,
+    "llm_calls": 2,
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5182,
-     "completion_tokens": 387,
-     "total_tokens": 5569,
+     "prompt_tokens": 4844,
+     "completion_tokens": 341,
+     "total_tokens": 5185,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001876
+    "notional_cost_usd": 0.0017225
    },
-   "critic_status": "passed_after_retry",
-   "stability": null
+   "critic_status": "passed",
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence found",
+     "a": "evidence found",
+     "b": "evidence found"
+    }
+   }
   },
   {
    "finding": {
@@ -1841,24 +1848,31 @@
     "notional_cost_usd": 0.00171675
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "borderline",
+    "verdicts": {
+     "main": "evidence weak",
+     "a": "evidence found",
+     "b": "evidence found"
+    }
+   }
   },
   {
    "finding": {
     "criterion": "candid_management",
-    "verdict": "insufficient evidence",
-    "rationale": "The filing discusses the possibility of recording impairment charges as a risk factor, but does not provide a candid account of specific past mistakes or setbacks attributed to management's own decisions. A 10-K is a limited guide to candour.",
+    "verdict": "evidence found",
+    "rationale": "Management explicitly acknowledges that an impairment charge for the BodyArmor trademark was triggered by lower expectations of future performance compared to the original forecasts, indicating a shortfall in the company's own projections.",
     "citations": [
      {
-      "passage_id": "0001628280-26-010047:1A:67",
+      "passage_id": "0001628280-26-010047:7:24",
       "accession": "0001628280-26-010047",
-      "item": "1A",
-      "char_start": 131858,
-      "char_end": 132150,
-      "quote": "We have recorded in the past, and we may be required to record in the future, significant impairment charges or our proportionate share of significant impairment charges recorded by equity method investees in the future and, if we do so, our net income could be materially adversely affected.",
+      "item": "7",
+      "char_start": 225343,
+      "char_end": 225832,
+      "quote": "During the three months ended December 31, 2025, the operating results related to the trademark, combined with lower expectations of future performance compared to the original forecasts, triggered the need to update the Company's impairment analysis, including a reassessment of the business projections for the trademark. Based on this assessment, the Company concluded that the fair value of the trademark was less than its carrying value and recorded an additional impairment charge of",
       "sentences": [
-       5,
-       5
+       3,
+       4
       ]
      }
     ],
@@ -1891,17 +1905,15 @@
      },
      {
       "queries": [
-       "impairment charge write-down failure mistake"
+       "impairment charges 2025 10-K"
       ],
-      "items": [
-       "1A"
-      ],
+      "items": null,
       "seeded": false,
       "passage_ids": [
-       "0001628280-26-010047:1A:66",
-       "0001628280-26-010047:1A:67",
-       "0001628280-26-010047:1A:69",
-       "0001628280-26-010047:1A:35"
+       "0001628280-26-010047:7:58",
+       "0001628280-26-010047:1:46",
+       "0001628280-26-010047:7:57",
+       "0001628280-26-010047:7:24"
       ]
      }
     ],
@@ -1909,22 +1921,29 @@
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5360,
-     "completion_tokens": 147,
-     "total_tokens": 5507,
+     "prompt_tokens": 5673,
+     "completion_tokens": 131,
+     "total_tokens": 5804,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0015605
+    "notional_cost_usd": 0.00161475
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "borderline",
+    "verdicts": {
+     "main": "evidence found",
+     "a": "insufficient evidence",
+     "b": "evidence found"
+    }
+   }
   },
   {
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing explicitly states the company's capital allocation priorities, which include investing in business operations, growing dividends, pursuing acquisitions, and repurchasing shares. It also provides concrete figures for dividends paid during the 2025 fiscal year.",
+    "rationale": "The filing explicitly states the company's capital allocation priorities (investing in operations, growing dividends, acquisitions, and share repurchases) and provides the concrete amount of dividends paid during the 2025 fiscal year.",
     "citations": [
      {
       "passage_id": "0001628280-26-010047:7:77",
@@ -1977,16 +1996,23 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2207,
-     "completion_tokens": 156,
-     "total_tokens": 2363,
+     "prompt_tokens": 2270,
+     "completion_tokens": 153,
+     "total_tokens": 2423,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00078575
+    "notional_cost_usd": 0.000797
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence found",
+     "a": "evidence found",
+     "b": "evidence found"
+    }
+   }
   }
  ],
  "passages": {
@@ -2004,12 +2030,12 @@
    "char_start": 16877,
    "char_end": 18281
   },
-  "0001628280-26-010047:1A:67": {
-   "text": "We assess our noncurrent assets, including trademarks, goodwill and other intangible assets, equity method investments and other long-lived assets, as and when required by accounting principles generally accepted in the United States to determine\n22\nwhether they are impaired and, if they are, we record appropriate impairment charges. Our equity method investees also perform similar recoverability and impairment tests, and we record our proportionate share of impairment charges recorded by them adjusted, as appropriate, for the impact of items such as basis differences, deferred taxes and deferred gains. We have recorded in the past, and we may be required to record in the future, significant impairment charges or our proportionate share of significant impairment charges recorded by equity method investees in the future and, if we do so, our net income could be materially adversely affected.\nRISKS RELATED TO CYBERSECURITY AND DATA PRIVACY\nIf we are unable to protect our information systems against service interruption, misappropriation of data or cybersecurity incidents, our operations could be disrupted, we may suffer financial losses and our reputation may be damaged.",
-   "item": "1A",
+  "0001628280-26-010047:7:24": {
+   "text": "In November 2021, the Company acquired the remaining 85% ownership interest in, and now owns 100% of BA Sports Nutrition, LLC (\"BodyArmor\"), which offers a line of sports performance and hydration beverages. During the three months ended March 29, 2024, the Company recorded an impairment charge of $760 million due to revised projections of future operating results as well as higher discount rates resulting from changes in macroeconomic conditions since the acquisition date. During the three months ended December 31, 2025, the operating results related to the trademark, combined with lower expectations of future performance compared to the original forecasts, triggered the need to update the Company's impairment analysis, including a reassessment of the business projections for the trademark. Based on this assessment, the Company concluded that the fair value of the trademark was less than its carrying value and recorded an additional impairment charge of\n40",
+   "item": "7",
    "accession": "0001628280-26-010047",
-   "char_start": 131247,
-   "char_end": 132434
+   "char_start": 224864,
+   "char_end": 225835
   },
   "0001628280-26-010047:7:77": {
    "text": "The Company has a trade accounts receivable factoring program in certain countries. Under this program, we can elect to sell trade accounts receivables to unaffiliated financial institutions at a discount. In these factoring arrangements, for ease of administration, the Company collects customer payments related to the factored receivables and remits those payments to the financial institutions. The Company sold $14,710 million and $21,873 million of trade accounts receivables under this program during the years ended December 31, 2025 and 2024, respectively. The costs of factoring such receivables were $60 million and $114 million for the years ended December 31, 2025 and 2024, respectively. The cash received from the financial institutions is classified within the operating activities section in our consolidated statement of cash flows.\nOur current capital allocation priorities are as follows: investing wisely to support our business operations, continuing to grow our dividend payment, enhancing our beverage portfolio and capabilities through consumer-centric acquisitions, and using excess cash to repurchase shares over time. We currently expect 2026 capital expenditures to be approximately $2.2 billion. During 2026, we also expect to repurchase shares to offset dilution resulting from employee stock-based compensation plans.",
@@ -2333,20 +2359,28 @@
    {
     "check": "L1",
     "item": "understandable_business",
-    "status": "fail",
-    "detail": "supports_verdict=yes; unsupported: direct-to-consumer retail stores; The quotes clearly define the products, customers, and revenue generation methods, though the rationale mentions a retail store channel not present in the provided text.",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The quotes clearly define the products (beverages, fountain syrups), the customers (retailers, distributors, wholesalers), and the revenue generation model.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": "rationale",
-    "claims": [
-     "direct-to-consumer retail stores"
-    ]
+    "kind": null,
+    "claims": []
    },
    {
     "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing asserts competitive strengths without providing quantitative measures, fitting the definition of a weak evidence verdict.",
+    "detail": "supports_verdict=yes; The filing asserts competitive strengths but lacks quantified measures, fitting the definition of weak evidence where assets are named without substantiating metrics.",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "candid_management",
+    "status": "pass",
+    "detail": "supports_verdict=yes; Management explicitly links an impairment charge to their own failed performance expectations, meeting the requirement for acknowledging a setback related to internal projections.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2356,7 +2390,7 @@
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides both a clear policy on capital allocation and specific, quantified figures for dividend payments.",
+    "detail": "supports_verdict=yes; The filing provides both a clear list of capital allocation priorities and a specific, quantified dividend payment for the 2025 fiscal year.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2376,7 +2410,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet both components of the financial strength test.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the current ratio and debt-to-assets criteria.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2386,7 +2420,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year stability requirement.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the 10-year positive net income record.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2396,7 +2430,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that the test was met for the available record, justifying the partial pass.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that the dividend record is consistent with the available history.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2406,7 +2440,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio against the required threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio based on the 3-year averages.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2416,7 +2450,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the performance over the 10-year period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly summarizes the ROE performance over the 10-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2426,7 +2460,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares debt against the calculated maximum threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares long-term debt against the calculated maximum threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2436,7 +2470,7 @@
     "check": "L1",
     "item": "B3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin to the 10-year average.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly evaluates the margin stability and the ratio of averages.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2446,39 +2480,9 @@
     "check": "L1",
     "item": "B4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the owner earnings averages over the specified periods.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly confirms positive owner earnings and the growth between the first and last 3-year averages.",
     "owner": "explainer",
     "attempt": 0,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "R2",
-    "item": "understandable_business",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "R3",
-    "item": "understandable_business",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "L1",
-    "item": "understandable_business",
-    "status": "pass",
-    "detail": "supports_verdict=yes; The quotes clearly identify the products (beverages, syrups), the customers (retailers, distributors, wholesalers), and the revenue model (selling these products).",
-    "owner": "qualitative",
-    "attempt": 1,
     "kind": null,
     "claims": []
    }
@@ -2495,43 +2499,35 @@
    "B2": "passed",
    "B3": "passed",
    "B4": "passed",
-   "understandable_business": "passed_after_retry",
+   "understandable_business": "passed",
    "durable_competitive_advantage": "passed",
    "candid_management": "passed",
    "rational_capital_allocation": "passed"
   },
-  "repairs": [
-   {
-    "item": "understandable_business",
-    "path": "rationale_rewrite",
-    "outcome": "accepted",
-    "detail": "",
-    "llm_calls": 1
-   }
-  ],
-  "llm_calls": 2,
+  "repairs": [],
+  "llm_calls": 1,
   "usage": {
-   "prompt_tokens": 3480,
-   "completion_tokens": 867,
-   "total_tokens": 4347,
+   "prompt_tokens": 3188,
+   "completion_tokens": 855,
+   "total_tokens": 4043,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.0021705
+  "notional_cost_usd": 0.0020795
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.009657,
-  "llm_calls": 11,
-  "input_tokens": 24760,
-  "output_tokens": 2311,
+  "notional_cost_usd": 0.009477,
+  "llm_calls": 9,
+  "input_tokens": 24506,
+  "output_tokens": 2234,
   "by_agent": {
    "critic": {
-    "calls": 2,
-    "input_tokens": 3480,
-    "output_tokens": 867,
+    "calls": 1,
+    "input_tokens": 3188,
+    "output_tokens": 855,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002171
+    "notional_cost_usd": 0.00208
    },
    "explainer": {
     "calls": 1,
@@ -2541,11 +2537,11 @@
     "notional_cost_usd": 0.001547
    },
    "qualitative": {
-    "calls": 8,
-    "input_tokens": 18662,
-    "output_tokens": 849,
+    "calls": 7,
+    "input_tokens": 18700,
+    "output_tokens": 784,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.005939
+    "notional_cost_usd": 0.005851
    }
   }
  },

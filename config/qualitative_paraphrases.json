@@ -1,0 +1,55 @@
+{
+  "_notes": "Two paraphrases (a, b) of the question and the three verdict definitions for each qualitative criterion (build 4a, ADR-072). The meaning is meant to be identical to config/search_terms.json: the same tests, the same examples, the same thresholds, in different words. Items, queries, the year rule and the rationale note are NOT paraphrased (they stay as in search_terms.json). The stability runs give the agent and the Critic these wordings; a verdict that changes with them is marked borderline. Written once, reviewed by Daniel in the build report; changing a word here changes what a 'stable' verdict means, so edit only with a re-run.",
+  "a": {
+    "understandable_business": {
+      "question": "Is it possible to describe the company's business in plain words: what it sells, who buys it, and how it earns its money?",
+      "found_means": "The filing identifies particular products or services, says which customers or markets buy them, and explains how revenue arises (for instance segments with figures, or a pricing or sales model), in everyday language.",
+      "weak_means": "The business is described only in broad or promotional language (such as 'a leading provider of solutions'), or the filing says what the company sells but not who the buyers are or how the company makes money.",
+      "insufficient_means": "The retrieved text does not state what the company sells or how it makes money, or the Business section is missing. If the retrieved text points against the criterion, this is the verdict, and the rationale says so."
+    },
+    "durable_competitive_advantage": {
+      "question": "Does the filing offer concrete evidence of an advantage that shields the company's profits from competitors for many years (such as a brand, a scale or cost position, switching costs, a network, patents or a regulated franchise)?",
+      "found_means": "The filing names a source of advantage AND gives a checkable specific for it: a market share or ranking figure; a regulated exclusive franchise or service territory; a quantified scale or cost position; long-term contracts with stated terms; a stated size of network. Merely saying that an asset exists or is important (brand, trade secrets, patents, 'strong' distribution), with no measure, is not enough.",
+      "weak_means": "The advantage is merely claimed, or an asset such as a brand, trade secrets, patents or scale is called important without any measure; or the filing's own statements that competitors or customers can readily erode the position offset the specifics.",
+      "insufficient_means": "The retrieved text is silent on the company's competitive position, or only lists competitors, threats and competitive pressure. If the retrieved text points against the criterion, this is the verdict, and the rationale says so."
+    },
+    "candid_management": {
+      "question": "Does management talk openly, in its own words, about setbacks, mistakes, declines and uncertainty, and not only about successes?",
+      "found_means": "Management's own account of a setback that it blames at least in part on the company's own decisions or execution; or a target or guidance of the company's own that was missed; or an acknowledged material weakness, restatement or write-down of something management itself chose (an acquisition, investment or project), stated plainly.",
+      "weak_means": "Declines or charges attributed solely to outside factors (interest rates, currency, weather, regulation, the economy, product mix, litigation outcomes), even when quantified; or general words of caution ('results may fluctuate', 'we face risks'); or a setback that is mentioned but not explained.",
+      "insufficient_means": "The retrieved text is promotional or boilerplate and offers nothing from which to judge candour either way, or MD&A and Risk Factors are missing. If the retrieved text points against the criterion, this is the verdict, and the rationale says so."
+    },
+    "rational_capital_allocation": {
+      "question": "Does the filing show how management uses the cash the business produces (reinvestment, acquisitions, buybacks, dividends, repaying debt) and explain its approach? You judge whether this is documented concretely, not whether the prices paid were good.",
+      "found_means": "The filing puts an amount on at least one action taken in the fiscal year (share repurchases, dividends, acquisitions, capital expenditure or debt repayment) AND states a policy, priority or rationale for how cash is used. Not every action needs an amount.",
+      "weak_means": "Only forward-looking plans; or actions with no amount at all; or amounts with no stated policy, priority or rationale.",
+      "insufficient_means": "The retrieved text does not say what was done with cash, or MD&A is missing. If the retrieved text points against the criterion, this is the verdict, and the rationale says so."
+    }
+  },
+  "b": {
+    "understandable_business": {
+      "question": "Does the filing let a reader explain the business simply, covering what the company sells, who it sells to, and where its revenue comes from?",
+      "found_means": "Specific products or services are named, the customers or markets they serve are identified, and the way revenue is earned is described (for example segment figures, or a pricing or sales model), all in plain terms.",
+      "weak_means": "The description is general or promotional ('a leading provider of solutions'), or the filing states what is sold without saying who buys it or how revenue is earned.",
+      "insufficient_means": "Nothing in the retrieved text says what the company sells or how it earns revenue, or the Business section is absent. If the retrieved text argues against the criterion, this is the verdict, and the rationale says so."
+    },
+    "durable_competitive_advantage": {
+      "question": "Is there concrete evidence in the filing of a lasting advantage that keeps competitors from eroding the company's profits (for example a brand, a scale or cost position, switching costs, a network, patents, or a regulated franchise)?",
+      "found_means": "A source of advantage is stated AND backed by a checkable specific: a market share or rank; a regulated exclusive franchise or service territory; a quantified scale or cost position; long-term contracts with stated terms; a stated network size. Saying that an asset exists or matters (brand, trade secrets, patents, 'strong' distribution) without a measure does not count.",
+      "weak_means": "The advantage is only asserted, or an asset (brand, trade secrets, patents, scale) is described as important but not measured; or the filing itself says competitors or customers can readily wear the position down, offsetting the specifics.",
+      "insufficient_means": "The retrieved text does not discuss the company's competitive position, or only lists competitors, threats and competitive pressure. If the retrieved text argues against the criterion, this is the verdict, and the rationale says so."
+    },
+    "candid_management": {
+      "question": "Is management open, in its own words, about setbacks, mistakes, declines and uncertainty, rather than describing only successes?",
+      "found_means": "Management itself describes a setback and attributes it at least partly to the company's own decisions or execution; or reports a target or guidance of its own that was missed; or acknowledges a material weakness, restatement or write-down of something management chose (an acquisition, investment or project), stated plainly.",
+      "weak_means": "Declines or charges are explained only by external factors (interest rates, currency, weather, regulation, the economy, product mix, litigation outcomes), even if quantified; or the caution is generic ('results may fluctuate', 'we face risks'); or a setback is noted without any explanation.",
+      "insufficient_means": "The retrieved text is promotional or boilerplate and gives no basis for judging candour either way, or MD&A and Risk Factors are missing. If the retrieved text argues against the criterion, this is the verdict, and the rationale says so."
+    },
+    "rational_capital_allocation": {
+      "question": "Does the filing document what management does with the cash the business generates (reinvesting, acquisitions, buybacks, dividends, repaying debt) and say why? The test is whether this is concretely documented, not whether the prices paid were good.",
+      "found_means": "At least one action in the fiscal year is quantified (share repurchases, dividends, acquisitions, capital expenditure or debt repayment, with an amount), AND the filing states a policy, priority or rationale for how cash is used. Not every action needs an amount.",
+      "weak_means": "Forward-looking plans only; or actions without any amount; or amounts without a stated policy, priority or rationale.",
+      "insufficient_means": "Nothing in the retrieved text says what was done with cash, or MD&A is missing. If the retrieved text argues against the criterion, this is the verdict, and the rationale says so."
+    }
+  }
+}

@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "VST-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T03:01:53+00:00",
+  "generated_at": "2026-10-11T13:45:51+00:00",
   "timings": {
-   "fetch": 1.067,
+   "fetch": 0.059,
    "score": 0.0,
-   "qualitative": 76.219,
-   "explain_and_verify": 42.433
+   "qualitative": 20.549,
+   "explain_and_verify": 5.557
   }
  },
  "plan": {
@@ -64,7 +64,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 1.067,
+   "seconds": 0.059,
    "reason": null
   },
   {
@@ -76,19 +76,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 76.219,
+   "seconds": 20.549,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 42.433,
+   "seconds": 5.557,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.071,
+   "seconds": 0.042,
    "reason": null
   }
  ],
@@ -793,11 +793,11 @@
       "accession": "0001692819-26-000006",
       "item": "1",
       "char_start": 22805,
-      "char_end": 22984,
-      "quote": "Vistra is an integrated retail electricity and power generation company that provides essential power resources to customers, businesses, and communities from California to Maine.",
+      "char_end": 23268,
+      "quote": "Vistra is an integrated retail electricity and power generation company that provides essential power resources to customers, businesses, and communities from California to Maine. We combine an innovative, customer-centric approach to retail sales with safe, reliable, diverse, and efficient power generation. Our integrated power generation and wholesale operation allows us to efficiently obtain the electricity needed to serve our customers at the lowest cost.",
       "sentences": [
        5,
-       5
+       7
       ]
      },
      {
@@ -838,13 +838,13 @@
     "tool_calls": 4,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 7581,
+     "prompt_tokens": 7626,
      "completion_tokens": 519,
-     "total_tokens": 8100,
+     "total_tokens": 8145,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00267375
+    "notional_cost_usd": 0.002685
    },
    "critic_status": "passed",
    "stability": null
@@ -939,7 +939,7 @@
    "finding": {
     "criterion": "candid_management",
     "verdict": "evidence found",
-    "rationale": "Management explicitly acknowledges and quantifies material write-offs and impairment losses totaling $555 million ($400 million write-off and $155 million impairment) resulting from the Moss Landing Incident and the subsequent management decision not to return specific facilities to service.",
+    "rationale": "Management explicitly acknowledges and quantifies material write-offs and impairment losses resulting from specific operational incidents (the Moss Landing 300 fire and the decision not to return the Moss Landing 100 MW battery to service), demonstrating candor regarding these setbacks.",
     "citations": [
      {
       "passage_id": "0001692819-26-000006:7:16",
@@ -995,29 +995,29 @@
      },
      {
       "queries": [
-       "\"Moss Landing\" incident 10-K"
+       "\"Moss Landing 300 Incident\""
       ],
       "items": null,
       "seeded": false,
       "passage_ids": [
+       "0001692819-26-000006:7:16",
        "0001692819-26-000006:7:18",
        "0001692819-26-000006:7:15",
-       "0001692819-26-000006:7:16",
-       "0001692819-26-000006:7:38"
+       "0001692819-26-000006:7:14"
       ]
      }
     ],
-    "llm_calls": 2,
-    "tool_calls": 3,
+    "llm_calls": 3,
+    "tool_calls": 4,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 6008,
-     "completion_tokens": 184,
-     "total_tokens": 6192,
+     "prompt_tokens": 8994,
+     "completion_tokens": 223,
+     "total_tokens": 9217,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001778
+    "notional_cost_usd": 0.0025830000000000002
    },
    "critic_status": "passed",
    "stability": null
@@ -1026,7 +1026,7 @@
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing details capital allocation through natural gas expansion projects and acquisitions. It further quantifies specific cash outflows for 2025, including debt redemption, stock repurchases, debt repayment, noncontrolling interest purchases, and dividend payments.",
+    "rationale": "The filing documents specific capital allocation actions in 2025, including acquisitions, share repurchases, debt redemptions, and dividend payments, while stating a policy of maintaining a resilient balance sheet and disciplined capital allocation.",
     "citations": [
      {
       "passage_id": "0001692819-26-000006:7:3",
@@ -1075,19 +1075,19 @@
       ]
      }
     ],
-    "llm_calls": 2,
+    "llm_calls": 1,
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2773,
-     "completion_tokens": 217,
-     "total_tokens": 2990,
+     "prompt_tokens": 2399,
+     "completion_tokens": 152,
+     "total_tokens": 2551,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00101875
+    "notional_cost_usd": 0.00082775
    },
-   "critic_status": "passed_after_retry",
+   "critic_status": "passed",
    "stability": null
   }
  ],
@@ -1443,7 +1443,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing identifies the company as an integrated retail electricity and power generation business, specifies its customer base, and describes its revenue-generating activities.",
+    "detail": "supports_verdict=yes; The filing clearly identifies the company's products (electricity, natural gas), its customer base (5 million residential/commercial/industrial), and its revenue-generating activities (retail sales and power generation).",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -1453,7 +1453,7 @@
     "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides scale metrics but explicitly notes that the retail market is highly competitive with low barriers to entry, supporting the 'evidence weak' verdict.",
+    "detail": "supports_verdict=yes; The filing provides specific scale metrics but explicitly notes that the market is highly competitive with low barriers to entry, supporting the 'evidence weak' verdict.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -1463,7 +1463,7 @@
     "check": "L1",
     "item": "candid_management",
     "status": "pass",
-    "detail": "supports_verdict=yes; Management explicitly details and quantifies significant write-offs and impairment losses resulting from specific operational incidents and subsequent management decisions.",
+    "detail": "supports_verdict=yes; Management explicitly details and quantifies a $155 million impairment loss in 2025 resulting from their own decision not to return a facility to service.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -1472,20 +1472,18 @@
    {
     "check": "L1",
     "item": "rational_capital_allocation",
-    "status": "fail",
-    "detail": "supports_verdict=yes; unsupported: stating a policy of maintaining a resilient balance sheet and using cash for working capital, debt service, and capital expenditures; The filing quantifies specific capital allocation actions for the fiscal year, though the rationale attributes a policy statement not explicitly found in the provided quotes.",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The filing quantifies specific 2025 actions (debt redemption, buybacks, dividends, acquisitions) and references a policy of disciplined capital allocation.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": "rationale",
-    "claims": [
-     "stating a policy of maintaining a resilient balance sheet and using cash for working capital, debt service, and capital expenditures"
-    ]
+    "kind": null,
+    "claims": []
    },
    {
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue figure and compares it against the stated threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue figure and confirms it meets the stated threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1495,7 +1493,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet both the current ratio and debt-to-assets requirements.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the current ratio and debt levels fail the specified criteria.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1505,7 +1503,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to maintain positive net income in every year of the record.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the failure to maintain positive net income in every year of the record.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1515,7 +1513,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to pay dividends in every year of the record.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the missed dividend payments and the resulting failure of the test.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1525,39 +1523,9 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the long-term debt against the calculated 3-year average net income threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the debt to the 3-year average net income and identifies the failure.",
     "owner": "explainer",
     "attempt": 0,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "R2",
-    "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "R3",
-    "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "",
-    "owner": "qualitative",
-    "attempt": 1,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "L1",
-    "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides specific dollar amounts for multiple capital allocation activities and describes the strategic rationale behind the natural gas expansion and acquisition projects.",
-    "owner": "qualitative",
-    "attempt": 1,
     "kind": null,
     "claims": []
    }
@@ -1577,40 +1545,32 @@
    "understandable_business": "passed",
    "durable_competitive_advantage": "passed",
    "candid_management": "passed",
-   "rational_capital_allocation": "passed_after_retry"
+   "rational_capital_allocation": "passed"
   },
-  "repairs": [
-   {
-    "item": "rational_capital_allocation",
-    "path": "rationale_rewrite",
-    "outcome": "accepted",
-    "detail": "",
-    "llm_calls": 1
-   }
-  ],
-  "llm_calls": 2,
+  "repairs": [],
+  "llm_calls": 1,
   "usage": {
-   "prompt_tokens": 3618,
-   "completion_tokens": 740,
-   "total_tokens": 4358,
+   "prompt_tokens": 2921,
+   "completion_tokens": 641,
+   "total_tokens": 3562,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.0020145000000000002
+  "notional_cost_usd": 0.00169175
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.010156,
-  "llm_calls": 12,
-  "input_tokens": 27237,
-  "output_tokens": 2231,
+  "notional_cost_usd": 0.010458,
+  "llm_calls": 11,
+  "input_tokens": 29197,
+  "output_tokens": 2106,
   "by_agent": {
    "critic": {
-    "calls": 2,
-    "input_tokens": 3618,
-    "output_tokens": 740,
+    "calls": 1,
+    "input_tokens": 2921,
+    "output_tokens": 641,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002015
+    "notional_cost_usd": 0.001692
    },
    "explainer": {
     "calls": 1,
@@ -1621,10 +1581,10 @@
    },
    "qualitative": {
     "calls": 9,
-    "input_tokens": 21931,
-    "output_tokens": 1147,
+    "input_tokens": 24588,
+    "output_tokens": 1121,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.007203
+    "notional_cost_usd": 0.007829
    }
   }
  },

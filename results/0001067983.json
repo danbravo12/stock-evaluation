@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "BRK-B-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:49:38+00:00",
+  "generated_at": "2026-10-11T13:41:28+00:00",
   "timings": {
-   "fetch": 0.491,
+   "fetch": 0.064,
    "score": 0.0,
-   "qualitative": 53.388,
-   "explain_and_verify": 35.356
+   "qualitative": 7.244,
+   "explain_and_verify": 14.559
   }
  },
  "plan": {
@@ -64,7 +64,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 0.491,
+   "seconds": 0.064,
    "reason": null
   },
   {
@@ -76,19 +76,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 53.388,
+   "seconds": 7.244,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 35.356,
+   "seconds": 14.559,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.101,
+   "seconds": 0.028,
    "reason": null
   }
  ],
@@ -1261,7 +1261,7 @@
    "finding": {
     "criterion": "candid_management",
     "verdict": "insufficient evidence",
-    "rationale": "The filing identifies reporting units where estimated fair values are close to carrying values, but attributes potential future impairments to market and economic conditions rather than management's own decisions or execution. A 10-K is a limited guide to candour, and the provided text does not meet the specific criteria for \"evidence found.\"",
+    "rationale": "The filing identifies specific reporting units where estimated fair values are close to carrying values, indicating potential future impairment risk, but it does not attribute these or other setbacks to management's own decisions or execution. A 10-K is a limited guide to candour, and the provided text does not meet the specific criteria for \"evidence found.\"",
     "citations": [
      {
       "passage_id": "0001193125-26-083899:7:111",
@@ -1308,13 +1308,13 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2548,
-     "completion_tokens": 134,
-     "total_tokens": 2682,
+     "prompt_tokens": 2606,
+     "completion_tokens": 139,
+     "total_tokens": 2745,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.000838
+    "notional_cost_usd": 0.00086
    },
    "critic_status": "passed_after_retry",
    "stability": null
@@ -1323,18 +1323,18 @@
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing quantifies 2025 capital expenditures ($20.9 billion) and a 2026 acquisition ($9.5 billion), while stating a policy of prioritizing financial strength, liquidity, and repurchasing shares only when they are below intrinsic value and cash levels remain above $30 billion.",
+    "rationale": "The filing quantifies capital expenditures for 2025 ($20.9 billion) and describes the policy for share repurchases, noting that they are permitted when prices are below intrinsic value and subject to maintaining a minimum cash balance of $30 billion.",
     "citations": [
      {
       "passage_id": "0001193125-26-083899:7:90",
       "accession": "0001193125-26-083899",
       "item": "7",
       "char_start": 265463,
-      "char_end": 266038,
-      "quote": "Our consolidated capital expenditures for property, plant and equipment and equipment held for lease were $20.9 billion in 2025, which included capital expenditures of $14.4 billion by BNSF and BHE. BNSF and BHE maintain very large investments in capital assets (property, plant and equipment) and regularly make significant capital expenditures in the normal course of business. BHE and BNSF forecast capital expenditures in 2026 of approximately $15 billion. On January 2, 2026, Berkshire acquired Occidental's chemicals business (\"OxyChem\") for approximately $9.5 billion.",
+      "char_end": 265661,
+      "quote": "Our consolidated capital expenditures for property, plant and equipment and equipment held for lease were $20.9 billion in 2025, which included capital expenditures of $14.4 billion by BNSF and BHE.",
       "sentences": [
        2,
-       5
+       2
       ]
      },
      {
@@ -1342,11 +1342,11 @@
       "accession": "0001193125-26-083899",
       "item": "7",
       "char_start": 262089,
-      "char_end": 262674,
-      "quote": "Berkshire's common stock repurchase program permits Berkshire to repurchase its Class A and Class B shares at prices below Berkshire's intrinsic value, as conservatively determined by Berkshire's Chief Executive Officer after consultation with the Chairman of the Board. We are not committed to a minimum or subject to a maximum repurchase amount. We will not repurchase our stock if it reduces our consolidated cash, cash equivalents and U.S. Treasury Bills holdings to below $30 billion. Financial strength and redundant liquidity will always be of paramount importance at Berkshire.",
+      "char_end": 262578,
+      "quote": "Berkshire's common stock repurchase program permits Berkshire to repurchase its Class A and Class B shares at prices below Berkshire's intrinsic value, as conservatively determined by Berkshire's Chief Executive Officer after consultation with the Chairman of the Board. We are not committed to a minimum or subject to a maximum repurchase amount. We will not repurchase our stock if it reduces our consolidated cash, cash equivalents and U.S. Treasury Bills holdings to below $30 billion.",
       "sentences": [
        5,
-       8
+       7
       ]
      }
     ],
@@ -1372,17 +1372,17 @@
       ]
      }
     ],
-    "llm_calls": 2,
-    "tool_calls": 3,
+    "llm_calls": 1,
+    "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 4656,
-     "completion_tokens": 384,
-     "total_tokens": 5040,
+     "prompt_tokens": 2265,
+     "completion_tokens": 161,
+     "total_tokens": 2426,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00174
+    "notional_cost_usd": 0.00080775
    },
    "critic_status": "passed",
    "stability": null
@@ -1733,7 +1733,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing clearly identifies the business units, the services provided, the specific customer segments, and the operational models for both McLane and TTI.",
+    "detail": "supports_verdict=yes; The filing clearly identifies the business units, the services provided, the specific customer types, and the operational models for both McLane and TTI.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -1753,7 +1753,7 @@
     "check": "L1",
     "item": "candid_management",
     "status": "fail",
-    "detail": "supports_verdict=no; The quote mentions an impairment loss but does not attribute it to management's own decisions or execution, failing the specific requirement for the claimed verdict.",
+    "detail": "supports_verdict=no; The quote reports an impairment loss but does not explain the cause or attribute it to management's own decisions or execution.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": "verdict",
@@ -1763,7 +1763,7 @@
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing quantifies capital expenditures and acquisitions while explicitly stating the policy and priorities governing capital allocation and share repurchases.",
+    "detail": "supports_verdict=yes; The filing quantifies 2025 capital expenditures and details the specific policy and constraints governing share repurchases.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -1803,7 +1803,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that failing to meet the ROE threshold in at least 7 of 10 years results in a fail.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that failing to meet the ROE threshold in 7 of 10 years results in a fail.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1868,27 +1868,27 @@
   ],
   "llm_calls": 1,
   "usage": {
-   "prompt_tokens": 2767,
-   "completion_tokens": 617,
-   "total_tokens": 3384,
+   "prompt_tokens": 2833,
+   "completion_tokens": 610,
+   "total_tokens": 3443,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.00161725
+  "notional_cost_usd": 0.00162325
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.007387,
-  "llm_calls": 8,
-  "input_tokens": 18521,
-  "output_tokens": 1838,
+  "notional_cost_usd": 0.006506,
+  "llm_calls": 7,
+  "input_tokens": 16317,
+  "output_tokens": 1618,
   "by_agent": {
    "critic": {
     "calls": 1,
-    "input_tokens": 2767,
-    "output_tokens": 617,
+    "input_tokens": 2833,
+    "output_tokens": 610,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001617
+    "notional_cost_usd": 0.001623
    },
    "explainer": {
     "calls": 1,
@@ -1898,11 +1898,11 @@
     "notional_cost_usd": 0.000974
    },
    "qualitative": {
-    "calls": 6,
-    "input_tokens": 13825,
-    "output_tokens": 893,
+    "calls": 5,
+    "input_tokens": 11555,
+    "output_tokens": 680,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.004796
+    "notional_cost_usd": 0.003909
    }
   }
  },

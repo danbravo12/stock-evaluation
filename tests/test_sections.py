@@ -170,7 +170,7 @@ class FakeClient:
         self._html = html.encode()
 
     def latest_filing(self, cik, form="10-K"):
-        return SimpleNamespace(accession="0000000001-26-000001")
+        return SimpleNamespace(accession="0000000001-26-000001", report_date="2025-12-31")
 
     def filing_document(self, ref):
         return SimpleNamespace(body=self._html, sha256="abc123")

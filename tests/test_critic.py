@@ -146,7 +146,9 @@ class TestModelCheckInput(Fixture):
     def test_only_found_or_weak_findings_with_citations_are_judged(self):
         judged = {f.criterion for f in self.qual.findings if needs_llm_check(f)}
         self.assertEqual(judged, {f.criterion for f in self.qual.findings if f.verdict in ("evidence found", "evidence weak") and f.citations})
-        self.assertNotIn("candid_management", judged)  # KO's is "insufficient evidence"
+        for f in self.qual.findings:  # a finding that is "insufficient evidence" or "not assessed" is never sent to the model check
+            if f.verdict not in ("evidence found", "evidence weak"):
+                self.assertNotIn(f.criterion, judged)
 
     def test_payload_has_the_criterion_two_rubric_lines_quotes_and_rationale_and_nothing_else(self):
         f = self.finding("understandable_business")  # KO: a "found" verdict, so the definitions are those of found and weak

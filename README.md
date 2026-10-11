@@ -53,7 +53,8 @@ Usage and spend are counted in `data/ledger/usage.json` (daily quota resets at m
 ## Explainer + Critic report and the qualitative gold set
 
     .venv/bin/python scripts/review_report.py replay    # offline, writes docs/critic_report.md (research output, not financial advice)
-    .venv/bin/python -m eval.qualitative_agreement      # agent vs the human-reviewed gold set (19/20)
+    .venv/bin/python -m eval.qualitative_agreement      # agent (agent-only replay) vs the human-reviewed gold set
+    .venv/bin/python -m eval.agreement                  # final verdicts vs the human labels, dev and held-out sets separately (exact, within one level, kappa)
 
 ## Scorecard report (offline, from the fixtures)
 

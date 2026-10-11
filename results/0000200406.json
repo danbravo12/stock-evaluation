@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "JNJ-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:42:55+00:00",
+  "generated_at": "2026-10-11T13:39:41+00:00",
   "timings": {
-   "fetch": 0.655,
+   "fetch": 0.085,
    "score": 0.001,
-   "qualitative": 53.043,
-   "explain_and_verify": 20.764
+   "qualitative": 10.195,
+   "explain_and_verify": 21.258
   }
  },
  "plan": {
@@ -62,7 +62,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 0.655,
+   "seconds": 0.085,
    "reason": null
   },
   {
@@ -74,19 +74,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 53.043,
+   "seconds": 10.195,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 20.764,
+   "seconds": 21.258,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.048,
+   "seconds": 0.045,
    "reason": null
   }
  ],
@@ -1581,7 +1581,7 @@
    "finding": {
     "criterion": "candid_management",
     "verdict": "evidence found",
-    "rationale": "Management explicitly acknowledges specific financial charges related to the impairment of assets acquired in previous transactions (Abiomed and Momenta Pharmaceuticals), noting that one asset is now fully impaired. A 10-K is a limited guide to candour, but these disclosures represent a direct acknowledgment of setbacks in specific investment decisions.",
+    "rationale": "Management explicitly identifies and quantifies a $0.1 billion impairment charge in fiscal year 2025 related to a non-strategic asset acquired with Abiomed, acknowledging the specific write-down of an investment. A 10-K is a limited guide to candour, but this disclosure meets the criteria for acknowledging a specific, management-chosen investment setback.",
     "citations": [
      {
       "passage_id": "0000200406-26-000016:7:24",
@@ -1628,13 +1628,13 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2389,
-     "completion_tokens": 128,
-     "total_tokens": 2517,
+     "prompt_tokens": 2452,
+     "completion_tokens": 142,
+     "total_tokens": 2594,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00078925
+    "notional_cost_usd": 0.000826
    },
    "critic_status": "passed",
    "stability": null
@@ -1643,8 +1643,20 @@
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing quantifies 2025 R&D investment ($14.7 billion) and cash dividends paid ($5.14 per share), and states that the company invests to deliver value to shareholders and other stakeholders.",
+    "rationale": "The filing quantifies specific 2025 cash allocations, including $14.5 billion for an acquisition and $14.7 billion for R&D, while also noting a 63-year history of dividend increases. It explains that these investments are made to create life-enhancing innovations, address unmet societal needs, and deliver value to shareholders and other stakeholders.",
     "citations": [
+     {
+      "passage_id": "0000200406-26-000016:7:43",
+      "accession": "0000200406-26-000016",
+      "item": "7",
+      "char_start": 155726,
+      "char_end": 155925,
+      "quote": "The net proceeds from this offering were used to fund the Intra-Cellular Therapies, Inc. acquisition for approximately $14.5 billion which closed on April 2, 2025, and for general corporate purposes.",
+      "sentences": [
+       4,
+       4
+      ]
+     },
      {
       "passage_id": "0000200406-26-000016:7:4",
       "accession": "0000200406-26-000016",
@@ -1655,18 +1667,6 @@
       "sentences": [
        2,
        2
-      ]
-     },
-     {
-      "passage_id": "0000200406-26-000016:7:43",
-      "accession": "0000200406-26-000016",
-      "item": "7",
-      "char_start": 156462,
-      "char_end": 156539,
-      "quote": "Cash dividends paid were $5.14 per share in 2025 and $4.91 per share in 2024.",
-      "sentences": [
-       11,
-       11
       ]
      }
     ],
@@ -1692,19 +1692,19 @@
       ]
      }
     ],
-    "llm_calls": 2,
-    "tool_calls": 3,
+    "llm_calls": 4,
+    "tool_calls": 6,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5968,
-     "completion_tokens": 349,
-     "total_tokens": 6317,
+     "prompt_tokens": 11729,
+     "completion_tokens": 890,
+     "total_tokens": 12619,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0020155
+    "notional_cost_usd": 0.00426725
    },
-   "critic_status": "passed_after_retry",
+   "critic_status": "warning",
    "stability": null
   }
  ],
@@ -2046,7 +2046,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing identifies two segments, their therapeutic/professional focus, and the specific customer base for each.",
+    "detail": "supports_verdict=yes; The filing clearly identifies the two business segments, the therapeutic/professional fields, the customer base, and the nature of the business activities.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2056,7 +2056,7 @@
     "check": "L1",
     "item": "candid_management",
     "status": "pass",
-    "detail": "supports_verdict=yes; Management explicitly identifies impairment charges on specific past acquisitions, acknowledging these as setbacks.",
+    "detail": "supports_verdict=yes; Management explicitly identifies and quantifies a $0.1 billion impairment charge in 2025 related to a non-strategic asset acquired in 2022.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2066,19 +2066,19 @@
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "fail",
-    "detail": "supports_verdict=overstated; unsupported: Dividends are also quantified at $5.14 per share.; The quotes quantify R&D and an acquisition, but do not contain the dividend figure mentioned in the rationale.",
+    "detail": "supports_verdict=overstated; unsupported: 63-year history of dividend increases; The quotes quantify 2025 R&D and acquisition spending, but the claim regarding a 63-year dividend history is not present in the provided text.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": "verdict",
     "claims": [
-     "Dividends are also quantified at $5.14 per share."
+     "63-year history of dividend increases"
     ]
    },
    {
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue and compares it to the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies the revenue and compares it against the threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2088,7 +2088,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet both components of the debt/liquidity test.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies the failure to meet the current ratio and debt-to-assets criteria.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2098,7 +2098,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year positive net income requirement.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly interprets the 10-year positive net income requirement.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2108,7 +2108,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the dividend record over the available period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly identifies that dividends were paid in all 15 years on record.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2118,7 +2118,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio against the required threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly calculates the growth ratio and compares it to the 1.33 threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2128,7 +2128,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the frequency of meeting the ROE threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly states the ROE performance over the 10-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2138,7 +2138,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares debt to the calculated maximum allowed based on average net income.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly compares long-term debt against the 3-year average net income threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2148,7 +2148,7 @@
     "check": "L1",
     "item": "B4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly addresses both the frequency of positive owner earnings and the growth comparison.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The text correctly evaluates both the frequency of positive owner earnings and the growth in the 3-year averages.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2177,12 +2177,14 @@
    {
     "check": "L1",
     "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "supports_verdict=yes; The filing quantifies R&D and dividends while providing a clear rationale for the R&D investment, meeting both requirements of the claimed verdict.",
+    "status": "fail",
+    "detail": "supports_verdict=yes; unsupported: delivering value to shareholders; The filing quantifies 2025 dividends and R&D spending while providing a rationale for these capital allocation decisions.",
     "owner": "qualitative",
     "attempt": 1,
-    "kind": null,
-    "claims": []
+    "kind": "rationale",
+    "claims": [
+     "delivering value to shareholders"
+    ]
    }
   ],
   "final": {
@@ -2200,40 +2202,40 @@
    "understandable_business": "passed",
    "durable_competitive_advantage": "passed",
    "candid_management": "passed",
-   "rational_capital_allocation": "passed_after_retry"
+   "rational_capital_allocation": "warning"
   },
   "repairs": [
    {
     "item": "rational_capital_allocation",
     "path": "constrained_retry",
-    "outcome": "accepted",
-    "detail": "",
+    "outcome": "rejected_by_recheck",
+    "detail": "supports_verdict=yes; unsupported: delivering value to shareholders; The filing quantifies 2025 dividends and R&D spending while providing a rationale for these capital allocation decisions.",
     "llm_calls": 2
    }
   ],
   "llm_calls": 2,
   "usage": {
-   "prompt_tokens": 3512,
-   "completion_tokens": 799,
-   "total_tokens": 4311,
+   "prompt_tokens": 3842,
+   "completion_tokens": 869,
+   "total_tokens": 4711,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.0020765000000000002
+  "notional_cost_usd": 0.002264
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.014061,
-  "llm_calls": 14,
-  "input_tokens": 39521,
-  "output_tokens": 2787,
+  "notional_cost_usd": 0.013454,
+  "llm_calls": 13,
+  "input_tokens": 37034,
+  "output_tokens": 2797,
   "by_agent": {
    "critic": {
     "calls": 2,
-    "input_tokens": 3512,
-    "output_tokens": 799,
+    "input_tokens": 3842,
+    "output_tokens": 869,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002077
+    "notional_cost_usd": 0.002264
    },
    "explainer": {
     "calls": 1,
@@ -2243,11 +2245,11 @@
     "notional_cost_usd": 0.001347
    },
    "qualitative": {
-    "calls": 11,
-    "input_tokens": 33641,
-    "output_tokens": 1485,
+    "calls": 10,
+    "input_tokens": 30824,
+    "output_tokens": 1425,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.010638
+    "notional_cost_usd": 0.009843
    }
   }
  },
@@ -2354,5 +2356,10 @@
   "Filings and XBRL data: U.S. Securities and Exchange Commission, EDGAR (public domain)"
  ],
  "trace_path": "results/0000200406.trace.jsonl",
- "warnings": []
+ "warnings": [
+  {
+   "where": "rational_capital_allocation",
+   "message": "the Critic still objects after one repair: supports_verdict=yes; unsupported: delivering value to shareholders; The filing quantifies 2025 dividends and R&D spending while providing a rationale for these capital allocation decisions."
+  }
+ ]
 }

@@ -3,15 +3,15 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "NEE-live",
-  "engine_commit": "87f3c82",
+  "engine_commit": "53b0fe5",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "live",
-  "generated_at": "2026-10-11T02:59:53+00:00",
+  "generated_at": "2026-10-11T13:45:25+00:00",
   "timings": {
-   "fetch": 0.592,
+   "fetch": 0.087,
    "score": 0.001,
-   "qualitative": 81.547,
-   "explain_and_verify": 51.817
+   "qualitative": 23.067,
+   "explain_and_verify": 19.806
   }
  },
  "plan": {
@@ -64,7 +64,7 @@
   {
    "step": "fetch",
    "status": "done",
-   "seconds": 0.592,
+   "seconds": 0.087,
    "reason": null
   },
   {
@@ -76,19 +76,19 @@
   {
    "step": "qualitative",
    "status": "done",
-   "seconds": 81.547,
+   "seconds": 23.067,
    "reason": null
   },
   {
    "step": "explain_and_verify",
    "status": "done",
-   "seconds": 51.817,
+   "seconds": 19.806,
    "reason": null
   },
   {
    "step": "report",
    "status": "done",
-   "seconds": 0.076,
+   "seconds": 0.069,
    "reason": null
   }
  ],
@@ -1427,7 +1427,7 @@
    "finding": {
     "criterion": "understandable_business",
     "verdict": "evidence found",
-    "rationale": "The company sells energy, capacity, credits, and ancillary services from its generation and battery storage facilities. It generates revenue primarily by selling these products to customers in wholesale electricity markets through long-term power purchase agreements.",
+    "rationale": "NEER sells energy, capacity, credits, and ancillary services from its generation and battery storage facilities. It generates revenue primarily by selling these products to customers in wholesale electricity markets through long-term power purchase agreements.",
     "citations": [
      {
       "passage_id": "0000753308-26-000015:1:30",
@@ -1479,13 +1479,13 @@
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5071,
+     "prompt_tokens": 5067,
      "completion_tokens": 456,
-     "total_tokens": 5527,
+     "total_tokens": 5523,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00195175
+    "notional_cost_usd": 0.00195075
    },
    "critic_status": "passed_after_retry",
    "stability": null
@@ -1568,18 +1568,18 @@
    "finding": {
     "criterion": "candid_management",
     "verdict": "insufficient evidence",
-    "rationale": "The filing discusses risks related to asset valuation and potential write-offs in a general, prospective manner rather than acknowledging specific past mistakes or setbacks. A 10-K is a limited guide to candour, and the provided text does not contain evidence of management openly discussing specific past failures or errors.",
+    "rationale": "The filing reports significant impairment charges related to an investment in XPLR, but these are presented as accounting disclosures rather than a candid management discussion of the underlying business decisions or execution failures that led to the impairment. A 10-K is a limited guide to candour, and the provided text does not contain management's own account of mistakes or setbacks in its own words.",
     "citations": [
      {
-      "passage_id": "0000753308-26-000015:1A:70",
+      "passage_id": "0000753308-26-000015:7:20",
       "accession": "0000753308-26-000015",
-      "item": "1A",
-      "char_start": 156354,
-      "char_end": 157096,
-      "quote": "NEE holds certain assets and investments where changes in the fair value affect NEE's financial results. In some cases there may be no observable market values for these assets and investments, requiring fair value estimates to be based on other valuation techniques. This type of analysis requires significant judgment and the actual values realized in a sale of these assets and investments could differ materially from those estimated. A sale of an asset or investment below previously estimated value, or other decline in the fair value of an asset or investment, could result in losses or the write-off of such asset or investment, and may have a material adverse effect on NEE's liquidity, financial condition and results of operations.",
+      "item": "7",
+      "char_start": 195898,
+      "char_end": 196315,
+      "quote": "NEER recognized $193 million and $267 million of equity in losses of equity method investees in 2025 and 2024, respectively. The change in 2025 primarily reflects the impact of an impairment charge of approximately $0.7 billion ($0.5 billion after tax) compared to a 2024 impairment charge of $0.8 billion ($0.6 billion after tax) related to the investment in XPLR (see Note 4 – Nonrecurring Fair Value Measurements).",
       "sentences": [
-       1,
-       4
+       8,
+       9
       ]
      }
     ],
@@ -1609,19 +1609,34 @@
        "0000753308-26-000015:1A:70",
        "0000753308-26-000015:1A:1"
       ]
+     },
+     {
+      "queries": [
+       "impairment charge write-down loss 2025"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0000753308-26-000015:7:61",
+       "0000753308-26-000015:7:4",
+       "0000753308-26-000015:7:20",
+       "0000753308-26-000015:7:59"
+      ]
      }
     ],
-    "llm_calls": 1,
-    "tool_calls": 2,
+    "llm_calls": 4,
+    "tool_calls": 5,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2201,
-     "completion_tokens": 129,
-     "total_tokens": 2330,
+     "prompt_tokens": 13970,
+     "completion_tokens": 260,
+     "total_tokens": 14230,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00074375
+    "notional_cost_usd": 0.0038825
    },
    "critic_status": "passed",
    "stability": null
@@ -1630,20 +1645,8 @@
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing discloses the payment of dividends on common stock and states that capital allocation is managed to maintain a long-term capital structure that supports a strong investment grade credit rating.",
+    "rationale": "The filing quantifies dividend payments over a three-year period and states that capital allocation is managed to maintain a strong investment-grade credit rating.",
     "citations": [
-     {
-      "passage_id": "0000753308-26-000015:7:23",
-      "accession": "0000753308-26-000015",
-      "item": "7",
-      "char_start": 199321,
-      "char_end": 199539,
-      "quote": "in assets/businesses (see Note 1 – Disposal of Businesses), consistent with NEE's and FPL's objective of maintaining, on a long-term basis, a capital structure that will support a strong investment grade credit rating.",
-      "sentences": [
-       4,
-       4
-      ]
-     },
      {
       "passage_id": "0000753308-26-000015:7:26",
       "accession": "0000753308-26-000015",
@@ -1651,6 +1654,18 @@
       "char_start": 202595,
       "char_end": 202650,
       "quote": "Dividends on common stock | (4,680) | (4,235) | (3,782)",
+      "sentences": [
+       4,
+       4
+      ]
+     },
+     {
+      "passage_id": "0000753308-26-000015:7:23",
+      "accession": "0000753308-26-000015",
+      "item": "7",
+      "char_start": 199321,
+      "char_end": 199539,
+      "quote": "in assets/businesses (see Note 1 – Disposal of Businesses), consistent with NEE's and FPL's objective of maintaining, on a long-term basis, a capital structure that will support a strong investment grade credit rating.",
       "sentences": [
        4,
        4
@@ -1683,13 +1698,13 @@
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5854,
-     "completion_tokens": 434,
-     "total_tokens": 6288,
+     "prompt_tokens": 5978,
+     "completion_tokens": 425,
+     "total_tokens": 6403,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0021144999999999996
+    "notional_cost_usd": 0.002132
    },
    "critic_status": "passed_after_retry",
    "stability": null
@@ -1717,12 +1732,12 @@
    "char_start": 17882,
    "char_end": 18770
   },
-  "0000753308-26-000015:1A:70": {
-   "text": "NEE holds certain assets and investments where changes in the fair value affect NEE's financial results. In some cases there may be no observable market values for these assets and investments, requiring fair value estimates to be based on other valuation techniques. This type of analysis requires significant judgment and the actual values realized in a sale of these assets and investments could differ materially from those estimated. A sale of an asset or investment below previously estimated value, or other decline in the fair value of an asset or investment, could result in losses or the write-off of such asset or investment, and may have a material adverse effect on NEE's liquidity, financial condition and results of operations.",
-   "item": "1A",
+  "0000753308-26-000015:7:20": {
+   "text": "In 2025, the change in gains on disposal of businesses/assets – net is the result of lower disposal gains in the current year as compared to the prior year. See Note 1 – Disposal of Businesses for a discussion of gains related to the September 2024 sales of ownership interests in connection with the pipeline joint venture and the renewable assets joint venture.\nInterest Expense\nNEER's interest expense for 2025 increased $569 million primarily reflecting approximately $351 million of unfavorable impacts related to changes in the fair value of interest rate derivative instruments as well as higher average debt balances driven by growth in the business.\n43\nTable of Contents\nEquity in Losses of Equity Method Investees\nNEER recognized $193 million and $267 million of equity in losses of equity method investees in 2025 and 2024, respectively. The change in 2025 primarily reflects the impact of an impairment charge of approximately $0.7 billion ($0.5 billion after tax) compared to a 2024 impairment charge of $0.8 billion ($0.6 billion after tax) related to the investment in XPLR (see Note 4 – Nonrecurring Fair Value Measurements).\nIncome Taxes",
+   "item": "7",
    "accession": "0000753308-26-000015",
-   "char_start": 156354,
-   "char_end": 157096
+   "char_start": 195174,
+   "char_end": 196328
   },
   "0000753308-26-000015:7:23": {
    "text": "NEE and its subsidiaries require funds to support and grow their businesses. These funds are used for, among other things, working capital, capital expenditures (see Note 15 – Commitments), investments in or acquisitions of assets and businesses (see Note 6), payment of maturing debt and related derivative obligations (see Note 13 and Note 3) and, from time to time, redemption or repurchase of outstanding debt or equity securities. It is anticipated that these requirements will be satisfied through a combination of cash flows from operations, short- and long-term borrowings, the issuance of short- and long-term debt (see Note 13) and, from time to time, equity securities, proceeds from differential membership investors, sales of clean energy tax credits (see Note 1 – Income Taxes) and sales of ownership interests in assets/businesses (see Note 1 – Disposal of Businesses), consistent with NEE's and FPL's objective of maintaining, on a long-term basis, a capital structure that will support a strong investment grade credit rating. NEE, FPL and NEECH rely on access to credit and capital markets as significant sources of liquidity for capital requirements and other operations that are not satisfied by operating cash flows. The inability of NEE, FPL and NEECH to maintain their current credit ratings could affect their ability to raise short- and long-term capital, their cost of capital and the execution of their respective financing strategies, and could require the posting of additional collateral under certain agreements.",
@@ -2047,13 +2062,14 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "fail",
-    "detail": "supports_verdict=yes; unsupported: fuel and power products | municipal utilities, cooperatives, and other wholesale market participants | fixed-price full requirements service contracts | commodity marketing and trading activities; The quotes identify the products (energy, capacity, credits) and the market (wholesale electricity) sufficiently to meet the definition.",
+    "detail": "supports_verdict=yes; unsupported: municipal utilities | cooperatives | fuel and power products | fixed-price full requirements service contracts | commodity marketing and trading activities; The quotes identify the products (energy, capacity, RECs) and the market (wholesale electricity markets) sufficiently to meet the criteria.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": "rationale",
     "claims": [
+     "municipal utilities",
+     "cooperatives",
      "fuel and power products",
-     "municipal utilities, cooperatives, and other wholesale market participants",
      "fixed-price full requirements service contracts",
      "commodity marketing and trading activities"
     ]
@@ -2062,7 +2078,7 @@
     "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides a specific count of franchise agreements (226) and defines the duration and nature of the protection.",
+    "detail": "supports_verdict=yes; The filing provides a specific count of franchise agreements (226) and defines the nature of the regulated protection.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2072,12 +2088,13 @@
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "fail",
-    "detail": "supports_verdict=yes; unsupported: identifies primary capital requirements for expanding FPL's electric system and funding NEER's investments; The filing quantifies dividend payments and states a clear policy objective regarding capital structure and credit ratings.",
+    "detail": "supports_verdict=yes; unsupported: expanding FPL's electric system | funding NEER's investments; The filing quantifies dividends for the latest year and states a clear policy regarding capital structure and investment-grade credit ratings.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": "rationale",
     "claims": [
-     "identifies primary capital requirements for expanding FPL's electric system and funding NEER's investments"
+     "expanding FPL's electric system",
+     "funding NEER's investments"
     ]
    },
    {
@@ -2104,7 +2121,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the consistency of positive net income over the required period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the stability requirement.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2114,7 +2131,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that the dividend record is complete for the available history.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that the record is partial but meets the requirement for the available history.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2124,7 +2141,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the growth ratio and compares it to the required threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio and identifies the failure to meet the 1.33 threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2134,7 +2151,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the number of years meeting the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the ROE threshold in the required number of years.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2144,7 +2161,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the debt capacity based on average net income and compares it to actual debt.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the debt-to-income limit and identifies the failure.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2154,7 +2171,7 @@
     "check": "L1",
     "item": "B3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the margin ratio and compares it to the stability threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the margin stability ratio.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2204,7 +2221,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing clearly identifies the products sold, the customer base, and the revenue model through long-term power purchase agreements.",
+    "detail": "supports_verdict=yes; The filing clearly identifies the products sold, the customer base (wholesale electricity markets), and the revenue model (long-term PPAs).",
     "owner": "qualitative",
     "attempt": 1,
     "kind": null,
@@ -2214,7 +2231,7 @@
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides specific dividend amounts and articulates a clear policy objective regarding the maintenance of an investment-grade credit rating.",
+    "detail": "supports_verdict=yes; The filing provides the dividend amount for the latest fiscal year and explicitly states the policy of maintaining a capital structure to support an investment-grade credit rating.",
     "owner": "qualitative",
     "attempt": 1,
     "kind": null,
@@ -2256,27 +2273,27 @@
   ],
   "llm_calls": 2,
   "usage": {
-   "prompt_tokens": 3713,
-   "completion_tokens": 930,
-   "total_tokens": 4643,
+   "prompt_tokens": 3910,
+   "completion_tokens": 942,
+   "total_tokens": 4852,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.00232325
+  "notional_cost_usd": 0.0023905
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.010926,
-  "llm_calls": 13,
-  "input_tokens": 27469,
-  "output_tokens": 2706,
+  "notional_cost_usd": 0.014149,
+  "llm_calls": 16,
+  "input_tokens": 39555,
+  "output_tokens": 2840,
   "by_agent": {
    "critic": {
     "calls": 2,
-    "input_tokens": 3713,
-    "output_tokens": 930,
+    "input_tokens": 3910,
+    "output_tokens": 942,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002323
+    "notional_cost_usd": 0.00239
    },
    "explainer": {
     "calls": 1,
@@ -2286,11 +2303,11 @@
     "notional_cost_usd": 0.001354
    },
    "qualitative": {
-    "calls": 10,
-    "input_tokens": 21389,
-    "output_tokens": 1268,
+    "calls": 13,
+    "input_tokens": 33278,
+    "output_tokens": 1390,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.007249
+    "notional_cost_usd": 0.010405
    }
   }
  },
