@@ -74,6 +74,17 @@ The 20 dev findings (KO, JPM, GOOGL, TSLA, DUK) against the human labels (final 
 | TSLA Candid management (human: found) | weak | found | weak | borderline |
 | TSLA Rational capital allocation (human: weak) | found | found | insufficient | borderline |
 
+## Criterion reliability
+
+A criterion whose flip rate (findings whose verdict changed, of those with at least two assessed verdicts) is at or above 30% (`config/reliability.json`) is marked reliability low in every result and on the company page.
+
+| Criterion | Compared | Changed | Flip rate | Marked |
+|---|---|---|---|---|
+| Understandable business | 5 | 0 | 0% | no |
+| Durable competitive advantage | 5 | 2 | 40% | low reliability |
+| Candid management | 5 | 5 | 100% | low reliability |
+| Rational capital allocation | 5 | 1 | 20% | no |
+
 The six differences under prompt v2 (ADR-069), looked up in these runs:
 
 | v2 difference | Main (v2.1) | A | B | Status |

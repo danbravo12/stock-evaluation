@@ -17,6 +17,7 @@ from pathlib import Path
 
 from engine.agents.critic import banned_hits, load_banned
 from engine.rankings import OUTPUT_PATH, Rankings
+from engine.stability import criterion_stats, load_threshold
 from engine.trace_render import critic_notes, render_trace
 from engine.report import PublishGateError, finnhub_fields
 from engine.settings import REPO_ROOT, Settings
@@ -160,7 +161,7 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
         rankings = Rankings.model_validate_json(rk_text)
         put("rankings.json", text=rk_text)
         rows = rankings.criteria_ranking.ranked + rankings.criteria_ranking.ranked_financials + rankings.criteria_ranking.insufficient_data
-        n_scores, full = 0, []
+        n_scores, full, stability_rows = 0, [], []
         for r in rows:
             sf = results_dir / "scores" / f"{r.cik}.json"
             if sf.exists():
@@ -171,6 +172,7 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
             if r.has_full_analysis:
                 res = json.loads((results_dir / f"{r.cik}.json").read_text(encoding="utf-8"))
                 put(f"results/{r.cik}.json", res)
+                stability_rows.append({q["finding"]["criterion"]: q.get("stability") for q in res["qualitative"]})
                 trace = [json.loads(l) for l in (results_dir / f"{r.cik}.trace.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
                 retriever = _indexed_retriever(r.cik, settings)
                 put(f"results/{r.cik}.trace.json", render_trace(trace, res, retriever=retriever, cik=r.cik))
@@ -189,6 +191,9 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
         for r in rows:
             for n in r.notes + r.caveats:
                 scan_text(f"{r.symbol}:note", n, banned)
+        threshold = load_threshold()
+        put("stability.json", {"threshold": threshold, "companies": sum(any(v for v in row.values()) for row in stability_rows),
+                              "criteria": criterion_stats(stability_rows, threshold)})
         showcase = showcase_data(rankings)
         put("showcase.json", showcase)
         manifest = {"build_commit": commit if commit is not None else git_commit(), "data_as_of": rankings.data_as_of.model_dump(), "attribution": rankings.attribution,

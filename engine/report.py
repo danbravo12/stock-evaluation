@@ -16,7 +16,7 @@ from engine.contracts import (SEC_SOURCE, CriticReport, DataBundle, Explanation,
 from engine.settings import REPO_ROOT
 from engine.successors import NO_ANNUAL_REPORT
 
-SCHEMA_VERSION = "1.2"  # 1.1: sector notes and sector basis (ADR-058). 1.2: cited passage texts and per-finding stability (ADR-069, ADR-070); both additive
+SCHEMA_VERSION = "1.3"  # 1.1: sector notes and sector basis (ADR-058). 1.2: cited passage texts and per-finding stability (ADR-069, ADR-070). 1.3: criterion reliability (ADR-072 amendment). All additive
 DISCLAIMER = ("Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. "
               "Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.")
 SCHEMA_PATH = REPO_ROOT / "schema" / "result.schema.json"
@@ -71,10 +71,19 @@ class Stability(BaseModel):
     verdicts: dict[str, str]  # keys main, a, b
 
 
+class ReliabilityBasis(BaseModel):
+    """Where a criterion's low reliability comes from: over all analysed companies, `changed` of `compared` findings changed verdict when the question was reworded."""
+
+    changed: int
+    compared: int
+
+
 class QualItem(BaseModel):
     finding: QualFinding
     critic_status: str | None = None
     stability: Stability | None = None
+    reliability: Literal["low"] | None = None  # set on every finding of a criterion whose flip rate is at or above the threshold (config/reliability.json)
+    reliability_basis: ReliabilityBasis | None = None
 
 
 class CitedPassage(BaseModel):
@@ -236,4 +245,4 @@ def cited_passages(qualitative: list[QualItem], retriever) -> dict[str, CitedPas
     return out
 
 
-__all__ = ["Result", "Stability", "CitedPassage", "cited_passages", "SCHEMA_VERSION", "DISCLAIMER", "SEC_SOURCE", "write_result", "export_schema", "build_scorecard", "build_sources", "cost_from_trace", "finnhub_fields"]
+__all__ = ["Result", "Stability", "ReliabilityBasis", "CitedPassage", "cited_passages", "SCHEMA_VERSION", "DISCLAIMER", "SEC_SOURCE", "write_result", "export_schema", "build_scorecard", "build_sources", "cost_from_trace", "finnhub_fields"]

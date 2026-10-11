@@ -1,0 +1,4 @@
+{
+  "_notes": "Criterion-level reliability (ADR-072 amendment, decided by Daniel 2026-10-12). For each qualitative criterion, over all analysed companies, the share of findings (with at least two assessed verdicts across the main run and the two rewordings) whose verdict changed when the question was reworded. A criterion at or above the threshold is marked reliability 'low' in every result and on the company page. The figures are computed from the stability runs, never typed in.",
+  "low_flip_rate_threshold": 0.30
+}

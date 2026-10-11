@@ -15,7 +15,7 @@ from eval.agreement import load_human_dev  # noqa: E402
 from engine.agents.qualitative import load_criteria  # noqa: E402
 from engine.contracts import QUAL_CRITERIA  # noqa: E402
 from engine.settings import REPO_ROOT  # noqa: E402
-from engine.stability import FIELDS, STABILITY_DIR, attach, collect, dev_correlation, flip_stats, load_paraphrases, pair_flips  # noqa: E402
+from engine.stability import FIELDS, STABILITY_DIR, attach, collect, dev_correlation, flip_stats, load_paraphrases, load_threshold, criterion_stats, stability_for, pair_flips  # noqa: E402
 from engine.universe import load_universe  # noqa: E402
 
 OUT = REPO_ROOT / "docs" / "stability_report.md"
@@ -94,6 +94,12 @@ def render(companies) -> str:
     for r in dev_rows:
         if r["verdicts"]["main"] != human[r["ticker"]][r["criterion"]]:
             L.append(f"| {r['ticker']} {TITLE[r['criterion']]} (human: {SHORT[human[r['ticker']][r['criterion']]]}) | " + " | ".join(SHORT[r["verdicts"][k]] for k in ("main", "a", "b")) + f" | {r['status'] or 'no status'} |")
+    per_company = [stability_for(cik) for _, cik in companies]
+    rel = criterion_stats([p for p in per_company if p is not None])
+    L += ["", "## Criterion reliability", "",
+          f"A criterion whose flip rate (findings whose verdict changed, of those with at least two assessed verdicts) is at or above {pct(load_threshold())} (`config/reliability.json`) is marked "
+          "reliability low in every result and on the company page.", "", "| Criterion | Compared | Changed | Flip rate | Marked |", "|---|---|---|---|---|"]
+    L += [f"| {TITLE[c]} | {v['compared']} | {v['changed']} | {pct(v['rate'])} | {'low reliability' if v['low'] else 'no'} |" for c, v in rel.items()]
     by = {(r["ticker"], r["criterion"]): r for r in rows}
     L += ["", "The six differences under prompt v2 (ADR-069), looked up in these runs:", "", "| v2 difference | Main (v2.1) | A | B | Status |", "|---|---|---|---|---|"]
     for t, c in V2_DISAGREEMENTS:

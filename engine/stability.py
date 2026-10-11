@@ -12,10 +12,11 @@ from pathlib import Path
 
 from engine.agents.qualitative import load_criteria
 from engine.contracts import QUAL_CRITERIA
-from engine.report import Result, Stability, result_json
+from engine.report import SCHEMA_VERSION, ReliabilityBasis, Result, Stability, result_json
 from engine.settings import REPO_ROOT
 
 PARAPHRASES_PATH = REPO_ROOT / "config" / "qualitative_paraphrases.json"
+RELIABILITY_PATH = REPO_ROOT / "config" / "reliability.json"
 STABILITY_DIR = REPO_ROOT / "results" / "stability"
 VARIANTS = ("a", "b")
 FIELDS = ("question", "found_means", "weak_means", "insufficient_means")
@@ -71,19 +72,47 @@ def stability_for(cik: str, results_dir: Path | None = None, stability_dir: Path
     return {c: classify({k: got[k].get(c, "not assessed") for k in ("main", "a", "b")}) for c in QUAL_CRITERIA}
 
 
-def attach(ciks: list[str], results_dir: Path | None = None, stability_dir: Path | None = None) -> dict[str, dict]:
-    """Write `stability` onto every qualitative item of each main result (schema 1.2). Returns the classification per company; companies with a missing variant are left as they are."""
+def load_threshold(path: Path = RELIABILITY_PATH) -> float:
+    return float(json.loads(Path(path).read_text(encoding="utf-8"))["low_flip_rate_threshold"])
+
+
+def criterion_stats(per_company: list[dict], threshold: float | None = None) -> dict[str, dict]:
+    """Per qualitative criterion over all companies: `compared` = findings with a stability status (at least two assessed verdicts), `changed` = those that are
+    borderline, `rate` = changed / compared, `low` = rate at or above the threshold. `per_company` is a list of {criterion: Stability | dict | None}."""
+    threshold = load_threshold() if threshold is None else threshold
     out = {}
+    for c in QUAL_CRITERIA:
+        statuses = []
+        for company in per_company:
+            st = company.get(c)
+            status = st.get("status") if isinstance(st, dict) else (st.status if st is not None else None)
+            if status:
+                statuses.append(status)
+        n, k = len(statuses), sum(x == "borderline" for x in statuses)
+        rate = (k / n) if n else None
+        out[c] = {"changed": k, "compared": n, "rate": rate, "low": rate is not None and rate >= threshold}
+    return out
+
+
+def attach(ciks: list[str], results_dir: Path | None = None, stability_dir: Path | None = None, threshold: float | None = None) -> dict[str, dict]:
+    """Write `stability` onto every qualitative item of each main result whose two variant results exist, then the criterion reliability (computed over all those
+    companies) onto the items of every given result. Companies with a missing variant keep no stability record. Returns the stability per company."""
+    out = {cik: st for cik in ciks if (st := stability_for(cik, results_dir, stability_dir)) is not None}
+    stats = criterion_stats(list(out.values()), threshold)
     for cik in ciks:
-        st = stability_for(cik, results_dir, stability_dir)
-        if st is None:
-            continue
         path = result_path(cik, None, results_dir)
+        if not path.exists():
+            continue
         res = Result.model_validate_json(path.read_text(encoding="utf-8"))
+        res.schema_version = SCHEMA_VERSION
         for q in res.qualitative:
-            q.stability = st.get(q.finding.criterion)
+            c = q.finding.criterion
+            if cik in out:
+                q.stability = out[cik].get(c)
+            low = stats[c]["low"]
+            q.reliability = "low" if low else None
+            q.reliability_basis = ReliabilityBasis(changed=stats[c]["changed"], compared=stats[c]["compared"]) if low else None
         path.write_text(result_json(res), encoding="utf-8")
-        out[cik] = st
     return out
 
 

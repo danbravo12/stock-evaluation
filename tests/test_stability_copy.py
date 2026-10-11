@@ -22,6 +22,18 @@ def run_node(cases):
     return json.loads(p.stdout)
 
 
+NOTE_SCRIPT = """
+import { reliabilityNote } from "file://%s";
+const cases = JSON.parse(await new Promise((r) => { let s = ""; process.stdin.on("data", (d) => (s += d)); process.stdin.on("end", () => r(s)); }));
+console.log(JSON.stringify(cases.map((q) => reliabilityNote(q))));
+"""
+
+
+def run_node_note(cases):
+    p = subprocess.run([NODE, "--input-type=module", "-e", NOTE_SCRIPT % (REPO_ROOT / "site_src/assets/js/common.js")], input=json.dumps(cases), capture_output=True, text=True, check=True)
+    return json.loads(p.stdout)
+
+
 @unittest.skipUnless(NODE, "node is not installed")
 class TestBorderlineCopy(unittest.TestCase):
     def test_sentences(self):

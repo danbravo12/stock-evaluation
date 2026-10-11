@@ -190,10 +190,11 @@ class TestAttach(Dirs):
         for c in QUAL_CRITERIA:
             if c != "candid_management":
                 self.assertEqual(by[c]["status"], "stable", c)
+        after["schema_version"] = before["schema_version"]  # attach also upgrades the version and writes the criterion reliability
         for q in after["qualitative"]:  # the finding itself is untouched
-            q["stability"] = None
+            q["stability"] = q["reliability"] = q["reliability_basis"] = None
         for q in before["qualitative"]:
-            q["stability"] = None
+            q["stability"] = q["reliability"] = q["reliability_basis"] = None
         self.assertEqual(after, before)
 
 
