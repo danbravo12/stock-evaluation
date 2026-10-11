@@ -1,7 +1,6 @@
-import { el, getJSON, manifest, footer, strip, mark, WORD } from "./common.js";
+import { el, getJSON, tryJSON, manifest, footer, strip, mark, WORD } from "./common.js";
 
 const $ = (id) => document.getElementById(id);
-const SHOWCASE = ["KO", "JPM", "DUK"];
 const date = (d) => el("span", { class: "nowrap", text: d });
 
 function companyHref(row) { return `company.html?cik=${row.cik}`; }
@@ -34,12 +33,15 @@ async function main() {
   const d = data.data_as_of;
   const asof = $("asof");
   asof.replaceChildren(...["Data as of ", date(d.sec_fetched_from), ...(d.sec_fetched_to !== d.sec_fetched_from ? [" to ", date(d.sec_fetched_to)] : []),
-    `. ${all.length} companies scored on SEC filings; full agent analysis, with quoted filing text and a replayable run, for ${full.length}: ${full.map((r) => r.symbol).join(", ")}.`]);
-  const show = [...SHOWCASE, ...full.map((r) => r.symbol)].filter((s, i, a) => a.indexOf(s) === i).map((s) => all.find((r) => r.symbol === s)).filter(Boolean);
-  const sc = $("showcase");
-  sc.append("Start with a full analysis: ");
-  show.forEach((r, i) => { if (i) sc.append(i === show.length - 1 ? " and " : ", "); sc.append(el("a", { href: companyHref(r), text: `${r.name} (${r.symbol})` })); });
-  sc.append(".");
+    `. ${all.length} companies scored on SEC filings; full agent analysis, with quoted filing text and a replayable run, for ${full.length}, listed in the showcase below.`]);
+  const sc = await tryJSON("data/showcase.json");
+  if (sc && sc.groups.length) {
+    $("showcase").hidden = false;
+    $("show-sum").textContent = `Showcase: ${sc.groups.reduce((n, g) => n + g.items.length, 0)} companies with a full agent analysis`;
+    $("show-groups").replaceChildren(...sc.groups.flatMap((g) => [el("h3", { text: g.title }),
+      el("ul", { class: "showlist" }, g.items.map((i) => el("li", {}, el("a", { href: `company.html?cik=${i.cik}`, text: `${i.name} (${i.symbol})` }), i.tag ? el("span", { class: "muted", text: `  ${i.tag}` }) : null,
+        el("br"), i.why, i.rank ? el("span", { class: "muted", text: ` Rank ${i.rank}${i.rank_group === "financials" ? " among banks and insurers" : ""}.` }) : null)))]));
+  }
   if (data.caveats.length) {
     const c = $("caveat"); c.hidden = false;
     c.textContent = "Valuation tests (G6 P/E, G7 P/E × P/B) are pending licensed price data. They are not counted as gaps or as decided tests.";

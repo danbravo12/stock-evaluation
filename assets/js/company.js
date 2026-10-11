@@ -36,6 +36,15 @@ async function load() {
 }
 
 // ---------- the list of tests ----------
+// A finding the agent could not judge says so in plain words, not with the system's reason text.
+const NOT_ASSESSED = {
+  section_missing: "The part of the annual report this question needs could not be located, so it was not assessed. This says nothing about the company.",
+  invalid_citation: "The agent's citations could not be verified against the filing, so no finding was recorded and this question was not assessed. This says nothing about the company.",
+  turn_cap: "The agent ran out of turns before it could judge, so this question was not assessed. This says nothing about the company.",
+  llm_output_error: "The model's reply could not be read, so this question was not assessed. This says nothing about the company.",
+};
+export function findingText(f) { return f.verdict === "not assessed" ? NOT_ASSESSED[f.stop_reason] || "This question was not assessed. This says nothing about the company." : f.rationale; }
+
 function lineOf(c, cls) {
   if (c.label === "data_gap" || c.label === "pending" || c.label === "not_applicable") return plainReason(c, cls);
   if (c.explanation && c.explanation.text) return c.explanation.text;
@@ -70,7 +79,7 @@ function renderList() {
     ul.append(el("li", { id: "analysis" }, el("h3", { text: "Buffett's four judgement tests, read from the annual report by the agent" })));
     for (const q of model.qual) {
       const f = q.finding, st = q.critic_status;
-      ul.append(critRow(f.criterion, QUAL[f.criterion] || f.criterion, f.verdict, f.rationale, st === "warning" ? "The Critic still objects to this rationale. Open it to see why." : null, true));
+      ul.append(critRow(f.criterion, QUAL[f.criterion] || f.criterion, f.verdict, findingText(f), st === "warning" ? "The Critic still objects to this rationale. Open it to see why." : null, true));
     }
   }
 }
@@ -160,10 +169,11 @@ function passageView(cit) {
 function qualPane(q) {
   const f = q.finding, pane = [];
   pane.push(el("h2", { text: QUAL[f.criterion] || f.criterion }), el("p", {}, status(f.verdict)));
-  pane.push(el("p", { text: f.rationale }));
-  if (f.stop_reason && f.stop_reason !== "submitted") pane.push(el("p", { class: "muted", text: `The agent stopped early (${f.stop_reason.replaceAll("_", " ")}), so this is not a judgement about the company.` }));
-  if (!f.citations.length) pane.push(el("p", { class: "muted", text: "No sentence in the annual report is cited for this verdict." }));
-  pane.push(el("h3", { text: f.citations.length ? "The sentences it relies on, in the annual report" : "Evidence" }));
+  pane.push(el("p", { text: findingText(f) }));
+  if (f.verdict !== "not assessed") {
+    if (!f.citations.length) pane.push(el("p", { class: "muted", text: "No sentence in the annual report is cited for this verdict: the filing, as searched, does not show it." }));
+    pane.push(el("h3", { text: f.citations.length ? "The sentences it relies on, in the annual report" : "Evidence" }));
+  }
   f.citations.forEach((c) => {
     pane.push(passageView(c));
     const filing = model.result.data.filing;

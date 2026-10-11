@@ -63,8 +63,8 @@
      "B3": "pass",
      "B4": "pass"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0000006951.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -98,8 +98,8 @@
      "B3": "pass",
      "B4": "pass"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0000815556.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -553,8 +553,8 @@
      "B3": "pass",
      "B4": "pass"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0000909832.json",
     "as_of_fiscal_year": 2026
    },
    {
@@ -1078,8 +1078,8 @@
      "B3": "pass",
      "B4": "pass"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0001326801.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -1113,8 +1113,8 @@
      "B3": "pass",
      "B4": "pass"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0000789019.json",
     "as_of_fiscal_year": 2026
    },
    {
@@ -1218,8 +1218,8 @@
      "B3": "pass",
      "B4": "pass"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0000080424.json",
     "as_of_fiscal_year": 2026
    },
    {
@@ -1813,8 +1813,8 @@
      "B3": "data_gap",
      "B4": "pass"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0000200406.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -1918,8 +1918,8 @@
      "B3": "pass",
      "B4": "data_gap"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0001045810.json",
     "as_of_fiscal_year": 2026
    },
    {
@@ -2585,8 +2585,8 @@
      "B3": "pass",
      "B4": "pass"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0000320193.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -2797,8 +2797,8 @@
      "B3": "pass",
      "B4": "pass"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0000018230.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -3674,8 +3674,8 @@
      "B3": "pass",
      "B4": "pass"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0000731766.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -4201,8 +4201,8 @@
      "B3": "pass",
      "B4": "pass"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0000063908.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -7075,8 +7075,8 @@
      "B3": "pass",
      "B4": "data_gap"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0000753308.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -7252,8 +7252,8 @@
      "B3": "data_gap",
      "B4": "pass"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0002115436.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -8590,8 +8590,8 @@
      "B3": "pass",
      "B4": "data_gap"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0001045609.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -13440,8 +13440,8 @@
      "B3": "not_applicable",
      "B4": "not_applicable"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0000886982.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -13510,8 +13510,8 @@
      "B3": "not_applicable",
      "B4": "not_applicable"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0001099219.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -14953,8 +14953,8 @@
      "B3": "data_gap",
      "B4": "pass"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0001067983.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -16552,8 +16552,8 @@
      "B3": "data_gap",
      "B4": "data_gap"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0000726728.json",
     "as_of_fiscal_year": 2025
    },
    {
@@ -17435,8 +17435,8 @@
      "B3": "data_gap",
      "B4": "data_gap"
     },
-    "has_full_analysis": false,
-    "analysis_path": null,
+    "has_full_analysis": true,
+    "analysis_path": "results/0001692819.json",
     "as_of_fiscal_year": 2025
    },
    {

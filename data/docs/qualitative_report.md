@@ -6,13 +6,13 @@
 
 | Company | understandable_business | durable_competitive_advantage | candid_management | rational_capital_allocation |
 |---|---|---|---|---|
-| KO | found | found | insufficient | found |
-| JPM | found | insufficient | insufficient | found |
-| GOOGL | found | insufficient | found | found |
-| TSLA | found | weak | found | weak |
-| DUK | found | found | weak | found |
+| KO | found | weak | insufficient | found |
+| JPM | found | insufficient | weak | found |
+| GOOGL | found | weak | found | found |
+| TSLA | found | weak | found | insufficient |
+| DUK | found | found | found | found |
 
-Of 20 findings: 13 found, 3 weak, 4 insufficient, 0 not assessed.
+Of 20 findings: 13 found, 4 weak, 3 insufficient, 0 not assessed.
 
 ## Calls and tokens per company
 
@@ -20,21 +20,21 @@ Model calls are the requests that count against the free-tier quota; tool calls 
 
 | Company | Model calls | Tool calls | Input tokens | Output tokens | Total tokens | Notional cost | Actual cost |
 |---|---|---|---|---|---|---|---|
-| KO | 6 | 10 | 15,572 | 582 | 16,154 | $0.0048 | $0.0000 |
-| JPM | 9 | 13 | 27,302 | 1,125 | 28,427 | $0.0085 | $0.0000 |
-| GOOGL | 8 | 12 | 20,398 | 1,164 | 21,562 | $0.0068 | $0.0000 |
-| TSLA | 5 | 9 | 11,026 | 745 | 11,771 | $0.0039 | $0.0000 |
-| DUK | 5 | 9 | 11,995 | 721 | 12,716 | $0.0041 | $0.0000 |
-| **Mean** | 6.6 | 10.6 | 17,259 | 867 | 18,126 | $0.0056 | $0.0000 |
-| **Total** | 33 | 53 | 86,293 | 4,337 | 90,630 | $0.0281 | $0.0000 |
+| KO | 7 | 11 | 18,324 | 803 | 19,127 | $0.0058 | $0.0000 |
+| JPM | 9 | 13 | 27,451 | 916 | 28,367 | $0.0082 | $0.0000 |
+| GOOGL | 6 | 10 | 16,402 | 842 | 17,244 | $0.0054 | $0.0000 |
+| TSLA | 7 | 11 | 20,879 | 570 | 21,449 | $0.0061 | $0.0000 |
+| DUK | 8 | 12 | 22,696 | 1,085 | 23,781 | $0.0073 | $0.0000 |
+| **Mean** | 7.4 | 11.4 | 21,150 | 843 | 21,994 | $0.0066 | $0.0000 |
+| **Total** | 37 | 57 | 105,752 | 4,216 | 109,968 | $0.0328 | $0.0000 |
 
 ## KO
 
-10-K accession `0001628280-26-010047` · 6 model calls, 10 tool calls, 16,154 tokens, notional $0.0048, actual $0.0000
+10-K accession `0001628280-26-010047` · 7 model calls, 11 tool calls, 19,127 tokens, notional $0.0058, actual $0.0000
 
 ### KO · understandable_business: **evidence found**
 
-The filing explains that the company generates revenue by selling sparkling soft drinks, other finished beverages, and fountain syrups to retailers, distributors, wholesalers, and bottling partners. It also notes direct-to-consumer sales through Costa retail stores.
+The filing explains that the company generates revenue by selling sparkling soft drinks and other finished beverages to retailers, distributors, and wholesalers, as well as through direct-to-consumer retail stores and the sale of fountain syrups to fountain retailers.
 
 > Our finished product operations generate net operating revenues by selling sparkling soft drinks and a variety of other finished beverages to retailers, or to distributors and wholesalers who in turn sell the beverages to retailers.
 > — accession `0001628280-26-010047`, Item 1, passage `0001628280-26-010047:1:8`, sentences 1–1, characters 16877–17109
@@ -44,18 +44,18 @@ The filing explains that the company generates revenue by selling sparkling soft
 
 Searches: seeded "principal products services, how we generate revenue, segments, customers, business model" in items 1 → 4 hits
 
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,298 in / 151 out · notional $0.0008
+Stop: `submitted` · model calls 2 · tool calls 3 · tokens 4,844 in / 341 out · notional $0.0017
 
-### KO · durable_competitive_advantage: **evidence found**
+### KO · durable_competitive_advantage: **evidence weak**
 
-The filing provides a specific measure of the company's scale, stating that beverages bearing its trademarks account for 2.2 billion of the estimated 65 billion servings of all beverages consumed worldwide every day.
+The filing asserts that the company has competitive strengths such as "leading brands" and a "worldwide network of bottlers," but it does not provide concrete, quantified measures (such as specific market share percentages or network size metrics) to substantiate these as durable competitive advantages. The filing also notes that these strengths are subject to competitive challenges and pressures.
 
-> Beverages bearing trademarks owned by or licensed to the Company account for 2.2 billion of the estimated 65 billion servings of all beverages consumed worldwide every day.
-> — accession `0001628280-26-010047`, Item 1, passage `0001628280-26-010047:1:1`, sentences 9–9, characters 9839–10011
+> Our competitive strengths include leading brands with high levels of consumer recognition and loyalty; a worldwide network of bottlers and distributors of Company products; sophisticated marketing capabilities; and a talented group of dedicated employees.
+> — accession `0001628280-26-010047`, Item 1, passage `0001628280-26-010047:1:25`, sentences 3–3, characters 38357–38612
 
-Searches: seeded "competition competitive, brand, market share, pricing power price increases, switching costs, patents intellectual property, scale cost advantage, network" in items 1, 1A → 4 hits; "market share rank distribution network size" in items 1 → 4 hits
+Searches: seeded "competition competitive, brand, market share, pricing power price increases, switching costs, patents intellectual property, scale cost advantage, network" in items 1, 1A → 4 hits; "market share rank competitive advantage" in items 1 → 4 hits
 
-Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,734 in / 133 out · notional $0.0016
+Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,913 in / 159 out · notional $0.0017
 
 ### KO · candid_management: **insufficient evidence**
 
@@ -64,13 +64,13 @@ The filing discusses the possibility of recording impairment charges as a risk f
 > We have recorded in the past, and we may be required to record in the future, significant impairment charges or our proportionate share of significant impairment charges recorded by equity method investees in the future and, if we do so, our net income could be materially adversely affected.
 > — accession `0001628280-26-010047`, Item 1A, passage `0001628280-26-010047:1A:67`, sentences 5–5, characters 131858–132150
 
-Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits; "impairment charge write-down mistake failure" in items 1A → 4 hits
+Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits; "impairment charge write-down failure mistake" in items 1A → 4 hits
 
-Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,342 in / 147 out · notional $0.0016
+Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,360 in / 147 out · notional $0.0016
 
 ### KO · rational_capital_allocation: **evidence found**
 
-The filing explicitly states the company's capital allocation priorities, which include investing in business operations, growing dividends, making acquisitions, and repurchasing shares. It also provides concrete figures for dividends paid during the fiscal year.
+The filing explicitly states the company's capital allocation priorities, which include investing in business operations, growing dividends, pursuing acquisitions, and repurchasing shares. It also provides concrete figures for dividends paid during the 2025 fiscal year.
 
 > Our current capital allocation priorities are as follows: investing wisely to support our business operations, continuing to grow our dividend payment, enhancing our beverage portfolio and capabilities through consumer-centric acquisitions, and using excess cash to repurchase shares over time.
 > — accession `0001628280-26-010047`, Item 7, passage `0001628280-26-010047:7:77`, sentences 7–7, characters 281045–281339
@@ -80,150 +80,144 @@ The filing explicitly states the company's capital allocation priorities, which 
 
 Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits
 
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,198 in / 151 out · notional $0.0008
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,207 in / 156 out · notional $0.0008
 
 ## JPM
 
-10-K accession `0001628280-26-008131` · 9 model calls, 13 tool calls, 28,427 tokens, notional $0.0085, actual $0.0000
+10-K accession `0001628280-26-008131` · 9 model calls, 13 tool calls, 28,367 tokens, notional $0.0082, actual $0.0000
 
 ### JPM · understandable_business: **evidence found**
 
-The filing identifies the company's business segments and details the specific products and services offered (such as deposits, loans, credit cards, and investment banking) to defined customer bases (consumers, small businesses, large corporations, and institutions). It also provides revenue data for these segments, explaining how the business is organized and how it generates income.
+The filing clearly defines the company's three reportable business segments (Consumer & Community Banking, Commercial & Investment Bank, and Asset & Wealth Management), the specific products and services they offer (such as deposits, loans, credit cards, investment management, and banking services), the types of customers they serve (consumers, small businesses, institutional investors, and high net worth clients), and how they earn revenue (through fees, commissions, and net interest income).
 
-> Consumer & Community Banking offers products and services to consumers and small businesses through bank branches, ATMs, digital (including mobile and online) and telephone banking. CCB is organized into Banking & Wealth Management (including Consumer Banking, Business Banking and J.P. Morgan Wealth Management), Home Lending (including Home Lending Production, Home Lending Servicing and Real Estate Portfolios) and Card Services & Auto. Banking & Wealth Management offers deposit, investment and lending products, cash management, payments and services.
-> — accession `0001628280-26-008131`, Item 7, passage `0001628280-26-008131:7:56`, sentences 4–6, characters 261842–262398
+> Consumer & Community Banking offers products and services to consumers and small businesses through bank branches, ATMs, digital (including mobile and online) and telephone banking. CCB is organized into Banking & Wealth Management (including Consumer Banking, Business Banking and J.P. Morgan Wealth Management), Home Lending (including Home Lending Production, Home Lending Servicing and Real Estate Portfolios) and Card Services & Auto. Banking & Wealth Management offers deposit, investment and lending products, cash management, payments and services. Home Lending includes mortgage origination and servicing activities, as well as portfolios consisting of residential mortgages and home equity loans. Card Services issues credit cards and offers payment solutions, travel services, merchant offers and lifestyle benefits. Auto originates and services auto loans and leases.
+> — accession `0001628280-26-008131`, Item 7, passage `0001628280-26-008131:7:56`, sentences 4–9, characters 261842–262721
 
-> Banking & Payments Revenue by Client Coverage Segment: (a) Global Corporate Banking & Global Investment Banking provides banking products and services generally to large corporations, financial institutions and merchants. Commercial Banking provides banking products and services to clients, including start-ups, small and mid-sized companies, local governments, municipalities, and nonprofits, as well as commercial real estate clients. (a)Global Banking is a client coverage view within the Banking & Payments business and is comprised of the Global Corporate Banking, Global Investment Banking and Commercial Banking client coverage segments.
-> — accession `0001628280-26-008131`, Item 7, passage `0001628280-26-008131:7:72`, sentences 1–2, characters 277748–278393
+> Asset Management Offers multi-asset investment management solutions across equities, fixed income, alternatives and money market funds to institutional and retail investors providing for a broad range of clients' investment needs. Global Private Bank Provides retirement products and services, brokerage, custody, estate planning, lending, deposits and investment management to high net worth clients.
+> — accession `0001628280-26-008131`, Item 7, passage `0001628280-26-008131:7:88`, sentences 5–6, characters 295518–295919
 
-Searches: seeded "principal products services, how we generate revenue, segments, customers, business model" in items 1 → 4 hits; "Business Segment & Corporate Results products services revenue" in items 7 → 4 hits
+Searches: seeded "principal products services, how we generate revenue, segments, customers, business model" in items 1 → 4 hits; "Business Segment & Corporate Results products services revenue" in items 7 → 4 hits; "Asset & Wealth Management products services customers revenue" in items 7 → 4 hits
 
-Stop: `submitted` · model calls 3 · tool calls 4 · tokens 9,593 in / 394 out · notional $0.0030
+Stop: `submitted` · model calls 3 · tool calls 4 · tokens 10,587 in / 252 out · notional $0.0030
 
 ### JPM · durable_competitive_advantage: **insufficient evidence**
 
-The filing provides the company's total assets ($4.4 trillion) and stockholders' equity ($362.4 billion), but it does not provide a quantified market share or rank figure to substantiate a durable competitive advantage. While it describes itself as a "leading" firm, this is promotional language rather than concrete evidence of a protected competitive position.
+The filing discusses competitive pressures and the risk of losing market share to competitors, but it does not provide concrete evidence of a durable competitive advantage such as a quantified market share, exclusive franchise, or specific scale-based cost position that protects profits.
 
-> JPMorganChase had $4.4 trillion in assets and $362.4 billion in stockholders' equity as of December 31, 2025.
-> — accession `0001628280-26-008131`, Item 1, passage `0001628280-26-008131:1:1`, sentences 5–5, characters 7288–7397
+Searches: seeded "competition competitive, brand, market share, pricing power price increases, switching costs, patents intellectual property, scale cost advantage, network" in items 1, 1A → 4 hits; "market share rank scale size" in items 1 → 4 hits
 
-Searches: seeded "competition competitive, brand, market share, pricing power price increases, switching costs, patents intellectual property, scale cost advantage, network" in items 1, 1A → 4 hits; "market share rank scale size" in items 1 → 4 hits; ""market share" "number one" "leading" "largest"" in items 1 → 4 hits
+Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,696 in / 141 out · notional $0.0016
 
-Stop: `submitted` · model calls 3 · tool calls 4 · tokens 10,223 in / 195 out · notional $0.0028
+### JPM · candid_management: **evidence weak**
 
-### JPM · candid_management: **insufficient evidence**
+The filing describes a structured process where the company evaluates its control environment to identify where controls have failed and where remediation is required. However, the 10-K is a limited guide to candour, as it provides these descriptions as part of a standard risk management framework rather than as a candid, retrospective account of specific management-attributed setbacks or mistakes.
 
-The filing acknowledges that management's strategic choices could prove incorrect and that internal control weaknesses could occur, but these are presented as hypothetical risks rather than specific accounts of past management-driven setbacks. A 10-K is a limited guide to candour, as it focuses on risk disclosure rather than retrospective analysis of management's own performance.
+> The Firm utilizes a structured risk and control self-assessment process that is executed by the LOBs and Corporate. As part of this process, the LOBs and Corporate evaluate the effectiveness of their respective control environment to assess circumstances in which controls have failed, and to determine where remediation efforts may be required.
+> — accession `0001628280-26-008131`, Item 7, passage `0001628280-26-008131:7:313`, sentences 1–2, characters 542291–542636
 
-> The values and growth prospects of JPMorganChase's businesses could suffer and its earnings could decline if management makes strategic choices that prove to be incorrect, are based on incomplete, inaccurate or fraudulent information, do not accurately assess the competitive landscape and industry trends, or fail to address changing regulatory and market environments or the expectations of clients, customers, investors, employees and other stakeholders.
-> — accession `0001628280-26-008131`, Item 1A, passage `0001628280-26-008131:1A:72`, sentences 1–1, characters 138225–138682
+Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits; ""we" "our" "mistake" "setback" "failed" "inaccurate" "error"" in items 7 → 4 hits
 
-> JPMorganChase's disclosure and financial reporting controls may not always be effective, and a material weakness or significant deficiency in internal control over financial reporting could occur.
-> — accession `0001628280-26-008131`, Item 1A, passage `0001628280-26-008131:1A:70`, sentences 7–7, characters 136653–136849
-
-Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits
-
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,499 in / 179 out · notional $0.0009
+Stop: `submitted` · model calls 2 · tool calls 3 · tokens 6,171 in / 182 out · notional $0.0018
 
 ### JPM · rational_capital_allocation: **evidence found**
 
-The filing confirms the firm engaged in share repurchases and dividend payments during the fiscal year and outlines a capital management framework where management determines the timing and amount of these actions based on factors such as capital position, organic capital generation, and investment opportunities.
+The filing quantifies capital actions including common share repurchases and dividend payments, and explains that these are managed under a governance framework that considers factors such as capital position, organic capital generation, and investment opportunities.
 
 > •the impact of capital actions, including net repurchases of common shares and dividend payments on common and preferred stock.
 > — accession `0001628280-26-008131`, Item 7, passage `0001628280-26-008131:7:35`, sentences 7–7, characters 240020–240147
 
-> Management determines the amount and timing of common share repurchases based on various factors, including market conditions; legal and regulatory considerations affecting the amount and timing of repurchase activity; the Firm's capital position (taking into account goodwill and intangibles); organic capital generation; current and proposed future capital requirements; and other investment opportunities.
-> — accession `0001628280-26-008131`, Item 7, passage `0001628280-26-008131:7:160`, sentences 3–3, characters 375361–375769
+> The Board of Directors' authorization to repurchase common shares is utilized at management's discretion. The common share repurchase program approved by the Board of Directors does not establish specific price targets or timetables. Management determines the amount and timing of common share repurchases based on various factors, including market conditions; legal and regulatory considerations affecting the amount and timing of repurchase activity; the Firm's capital position (taking into account goodwill and intangibles); organic capital generation; current and proposed future capital requirements; and other investment opportunities.
+> — accession `0001628280-26-008131`, Item 7, passage `0001628280-26-008131:7:160`, sentences 1–3, characters 375127–375769
 
 Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits
 
-Stop: `submitted` · model calls 2 · tool calls 3 · tokens 4,987 in / 357 out · notional $0.0018
+Stop: `submitted` · model calls 2 · tool calls 3 · tokens 4,997 in / 341 out · notional $0.0018
 
 ## GOOGL
 
-10-K accession `0001652044-26-000018` · 8 model calls, 12 tool calls, 21,562 tokens, notional $0.0068, actual $0.0000
+10-K accession `0001652044-26-000018` · 6 model calls, 10 tool calls, 17,244 tokens, notional $0.0054, actual $0.0000
 
 ### GOOGL · understandable_business: **evidence found**
 
-The filing explains that the company generates revenue through advertising, consumption-based fees and subscriptions for cloud services, consumer subscriptions (e.g., YouTube, Google One), and app sales. It identifies its customers as advertisers, individual consumers, and enterprise/developer users of its cloud and AI platforms.
+The filing explains that Google generates revenue through advertising, consumption-based fees and subscriptions for cloud services, consumer subscriptions (such as YouTube and Google One), app sales, and hardware device sales. It identifies its customers as advertisers, individual consumers, and enterprise/developer users of its cloud and AI infrastructure.
 
-> •Brand advertising helps enhance users' awareness of and affinity for advertisers' products and services, through videos, text, images, and other interactive ads that run across various devices.
-> — accession `0001652044-26-000018`, Item 1, passage `0001652044-26-000018:1:11`, sentences 1–1, characters 21575–21769
+> Through our Google Cloud Platform and Google Workspace offerings, Google Cloud generates revenues primarily from consumption-based fees and subscriptions for infrastructure, platform, applications, and other cloud services.
+> — accession `0001652044-26-000018`, Item 1, passage `0001652044-26-000018:1:12`, sentences 1–1, characters 22889–23112
 
-> In addition, Google Services generates revenues from products and services beyond advertising, including: •consumer subscriptions, which primarily include revenues from YouTube services, such as YouTube TV, YouTube Music and Premium, and NFL Sunday Ticket, as well as Google One, which offers access to our most capable Gemini models; •platforms, which primarily include revenues from Google Play sales of apps and in-app purchases; and
-> — accession `0001652044-26-000018`, Item 1, passage `0001652044-26-000018:1:11`, sentences 5–7, characters 22367–22803
+> In addition, Google Services generates revenues from products and services beyond advertising, including: •consumer subscriptions, which primarily include revenues from YouTube services, such as YouTube TV, YouTube Music and Premium, and NFL Sunday Ticket, as well as Google One, which offers access to our most capable Gemini models; •platforms, which primarily include revenues from Google Play sales of apps and in-app purchases; and •devices, which primarily include sales of the Pixel family of devices.
+> — accession `0001652044-26-000018`, Item 1, passage `0001652044-26-000018:1:11`, sentences 5–8, characters 22367–22875
 
 Searches: seeded "principal products services, how we generate revenue, segments, customers, business model" in items 1 → 4 hits
 
-Stop: `submitted` · model calls 3 · tool calls 4 · tokens 7,639 in / 546 out · notional $0.0027
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,267 in / 167 out · notional $0.0008
 
-### GOOGL · durable_competitive_advantage: **insufficient evidence**
+### GOOGL · durable_competitive_advantage: **evidence weak**
 
-The filing identifies intellectual property and brands as important assets but does not provide concrete, quantified measures of a durable competitive advantage. Furthermore, the filing explicitly notes that competitors can readily erode the company's position, stating that users can switch to other products with a single click and that competitors may innovate faster or more cost-effectively.
+The filing asserts the importance of brands and intellectual property but does not provide concrete, quantified evidence of a durable competitive advantage, such as specific market share figures or exclusive franchise terms. Furthermore, the filing explicitly notes that competitors can readily erode the company's position, as users can switch to other services with a single click.
 
-> We also seek to maintain certain intellectual property as trade secrets. The confidentiality of such trade secrets and other sensitive information could be compromised, which could cause us to lose the competitive advantage resulting from these trade secrets.
-> — accession `0001652044-26-000018`, Item 1A, passage `0001652044-26-000018:1A:15`, sentences 1–2, characters 50517–50776
+> Any significant impairment of our intellectual property rights could harm our business and ability to compete. Protecting our intellectual property rights is costly and time consuming; any increase in unauthorized use could make it more expensive to do business and harm our financial condition and operating results. Our business depends on strong brands, and failing to maintain and enhance our brands would hurt our ability to expand our base of users, advertisers, customers, content providers, and other partners.
+> — accession `0001652044-26-000018`, Item 1A, passage `0001652044-26-000018:1A:15`, sentences 7–9, characters 51201–51719
 
 > •users, for whom other products and services are literally one click away, on the basis of the relevance of our advertising, as well as the general usefulness, security, and availability of our products and services; •advertisers, primarily based on our ability to generate sales leads, and ultimately customers, and to deliver their advertisements in an efficient and effective manner across a variety of distribution channels even as trends in advertising mediums and user preferences change; and •content providers, primarily based on the quality of our advertiser base, our ability to help these partners generate revenues from advertising, and the terms of our agreements with them.
 > — accession `0001652044-26-000018`, Item 1, passage `0001652044-26-000018:1:15`, sentences 8–10, characters 27481–28168
 
 Searches: seeded "competition competitive, brand, market share, pricing power price increases, switching costs, patents intellectual property, scale cost advantage, network" in items 1, 1A → 4 hits; "market share rank users advertisers" in items 1 → 4 hits
 
-Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,532 in / 199 out · notional $0.0017
+Stop: `submitted` · model calls 3 · tool calls 4 · tokens 9,493 in / 370 out · notional $0.0029
 
 ### GOOGL · candid_management: **evidence found**
 
-Management acknowledges that its devices have had and may have quality issues resulting from design, manufacturing, or operations, which could harm the company's business and reputation. A 10-K is a limited guide to candour, but this statement identifies specific operational risks and potential failures.
+Management acknowledges that its devices have had and may have quality issues resulting from design, manufacturing, or operations, which could harm the company's business and reputation. A 10-K is a limited guide to candour, but this statement identifies specific operational risks and past occurrences.
 
-> Our devices have had, and in the future may have, quality issues resulting from design, manufacturing, or operations. Sometimes, these issues may be caused by components we purchase from other manufacturers or suppliers. In addition, quality issues with equipment used in our technical infrastructure could constrain our capacity to support the delivery and continued development of our products and services.
-> — accession `0001652044-26-000018`, Item 1A, passage `0001652044-26-000018:1A:22`, sentences 1–3, characters 56728–57137
+> Our devices have had, and in the future may have, quality issues resulting from design, manufacturing, or operations. Sometimes, these issues may be caused by components we purchase from other manufacturers or suppliers. In addition, quality issues with equipment used in our technical infrastructure could constrain our capacity to support the delivery and continued development of our products and services. If the quality of our products and services does not meet expectations, we lack the capacity to deliver them, or our products or services are defective or require a corrective action or recall, it could harm our business, reputation, financial condition, and operating results.
+> — accession `0001652044-26-000018`, Item 1A, passage `0001652044-26-000018:1A:22`, sentences 1–4, characters 56728–57415
 
 Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits
 
-Stop: `submitted` · model calls 2 · tool calls 3 · tokens 4,882 in / 250 out · notional $0.0016
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,288 in / 125 out · notional $0.0008
 
 ### GOOGL · rational_capital_allocation: **evidence found**
 
-The filing states that the primary use of capital is to invest for long-term growth and that management regularly evaluates capital returns to stockholders. It also provides concrete figures for 2025, including $91.4 billion in capital expenditures and $45.4 billion in share repurchases.
-
-> The primary use of capital continues to be to invest for the long-term growth of the business. We regularly evaluate our cash and capital structure, including the size, pace, and form of capital return to stockholders.
-> — accession `0001652044-26-000018`, Item 7, passage `0001652044-26-000018:7:31`, sentences 5–6, characters 163027–163245
+The filing quantifies specific capital allocation actions in 2025, including $45.4 billion in share repurchases and $91.4 billion in capital expenditures. It also states that the primary use of capital is to invest for long-term growth and that management regularly evaluates the size, pace, and form of capital returns to stockholders.
 
 > •Repurchases of Class A and Class C shares were $6.5 billion and $38.9 billion, respectively, totaling $45.4 billion for the year ended December 31, 2025. •Operating cash flow was $164.7 billion for the year ended December 31, 2025. •Capital expenditures, which primarily reflected investments in technical infrastructure, were $91.4 billion for the year ended December 31, 2025.
 > — accession `0001652044-26-000018`, Item 7, passage `0001652044-26-000018:7:20`, sentences 2–4, characters 150578–150957
 
+> The primary use of capital continues to be to invest for the long-term growth of the business. We regularly evaluate our cash and capital structure, including the size, pace, and form of capital return to stockholders.
+> — accession `0001652044-26-000018`, Item 7, passage `0001652044-26-000018:7:31`, sentences 5–6, characters 163027–163245
+
 Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits
 
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,345 in / 169 out · notional $0.0008
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,354 in / 180 out · notional $0.0009
 
 ## TSLA
 
-10-K accession `0001628280-26-003952` · 5 model calls, 9 tool calls, 11,771 tokens, notional $0.0039, actual $0.0000
+10-K accession `0001628280-26-003952` · 7 model calls, 11 tool calls, 21,449 tokens, notional $0.0061, actual $0.0000
 
 ### TSLA · understandable_business: **evidence found**
 
-The filing identifies two reportable segments (automotive and energy generation and storage), specifies the products sold (electric vehicles, energy storage products, software, and services), notes that products are sold directly to customers, and describes how revenue is earned through sales, leasing, financing, and service-based models.
+The filing clearly defines the company's two reportable segments (automotive and energy generation and storage), the products and services sold within those segments, and states that it generally sells these products directly to customers.
 
-> We operate as two reportable segments: (i) automotive and (ii) energy generation and storage. The automotive segment includes the design, development, manufacturing, sales and leasing of high-performance fully electric vehicles as well as sales of automotive regulatory credits. Additionally, the automotive segment also includes services and other, which includes sales of used vehicles, non-warranty maintenance services and collision, paid Supercharging sessions, automotive insurance business revenue, part sales and retail merchandise sales.
-> — accession `0001628280-26-003952`, Item 1, passage `0001628280-26-003952:1:2`, sentences 4–6, characters 9855–10401
+> We operate as two reportable segments: (i) automotive and (ii) energy generation and storage. The automotive segment includes the design, development, manufacturing, sales and leasing of high-performance fully electric vehicles as well as sales of automotive regulatory credits. Additionally, the automotive segment also includes services and other, which includes sales of used vehicles, non-warranty maintenance services and collision, paid Supercharging sessions, automotive insurance business revenue, part sales and retail merchandise sales. The energy generation and storage segment includes sales, leasing, and financing of energy generation and storage products, services related to such products and sales of energy generation incentives.
+> — accession `0001628280-26-003952`, Item 1, passage `0001628280-26-003952:1:2`, sentences 4–7, characters 9855–10602
 
 > We generally sell our products directly to customers, and continue to grow our global retail, service and charging footprint to accelerate the widespread adoption of our products.
 > — accession `0001628280-26-003952`, Item 1, passage `0001628280-26-003952:1:1`, sentences 6–6, characters 8991–9170
 
 Searches: seeded "principal products services, how we generate revenue, segments, customers, business model" in items 1 → 4 hits
 
-Stop: `submitted` · model calls 2 · tool calls 3 · tokens 4,564 in / 332 out · notional $0.0016
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,112 in / 147 out · notional $0.0007
 
 ### TSLA · durable_competitive_advantage: **evidence weak**
 
-The filing asserts that the company's brand and product features provide a competitive advantage, but it does not provide concrete, measurable evidence (such as market share figures or quantified cost advantages) to support this claim.
+The filing asserts that the company's brand and product features provide a competitive advantage, but it does not provide concrete, measurable evidence (such as market share figures or quantified cost positions) to support these claims.
 
 > We believe that the specifications and features of our products, our strong brand and the modular, scalable nature of our energy storage products give us a competitive advantage in our markets.
 > — accession `0001628280-26-003952`, Item 1, passage `0001628280-26-003952:1:35`, sentences 7–7, characters 46520–46713
 
 Searches: seeded "competition competitive, brand, market share, pricing power price increases, switching costs, patents intellectual property, scale cost advantage, network" in items 1, 1A → 4 hits
 
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,010 in / 109 out · notional $0.0007
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,019 in / 109 out · notional $0.0007
 
 ### TSLA · candid_management: **evidence found**
 
@@ -234,73 +228,70 @@ Management explicitly acknowledges that its publicly announced guidance has been
 
 Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits
 
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,371 in / 121 out · notional $0.0008
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,380 in / 121 out · notional $0.0008
 
-### TSLA · rational_capital_allocation: **evidence weak**
+### TSLA · rational_capital_allocation: **insufficient evidence**
 
-The filing states a priority of focusing on long-term growth through high-value investments and quantifies expected capital expenditures for 2026 at over $20 billion to fund AI initiatives, manufacturing, and infrastructure. However, it does not quantify past capital allocation actions (such as specific amounts spent on acquisitions, buybacks, or debt repayment) during the fiscal year.
+The filing discusses future capital expenditure expectations and general priorities for growth, but it does not quantify past capital allocation actions (such as specific amounts spent on acquisitions, buybacks, or debt repayment) during the fiscal year.
 
-> As discussed in and subject to the considerations referenced in Part II, Item 7, Management's Discussion and Analysis of Financial Condition and Results of Operations—Management Opportunities, Challenges and Uncertainties and 2026 Outlook—Cash Flow and Capital Expenditure Trends in this Annual Report on Form 10-K, we currently expect our capital expenditures to exceed $20 billion in 2026 driven by our AI initiatives, including investments in compute infrastructure and data centers, the expansion and ramp of our manufacturing and R&D production lines and facilities, and growth in our fleet of company-operated AI-enabled assets and our retail, service and charging footprint.
-> — accession `0001628280-26-003952`, Item 7, passage `0001628280-26-003952:7:50`, sentences 1–2, characters 198178–198859
+Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits; "capital expenditures 2025 amount" in items 7 → 4 hits; "capital expenditures 2025 actual amount" in items 7 → 4 hits; "capital expenditures 2025 actual" in items 7 → 4 hits
 
-> We are focused on long-term growth opportunities through critical, high-value investments. We currently expect our capital expenditures to be in excess of $20 billion in 2026, driven by our AI initiatives, including investments in compute infrastructure and data centers, the expansion and ramp of our manufacturing and R&D production lines and facilities, and growth in our fleet of company-operated AI-enabled assets and our retail, service and charging footprint.
-> — accession `0001628280-26-003952`, Item 7, passage `0001628280-26-003952:7:13`, sentences 4–5, characters 160715–161181
-
-Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits
-
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,081 in / 183 out · notional $0.0008
+Stop: `submitted` · model calls 4 · tool calls 5 · tokens 14,368 in / 193 out · notional $0.0039
 
 ## DUK
 
-10-K accession `0001326160-26-000014` · 5 model calls, 9 tool calls, 12,716 tokens, notional $0.0041, actual $0.0000
+10-K accession `0001326160-26-000014` · 8 model calls, 12 tool calls, 23,781 tokens, notional $0.0073, actual $0.0000
 
 ### DUK · understandable_business: **evidence found**
 
-The filing explains that the company generates, transmits, distributes, and sells electricity and gas to residential, commercial, and industrial customers. It earns revenue through state commission-approved rates designed to cover costs and provide a return on capital.
-
-> EU&I owns and operates facilities necessary to generate, transmit, distribute and sell electricity.
-> — accession `0001326160-26-000014`, Item 1, passage `0001326160-26-000014:1:9`, sentences 2–2, characters 35361–35460
+The filing identifies the company's business segments as Electric Utilities and Infrastructure and Gas Utilities and Infrastructure. It explains that the company generates, transmits, distributes, and sells electricity and gas to residential, commercial, and industrial customers, with revenue earned through state commission-approved rates.
 
 > Duke Energy Indiana is a regulated public utility primarily engaged in the generation, transmission, distribution and sale of electricity in portions of Indiana. Duke Energy Indiana's service area covers approximately 23,000 square miles and supplies electric service to approximately 930,000 residential, commercial and industrial customers.
 > — accession `0001326160-26-000014`, Item 1, passage `0001326160-26-000014:1:72`, sentences 4–5, characters 100217–100559
 
+> EU&I owns and operates facilities necessary to generate, transmit, distribute and sell electricity. Services are priced by state commission-approved rates designed to include the costs of providing these services and a reasonable return on invested capital.
+> — accession `0001326160-26-000014`, Item 1, passage `0001326160-26-000014:1:9`, sentences 2–3, characters 35361–35618
+
 Searches: seeded "principal products services, how we generate revenue, segments, customers, business model" in items 1 → 4 hits
 
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,178 in / 152 out · notional $0.0008
+Stop: `submitted` · model calls 2 · tool calls 3 · tokens 4,614 in / 361 out · notional $0.0017
 
 ### DUK · durable_competitive_advantage: **evidence found**
 
-The filing states that EU&I's businesses operate as the sole supplier of electricity within their service territories (with the exception of Ohio), and that services are priced by state commission-approved rates designed to include the costs of providing these services and a reasonable return on invested capital. This constitutes a regulated exclusive franchise.
+The filing states that the company's electric utility businesses operate as the sole supplier of electricity within their service territories, with rates set by state commissions to include costs and a reasonable return on capital.
 
-> EU&I's businesses operate as the sole supplier of electricity within their service territories, with the exception of Ohio, which has a competitive electricity supply market for generation service. EU&I owns and operates facilities necessary to generate, transmit, distribute and sell electricity. Services are priced by state commission-approved rates designed to include the costs of providing these services and a reasonable return on invested capital.
-> — accession `0001326160-26-000014`, Item 1, passage `0001326160-26-000014:1:9`, sentences 1–3, characters 35163–35618
+> EU&I's businesses operate as the sole supplier of electricity within their service territories, with the exception of Ohio, which has a competitive electricity supply market for generation service. EU&I owns and operates facilities necessary to generate, transmit, distribute and sell electricity. Services are priced by state commission-approved rates designed to include the costs of providing these services and a reasonable return on invested capital. This regulatory policy is intended to provide safe and reliable electricity at fair prices.
+> — accession `0001326160-26-000014`, Item 1, passage `0001326160-26-000014:1:9`, sentences 1–4, characters 35163–35710
 
 Searches: seeded "competition competitive, brand, market share, pricing power price increases, switching costs, patents intellectual property, scale cost advantage, network" in items 1, 1A → 4 hits
 
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,125 in / 129 out · notional $0.0007
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,134 in / 105 out · notional $0.0007
 
-### DUK · candid_management: **evidence weak**
+### DUK · candid_management: **evidence found**
 
-Management acknowledges that progress toward its net-zero carbon emissions target will not be linear, which is a candid admission of potential non-linear performance. However, a 10-K is a limited guide to candour, and the filing otherwise relies on standard risk disclosures.
+Management explicitly identifies and quantifies specific charges and impairments related to its own business decisions, such as the implementation of a new customer system, joint venture electric transmission projects, and renewable natural gas investments. These are presented as distinct items impacting financial results rather than being obscured by external factors.
 
-> As we continue to execute on our energy modernization strategy, and target net-zero carbon emissions from electric generation by 2050, our progress will not be linear.
-> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:29`, sentences 3–3, characters 229194–229361
+> •Regulatory Matters primarily represents net impairment charges related to Duke Energy Carolinas' and Duke Energy Progress' 2024 South Carolina rate case orders and charges related to Duke Energy Indiana post-retirement benefits. •System Post-Implementation Costs represents the net impact of charges related to nonrecurring customer billing adjustments as a result of implementation of a new customer system. •Preferred Redemption Costs represents charges related to the redemption of Series B Preferred Stock. •Noncore Asset Sales and Net Impairments primarily represents charges related to certain joint venture electric transmission projects and certain renewable natural gas investments.
+> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:36`, sentences 1–4, characters 236474–237166
 
-Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits
+> In addition to the drivers below, the increase in GAAP Reported Earnings/EPS was primarily due to impairments related to the 2024 South Carolina rate case and charges related to Duke Energy Indiana post-retirement benefits in the prior year, as well as charges related to certain joint venture electric transmission projects and certain renewable natural gas investments in the prior year.
+> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:38`, sentences 8–8, characters 239619–240008
 
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,182 in / 122 out · notional $0.0007
+Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits; "impairment charge write-down project failure" in items 7 → 4 hits
+
+Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,605 in / 191 out · notional $0.0017
 
 ### DUK · rational_capital_allocation: **evidence found**
 
-The filing identifies capital expenditures, debt repayment, and dividends as the primary capital requirements for the business. It provides concrete figures for capital expenditures in 2025 and 2024, as well as data on debt and equity financing activities.
+The filing identifies capital expenditures, debt repayment, and dividends as primary uses of cash, providing specific 2025 expenditure amounts for these categories. It also states a policy of targeting a dividend payout ratio of 60% to 70% of adjusted EPS.
 
-> Duke Energy's capital requirements arise primarily from capital and investment expenditures, repaying long-term debt and paying dividends to shareholders.
-> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:80`, sentences 2–2, characters 284809–284963
+> Duke Energy relies primarily upon cash flows from operations, debt and equity issuances and its existing cash and cash equivalents to fund its liquidity and capital requirements. Duke Energy's capital requirements arise primarily from capital and investment expenditures, repaying long-term debt and paying dividends to shareholders.
+> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:80`, sentences 1–2, characters 284630–284963
 
-> Gas Utilities and Infrastructure | 1,114 | 1,313 | (199) Other | 335 | 261 | 74 Total capital, investment and acquisition expenditures, net of return of investment capital | $ | 14,002 | $ | 12,263 | $ | 1,739
-> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:101`, sentences 6–8, characters 307579–307788
+> Duke Energy targets a dividend payout ratio of between 60% and 70%, based upon adjusted EPS.
+> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:90`, sentences 1–1, characters 295630–295722
 
-Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits
+Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits; "dividend policy rationale" in items 7 → 4 hits
 
-Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,510 in / 318 out · notional $0.0019
+Stop: `submitted` · model calls 3 · tool calls 4 · tokens 10,343 in / 428 out · notional $0.0032
 
