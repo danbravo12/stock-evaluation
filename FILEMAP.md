@@ -58,6 +58,7 @@ StockEvaluation/
 | `config/figure_formats.json` | Figure key → display format for the Explainer's placeholders (usd_billions, usd_millions, ratio_2dp, percent_1dp, count, per_share_usd, years); a test checks every key the scorers produce (ADR-048). | Built |
 | `config/banned_phrases.json` | Advice and valuation phrases the Critic's R3 forbids (regex, reason each) and an allowlist for ordinary vocabulary such as "share buyback" (ADR-049). | Built |
 | `config/search_terms.json` | Per qualitative Buffett criterion: items to search first, starting queries and why (ADR-037), plus the rubric: `question`, `found_means`, `weak_means`, `insufficient_means` (ADR-043). | Built |
+| `config/label_packet.json` | The packet's generic queries and passages per criterion (ADR-071). | Built |
 | `config/test_tickers.json` | The five test companies (KO, JPM, GOOGL, TSLA, DUK). Used by the record script now and the evaluation harness later. Rationale per ticker: ADR-024. | Built |
 
 ## Engine (`engine/`)
@@ -134,6 +135,7 @@ The engine is a library, so the batch command, the tests and the future live app
 | `scripts/review_report.py` | Runs Explainer + Critic on the 5 tickers against the recorded qualitative run, injects 3 faults into the model check, and writes `docs/critic_report.md` (explanations, every check, retries, gold-set table, Critic scorecard, cost). `record` (free tier only) or `replay` (offline, identical). | Built |
 | `scripts/qualitative_variability.py` | Runs the 5 tickers N extra times live with the response store bypassed (`use_store=False`), compares with the recorded run and writes `docs/qualitative_variability.md`. Free tier only; stops if today's ledger count would pass 400. | Built |
 | `scripts/sections_audit.py` | Offline: runs the section extractor over every analysed company's 10-K (fixtures, then the local cache) and prints found / not_found per item; `--save` / `--compare` give a before → after (build 4a). | Built |
+| `scripts/label_packet.py` | Writes the blind labelling packet for the held-out companies (`docs/labelling/heldout_packet.md`, git-ignored) from their 10-Ks only, or `--ingest` a filled packet into `eval/heldout_labels.json` (ADR-071). | Built |
 | `scripts/backfill_passages.py` | Offline: adds the cited passages' text to results written before schema 1.2 and re-exports `schema/result.schema.json`; nothing else in a result changes (build 4a). | Built |
 | `scripts/score_report.py` | Scores the 5 fixtures (replay) and writes `docs/scorecard_report.md`. | Built |
 | `scripts/coverage_report.py` | Runs the normaliser on the 5 fixtures (replay) and writes `docs/coverage_report.md`. | Built |
@@ -184,6 +186,7 @@ The engine is a library, so the batch command, the tests and the future live app
 | `tests/test_sentences.py` | Segmentation rules on synthetic text (bullets, newlines, abbreviations, decimals, long-sentence cuts, nothing lost) and exact round trip of every passage of the 5 recorded filings. | Built |
 | `tests/test_qualitative.py` | 29 offline tests of the agent with scripted model replies through the real client (fake transport) on a synthetic 10-K: seeded search, search / get_passage / submit, unchanged assistant messages and tool-call ids, turn cap and last-turn tools, pointer citations (exact quote from sentence numbers, out-of-range, last before first, over 3 sentences, over 120 words, never-retrieved passage, one correction then `invalid_citation`, one extra turn), verdict per stop reason, malformed arguments, section_missing, quota and budget propagation, totals and trace order. | Built |
 | `tests/test_qualitative_fixtures.py` | Replay of all 5 real runs with zero network: four findings each, every cited span equals `document_text[start:end]` and its sentence offsets, no mechanical citation failures, no advice words, totals add up. Structural only; verdicts not frozen. | Built |
+| `tests/test_heldout.py` | The frozen held-out list, the packet (structure, eight passages per criterion, deterministic, no agent output), the ingest round trip and the agreement maths on synthetic cases including a hand-computed weighted kappa (ADR-071). | Built |
 | `tests/test_build4a.py` | Build 4a: the citation cap message with per-sentence words (incl. the recorded O and MetLife rejections), the latest-fiscal-year rule reaching the agent and the Critic only from v2.1, results carrying their cited passages, publish from a clean checkout and its failure on a missing passage text, schema 1.2 additive. | Built |
 | `tests/test_sections.py` | Synthetic-filing tests: HTML normalisation, TOC not chosen, combined headings, title fallback and stub handling, not_found reasons, passage offsets and determinism, BM25, the Retriever and its text cache. | Built |
 | `tests/test_sections_fixtures.py` | Real 10-Ks (replay): every item found or explained, sections not opening on the TOC, offsets round-trip, DUK's 16 MB filing under 10 s. | Built |
@@ -217,6 +220,10 @@ Committed, so LLM-using tests replay offline. The three smoke-test calls (JSON m
 | `eval/snapshot.py` | Reduces a `ScoreSet` to label + key figures (4 significant digits); `python -m eval.snapshot` rewrites the frozen file after a reviewed change. | Built |
 | `eval/expected_qualitative.json` | Gold set for the qualitative agent: per ticker and criterion the recorded agent verdict, the human-reviewed verdict and a note (reviewer line inside). Labels judge the filing under the current rubric; changes are kept in `label_history`. 1 of 20 labels differs from the agent's verdict. | Built |
 | `eval/qualitative_agreement.py` | Replays the recorded agent run and prints agreement with the gold set (19/20) and the disagreements; `agreement()` is reused by the Critic evaluation. | Built |
+| `eval/heldout.json` | The frozen held-out list (AAPL, MSFT, PG, NEE, CAT, JNJ), why, the disclosure that agent verdicts for them already exist (ADR-071). | Built |
+| `eval/heldout_labels.json` | Template for the 24 human labels (empty until Daniel labels the packet). | Built |
+| `eval/packet.py` | The packet builder (`build_packet`, `fixed_retrieval`) and the reader of a filled packet; never reads an agent result. | Built |
+| `eval/agreement.py` | `python -m eval.agreement`: agreement of the final agent verdicts with the human labels, dev and held-out separately: exact, within one level, direction, per criterion, weighted kappa. | Built |
 | `eval/universe_label_counts.json` | Frozen per-criterion label counts (and per sector class) of the 498-company numeric run, with the tolerance rule. | Built |
 | `eval/universe_counts.py` | `count_labels`, `compare` (tolerance max(5, 2%)) and `--freeze`; run as `python -m eval.universe_counts`. | Built |
 | `eval/expected_scores.json` | Frozen, reviewed results for the 5 test companies and 11 criteria. | Built |

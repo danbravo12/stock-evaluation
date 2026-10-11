@@ -1,0 +1,11 @@
+{
+ "frozen": "2026-10-12",
+ "frozen_before_commit": "0adc6da",
+ "companies": ["AAPL", "MSFT", "PG", "NEE", "CAT", "JNJ"],
+ "criteria": ["understandable_business", "durable_competitive_advantage", "candid_management", "rational_capital_allocation"],
+ "items": 24,
+ "why": "The five dev-set companies (KO, JPM, GOOGL, TSLA, DUK) are where the rubric was written and tuned, so agreement on them overstates accuracy (it fell from 19/20 to 14/20 when prompt v2 changed the wording). These six were chosen from the showcase companies as large, familiar, non-financial filers across five sectors that were not used to tune the rubric or the prompts. The list is frozen: it is not edited after labels exist, and no rubric or prompt change is made by looking at these labels.",
+ "disclosure": "Agent verdicts for these six companies already exist (prompt v2; results/0000320193.json, 0000789019.json, 0000080424.json, 0000753308.json, 0000018230.json, 0000200406.json) and are shown on the published site's company pages, so Daniel may have seen some of them. The labelling packet contains no agent output; labels are to be made from the passages and the filing before looking at any agent verdict, and this disclosure is part of the record of how independent the labels are.",
+ "labels": "eval/heldout_labels.json",
+ "packet": "scripts/label_packet.py -> docs/labelling/heldout_packet.md (git-ignored until the labels are in)"
+}

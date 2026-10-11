@@ -42,3 +42,6 @@ results/*
 site/
 site.building/
 docs/screenshots/
+
+# labelling packet: holds the held-out passages until the labels are in (ADR-071)
+docs/labelling/

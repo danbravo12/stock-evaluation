@@ -1,0 +1,9 @@
+{
+  "_notes": "Settings for the blind labelling packet (build 4a, ADR-071). The passages are a fixed, deterministic, broad retrieval and are NOT the agent's: search_many over the criterion's own seeded queries (config/search_terms.json) plus the generic queries below, restricted to the criterion's items, the top `passages_per_criterion` passages shown in filing order. Nothing the agent produced is read.",
+  "passages_per_criterion": 8,
+  "generic_queries": [
+    "overview of our business strategy and priorities",
+    "factors that affected our results compared with the prior year",
+    "how management uses cash and invests in the business"
+  ]
+}
