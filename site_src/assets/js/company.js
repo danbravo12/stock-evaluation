@@ -1,4 +1,4 @@
-import { el, getJSON, tryJSON, fail, manifest, footer, mark, status, effectiveLabel, figureSummary, WORD, CRITERIA, NAMES, QUAL, usd, perShare, pct, figures, plainReason, secLink, secOk, measureName } from "./common.js";
+import { el, getJSON, tryJSON, fail, manifest, footer, mark, status, borderlineSentence, isBorderline, stabilityRows, effectiveLabel, figureSummary, WORD, CRITERIA, NAMES, QUAL, usd, perShare, pct, figures, plainReason, secLink, secOk, measureName } from "./common.js";
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -52,9 +52,10 @@ function lineOf(c, cls) {
   return (plainReason(c, cls) || `Test: ${c.threshold}.`) + (sum && !plainReason(c, cls) ? ` ${sum}.` : "");
 }
 
-function critRow(id, name, label, line, warn, qual) {
+function critRow(id, name, label, line, warn, qual, borderline) {
   const b = el("button", { class: "crit", "data-q": qual ? "1" : false, type: "button", "aria-expanded": "false", "aria-controls": "pane", "data-id": id, onclick: () => select(id, true) },
-    el("span", {}, el("span", { class: "t" }, id.length <= 3 ? el("span", { class: "id", text: id }) : null, name), el("br"), status(label)),
+    el("span", {}, el("span", { class: "t" }, id.length <= 3 ? el("span", { class: "id", text: id }) : null, name), el("br"), status(label),
+      borderline ? el("span", { class: "borderline", text: "Borderline", title: borderline }) : null),
     el("span", { class: "line", text: line }),
     warn ? el("span", { class: "warn", text: warn }) : null);
   return el("li", { id: `row-${id}` }, b);
@@ -79,7 +80,7 @@ function renderList() {
     ul.append(el("li", { id: "analysis" }, el("h3", { text: "Buffett's four judgement tests, read from the annual report by the agent" })));
     for (const q of model.qual) {
       const f = q.finding, st = q.critic_status;
-      ul.append(critRow(f.criterion, QUAL[f.criterion] || f.criterion, f.verdict, findingText(f), st === "warning" ? "The Critic still objects to this rationale. Open it to see why." : null, true));
+      ul.append(critRow(f.criterion, QUAL[f.criterion] || f.criterion, f.verdict, findingText(f), st === "warning" ? "The Critic still objects to this rationale. Open it to see why." : null, true, borderlineSentence(q.stability)));
     }
   }
 }
@@ -180,6 +181,13 @@ function qualPane(q) {
     pane.push(el("p", { class: "src" }, `Item ${c.item}, filing ${c.accession}. `, secLink(filing.url, "Open the 10-K"), "."),
       el("p", { class: "src offs", text: `Characters ${c.char_start} to ${c.char_end} of the filing's normalised text.` }));
   });
+  if (q.stability && f.verdict !== "not assessed") {
+    pane.push(el("h3", { text: "Does the verdict depend on the wording?" }));
+    if (isBorderline(q.stability)) pane.push(el("p", {}, el("span", { class: "borderline", text: "Borderline" }), " ", borderlineSentence(q.stability)));
+    else pane.push(el("p", { text: "The verdict was the same in all three runs." }));
+    pane.push(el("dl", { class: "fig" }, ...stabilityRows(q.stability).flatMap(([k, v]) => [el("dt", { text: k }), el("dd", { text: v })])),
+      el("p", { class: "small muted", text: "The question and the definitions of each verdict were reworded twice, keeping their meaning, and the agent and the Critic were run again each time. A borderline verdict is one that changes with a reasonable rewording of the question." }));
+  }
   const qn = model.explain && model.explain.qualitative[f.criterion];
   if (qn) pane.push(el("p", { class: "small muted", text: qn }));
   const st = q.critic_status;

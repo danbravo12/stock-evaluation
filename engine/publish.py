@@ -25,7 +25,7 @@ SITE_SRC = REPO_ROOT / "site_src"
 SITE_OUT = REPO_ROOT / "site"
 DOCS = {"evaluation_notes": "docs/evaluation_notes.md", "DECISIONS": "DECISIONS.md", "PROCESS": "PROCESS.md", "ARCHITECTURE": "ARCHITECTURE.md",
         "universe_scorecard_report": "docs/universe_scorecard_report.md", "qualitative_report": "docs/qualitative_report.md", "critic_report": "docs/critic_report.md",
-        "coverage_report": "docs/coverage_report.md"}
+        "coverage_report": "docs/coverage_report.md", "stability_report": "docs/stability_report.md"}
 SITE_CONFIG = REPO_ROOT / "config" / "site.json"
 SHOWCASE_CONFIG = REPO_ROOT / "config" / "showcase.json"
 SCORE_KEYS = ("ticker", "cik", "name", "gics_sector", "gics_sub_industry", "sector_class", "sector_notes", "source_notes", "fetched_at", "score")
