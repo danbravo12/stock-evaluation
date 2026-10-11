@@ -52,7 +52,7 @@ class TestQualitativeFixtures(unittest.TestCase):
                 for c in f.citations:
                     p = idx.by_id[c.passage_id]
                     first, last = c.sentences
-                    self.assertTrue(1 <= first <= last <= len(p.sentences) and last - first <= 2)
+                    self.assertTrue(1 <= first <= last <= len(p.sentences))  # a contiguous range; its length is capped in words (below), not in sentences (prompt v2)
                     self.assertEqual((c.char_start, c.char_end), (p.sentences[first - 1][0], p.sentences[last - 1][1]))
                     self.assertEqual(self.docs[t][c.char_start:c.char_end], c.quote, (t, f.criterion))
                     self.assertLessEqual(len(c.quote.split()), MAX_SPAN_WORDS)

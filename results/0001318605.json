@@ -3,7 +3,7 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "TSLA-replay",
-  "engine_commit": "c29ebe8",
+  "engine_commit": "c1a9bc1",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "replay",
   "generated_at": null,
@@ -180,8 +180,8 @@
     ],
     "explanation": {
      "criterion": "G2",
-     "raw": "The company maintains a current ratio of {current_ratio} and long-term debt of {long_term_debt}, which is less than the {net_current_assets} in net current assets (test: {threshold}).",
-     "text": "The company maintains a current ratio of 2.16 and long-term debt of $6.58 billion, which is less than the $36.93 billion in net current assets (test: current ratio >= 2 and long-term debt <= net current assets).",
+     "raw": "The company maintains a current ratio of {current_ratio} and long-term debt of {long_term_debt}, which is less than the net current assets of {net_current_assets} (test: {threshold}).",
+     "text": "The company maintains a current ratio of 2.16 and long-term debt of $6.58 billion, which is less than the net current assets of $36.93 billion (test: current ratio >= 2 and long-term debt <= net current assets).",
      "placeholders_used": [
       "current_ratio",
       "long_term_debt",
@@ -247,11 +247,12 @@
     ],
     "explanation": {
      "criterion": "G3",
-     "raw": "Net income was not positive in every year, with losses recorded in {loss_years} out of the {years_on_record} years on record (test: {threshold}).",
-     "text": "Net income was not positive in every year, with losses recorded in 2016, 2017, 2018, 2019 out of the 10 years on record (test: net income > 0 in every year of the last 10).",
+     "raw": "Net income was positive in {profit_year_count} of the last 10 years, with {loss_year_count} loss years occurring in {loss_years} (test: {threshold}).",
+     "text": "Net income was positive in 6 of the last 10 years, with 4 loss years occurring in 2016, 2017, 2018, 2019 (test: net income > 0 in every year of the last 10).",
      "placeholders_used": [
+      "profit_year_count",
+      "loss_year_count",
       "loss_years",
-      "years_on_record",
       "threshold"
      ],
      "templated": false
@@ -383,11 +384,13 @@
     "input_keys": [],
     "explanation": {
      "criterion": "G4",
-     "raw": "Dividends were not paid in the years {unpaid_years} out of the {years_on_record} years on record (test: {threshold}).",
-     "text": "Dividends were not paid in the years 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 out of the 15 years on record (test: dividend paid in every year on record in the last 15).",
+     "raw": "Dividends were paid in {paid_year_count} of the {years_on_record} years on record and missed in {unpaid_year_count} years, including {unpaid_years} (test: {threshold}).",
+     "text": "Dividends were paid in 0 of the 15 years on record and missed in 15 years, including 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 (test: dividend paid in every year on record in the last 15).",
      "placeholders_used": [
-      "unpaid_years",
+      "paid_year_count",
       "years_on_record",
+      "unpaid_year_count",
+      "unpaid_years",
       "threshold"
      ],
      "templated": false
@@ -429,10 +432,11 @@
     ],
     "explanation": {
      "criterion": "G5",
-     "raw": "This test is not meaningful because the starting average EPS of {avg_eps_start} is not positive (test: {threshold}).",
-     "text": "This test is not meaningful because the starting average EPS of -$0.49 is not positive (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)).",
+     "raw": "This test is not meaningful because the starting average EPS of {avg_eps_start} is not positive, preventing a growth calculation against the ending average EPS of {avg_eps_end} (test: {threshold}).",
+     "text": "This test is not meaningful because the starting average EPS of -$0.49 is not positive, preventing a growth calculation against the ending average EPS of $2.47 (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)).",
      "placeholders_used": [
       "avg_eps_start",
+      "avg_eps_end",
       "threshold"
      ],
      "templated": false
@@ -541,8 +545,8 @@
     ],
     "explanation": {
      "criterion": "B1",
-     "raw": "Return on equity was at or above the threshold in {years_at_or_above_15pct} of the last 10 years (test: {threshold}).",
-     "text": "Return on equity was at or above the threshold in 3 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years).",
+     "raw": "Return on equity reached the target in {years_at_or_above_15pct} of the last 10 years (test: {threshold}).",
+     "text": "Return on equity reached the target in 3 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years).",
      "placeholders_used": [
       "years_at_or_above_15pct",
       "threshold"
@@ -578,8 +582,8 @@
     ],
     "explanation": {
      "criterion": "B2",
-     "raw": "Long-term debt of {long_term_debt} is well below the maximum debt of {max_debt}, calculated from the 3-year average net income of {avg_net_income_3y} (test: {threshold}).",
-     "text": "Long-term debt of $6.58 billion is well below the maximum debt of $34.51 billion, calculated from the 3-year average net income of $8.63 billion (test: long-term debt <= 4 x avg net income of the last 3 years).",
+     "raw": "Long-term debt of {long_term_debt} is well below the maximum allowed debt of {max_debt}, which is based on an average net income of {avg_net_income_3y} (test: {threshold}).",
+     "text": "Long-term debt of $6.58 billion is well below the maximum allowed debt of $34.51 billion, which is based on an average net income of $8.63 billion (test: long-term debt <= 4 x avg net income of the last 3 years).",
      "placeholders_used": [
       "long_term_debt",
       "max_debt",
@@ -651,11 +655,12 @@
     ],
     "explanation": {
      "criterion": "B3",
-     "raw": "The 3-year average operating margin of {avg_margin_3y} is not at least 90% of the 10-year average of {avg_margin_10y} (test: {threshold}).",
-     "text": "The 3-year average operating margin of 7.0% is not at least 90% of the 10-year average of 3.1% (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg).",
+     "raw": "The last-3-yr average operating margin of {avg_margin_3y} compared to the 10-yr average of {avg_margin_10y} results in a ratio of {ratio} (test: {threshold}).",
+     "text": "The last-3-yr average operating margin of 7.0% compared to the 10-yr average of 3.1% results in a ratio of 2.28 (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg).",
      "placeholders_used": [
       "avg_margin_3y",
       "avg_margin_10y",
+      "ratio",
       "threshold"
      ],
      "templated": false
@@ -742,10 +747,12 @@
     ],
     "explanation": {
      "criterion": "B4",
-     "raw": "Owner earnings were positive in {years_positive} of the last 10 years, failing to meet the required frequency (test: {threshold}).",
-     "text": "Owner earnings were positive in 4 of the last 10 years, failing to meet the required frequency (test: net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg).",
+     "raw": "Owner earnings were positive in {years_positive} of the last 10 years, though the last-3-yr average of {avg_last_3y} is higher than the first-3-yr average of {avg_first_3y} (test: {threshold}).",
+     "text": "Owner earnings were positive in 4 of the last 10 years, though the last-3-yr average of $3.20 billion is higher than the first-3-yr average of -$2.66 billion (test: net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg).",
      "placeholders_used": [
       "years_positive",
+      "avg_last_3y",
+      "avg_first_3y",
       "threshold"
      ],
      "templated": false
@@ -1555,18 +1562,18 @@
    "finding": {
     "criterion": "understandable_business",
     "verdict": "evidence found",
-    "rationale": "The filing identifies two reportable segments (automotive and energy generation and storage), specifies the products sold (electric vehicles, energy storage products, software, and services), notes that products are sold directly to customers, and describes how revenue is earned through sales, leasing, financing, and service-based models.",
+    "rationale": "The filing clearly defines the company's two reportable segments (automotive and energy generation and storage), the products and services sold within those segments, and states that it generally sells these products directly to customers.",
     "citations": [
      {
       "passage_id": "0001628280-26-003952:1:2",
       "accession": "0001628280-26-003952",
       "item": "1",
       "char_start": 9855,
-      "char_end": 10401,
-      "quote": "We operate as two reportable segments: (i) automotive and (ii) energy generation and storage.\nThe automotive segment includes the design, development, manufacturing, sales and leasing of high-performance fully electric vehicles as well as sales of automotive regulatory credits. Additionally, the automotive segment also includes services and other, which includes sales of used vehicles, non-warranty maintenance services and collision, paid Supercharging sessions, automotive insurance business revenue, part sales and retail merchandise sales.",
+      "char_end": 10602,
+      "quote": "We operate as two reportable segments: (i) automotive and (ii) energy generation and storage.\nThe automotive segment includes the design, development, manufacturing, sales and leasing of high-performance fully electric vehicles as well as sales of automotive regulatory credits. Additionally, the automotive segment also includes services and other, which includes sales of used vehicles, non-warranty maintenance services and collision, paid Supercharging sessions, automotive insurance business revenue, part sales and retail merchandise sales. The energy generation and storage segment includes sales, leasing, and financing of energy generation and storage products, services related to such products and sales of energy generation incentives.",
       "sentences": [
        4,
-       6
+       7
       ]
      },
      {
@@ -1603,17 +1610,17 @@
       ]
      }
     ],
-    "llm_calls": 2,
-    "tool_calls": 3,
+    "llm_calls": 1,
+    "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 4564,
-     "completion_tokens": 332,
-     "total_tokens": 4896,
+     "prompt_tokens": 2112,
+     "completion_tokens": 147,
+     "total_tokens": 2259,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001639
+    "notional_cost_usd": 0.0007485
    },
    "critic_status": "passed"
   },
@@ -1621,7 +1628,7 @@
    "finding": {
     "criterion": "durable_competitive_advantage",
     "verdict": "evidence weak",
-    "rationale": "The filing asserts that the company's brand and product features provide a competitive advantage, but it does not provide concrete, measurable evidence (such as market share figures or quantified cost advantages) to support this claim.",
+    "rationale": "The filing asserts that the company's brand and product features provide a competitive advantage, but it does not provide concrete, measurable evidence (such as market share figures or quantified cost positions) to support these claims.",
     "citations": [
      {
       "passage_id": "0001628280-26-003952:1:35",
@@ -1665,13 +1672,13 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2010,
+     "prompt_tokens": 2019,
      "completion_tokens": 109,
-     "total_tokens": 2119,
+     "total_tokens": 2128,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.000666
+    "notional_cost_usd": 0.00066825
    },
    "critic_status": "passed"
   },
@@ -1726,47 +1733,22 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2371,
+     "prompt_tokens": 2380,
      "completion_tokens": 121,
-     "total_tokens": 2492,
+     "total_tokens": 2501,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00077425
+    "notional_cost_usd": 0.0007765
    },
    "critic_status": "passed"
   },
   {
    "finding": {
     "criterion": "rational_capital_allocation",
-    "verdict": "evidence weak",
-    "rationale": "The filing states a priority of focusing on long-term growth through high-value investments and quantifies expected capital expenditures for 2026 at over $20 billion to fund AI initiatives, manufacturing, and infrastructure. However, it does not quantify past capital allocation actions (such as specific amounts spent on acquisitions, buybacks, or debt repayment) during the fiscal year.",
-    "citations": [
-     {
-      "passage_id": "0001628280-26-003952:7:50",
-      "accession": "0001628280-26-003952",
-      "item": "7",
-      "char_start": 198178,
-      "char_end": 198859,
-      "quote": "As discussed in and subject to the considerations referenced in Part II, Item 7, Management's Discussion and Analysis of Financial Condition and Results of Operations—Management Opportunities, Challenges and Uncertainties and 2026 Outlook—Cash Flow and Capital Expenditure Trends in this Annual Report on Form 10-K, we currently expect our capital expenditures to exceed $20 billion in 2026 driven by our AI initiatives, including investments in compute infrastructure and data centers, the expansion and ramp of our manufacturing and R&D production lines and facilities, and growth in our fleet of company-operated AI-enabled assets and our retail, service and charging footprint.",
-      "sentences": [
-       1,
-       2
-      ]
-     },
-     {
-      "passage_id": "0001628280-26-003952:7:13",
-      "accession": "0001628280-26-003952",
-      "item": "7",
-      "char_start": 160715,
-      "char_end": 161181,
-      "quote": "We are focused on long-term growth opportunities through critical, high-value investments. We currently expect our capital expenditures to be in excess of $20 billion in 2026, driven by our AI initiatives, including investments in compute infrastructure and data centers, the expansion and ramp of our manufacturing and R&D production lines and facilities, and growth in our fleet of company-operated AI-enabled assets and our retail, service and charging footprint.",
-      "sentences": [
-       4,
-       5
-      ]
-     }
-    ],
+    "verdict": "insufficient evidence",
+    "rationale": "The filing discusses future capital expenditure expectations and general priorities for growth, but it does not quantify past capital allocation actions (such as specific amounts spent on acquisitions, buybacks, or debt repayment) during the fiscal year.",
+    "citations": [],
     "searches": [
      {
       "queries": [
@@ -1787,19 +1769,64 @@
        "0001628280-26-003952:7:12",
        "0001628280-26-003952:7:13"
       ]
+     },
+     {
+      "queries": [
+       "capital expenditures 2025 amount"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0001628280-26-003952:7:50",
+       "0001628280-26-003952:7:48",
+       "0001628280-26-003952:7:12",
+       "0001628280-26-003952:7:13"
+      ]
+     },
+     {
+      "queries": [
+       "capital expenditures 2025 actual amount"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0001628280-26-003952:7:50",
+       "0001628280-26-003952:7:48",
+       "0001628280-26-003952:7:12",
+       "0001628280-26-003952:7:13"
+      ]
+     },
+     {
+      "queries": [
+       "capital expenditures 2025 actual"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0001628280-26-003952:7:50",
+       "0001628280-26-003952:7:48",
+       "0001628280-26-003952:7:12",
+       "0001628280-26-003952:7:13"
+      ]
      }
     ],
-    "llm_calls": 1,
-    "tool_calls": 2,
+    "llm_calls": 4,
+    "tool_calls": 5,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2081,
-     "completion_tokens": 183,
-     "total_tokens": 2264,
+     "prompt_tokens": 14368,
+     "completion_tokens": 193,
+     "total_tokens": 14561,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00079475
+    "notional_cost_usd": 0.0038815
    },
    "critic_status": "passed"
   }
@@ -2112,7 +2139,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing clearly defines the two business segments, the products sold, and the direct-to-consumer sales model.",
+    "detail": "supports_verdict=yes; The filing explicitly details the two segments, the products within them, and the direct-to-customer sales model.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2122,7 +2149,7 @@
     "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing asserts competitive advantages but provides no measurable evidence, fitting the definition of weak evidence.",
+    "detail": "supports_verdict=yes; The filing asserts competitive advantages (brand, product features) without providing measurable evidence, fitting the definition of weak evidence.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2132,17 +2159,7 @@
     "check": "L1",
     "item": "candid_management",
     "status": "pass",
-    "detail": "supports_verdict=yes; Management explicitly admits to past inaccuracies in its own guidance regarding manufacturing ramps.",
-    "owner": "qualitative",
-    "attempt": 0,
-    "kind": null,
-    "claims": []
-   },
-   {
-    "check": "L1",
-    "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides forward-looking capital expenditure plans but lacks a detailed breakdown of past capital allocation actions.",
+    "detail": "supports_verdict=yes; Management admits to past inaccuracies in its own guidance regarding manufacturing ramps, which constitutes an admission of execution-related error.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2152,7 +2169,7 @@
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and compares it to the reported figure.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and confirms the company exceeds it.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2162,7 +2179,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly cites the current ratio and debt-to-assets comparison.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the current ratio and debt levels against the specified criteria.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2172,7 +2189,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to maintain positive net income over the 10-year period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the company failed the 10-year positive net income requirement.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2182,7 +2199,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the absence of dividend payments over the specified period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the absence of dividends over the 15-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2192,7 +2209,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the test is not meaningful due to negative starting earnings.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the test cannot be performed due to negative starting earnings.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2202,7 +2219,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the ROE threshold in the required number of years.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the ROE target was not met in enough years.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2212,7 +2229,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares long-term debt against the calculated maximum debt threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares debt to the calculated average net income threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2222,7 +2239,7 @@
     "check": "L1",
     "item": "B3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the margin stability criteria.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure based on the operating margin criteria.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2259,41 +2276,41 @@
   "repairs": [],
   "llm_calls": 1,
   "usage": {
-   "prompt_tokens": 3215,
-   "completion_tokens": 822,
-   "total_tokens": 4037,
+   "prompt_tokens": 2777,
+   "completion_tokens": 767,
+   "total_tokens": 3544,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.00203675
+  "notional_cost_usd": 0.00184475
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.007363,
-  "llm_calls": 7,
-  "input_tokens": 16779,
-  "output_tokens": 2112,
+  "notional_cost_usd": 0.009527,
+  "llm_calls": 9,
+  "input_tokens": 26401,
+  "output_tokens": 1951,
   "by_agent": {
    "critic": {
     "calls": 1,
-    "input_tokens": 3215,
-    "output_tokens": 822,
+    "input_tokens": 2777,
+    "output_tokens": 767,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002037
+    "notional_cost_usd": 0.001845
    },
    "explainer": {
     "calls": 1,
-    "input_tokens": 2538,
-    "output_tokens": 545,
+    "input_tokens": 2745,
+    "output_tokens": 614,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001452
+    "notional_cost_usd": 0.001607
    },
    "qualitative": {
-    "calls": 5,
-    "input_tokens": 11026,
-    "output_tokens": 745,
+    "calls": 7,
+    "input_tokens": 20879,
+    "output_tokens": 570,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.003874
+    "notional_cost_usd": 0.006075
    }
   }
  },

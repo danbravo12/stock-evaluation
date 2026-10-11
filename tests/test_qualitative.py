@@ -77,6 +77,10 @@ ONLY_BUSINESS = dict(items={"understandable_business": ["1"]}, queries={"underst
 class AgentCase(Base):
     def setUp(self):
         super().setUp()
+        # These synthetic tests exercise the v1 prompt (at most 3 consecutive sentences); v2, the active version since the 2026-10-12 re-record, has its own class below.
+        self.pin_v1 = mock.patch("engine.agents.qualitative.active_prompt", lambda name: "v1")
+        self.pin_v1.start()
+        self.addCleanup(self.pin_v1.stop)
         self.html_tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.html_tmp.cleanup)
 
@@ -290,15 +294,17 @@ class TestPointerCitations(AgentCase):
 
 
 class TestWordCapPromptV2(AgentCase):
-    """ADR-046 amendment: a citation is a contiguous range of at most 120 words, not at most 3 sentences. Inactive until the re-record."""
+    """ADR-046 amendment: a citation is a contiguous range of at most 120 words, not at most 3 sentences. Active since the re-record of 2026-10-12."""
 
     def v2(self):
         return mock.patch("engine.agents.qualitative.active_prompt", lambda name: "v2")
 
-    def test_the_recorded_prompt_version_is_the_default(self):
+    def test_v2_is_the_active_version_and_v1_stays_available(self):
         from engine.prompts import active
-        self.assertEqual(active("qualitative"), "v1")
-        self.assertEqual(prompt_parts()[3], 3)
+        self.pin_v1.stop()  # look at the real configuration, not the v1 pin of the synthetic tests
+        self.assertEqual(active("qualitative"), "v2")
+        self.assertIsNone(prompt_parts()[3])  # no sentence cap: the word cap applies
+        self.assertEqual(prompt_parts("v1")[3], 3)
 
     def test_v2_accepts_a_long_range_that_v1_refuses_and_still_caps_the_words(self):
         pid, _ = self.loc(BIZ_A)

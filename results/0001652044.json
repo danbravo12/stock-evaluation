@@ -3,7 +3,7 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "GOOGL-replay",
-  "engine_commit": "c29ebe8",
+  "engine_commit": "c1a9bc1",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "replay",
   "generated_at": null,
@@ -146,8 +146,8 @@
     ],
     "explanation": {
      "criterion": "G1",
-     "raw": "Revenue in 2025 was {revenue}, which exceeds the minimum size requirement (test: {threshold}).",
-     "text": "Revenue in 2025 was $402.84 billion, which exceeds the minimum size requirement (test: revenue >= $1B).",
+     "raw": "Revenue in 2025 was {revenue}, which is above the minimum size (test: {threshold}).",
+     "text": "Revenue in 2025 was $402.84 billion, which is above the minimum size (test: revenue >= $1B).",
      "placeholders_used": [
       "revenue",
       "threshold"
@@ -180,8 +180,8 @@
     ],
     "explanation": {
      "criterion": "G2",
-     "raw": "The company maintains a current ratio of {current_ratio} and long-term debt of {long_term_debt}, which is less than the net current assets of {net_current_assets} (test: {threshold}).",
-     "text": "The company maintains a current ratio of 2.01 and long-term debt of $46.55 billion, which is less than the net current assets of $103.29 billion (test: current ratio >= 2 and long-term debt <= net current assets).",
+     "raw": "The company maintains a current ratio of {current_ratio} and long-term debt of {long_term_debt}, which is less than the {net_current_assets} in net current assets (test: {threshold}).",
+     "text": "The company maintains a current ratio of 2.01 and long-term debt of $46.55 billion, which is less than the $103.29 billion in net current assets (test: current ratio >= 2 and long-term debt <= net current assets).",
      "placeholders_used": [
       "current_ratio",
       "long_term_debt",
@@ -242,11 +242,11 @@
     ],
     "explanation": {
      "criterion": "G3",
-     "raw": "Net income remained positive across all {years_on_record} years on record, with {loss_years} years showing a loss (test: {threshold}).",
-     "text": "Net income remained positive across all 10 years on record, with none years showing a loss (test: net income > 0 in every year of the last 10).",
+     "raw": "Net income was positive in each of the {years_on_record} years on record, with {loss_year_count} loss years (test: {threshold}).",
+     "text": "Net income was positive in each of the 10 years on record, with 0 loss years (test: net income > 0 in every year of the last 10).",
      "placeholders_used": [
       "years_on_record",
-      "loss_years",
+      "loss_year_count",
       "threshold"
      ],
      "templated": false
@@ -371,11 +371,12 @@
     ],
     "explanation": {
      "criterion": "G4",
-     "raw": "Dividends were not paid in the years {unpaid_years} out of the {years_on_record} years on record (test: {threshold}).",
-     "text": "Dividends were not paid in the years 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 out of the 13 years on record (test: dividend paid in every year on record in the last 15).",
+     "raw": "Dividends were paid in {paid_year_count} of the {years_on_record} years on record and missed in {unpaid_year_count} (test: {threshold}).",
+     "text": "Dividends were paid in 3 of the 13 years on record and missed in 10 (test: dividend paid in every year on record in the last 15).",
      "placeholders_used": [
-      "unpaid_years",
+      "paid_year_count",
       "years_on_record",
+      "unpaid_year_count",
       "threshold"
      ],
      "templated": false
@@ -530,8 +531,8 @@
     ],
     "explanation": {
      "criterion": "B1",
-     "raw": "Return on equity was at or above the threshold in {years_at_or_above_15pct} of the last 10 years (test: {threshold}).",
-     "text": "Return on equity was at or above the threshold in 9 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years).",
+     "raw": "Return on equity was at or above 15% in {years_at_or_above_15pct} of the last 10 years (test: {threshold}).",
+     "text": "Return on equity was at or above 15% in 9 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years).",
      "placeholders_used": [
       "years_at_or_above_15pct",
       "threshold"
@@ -567,8 +568,8 @@
     ],
     "explanation": {
      "criterion": "B2",
-     "raw": "Long-term debt of {long_term_debt} is well below the maximum debt of {max_debt}, calculated from an average net income of {avg_net_income_3y} (test: {threshold}).",
-     "text": "Long-term debt of $46.55 billion is well below the maximum debt of $408.11 billion, calculated from an average net income of $102.03 billion (test: long-term debt <= 4 x avg net income of the last 3 years).",
+     "raw": "Long-term debt of {long_term_debt} is well below the maximum debt of {max_debt}, which is based on the 3-year average net income of {avg_net_income_3y} (test: {threshold}).",
+     "text": "Long-term debt of $46.55 billion is well below the maximum debt of $408.11 billion, which is based on the 3-year average net income of $102.03 billion (test: long-term debt <= 4 x avg net income of the last 3 years).",
      "placeholders_used": [
       "long_term_debt",
       "max_debt",
@@ -642,8 +643,8 @@
     ],
     "explanation": {
      "criterion": "B3",
-     "raw": "The 3-year average operating margin of {avg_margin_3y} is {ratio} times the 10-year average of {avg_margin_10y}, with positive margins maintained throughout (test: {threshold}).",
-     "text": "The 3-year average operating margin of 30.5% is 1.16 times the 10-year average of 26.2%, with positive margins maintained throughout (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg).",
+     "raw": "The operating margin remained positive in every year, and the 3-year average margin of {avg_margin_3y} is {ratio} times the 10-year average of {avg_margin_10y} (test: {threshold}).",
+     "text": "The operating margin remained positive in every year, and the 3-year average margin of 30.5% is 1.16 times the 10-year average of 26.2% (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg).",
      "placeholders_used": [
       "avg_margin_3y",
       "ratio",
@@ -1348,15 +1349,15 @@
    "finding": {
     "criterion": "understandable_business",
     "verdict": "evidence found",
-    "rationale": "The filing explains that the company generates revenue through advertising, consumption-based fees and subscriptions for cloud services, consumer subscriptions (e.g., YouTube, Google One), and app sales. It identifies its customers as advertisers, individual consumers, and enterprise/developer users of its cloud and AI platforms.",
+    "rationale": "The filing explains that Google generates revenue through advertising, consumption-based fees and subscriptions for cloud services, consumer subscriptions (such as YouTube and Google One), app sales, and hardware device sales. It identifies its customers as advertisers, individual consumers, and enterprise/developer users of its cloud and AI infrastructure.",
     "citations": [
      {
-      "passage_id": "0001652044-26-000018:1:11",
+      "passage_id": "0001652044-26-000018:1:12",
       "accession": "0001652044-26-000018",
       "item": "1",
-      "char_start": 21575,
-      "char_end": 21769,
-      "quote": "•Brand advertising helps enhance users' awareness of and affinity for advertisers' products and services, through videos, text, images, and other interactive ads that run across various devices.",
+      "char_start": 22889,
+      "char_end": 23112,
+      "quote": "Through our Google Cloud Platform and Google Workspace offerings, Google Cloud generates revenues primarily from consumption-based fees and subscriptions for infrastructure, platform, applications, and other cloud services.",
       "sentences": [
        1,
        1
@@ -1367,11 +1368,11 @@
       "accession": "0001652044-26-000018",
       "item": "1",
       "char_start": 22367,
-      "char_end": 22803,
-      "quote": "In addition, Google Services generates revenues from products and services beyond advertising, including:\n•consumer subscriptions, which primarily include revenues from YouTube services, such as YouTube TV, YouTube Music and Premium, and NFL Sunday Ticket, as well as Google One, which offers access to our most capable Gemini models;\n•platforms, which primarily include revenues from Google Play sales of apps and in-app purchases; and",
+      "char_end": 22875,
+      "quote": "In addition, Google Services generates revenues from products and services beyond advertising, including:\n•consumer subscriptions, which primarily include revenues from YouTube services, such as YouTube TV, YouTube Music and Premium, and NFL Sunday Ticket, as well as Google One, which offers access to our most capable Gemini models;\n•platforms, which primarily include revenues from Google Play sales of apps and in-app purchases; and\n•devices, which primarily include sales of the Pixel family of devices.",
       "sentences": [
        5,
-       7
+       8
       ]
      }
     ],
@@ -1396,36 +1397,36 @@
       ]
      }
     ],
-    "llm_calls": 3,
-    "tool_calls": 4,
+    "llm_calls": 1,
+    "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 7639,
-     "completion_tokens": 546,
-     "total_tokens": 8185,
+     "prompt_tokens": 2267,
+     "completion_tokens": 167,
+     "total_tokens": 2434,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0027287500000000003
+    "notional_cost_usd": 0.00081725
    },
    "critic_status": "passed"
   },
   {
    "finding": {
     "criterion": "durable_competitive_advantage",
-    "verdict": "insufficient evidence",
-    "rationale": "The filing identifies intellectual property and brands as important assets but does not provide concrete, quantified measures of a durable competitive advantage. Furthermore, the filing explicitly notes that competitors can readily erode the company's position, stating that users can switch to other products with a single click and that competitors may innovate faster or more cost-effectively.",
+    "verdict": "evidence weak",
+    "rationale": "The filing asserts the importance of brands and intellectual property but does not provide concrete, quantified evidence of a durable competitive advantage, such as specific market share figures or exclusive franchise terms. Furthermore, the filing explicitly notes that competitors can readily erode the company's position, as users can switch to other services with a single click.",
     "citations": [
      {
       "passage_id": "0001652044-26-000018:1A:15",
       "accession": "0001652044-26-000018",
       "item": "1A",
-      "char_start": 50517,
-      "char_end": 50776,
-      "quote": "We also seek to maintain certain intellectual property as trade secrets. The confidentiality of such trade secrets and other sensitive information could be compromised, which could cause us to lose the competitive advantage resulting from these trade secrets.",
+      "char_start": 51201,
+      "char_end": 51719,
+      "quote": "Any significant impairment of our intellectual property rights could harm our business and ability to compete. Protecting our intellectual property rights is costly and time consuming; any increase in unauthorized use could make it more expensive to do business and harm our financial condition and operating results.\nOur business depends on strong brands, and failing to maintain and enhance our brands would hurt our ability to expand our base of users, advertisers, customers, content providers, and other partners.",
       "sentences": [
-       1,
-       2
+       7,
+       9
       ]
      },
      {
@@ -1481,17 +1482,17 @@
       ]
      }
     ],
-    "llm_calls": 2,
-    "tool_calls": 3,
+    "llm_calls": 3,
+    "tool_calls": 4,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5532,
-     "completion_tokens": 199,
-     "total_tokens": 5731,
+     "prompt_tokens": 9493,
+     "completion_tokens": 370,
+     "total_tokens": 9863,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0016815000000000003
+    "notional_cost_usd": 0.0029282500000000003
    },
    "critic_status": "passed"
   },
@@ -1499,21 +1500,8 @@
    "finding": {
     "criterion": "candid_management",
     "verdict": "insufficient evidence",
-    "rationale": "The filing discusses risks related to acquisitions and operating results in a generic, forward-looking manner, attributing potential issues to external factors or hypothetical scenarios rather than acknowledging specific past failures or setbacks caused by management's own decisions. A 10-K is a limited guide to candour.",
-    "citations": [
-     {
-      "passage_id": "0001652044-26-000018:1A:73",
-      "accession": "0001652044-26-000018",
-      "item": "1A",
-      "char_start": 113737,
-      "char_end": 114286,
-      "quote": "Our operating results have fluctuated, and may in the future fluctuate, as a result of a number of factors, many outside of our control, including the cyclical nature and seasonality in our business and geopolitical events. As a result, comparing our operating results (including our expenses as a percentage of our revenues) on a period-to-period basis may not be meaningful, and our past results should not be relied on as an indication of our future performance. Consequently, our operating results in future quarters may fall below expectations.",
-      "sentences": [
-       1,
-       3
-      ]
-     }
-    ],
+    "rationale": "The provided 10-K text focuses on potential risks, accounting policies, and external regulatory changes rather than providing a management-attributed account of a specific past failure or missed target. As a 10-K is a limited guide to candour, the evidence is insufficient to meet the criterion.",
+    "citations": [],
     "searches": [
      {
       "queries": [
@@ -1546,13 +1534,13 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2523,
-     "completion_tokens": 127,
-     "total_tokens": 2650,
+     "prompt_tokens": 2585,
+     "completion_tokens": 89,
+     "total_tokens": 2674,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00082125
+    "notional_cost_usd": 0.00077975
    },
    "critic_status": "passed_after_retry"
   },
@@ -1560,20 +1548,8 @@
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing states that the primary use of capital is to invest for long-term growth and that management regularly evaluates capital returns to stockholders. It also provides concrete figures for 2025, including $91.4 billion in capital expenditures and $45.4 billion in share repurchases.",
+    "rationale": "The filing quantifies specific capital allocation actions in 2025, including $45.4 billion in share repurchases and $91.4 billion in capital expenditures. It also states that the primary use of capital is to invest for long-term growth and that management regularly evaluates the size, pace, and form of capital returns to stockholders.",
     "citations": [
-     {
-      "passage_id": "0001652044-26-000018:7:31",
-      "accession": "0001652044-26-000018",
-      "item": "7",
-      "char_start": 163027,
-      "char_end": 163245,
-      "quote": "The primary use of capital continues to be to invest for the long-term growth of the business. We regularly evaluate our cash and capital structure, including the size, pace, and form of capital return to stockholders.",
-      "sentences": [
-       5,
-       6
-      ]
-     },
      {
       "passage_id": "0001652044-26-000018:7:20",
       "accession": "0001652044-26-000018",
@@ -1584,6 +1560,18 @@
       "sentences": [
        2,
        4
+      ]
+     },
+     {
+      "passage_id": "0001652044-26-000018:7:31",
+      "accession": "0001652044-26-000018",
+      "item": "7",
+      "char_start": 163027,
+      "char_end": 163245,
+      "quote": "The primary use of capital continues to be to invest for the long-term growth of the business. We regularly evaluate our cash and capital structure, including the size, pace, and form of capital return to stockholders.",
+      "sentences": [
+       5,
+       6
       ]
      }
     ],
@@ -1613,13 +1601,13 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2345,
-     "completion_tokens": 169,
-     "total_tokens": 2514,
+     "prompt_tokens": 2354,
+     "completion_tokens": 180,
+     "total_tokens": 2534,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00083975
+    "notional_cost_usd": 0.0008585
    },
    "critic_status": "passed"
   }
@@ -1932,7 +1920,17 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The quotes clearly identify revenue sources (advertising, subscriptions, platforms) and the customer base (advertisers, consumers, developers).",
+    "detail": "supports_verdict=yes; The filing clearly identifies revenue streams from cloud services, advertising, subscriptions, app sales, and hardware, while specifying the customer base.",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "durable_competitive_advantage",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The filing acknowledges the importance of brands and IP but explicitly highlights the ease with which users can switch to competitors, supporting the weak evidence verdict.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -1942,7 +1940,7 @@
     "check": "L1",
     "item": "candid_management",
     "status": "fail",
-    "detail": "supports_verdict=overstated; The quote describes potential risks and generic quality issues rather than acknowledging a specific past setback or failure caused by management's own decisions.",
+    "detail": "supports_verdict=overstated; The quote describes potential risks and general quality issues rather than a specific, management-attributed past failure or missed target as required by the definition.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": "verdict",
@@ -1952,7 +1950,7 @@
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides specific 2025 figures for share repurchases and capital expenditures while stating a clear priority for long-term investment.",
+    "detail": "supports_verdict=yes; The filing provides specific dollar amounts for share repurchases and capital expenditures while stating a clear policy of investing for long-term growth.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -1962,7 +1960,7 @@
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the revenue figure to the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and compares the company's performance against it.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1972,7 +1970,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the financial strength criteria.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the financial strength criteria and provides the relevant figures.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1982,7 +1980,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the earnings stability requirement.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation accurately reflects the earnings stability test over the 10-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2002,7 +2000,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly describes the growth calculation.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio based on the 3-year average EPS.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2012,7 +2010,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly summarizes the ROE performance.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation accurately states the ROE performance against the defined threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2022,7 +2020,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares debt to the calculated maximum.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares long-term debt to the calculated maximum debt threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2042,7 +2040,7 @@
     "check": "R2",
     "item": "candid_management",
     "status": "pass",
-    "detail": "",
+    "detail": "no citations to check",
     "owner": "qualitative",
     "attempt": 1,
     "kind": null,
@@ -2087,41 +2085,41 @@
   ],
   "llm_calls": 1,
   "usage": {
-   "prompt_tokens": 2675,
-   "completion_tokens": 684,
-   "total_tokens": 3359,
+   "prompt_tokens": 3213,
+   "completion_tokens": 794,
+   "total_tokens": 4007,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.00169475
+  "notional_cost_usd": 0.00199425
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.010658,
-  "llm_calls": 11,
-  "input_tokens": 27795,
-  "output_tokens": 2473,
+  "notional_cost_usd": 0.009514,
+  "llm_calls": 9,
+  "input_tokens": 24592,
+  "output_tokens": 2244,
   "by_agent": {
    "critic": {
     "calls": 1,
-    "input_tokens": 2675,
-    "output_tokens": 684,
+    "input_tokens": 3213,
+    "output_tokens": 794,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001695
+    "notional_cost_usd": 0.001994
    },
    "explainer": {
     "calls": 1,
-    "input_tokens": 2199,
-    "output_tokens": 498,
+    "input_tokens": 2392,
+    "output_tokens": 519,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001297
+    "notional_cost_usd": 0.001376
    },
    "qualitative": {
-    "calls": 9,
-    "input_tokens": 22921,
-    "output_tokens": 1291,
+    "calls": 7,
+    "input_tokens": 18987,
+    "output_tokens": 931,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.007667
+    "notional_cost_usd": 0.006143
    }
   }
  },

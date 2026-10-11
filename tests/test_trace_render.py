@@ -43,20 +43,20 @@ class TestRenderers(unittest.TestCase):
     def test_titles_for_the_main_event_types(self):
         events, res = load(SAMPLES["JPM"])
         steps = {s["n"]: s for s in render_trace(events, res)["steps"]}
-        self.assertEqual(steps[1]["title"], "Planned the run for JPM")
+        self.assertEqual(steps[1]["title"], "Planned the run for JPM")  # prompt v2 recording of 2026-10-12
         self.assertIn("Tests that do not apply to this kind of company: G2, B2, B3, B4.", steps[1]["details"])
-        self.assertEqual(steps[31]["title"], 'Planned: search Item 7 first, starting queries: "share repurchases buyback", "dividends", "acquisitions", and others')
-        self.assertEqual(steps[32]["title"], 'Searched Item 7 for "share repurchases buyback", "dividends", "acquisitions", and others: 4 passages')
-        self.assertEqual(steps[33]["title"], "Model call 1 for rational capital allocation: 2,374 tokens in, 199 out, ~$0.0009 at paid rates")
-        self.assertEqual(steps[9]["title"], "Pointer check: rejected, a citation covered more than three sentences")
-        self.assertEqual(steps[12]["title"], "Pointer check: quote built from the filing and verified")
-        self.assertEqual(steps[13]["title"], "Model submitted: evidence found, citing passage 7:56 sentences 4 to 6; passage 7:72 sentences 1 to 2")
-        self.assertEqual(steps[34]["title"], "Model submission malformed: it gave more than 2 citations")
-        self.assertEqual(steps[41]["title"], "Explainer wrote 11 lines; figures filled in by code from the scorecard")
-        self.assertEqual(steps[43]["title"], "Critic: explanation check passed for 11 items")
-        self.assertEqual(steps[47]["title"], "Critic: second-model review found 2 problems in 7 items")
-        self.assertEqual(steps[48]["title"], "Critic sent 2 findings back for repair")
-        self.assertEqual(steps[49]["title"].split(":")[0], "Rationale rewrite for understandable business")
+        self.assertEqual(steps[30]["title"], 'Planned: search Item 7 first, starting queries: "share repurchases buyback", "dividends", "acquisitions", and others')
+        self.assertEqual(steps[31]["title"], 'Searched Item 7 for "share repurchases buyback", "dividends", "acquisitions", and others: 4 passages')
+        self.assertEqual(steps[32]["title"], "Model call 1 for rational capital allocation: 2,383 tokens in, 191 out, ~$0.0009 at paid rates")
+        self.assertEqual(steps[11]["title"], "Pointer check: quote built from the filing and verified")
+        self.assertEqual(steps[12]["title"], "Model submitted: evidence found, citing passage 7:56 sentences 4 to 9; passage 7:88 sentences 5 to 6")  # prompt v2 allows a long range
+        self.assertEqual(steps[33]["title"], "Model submission malformed: it gave more than 2 citations")
+        self.assertEqual(steps[40]["title"], "Explainer wrote 11 lines; figures filled in by code from the scorecard")
+        self.assertEqual(steps[42]["title"], "Critic: explanation check passed for 11 items")
+        self.assertEqual(steps[46]["title"], "Critic: second-model review found 2 problems in 8 items")
+        self.assertEqual(steps[47]["title"], "Critic sent 2 findings back for repair")
+        self.assertEqual(steps[48]["title"].split(":")[0], "Rationale rewrite for understandable business")
+        self.assertEqual(steps[60]["title"], "Critic: explanation check had nothing to judge")
 
     def test_the_submitted_step_shows_the_built_quote(self):
         events, res = load(SAMPLES["KO"])
@@ -68,7 +68,7 @@ class TestRenderers(unittest.TestCase):
     def test_the_critic_objection_is_a_sentence(self):
         events, res = load(SAMPLES["KO"])
         step = next(s for s in render_trace(events, res)["steps"] if s["title"].startswith("Critic: second-model review found"))
-        self.assertEqual(step["details"], ["The Critic objected to the understandable business rationale: it says \"It also notes direct-to-consumer sales through Costa retail stores\", which the quoted sentences don't show."])
+        self.assertEqual(step["details"], ["The Critic objected to the understandable business rationale: it says \"direct-to-consumer retail stores\", which the quoted sentences don't show."])
 
     def test_hand_offs_are_only_the_real_ones(self):
         for t, r in self.rendered.items():
@@ -91,7 +91,7 @@ class TestRenderers(unittest.TestCase):
     def test_group_summaries_and_repairs(self):
         groups = {g["title"]: g for g in self.rendered["KO"]["groups"]}
         self.assertEqual(groups["Rational capital allocation"]["summary"], "1 search, 1 model call, evidence found, 2 citations")
-        self.assertEqual(groups["Durable competitive advantage"]["summary"], "2 searches, 2 model calls, evidence found, 1 citation")
+        self.assertEqual(groups["Durable competitive advantage"]["summary"], "2 searches, 2 model calls, evidence weak, 1 citation")
         jpm = self.rendered["JPM"]["groups"]
         self.assertEqual([g["title"] for g in jpm if g["repair"]], ["Repair: Understandable business", "Repair: Rational capital allocation"])
         self.assertTrue(all(g["steps"] for g in jpm))
@@ -133,7 +133,7 @@ class TestCriticSentences(unittest.TestCase):
         _, res = load(SAMPLES["KO"])
         v = critic_notes(res)["critic"]["understandable_business"]
         self.assertEqual(v["status"], "Passed after one repair")
-        self.assertEqual(v["sentences"], ["The Critic objected to the understandable business rationale: it says \"It also notes direct-to-consumer sales through Costa retail stores\", which the quoted sentences don't show.",
+        self.assertEqual(v["sentences"], ["The Critic objected to the understandable business rationale: it says \"direct-to-consumer retail stores\", which the quoted sentences don't show.",
                                           "The rationale was rewritten from the quotes and passed the re-check."])
         self.assertTrue(v["objected"])
         plain = critic_notes(res)["critic"]["G1"]
@@ -143,12 +143,13 @@ class TestCriticSentences(unittest.TestCase):
         _, res = load(SAMPLES["JPM"])
         v = critic_notes(res)["critic"]["rational_capital_allocation"]
         self.assertTrue(v["sentences"][0].startswith("The Critic objected to the rational capital allocation verdict: the quoted sentences don't fully support it"))
-        self.assertIn("The agent was asked to cite something new or lower its verdict and passed the re-check.", v["sentences"])
+        self.assertEqual(v["status"], "Still objected to after one repair")  # prompt v2 recording: the repair did not satisfy the Critic
+        self.assertIn("The agent was asked to cite something new or lower its verdict, but the Critic still objects.", v["sentences"])
 
     def test_agent_and_cost_sentences_use_real_plurals(self):
         _, res = load(SAMPLES["KO"])
         n = critic_notes(res)
-        self.assertEqual(n["cost"], "The agents made 10 model calls and read 21,797 tokens, writing 2,120. On the free tier that cost $0.00; at paid rates it would have cost about $0.0086.")
+        self.assertEqual(n["cost"], "The agents made 11 model calls and read 24,760 tokens, writing 2,311. On the free tier that cost $0.00; at paid rates it would have cost about $0.0097.")
         self.assertRegex(n["qualitative"]["rational_capital_allocation"], r"^The agent made 1 model call and \d+ tool calls?, including 1 search of the filing")
         self.assertIn("2 searches", n["qualitative"]["durable_competitive_advantage"])
 

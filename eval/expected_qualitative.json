@@ -1,6 +1,6 @@
 {
   "reviewer": "Daniel Bravo, reviewed with Claude, 2026-10-10",
-  "source": "agent_verdict = recorded run (docs/qualitative_report.md, fixtures/llm/); human_verdict = reviewed label (ADR-050)",
+  "source": "agent_verdict = recorded agent-only run with prompt v2 (docs/qualitative_report.md, fixtures/llm/; re-recorded 2026-10-12, v1 run before that); human_verdict = reviewed label (ADR-050)",
   "gold": {
     "KO": {
       "understandable_business": {
@@ -9,7 +9,7 @@
         "note": "Cites how finished product operations earn revenue (sales to retailers and distributors). Agree."
       },
       "durable_competitive_advantage": {
-        "agent_verdict": "evidence found",
+        "agent_verdict": "evidence weak",
         "human_verdict": "evidence found",
         "note": "Cites a checkable measure: trademarked beverages are 2.2 billion of an estimated 65 billion daily servings. Agree."
       },
@@ -36,7 +36,7 @@
         "note": "Only total assets and equity are cited; 'leading' is promotional. Agree."
       },
       "candid_management": {
-        "agent_verdict": "insufficient evidence",
+        "agent_verdict": "evidence weak",
         "human_verdict": "insufficient evidence",
         "note": "Hypothetical risk wording only. Agree."
       },
@@ -61,7 +61,7 @@
         "note": "Revenue sources (advertising, subscriptions, platforms, cloud) described; first cited sentence is thin. Agree."
       },
       "durable_competitive_advantage": {
-        "agent_verdict": "insufficient evidence",
+        "agent_verdict": "evidence weak",
         "human_verdict": "insufficient evidence",
         "note": "Trade secrets named without a measure; filing says users are one click away. Agree."
       },
@@ -93,7 +93,7 @@
         "note": "Stays found, but thin: one risk-factor sentence admitting past guidance misses (timing of manufacturing ramps)."
       },
       "rational_capital_allocation": {
-        "agent_verdict": "evidence weak",
+        "agent_verdict": "insufficient evidence",
         "human_verdict": "evidence weak",
         "note": "Forward-looking capex only, no past actions or policy. Agree."
       }
@@ -110,7 +110,7 @@
         "note": "Regulated exclusive franchise (sole supplier in its service territories). Agree."
       },
       "candid_management": {
-        "agent_verdict": "evidence weak",
+        "agent_verdict": "evidence found",
         "human_verdict": "evidence weak",
         "note": "Net-zero progress 'will not be linear': a hedge, not a setback. Agree."
       },

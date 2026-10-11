@@ -3,7 +3,7 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "KO-replay",
-  "engine_commit": "c29ebe8",
+  "engine_commit": "c1a9bc1",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "replay",
   "generated_at": null,
@@ -146,8 +146,8 @@
     ],
     "explanation": {
      "criterion": "G1",
-     "raw": "Revenue in 2025 was {revenue}, which meets the minimum size requirement (test: {threshold}).",
-     "text": "Revenue in 2025 was $47.94 billion, which meets the minimum size requirement (test: revenue >= $1B).",
+     "raw": "Revenue in 2025 was {revenue}, which is above the minimum size (test: {threshold}).",
+     "text": "Revenue in 2025 was $47.94 billion, which is above the minimum size (test: revenue >= $1B).",
      "placeholders_used": [
       "revenue",
       "threshold"
@@ -242,11 +242,12 @@
     ],
     "explanation": {
      "criterion": "G3",
-     "raw": "Net income was positive in each of the {years_on_record} years on record, with {loss_years} showing a loss (test: {threshold}).",
-     "text": "Net income was positive in each of the 10 years on record, with none showing a loss (test: net income > 0 in every year of the last 10).",
+     "raw": "Net income was positive in all {profit_year_count} of the {years_on_record} years on record, with {loss_year_count} loss years (test: {threshold}).",
+     "text": "Net income was positive in all 10 of the 10 years on record, with 0 loss years (test: net income > 0 in every year of the last 10).",
      "placeholders_used": [
+      "profit_year_count",
       "years_on_record",
-      "loss_years",
+      "loss_year_count",
       "threshold"
      ],
      "templated": false
@@ -379,9 +380,10 @@
     ],
     "explanation": {
      "criterion": "G4",
-     "raw": "Dividends were paid in every one of the {years_on_record} years on record, which is the full history available for this test (test: {threshold}).",
-     "text": "Dividends were paid in every one of the 15 years on record, which is the full history available for this test (test: dividend paid in every year on record in the last 15).",
+     "raw": "Dividends were paid in all {paid_year_count} of the {years_on_record} years on record, which is the full history available for this test (test: {threshold}).",
+     "text": "Dividends were paid in all 15 of the 15 years on record, which is the full history available for this test (test: dividend paid in every year on record in the last 15).",
      "placeholders_used": [
+      "paid_year_count",
       "years_on_record",
       "threshold"
      ],
@@ -647,11 +649,12 @@
     ],
     "explanation": {
      "criterion": "B3",
-     "raw": "Operating margins remained positive throughout the period, with a 3-year average margin that is {ratio} of the 10-year average margin of {avg_margin_10y} (test: {threshold}).",
-     "text": "Operating margins remained positive throughout the period, with a 3-year average margin that is 1.00 of the 10-year average margin of 25.0% (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg).",
+     "raw": "Operating margins remained positive, and the last-3-yr avg margin of {avg_margin_3y} compared to the 10-yr avg of {avg_margin_10y} results in a ratio of {ratio} (test: {threshold}).",
+     "text": "Operating margins remained positive, and the last-3-yr avg margin of 24.9% compared to the 10-yr avg of 25.0% results in a ratio of 1.00 (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg).",
      "placeholders_used": [
-      "ratio",
+      "avg_margin_3y",
       "avg_margin_10y",
+      "ratio",
       "threshold"
      ],
      "templated": false
@@ -732,8 +735,8 @@
     ],
     "explanation": {
      "criterion": "B4",
-     "raw": "Owner earnings were positive in {years_positive} of the last 10 years, and the 3-year average of {avg_last_3y} is higher than the initial 3-year average of {avg_first_3y} (test: {threshold}).",
-     "text": "Owner earnings were positive in 10 of the last 10 years, and the 3-year average of $10.56 billion is higher than the initial 3-year average of $4.26 billion (test: net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg).",
+     "raw": "Owner earnings were positive in all {years_positive} years, and the last-3-yr avg of {avg_last_3y} is greater than the first-3-yr avg of {avg_first_3y} (test: {threshold}).",
+     "text": "Owner earnings were positive in all 10 years, and the last-3-yr avg of $10.56 billion is greater than the first-3-yr avg of $4.26 billion (test: net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg).",
      "placeholders_used": [
       "years_positive",
       "avg_last_3y",
@@ -1703,7 +1706,7 @@
    "finding": {
     "criterion": "understandable_business",
     "verdict": "evidence found",
-    "rationale": "The company generates revenue by selling finished sparkling and other beverages to retailers, distributors, and wholesalers. Additionally, it manufactures and sells fountain syrups to fountain retailers, wholesalers, and bottling partners.",
+    "rationale": "The company generates revenue by selling finished beverages and fountain syrups to retailers, distributors, and wholesalers. These customers then sell the products or use the syrups to produce beverages for immediate consumption.",
     "citations": [
      {
       "passage_id": "0001628280-26-010047:1:8",
@@ -1751,36 +1754,36 @@
       ]
      }
     ],
-    "llm_calls": 2,
-    "tool_calls": 2,
+    "llm_calls": 3,
+    "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2642,
-     "completion_tokens": 199,
-     "total_tokens": 2841,
+     "prompt_tokens": 5182,
+     "completion_tokens": 387,
+     "total_tokens": 5569,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.000959
+    "notional_cost_usd": 0.001876
    },
    "critic_status": "passed_after_retry"
   },
   {
    "finding": {
     "criterion": "durable_competitive_advantage",
-    "verdict": "evidence found",
-    "rationale": "The filing provides a specific measure of the company's scale, stating that beverages bearing its trademarks account for 2.2 billion of the estimated 65 billion servings of all beverages consumed worldwide every day.",
+    "verdict": "evidence weak",
+    "rationale": "The filing asserts that the company has competitive strengths such as \"leading brands\" and a \"worldwide network of bottlers,\" but it does not provide concrete, quantified measures (such as specific market share percentages or network size metrics) to substantiate these as durable competitive advantages. The filing also notes that these strengths are subject to competitive challenges and pressures.",
     "citations": [
      {
-      "passage_id": "0001628280-26-010047:1:1",
+      "passage_id": "0001628280-26-010047:1:25",
       "accession": "0001628280-26-010047",
       "item": "1",
-      "char_start": 9839,
-      "char_end": 10011,
-      "quote": "Beverages bearing trademarks owned by or licensed to the Company account for 2.2 billion of the estimated 65 billion servings of all beverages consumed worldwide every day.",
+      "char_start": 38357,
+      "char_end": 38612,
+      "quote": "Our competitive strengths include leading brands with high levels of consumer recognition and loyalty; a worldwide network of bottlers and distributors of Company products; sophisticated marketing capabilities; and a talented group of dedicated employees.",
       "sentences": [
-       9,
-       9
+       3,
+       3
       ]
      }
     ],
@@ -1810,16 +1813,16 @@
      },
      {
       "queries": [
-       "market share rank distribution network size"
+       "market share rank competitive advantage"
       ],
       "items": [
        "1"
       ],
       "seeded": false,
       "passage_ids": [
-       "0001628280-26-010047:1:11",
-       "0001628280-26-010047:1:1",
-       "0001628280-26-010047:1:40",
+       "0001628280-26-010047:1:24",
+       "0001628280-26-010047:1:25",
+       "0001628280-26-010047:1:16",
        "0001628280-26-010047:1:22"
       ]
      }
@@ -1828,13 +1831,13 @@
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5734,
-     "completion_tokens": 133,
-     "total_tokens": 5867,
+     "prompt_tokens": 5913,
+     "completion_tokens": 159,
+     "total_tokens": 6072,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001633
+    "notional_cost_usd": 0.00171675
    },
    "critic_status": "passed"
   },
@@ -1886,7 +1889,7 @@
      },
      {
       "queries": [
-       "impairment charge write-down mistake failure"
+       "impairment charge write-down failure mistake"
       ],
       "items": [
        "1A"
@@ -1904,13 +1907,13 @@
     "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5342,
+     "prompt_tokens": 5360,
      "completion_tokens": 147,
-     "total_tokens": 5489,
+     "total_tokens": 5507,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0015559999999999999
+    "notional_cost_usd": 0.0015605
    },
    "critic_status": "passed"
   },
@@ -1918,7 +1921,7 @@
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing explicitly states the company's capital allocation priorities, which include investing in business operations, growing dividends, making acquisitions, and repurchasing shares. It also provides concrete figures for dividends paid during the fiscal year.",
+    "rationale": "The filing explicitly states the company's capital allocation priorities, which include investing in business operations, growing dividends, pursuing acquisitions, and repurchasing shares. It also provides concrete figures for dividends paid during the 2025 fiscal year.",
     "citations": [
      {
       "passage_id": "0001628280-26-010047:7:77",
@@ -1971,13 +1974,13 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2198,
-     "completion_tokens": 151,
-     "total_tokens": 2349,
+     "prompt_tokens": 2207,
+     "completion_tokens": 156,
+     "total_tokens": 2363,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.000776
+    "notional_cost_usd": 0.00078575
    },
    "critic_status": "passed"
   }
@@ -2290,19 +2293,19 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "fail",
-    "detail": "supports_verdict=yes; unsupported: It also notes direct-to-consumer sales through Costa retail stores.; The quotes clearly define the products, customers, and revenue generation methods. The rationale includes a claim about Costa stores not present in the provided quotes.",
+    "detail": "supports_verdict=yes; unsupported: direct-to-consumer retail stores; The quotes clearly define the products, customers, and revenue generation methods, though the rationale mentions a retail store channel not present in the provided text.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": "rationale",
     "claims": [
-     "It also notes direct-to-consumer sales through Costa retail stores."
+     "direct-to-consumer retail stores"
     ]
    },
    {
     "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides a specific, checkable measure of market scale (2.2 billion out of 65 billion daily servings) to support the competitive advantage.",
+    "detail": "supports_verdict=yes; The filing asserts competitive strengths without providing quantitative measures, fitting the definition of a weak evidence verdict.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2312,7 +2315,7 @@
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides both a clear statement of capital allocation priorities and specific, quantified figures for dividends paid during the fiscal year.",
+    "detail": "supports_verdict=yes; The filing provides both a clear policy on capital allocation and specific, quantified figures for dividend payments.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2322,7 +2325,7 @@
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue figure and compares it against the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue and compares it against the threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2342,7 +2345,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the stability requirement over the 10-year period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year stability requirement.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2352,7 +2355,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that the record is complete for the available history, justifying the partial pass.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that the test was met for the available record, justifying the partial pass.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2362,7 +2365,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio and compares it to the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio against the required threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2372,7 +2375,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the frequency of meeting the ROE threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the performance over the 10-year period.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2382,7 +2385,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the debt level against the calculated maximum based on average net income.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares debt against the calculated maximum threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2392,7 +2395,7 @@
     "check": "L1",
     "item": "B3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly evaluates the margin stability and the comparison between the 3-year and 10-year averages.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin to the 10-year average.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2402,7 +2405,7 @@
     "check": "L1",
     "item": "B4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly evaluates both the frequency of positive owner earnings and the growth between the initial and final 3-year periods.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the owner earnings averages over the specified periods.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2432,7 +2435,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The quotes clearly identify the products (beverages, fountain syrups), the customers (retailers, distributors, wholesalers), and the revenue generation model.",
+    "detail": "supports_verdict=yes; The quotes clearly identify the products (beverages, syrups), the customers (retailers, distributors, wholesalers), and the revenue model (selling these products).",
     "owner": "qualitative",
     "attempt": 1,
     "kind": null,
@@ -2467,41 +2470,41 @@
   ],
   "llm_calls": 2,
   "usage": {
-   "prompt_tokens": 3471,
-   "completion_tokens": 915,
-   "total_tokens": 4386,
+   "prompt_tokens": 3480,
+   "completion_tokens": 867,
+   "total_tokens": 4347,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.00224025
+  "notional_cost_usd": 0.0021705
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.008629,
-  "llm_calls": 10,
-  "input_tokens": 21797,
-  "output_tokens": 2120,
+  "notional_cost_usd": 0.009657,
+  "llm_calls": 11,
+  "input_tokens": 24760,
+  "output_tokens": 2311,
   "by_agent": {
    "critic": {
     "calls": 2,
-    "input_tokens": 3471,
-    "output_tokens": 915,
+    "input_tokens": 3480,
+    "output_tokens": 867,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00224
+    "notional_cost_usd": 0.002171
    },
    "explainer": {
     "calls": 1,
-    "input_tokens": 2410,
-    "output_tokens": 575,
+    "input_tokens": 2618,
+    "output_tokens": 595,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001465
+    "notional_cost_usd": 0.001547
    },
    "qualitative": {
-    "calls": 7,
-    "input_tokens": 15916,
-    "output_tokens": 630,
+    "calls": 8,
+    "input_tokens": 18662,
+    "output_tokens": 849,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.004924
+    "notional_cost_usd": 0.005939
    }
   }
  },

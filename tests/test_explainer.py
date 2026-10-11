@@ -75,14 +75,14 @@ class TestExplainer(unittest.TestCase):
         self.assertEqual({formats[k] for k in derived}, {"count"})
         self.assertEqual(derived & {k for s in self.scores.values() for r in s.results for k in r.figures}, set())
 
-    def test_the_v2_prompt_teaches_counts_and_is_not_active_until_the_re_record(self):
+    def test_the_v2_prompt_teaches_counts_and_is_active_since_the_re_record(self):
         from engine.prompts import active
-        self.assertEqual(active("explainer"), "v1")  # fixtures were recorded with v1
-        self.assertEqual(explainer.system_prompt(), explainer.SYSTEM_PROMPT)
+        self.assertEqual(active("explainer"), "v2")  # fixtures were re-recorded with v2 on 2026-10-12
+        self.assertEqual(explainer.system_prompt(), explainer.SYSTEM_PROMPT_V2)
         self.assertIn("{loss_year_count}", explainer.SYSTEM_PROMPT_V2)
         self.assertNotIn("{loss_year_count}", explainer.SYSTEM_PROMPT)
-        with mock.patch.object(explainer, "active_prompt", lambda name: "v2"):
-            self.assertEqual(explainer.system_prompt(), explainer.SYSTEM_PROMPT_V2)
+        with mock.patch.object(explainer, "active_prompt", lambda name: "v1"):
+            self.assertEqual(explainer.system_prompt(), explainer.SYSTEM_PROMPT)  # v1 stays available
 
     def test_none_figures_are_not_offered_as_placeholders(self):
         r = self.result("TSLA", "G5")

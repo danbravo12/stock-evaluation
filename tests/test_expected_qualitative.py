@@ -18,11 +18,13 @@ class TestExpectedQualitative(unittest.TestCase):
             for c, rec in crits.items():
                 self.assertEqual(self.verdicts[t][c], rec["agent_verdict"], f"{t} {c}")
 
-    def test_agreement_is_19_of_20_and_the_one_disagreement_is_over_generous(self):
+    def test_agreement_is_14_of_20_under_prompt_v2(self):
+        """Was 19 of 20 with prompt v1. Four of the six differences are over-generous, two too strict; all are weak-versus-insufficient or found-versus-weak borderline calls."""
         result = agreement(self.verdicts, self.gold)
-        self.assertEqual((result["agree"], result["total"]), (19, 20))
-        self.assertEqual({(d["ticker"], d["criterion"]) for d in result["disagreements"]}, {("GOOGL", "candid_management")})
-        self.assertTrue(all(d["direction"] == "over-generous" for d in result["disagreements"]))
+        self.assertEqual((result["agree"], result["total"]), (14, 20))
+        self.assertEqual({(d["ticker"], d["criterion"]): d["direction"] for d in result["disagreements"]},
+                         {("KO", "durable_competitive_advantage"): "too strict", ("JPM", "candid_management"): "over-generous", ("GOOGL", "durable_competitive_advantage"): "over-generous",
+                          ("GOOGL", "candid_management"): "over-generous", ("TSLA", "rational_capital_allocation"): "too strict", ("DUK", "candid_management"): "over-generous"})
 
     def test_every_changed_label_has_a_dated_history_entry_with_a_reason(self):
         changed = 0

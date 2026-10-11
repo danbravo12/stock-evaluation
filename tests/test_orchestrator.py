@@ -245,7 +245,7 @@ class TestBatchAndCli(Replay):
         first = self.batch(["KO", "JPM", "GOOGL", "TSLA"], flaky)
         self.assertEqual((first.done, calls), (["KO", "JPM"], ["KO", "JPM", "GOOGL"]))
         self.assertIn("midnight Pacific", first.stopped)
-        self.assertEqual({r["ticker"]: r["status"] for r in self.ledger.rows.values()}, {"KO": "done", "JPM": "done"})
+        self.assertEqual({r["ticker"]: r["status"] for r in self.ledger.rows.values()}, {"KO": "done", "JPM": "warning"})  # JPM: the Critic still objects to one finding after its repair (a warning, not a failure)
         calls.clear()
         second = self.batch(["KO", "JPM", "GOOGL", "TSLA"], lambda s, **kw: (calls.append(s), analyse(s, **kw))[1])
         self.assertEqual((second.skipped, calls, second.stopped), (["KO", "JPM"], ["GOOGL", "TSLA"], None))

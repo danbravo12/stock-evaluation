@@ -72,7 +72,10 @@ def citations_text(cits: list[dict]) -> str:
 
 def reject_reason(text: str) -> str:
     if "consecutive sentences" in text:
-        return SENTENCE_CAP
+        return SENTENCE_CAP  # prompt v1
+    m = re.search(r"(\d+) words; the limit is (\d+)", text)
+    if m:  # prompt v2: a word cap
+        return f"a citation was {m.group(1)} words long, over the limit of {m.group(2)}"
     m = re.search(r"at most (\d+) citations", text)
     if m:
         return f"it gave more than {m.group(1)} citations"
@@ -300,7 +303,7 @@ class Renderer:
                 n = re.match(r"(\d+) passed, (\d+) failed", text)
                 p, f = int(n.group(1)), int(n.group(2))
                 what = CHECK[chk]
-                if "nothing to judge" in text:
+                if "nothing to judge" in text or p + f == 0:
                     s.update(kind="check", title=f"Critic: {what} had nothing to judge", details=["No repaired item needed a second look."])
                 elif f == 0:
                     s.update(kind="check", title=f"Critic: {what} passed for {plural(p, 'item')}")

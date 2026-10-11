@@ -3,7 +3,7 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "JPM-replay",
-  "engine_commit": "c29ebe8",
+  "engine_commit": "c1a9bc1",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "replay",
   "generated_at": null,
@@ -159,8 +159,8 @@
     ],
     "explanation": {
      "criterion": "G1",
-     "raw": "Revenue in 2025 was {revenue}, which exceeds the minimum size requirement (test: {threshold}).",
-     "text": "Revenue in 2025 was $182.45 billion, which exceeds the minimum size requirement (test: revenue >= $1B).",
+     "raw": "Revenue in 2025 was {revenue}, which meets the minimum size requirement (test: {threshold}).",
+     "text": "Revenue in 2025 was $182.45 billion, which meets the minimum size requirement (test: revenue >= $1B).",
      "placeholders_used": [
       "revenue",
       "threshold"
@@ -240,11 +240,11 @@
     ],
     "explanation": {
      "criterion": "G3",
-     "raw": "Net income remained positive across all {years_on_record} years on record, with {loss_years} years showing a loss (test: {threshold}).",
-     "text": "Net income remained positive across all 10 years on record, with none years showing a loss (test: net income > 0 in every year of the last 10).",
+     "raw": "Net income was positive in all {profit_year_count} years on record, with {loss_year_count} loss years (test: {threshold}).",
+     "text": "Net income was positive in all 10 years on record, with 0 loss years (test: net income > 0 in every year of the last 10).",
      "placeholders_used": [
-      "years_on_record",
-      "loss_years",
+      "profit_year_count",
+      "loss_year_count",
       "threshold"
      ],
      "templated": false
@@ -375,9 +375,10 @@
     ],
     "explanation": {
      "criterion": "G4",
-     "raw": "Dividends were paid in every one of the {years_on_record} years on record (test: {threshold}).",
-     "text": "Dividends were paid in every one of the 15 years on record (test: dividend paid in every year on record in the last 15).",
+     "raw": "Dividends were paid in all {paid_year_count} of the {years_on_record} years on record, which covers the full history available for this test (test: {threshold}).",
+     "text": "Dividends were paid in all 15 of the 15 years on record, which covers the full history available for this test (test: dividend paid in every year on record in the last 15).",
      "placeholders_used": [
+      "paid_year_count",
       "years_on_record",
       "threshold"
      ],
@@ -417,8 +418,8 @@
     ],
     "explanation": {
      "criterion": "G5",
-     "raw": "The 3-year average diluted EPS grew from {avg_eps_start} to {avg_eps_end}, representing a ratio of {ratio} (test: {threshold}).",
-     "text": "The 3-year average diluted EPS grew from $7.17 to $18.67, representing a ratio of 2.60 (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)).",
+     "raw": "The 3-year average diluted EPS grew from {avg_eps_start} to {avg_eps_end}, resulting in a ratio of {ratio} (test: {threshold}).",
+     "text": "The 3-year average diluted EPS grew from $7.17 to $18.67, resulting in a ratio of 2.60 (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)).",
      "placeholders_used": [
       "avg_eps_start",
       "avg_eps_end",
@@ -531,8 +532,8 @@
     ],
     "explanation": {
      "criterion": "B1",
-     "raw": "Return on equity reached at least 15% in {years_at_or_above_15pct} of the last 10 years (test: {threshold}).",
-     "text": "Return on equity reached at least 15% in 4 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years).",
+     "raw": "Return on equity reached the threshold in {years_at_or_above_15pct} of the last 10 years (test: {threshold}).",
+     "text": "Return on equity reached the threshold in 4 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years).",
      "placeholders_used": [
       "years_at_or_above_15pct",
       "threshold"
@@ -1087,30 +1088,30 @@
    "finding": {
     "criterion": "understandable_business",
     "verdict": "evidence found",
-    "rationale": "The company provides banking, investment, lending, and payment services to a diverse client base ranging from individual consumers and small businesses to large corporations and government entities. It generates revenue by offering these financial products and services through various channels, including digital platforms, branches, and direct client coverage segments.",
+    "rationale": "The company provides banking, lending, investment, and payment services to consumers, small businesses, institutional investors, and high-net-worth clients. It generates revenue through products such as deposits, mortgages, credit cards, auto loans, and asset management solutions.",
     "citations": [
      {
       "passage_id": "0001628280-26-008131:7:56",
       "accession": "0001628280-26-008131",
       "item": "7",
       "char_start": 261842,
-      "char_end": 262398,
-      "quote": "Consumer & Community Banking offers products and services to consumers and small businesses through bank branches, ATMs, digital (including mobile and online) and telephone banking. CCB is organized into Banking & Wealth Management (including Consumer Banking, Business Banking and J.P. Morgan Wealth Management), Home Lending (including Home Lending Production, Home Lending Servicing and Real Estate Portfolios) and Card Services & Auto. Banking & Wealth Management offers deposit, investment and lending products, cash management, payments and services.",
+      "char_end": 262721,
+      "quote": "Consumer & Community Banking offers products and services to consumers and small businesses through bank branches, ATMs, digital (including mobile and online) and telephone banking. CCB is organized into Banking & Wealth Management (including Consumer Banking, Business Banking and J.P. Morgan Wealth Management), Home Lending (including Home Lending Production, Home Lending Servicing and Real Estate Portfolios) and Card Services & Auto. Banking & Wealth Management offers deposit, investment and lending products, cash management, payments and services. Home Lending includes mortgage origination and servicing activities, as well as portfolios consisting of residential mortgages and home equity loans. Card Services issues credit cards and offers payment solutions, travel services, merchant offers and lifestyle benefits. Auto originates and services auto loans and leases.",
       "sentences": [
        4,
-       6
+       9
       ]
      },
      {
-      "passage_id": "0001628280-26-008131:7:72",
+      "passage_id": "0001628280-26-008131:7:88",
       "accession": "0001628280-26-008131",
       "item": "7",
-      "char_start": 277748,
-      "char_end": 278393,
-      "quote": "Banking & Payments Revenue by Client Coverage Segment: (a) Global Corporate Banking & Global Investment Banking provides banking products and services generally to large corporations, financial institutions and merchants. Commercial Banking provides banking products and services to clients, including start-ups, small and mid-sized companies, local governments, municipalities, and nonprofits, as well as commercial real estate clients. (a)Global Banking is a client coverage view within the Banking & Payments business and is comprised of the Global Corporate Banking, Global Investment Banking and Commercial Banking client coverage segments.",
+      "char_start": 295518,
+      "char_end": 295919,
+      "quote": "Asset Management Offers multi-asset investment management solutions across equities, fixed income, alternatives and money market funds to institutional and retail investors providing for a broad range of clients' investment needs. Global Private Bank Provides retirement products and services, brokerage, custody, estate planning, lending, deposits and investment management to high net worth clients.",
       "sentences": [
-       1,
-       2
+       5,
+       6
       ]
      }
     ],
@@ -1148,19 +1149,34 @@
        "0001628280-26-008131:7:48",
        "0001628280-26-008131:7:56"
       ]
+     },
+     {
+      "queries": [
+       "Asset & Wealth Management products services customers revenue"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0001628280-26-008131:7:88",
+       "0001628280-26-008131:7:56",
+       "0001628280-26-008131:7:49",
+       "0001628280-26-008131:7:368"
+      ]
      }
     ],
     "llm_calls": 4,
     "tool_calls": 4,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 10042,
-     "completion_tokens": 461,
-     "total_tokens": 10503,
+     "prompt_tokens": 11063,
+     "completion_tokens": 313,
+     "total_tokens": 11376,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0032019999999999996
+    "notional_cost_usd": 0.0032352500000000003
    },
    "critic_status": "passed_after_retry"
   },
@@ -1168,21 +1184,8 @@
    "finding": {
     "criterion": "durable_competitive_advantage",
     "verdict": "insufficient evidence",
-    "rationale": "The filing provides the company's total assets ($4.4 trillion) and stockholders' equity ($362.4 billion), but it does not provide a quantified market share or rank figure to substantiate a durable competitive advantage. While it describes itself as a \"leading\" firm, this is promotional language rather than concrete evidence of a protected competitive position.",
-    "citations": [
-     {
-      "passage_id": "0001628280-26-008131:1:1",
-      "accession": "0001628280-26-008131",
-      "item": "1",
-      "char_start": 7288,
-      "char_end": 7397,
-      "quote": "JPMorganChase had $4.4 trillion in assets and $362.4 billion in stockholders' equity as of December 31, 2025.",
-      "sentences": [
-       5,
-       5
-      ]
-     }
-    ],
+    "rationale": "The filing discusses competitive pressures and the risk of losing market share to competitors, but it does not provide concrete evidence of a durable competitive advantage such as a quantified market share, exclusive franchise, or specific scale-based cost position that protects profits.",
+    "citations": [],
     "searches": [
      {
       "queries": [
@@ -1221,65 +1224,38 @@
        "0001628280-26-008131:1:39",
        "0001628280-26-008131:1:10"
       ]
-     },
-     {
-      "queries": [
-       "\"market share\" \"number one\" \"leading\" \"largest\""
-      ],
-      "items": [
-       "1"
-      ],
-      "seeded": false,
-      "passage_ids": [
-       "0001628280-26-008131:1:1",
-       "0001628280-26-008131:1:15",
-       "0001628280-26-008131:1:33",
-       "0001628280-26-008131:1:19"
-      ]
      }
     ],
-    "llm_calls": 3,
-    "tool_calls": 4,
+    "llm_calls": 2,
+    "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 10223,
-     "completion_tokens": 195,
-     "total_tokens": 10418,
+     "prompt_tokens": 5696,
+     "completion_tokens": 141,
+     "total_tokens": 5837,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00284825
+    "notional_cost_usd": 0.0016355
    },
    "critic_status": "passed"
   },
   {
    "finding": {
     "criterion": "candid_management",
-    "verdict": "insufficient evidence",
-    "rationale": "The filing acknowledges that management's strategic choices could prove incorrect and that internal control weaknesses could occur, but these are presented as hypothetical risks rather than specific accounts of past management-driven setbacks. A 10-K is a limited guide to candour, as it focuses on risk disclosure rather than retrospective analysis of management's own performance.",
+    "verdict": "evidence weak",
+    "rationale": "The filing describes a structured process where the company evaluates its control environment to identify where controls have failed and where remediation is required. However, the 10-K is a limited guide to candour, as it provides these descriptions as part of a standard risk management framework rather than as a candid, retrospective account of specific management-attributed setbacks or mistakes.",
     "citations": [
      {
-      "passage_id": "0001628280-26-008131:1A:72",
+      "passage_id": "0001628280-26-008131:7:313",
       "accession": "0001628280-26-008131",
-      "item": "1A",
-      "char_start": 138225,
-      "char_end": 138682,
-      "quote": "The values and growth prospects of JPMorganChase's businesses could suffer and its earnings could decline if management makes strategic choices that prove to be incorrect, are based on incomplete, inaccurate or fraudulent information, do not accurately assess the competitive landscape and industry trends, or fail to address changing regulatory and market environments or the expectations of clients, customers, investors, employees and other stakeholders.",
+      "item": "7",
+      "char_start": 542291,
+      "char_end": 542636,
+      "quote": "The Firm utilizes a structured risk and control self-assessment process that is executed by the LOBs and Corporate. As part of this process, the LOBs and Corporate evaluate the effectiveness of their respective control environment to assess circumstances in which controls have failed, and to determine where remediation efforts may be required.",
       "sentences": [
        1,
-       1
-      ]
-     },
-     {
-      "passage_id": "0001628280-26-008131:1A:70",
-      "accession": "0001628280-26-008131",
-      "item": "1A",
-      "char_start": 136653,
-      "char_end": 136849,
-      "quote": "JPMorganChase's disclosure and financial reporting controls may not always be effective, and a material weakness or significant deficiency in internal control over financial reporting could occur.",
-      "sentences": [
-       7,
-       7
+       2
       ]
      }
     ],
@@ -1309,19 +1285,34 @@
        "0001628280-26-008131:1A:72",
        "0001628280-26-008131:1A:70"
       ]
+     },
+     {
+      "queries": [
+       "\"we\" \"our\" \"mistake\" \"setback\" \"failed\" \"inaccurate\" \"error\""
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0001628280-26-008131:7:110",
+       "0001628280-26-008131:7:123",
+       "0001628280-26-008131:7:313",
+       "0001628280-26-008131:7:311"
+      ]
      }
     ],
-    "llm_calls": 1,
-    "tool_calls": 2,
+    "llm_calls": 2,
+    "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2499,
-     "completion_tokens": 179,
-     "total_tokens": 2678,
+     "prompt_tokens": 6171,
+     "completion_tokens": 182,
+     "total_tokens": 6353,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00089325
+    "notional_cost_usd": 0.00181575
    },
    "critic_status": "passed"
   },
@@ -1329,30 +1320,30 @@
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing states that common stock dividends are planned as part of the Capital Management governance framework in line with capital management objectives, and it provides the aggregate purchase price of common stock repurchases for the fiscal year 2025 ($31,640 million).",
+    "rationale": "The filing quantifies capital actions including common share repurchases and dividend payments, and explains that these are managed under a governance framework that considers factors such as capital position, organic capital generation, and investment opportunities.",
     "citations": [
      {
-      "passage_id": "0001628280-26-008131:7:158",
+      "passage_id": "0001628280-26-008131:7:35",
       "accession": "0001628280-26-008131",
       "item": "7",
-      "char_start": 373665,
-      "char_end": 373820,
-      "quote": "The Firm's common stock dividends are planned as part of the Capital Management governance framework in line with the Firm's capital management objectives.",
+      "char_start": 240020,
+      "char_end": 240147,
+      "quote": "•the impact of capital actions, including net repurchases of common shares and dividend payments on common and preferred stock.",
       "sentences": [
-       6,
-       6
+       7,
+       7
       ]
      },
      {
-      "passage_id": "0001628280-26-008131:7:159",
+      "passage_id": "0001628280-26-008131:7:160",
       "accession": "0001628280-26-008131",
       "item": "7",
-      "char_start": 374993,
-      "char_end": 375086,
-      "quote": "Aggregate purchase price of common stock repurchases(a) | $ | 31,640 | $ | 18,841 | $ | 9,898",
+      "char_start": 375127,
+      "char_end": 375769,
+      "quote": "The Board of Directors' authorization to repurchase common shares is utilized at management's discretion. The common share repurchase program approved by the Board of Directors does not establish specific price targets or timetables. Management determines the amount and timing of common share repurchases based on various factors, including market conditions; legal and regulatory considerations affecting the amount and timing of repurchase activity; the Firm's capital position (taking into account goodwill and intangibles); organic capital generation; current and proposed future capital requirements; and other investment opportunities.",
       "sentences": [
-       6,
-       6
+       1,
+       3
       ]
      }
     ],
@@ -1376,36 +1367,21 @@
        "0001628280-26-008131:7:274",
        "0001628280-26-008131:7:160"
       ]
-     },
-     {
-      "queries": [
-       "common stock repurchases amount 2025"
-      ],
-      "items": [
-       "7"
-      ],
-      "seeded": false,
-      "passage_ids": [
-       "0001628280-26-008131:7:159",
-       "0001628280-26-008131:7:158",
-       "0001628280-26-008131:7:160",
-       "0001628280-26-008131:7:38"
-      ]
      }
     ],
-    "llm_calls": 2,
-    "tool_calls": 3,
+    "llm_calls": 5,
+    "tool_calls": 7,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 6735,
-     "completion_tokens": 194,
-     "total_tokens": 6929,
+     "prompt_tokens": 16219,
+     "completion_tokens": 777,
+     "total_tokens": 16996,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00197475
+    "notional_cost_usd": 0.00522025
    },
-   "critic_status": "passed_after_retry"
+   "critic_status": "warning"
   }
  ],
  "critic": {
@@ -1716,31 +1692,42 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "fail",
-    "detail": "supports_verdict=yes; unsupported: It also provides revenue data for these segments; The quotes clearly define products, services, and customer segments, meeting the requirements for the claimed verdict.",
+    "detail": "supports_verdict=yes; unsupported: Commercial & Investment Bank | how they earn revenue (through fees, commissions, and net interest income); The quotes identify segments, products, and customer types. However, the rationale references a segment and revenue sources not present in the provided text.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": "rationale",
     "claims": [
-     "It also provides revenue data for these segments"
+     "Commercial & Investment Bank",
+     "how they earn revenue (through fees, commissions, and net interest income)"
     ]
+   },
+   {
+    "check": "L1",
+    "item": "candid_management",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The quote describes a general risk management process rather than specific management-attributed setbacks, supporting the 'evidence weak' verdict.",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
    },
    {
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "fail",
-    "detail": "supports_verdict=overstated; unsupported: The filing confirms the firm engaged in share repurchases and dividend payments during the fiscal year; The quotes mention the impact of capital actions but do not provide specific amounts or confirm that these actions occurred during the fiscal year.",
+    "detail": "supports_verdict=overstated; unsupported: quantifies capital actions including common share repurchases and dividend payments; The quotes mention the existence of repurchases and dividends but do not provide the specific amounts or figures required by the definition.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": "verdict",
     "claims": [
-     "The filing confirms the firm engaged in share repurchases and dividend payments during the fiscal year"
+     "quantifies capital actions including common share repurchases and dividend payments"
     ]
    },
    {
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue and compares it to the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation clearly states the revenue figure and confirms it meets the threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1750,7 +1737,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the positive net income record.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year positive net income requirement.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1760,7 +1747,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly describes the dividend record over the available 15-year period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that dividends were paid in all available years on record.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1770,7 +1757,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio based on the provided EPS figures.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the 3-year average growth and the resulting ratio.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1780,7 +1767,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation accurately reflects the failure to meet the ROE threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation accurately states the failure to meet the threshold in the required number of years.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -1830,7 +1817,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing clearly identifies the products, the diverse customer segments, and the delivery channels, meeting the requirements for the claimed verdict.",
+    "detail": "supports_verdict=yes; The filing clearly identifies the products, the customer segments, and the revenue-generating activities for the business segments described.",
     "owner": "qualitative",
     "attempt": 1,
     "kind": null,
@@ -1839,12 +1826,14 @@
    {
     "check": "L1",
     "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "supports_verdict=yes; The filing provides specific quantitative data on share repurchases and references a governance framework for dividend policy, satisfying both requirements.",
+    "status": "fail",
+    "detail": "supports_verdict=overstated; unsupported: 2025 common stock repurchases; The quotes provide historical data and a policy, but the rationale incorrectly attributes the $31.6 billion figure to 2025, which is not supported by the provided text.",
     "owner": "qualitative",
     "attempt": 1,
-    "kind": null,
-    "claims": []
+    "kind": "verdict",
+    "claims": [
+     "2025 common stock repurchases"
+    ]
    }
   ],
   "final": {
@@ -1862,7 +1851,7 @@
    "understandable_business": "passed_after_retry",
    "durable_competitive_advantage": "passed",
    "candid_management": "passed",
-   "rational_capital_allocation": "passed_after_retry"
+   "rational_capital_allocation": "warning"
   },
   "repairs": [
    {
@@ -1875,48 +1864,48 @@
    {
     "item": "rational_capital_allocation",
     "path": "constrained_retry",
-    "outcome": "accepted",
-    "detail": "",
-    "llm_calls": 2
+    "outcome": "rejected_by_recheck",
+    "detail": "supports_verdict=overstated; unsupported: 2025 common stock repurchases; The quotes provide historical data and a policy, but the rationale incorrectly attributes the $31.6 billion figure to 2025, which is not supported by the provided text.",
+    "llm_calls": 3
    }
   ],
   "llm_calls": 2,
   "usage": {
-   "prompt_tokens": 3168,
-   "completion_tokens": 644,
-   "total_tokens": 3812,
+   "prompt_tokens": 3603,
+   "completion_tokens": 768,
+   "total_tokens": 4371,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.001758
+  "notional_cost_usd": 0.00205275
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.013274,
-  "llm_calls": 15,
-  "input_tokens": 39235,
-  "output_tokens": 2310,
+  "notional_cost_usd": 0.014843,
+  "llm_calls": 16,
+  "input_tokens": 44526,
+  "output_tokens": 2474,
   "by_agent": {
    "critic": {
     "calls": 2,
-    "input_tokens": 3168,
-    "output_tokens": 644,
+    "input_tokens": 3603,
+    "output_tokens": 768,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001758
+    "notional_cost_usd": 0.002053
    },
    "explainer": {
     "calls": 1,
-    "input_tokens": 1581,
-    "output_tokens": 280,
+    "input_tokens": 1774,
+    "output_tokens": 293,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.000815
+    "notional_cost_usd": 0.000883
    },
    "qualitative": {
-    "calls": 12,
-    "input_tokens": 34486,
-    "output_tokens": 1386,
+    "calls": 13,
+    "input_tokens": 39149,
+    "output_tokens": 1413,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0107
+    "notional_cost_usd": 0.011907
    }
   }
  },
@@ -2023,5 +2012,10 @@
   "Filings and XBRL data: U.S. Securities and Exchange Commission, EDGAR (public domain)"
  ],
  "trace_path": "results/0000019617.trace.jsonl",
- "warnings": []
+ "warnings": [
+  {
+   "where": "rational_capital_allocation",
+   "message": "the Critic still objects after one repair: supports_verdict=overstated; unsupported: 2025 common stock repurchases; The quotes provide historical data and a policy, but the rationale incorrectly attributes the $31.6 billion figure to 2025, which is not supported by the provided text."
+  }
+ ]
 }

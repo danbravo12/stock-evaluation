@@ -9,35 +9,35 @@ Gold set: `eval/expected_qualitative.json` (Daniel Bravo, reviewed with Claude, 
 | Company | Criterion | Agent | Human | Flagged by | Final | Critic status | Final = human |
 |---|---|---|---|---|---|---|---|
 | KO | understandable_business | found | found | L1 | found | passed_after_retry | yes |
-| KO | durable_competitive_advantage | found | found | – | found | passed | yes |
+| KO | durable_competitive_advantage | found | found | – | weak | passed | NO |
 | KO | candid_management | insufficient | insufficient | – | insufficient | passed | yes |
 | KO | rational_capital_allocation | found | found | – | found | passed | yes |
 | JPM | understandable_business | found | found | L1 | found | passed_after_retry | yes |
 | JPM | durable_competitive_advantage | insufficient | insufficient | – | insufficient | passed | yes |
-| JPM | candid_management | insufficient | insufficient | – | insufficient | passed | yes |
-| JPM | rational_capital_allocation | found | found | L1 | found | passed_after_retry | yes |
+| JPM | candid_management | insufficient | insufficient | – | weak | passed | NO |
+| JPM | rational_capital_allocation | found | found | L1 | found | warning | yes |
 | GOOGL | understandable_business | found | found | – | found | passed | yes |
-| GOOGL | durable_competitive_advantage | insufficient | insufficient | – | insufficient | passed | yes |
+| GOOGL | durable_competitive_advantage | insufficient | insufficient | – | weak | passed | NO |
 | GOOGL | candid_management | found | weak | L1 | insufficient | passed_after_retry | NO |
 | GOOGL | rational_capital_allocation | found | found | – | found | passed | yes |
 | TSLA | understandable_business | found | found | – | found | passed | yes |
 | TSLA | durable_competitive_advantage | weak | weak | – | weak | passed | yes |
 | TSLA | candid_management | found | found | – | found | passed | yes |
-| TSLA | rational_capital_allocation | weak | weak | – | weak | passed | yes |
+| TSLA | rational_capital_allocation | weak | weak | – | insufficient | passed | NO |
 | DUK | understandable_business | found | found | – | found | passed | yes |
 | DUK | durable_competitive_advantage | found | found | – | found | passed | yes |
-| DUK | candid_management | weak | weak | – | weak | passed | yes |
-| DUK | rational_capital_allocation | found | found | L1 | found | passed_after_retry | yes |
+| DUK | candid_management | weak | weak | – | found | passed | NO |
+| DUK | rational_capital_allocation | found | found | L1 | found | warning | yes |
 
 | Scorecard | |
 |---|---|
 | Gold-set disagreements caught (flagged) | **1 of 1** |
 | False alarms (correct found/weak finding flagged) | **4 of 15** |
 | Disagreements fixed by routing and retry (final = human) | 0 of 1 |
-| Correct findings changed to wrong by a retry | 0 |
-| Agreement with the gold set: agent only → after the Critic | **19/20 → 19/20** |
+| Correct findings changed to wrong by a retry | 3 |
+| Agreement with the gold set: agent only → after the Critic | **19/20 → 14/20** |
 
-"False alarms" are judged on the verdict only (the gold set labels verdicts, not rationales). Flagged although agent = human: KO understandable_business (yes + claims not in the quotes); JPM understandable_business (yes + claims not in the quotes); JPM rational_capital_allocation (overstated + claims not in the quotes); DUK rational_capital_allocation (yes + claims not in the quotes).
+"False alarms" are judged on the verdict only (the gold set labels verdicts, not rationales). Flagged although agent = human: KO understandable_business (yes + claims not in the quotes); JPM understandable_business (yes + claims not in the quotes); JPM rational_capital_allocation (overstated + claims not in the quotes); DUK rational_capital_allocation (overstated + claims not in the quotes).
 
 ## Repairs
 
@@ -45,38 +45,39 @@ Each failed item gets one repair by the path that fits its failure (ADR-052); a 
 
 | Path | Attempts | Accepted | Rejected on re-check | Not submitted / no change / invalid |
 |---|---|---|---|---|
-| rationale_rewrite | 3 | 3 | 0 | 0 |
-| constrained_retry | 2 | 2 | 0 | 0 |
+| rationale_rewrite | 2 | 2 | 0 | 0 |
+| constrained_retry | 3 | 1 | 2 | 0 |
 
 | Company | Item | Path | Outcome | Detail |
 |---|---|---|---|---|
 | KO | understandable_business | rationale_rewrite | accepted | – |
 | JPM | understandable_business | rationale_rewrite | accepted | – |
-| JPM | rational_capital_allocation | constrained_retry | accepted | – |
+| JPM | rational_capital_allocation | constrained_retry | rejected_by_recheck | supports_verdict=overstated; unsupported: 2025 common stock repurchases; The quotes provide historical data and a policy, but the rationale incorrectly attributes the $31.6 billion figure to 2025, wh… |
 | GOOGL | candid_management | constrained_retry | accepted | – |
-| DUK | rational_capital_allocation | rationale_rewrite | accepted | – |
+| DUK | rational_capital_allocation | constrained_retry | rejected_by_recheck | supports_verdict=overstated; unsupported: 2025 actual expenditure amount \| dividend payout ratio of 60% to 70% of adjusted EPS; The quotes provide a capital expenditure figure but do not contain the… |
 
 ## Rationale review
 
-Counts only (no accuracy is claimed until the labels exist): 15 found/weak findings; the Critic flagged 4 on the first pass; 4 of those passed after repair. The `human` column is empty on purpose: Daniel labels it (ok / overreach), and the labels will be committed keyed by the rationale hash, so they stay valid only while the text is unchanged.
+Counts only (no accuracy is claimed until the labels exist): 16 found/weak findings; the Critic flagged 4 on the first pass; 2 of those passed after repair. The `human` column is empty on purpose: Daniel labels it (ok / overreach), and the labels will be committed keyed by the rationale hash, so they stay valid only while the text is unchanged.
 
 | Company | Criterion | Rationale hash | Rationale | Quotes | Critic (first pass) | Critic status | human |
 |---|---|---|---|---|---|---|---|
-| KO | understandable_business | `12b323bd8f` | The company generates revenue by selling finished sparkling and other beverages to retailers, distributors, and wholesalers. Additionally, it manufactures and sells fountain syrups to fountain retailers, wholesalers, and bottling partners. | Our finished product operations generate net operating revenues by selling sparkling soft drinks and a variety of other finished beverages to retailers, or to distributors and wholesalers who in turn sell the beverages to retailers. / In the United States, we manufacture fountain syrups and sell them to fountain retailers, who use the fountain syrups to produce beverages for immediate consumption, or to authorized fountain wholesalers or bottling partners who in turn sell and distribute the fountain syrups to fountain retailers. | supports_verdict=yes; unsupported: It also notes direct-to-consumer sales through Costa retail stores.; The quotes clearly define the products, customers, and revenue generation methods. The rationale includes a claim a… | passed_after_retry | |
-| KO | durable_competitive_advantage | `627f9a74af` | The filing provides a specific measure of the company's scale, stating that beverages bearing its trademarks account for 2.2 billion of the estimated 65 billion servings of all beverages consumed worldwide every day. | Beverages bearing trademarks owned by or licensed to the Company account for 2.2 billion of the estimated 65 billion servings of all beverages consumed worldwide every day. | supports_verdict=yes; The filing provides a specific, checkable measure of market scale (2.2 billion out of 65 billion daily servings) to support the competitive advantage. | passed | |
-| KO | rational_capital_allocation | `7855eeba52` | The filing explicitly states the company's capital allocation priorities, which include investing in business operations, growing dividends, making acquisitions, and repurchasing shares. It also provides concrete figures for dividends paid during the fiscal year. | Our current capital allocation priorities are as follows: investing wisely to support our business operations, continuing to grow our dividend payment, enhancing our beverage portfolio and capabilities through consumer-centric acquisitions, and using excess cash to repurchase shares over time. / The Company paid dividends of $8,779 million and $8,359 million during the years ended December 31, 2025 and 2024, respectively. | supports_verdict=yes; The filing provides both a clear statement of capital allocation priorities and specific, quantified figures for dividends paid during the fiscal year. | passed | |
-| JPM | understandable_business | `12cdfef7bf` | The company provides banking, investment, lending, and payment services to a diverse client base ranging from individual consumers and small businesses to large corporations and government entities. It generates revenue by offering these financial products and services through various channels, including digital platforms, branches, and direct client coverage segments. | Consumer & Community Banking offers products and services to consumers and small businesses through bank branches, ATMs, digital (including mobile and online) and telephone banking. CCB is organized into Banking & Wealth Management (including Consumer Banking, Business Banking and J.P. Morgan Wealth Management), Home Lending (including Home Lending Production, Home Lending Servicing and Real Estate Portfolios) and Card Services & Auto. Banking & Wealth Management offers deposit, investment and lending products, cash management, payments and services. / Banking & Payments Revenue by Client Cov… | supports_verdict=yes; unsupported: It also provides revenue data for these segments; The quotes clearly define products, services, and customer segments, meeting the requirements for the claimed verdict. | passed_after_retry | |
-| JPM | rational_capital_allocation | `dc329f8227` | The filing states that common stock dividends are planned as part of the Capital Management governance framework in line with capital management objectives, and it provides the aggregate purchase price of common stock repurchases for the fiscal year 2025 ($31,640 million). | The Firm's common stock dividends are planned as part of the Capital Management governance framework in line with the Firm's capital management objectives. / Aggregate purchase price of common stock repurchases(a) \| $ \| 31,640 \| $ \| 18,841 \| $ \| 9,898 | supports_verdict=overstated; unsupported: The filing confirms the firm engaged in share repurchases and dividend payments during the fiscal year; The quotes mention the impact of capital actions but do not provide speci… | passed_after_retry | |
-| GOOGL | understandable_business | `36ee099e1f` | The filing explains that the company generates revenue through advertising, consumption-based fees and subscriptions for cloud services, consumer subscriptions (e.g., YouTube, Google One), and app sales. It identifies its customers as advertisers, individual consumers, and enterprise/developer users of its cloud and AI platforms. | •Brand advertising helps enhance users' awareness of and affinity for advertisers' products and services, through videos, text, images, and other interactive ads that run across various devices. / In addition, Google Services generates revenues from products and services beyond advertising, including: •consumer subscriptions, which primarily include revenues from YouTube services, such as YouTube TV, YouTube Music and Premium, and NFL Sunday Ticket, as well as Google One, which offers access to our most capable Gemini models; •platforms, which primarily include revenues from Google Play sales… | supports_verdict=yes; The quotes clearly identify revenue sources (advertising, subscriptions, platforms) and the customer base (advertisers, consumers, developers). | passed | |
-| GOOGL | rational_capital_allocation | `02ce666b81` | The filing states that the primary use of capital is to invest for long-term growth and that management regularly evaluates capital returns to stockholders. It also provides concrete figures for 2025, including $91.4 billion in capital expenditures and $45.4 billion in share repurchases. | The primary use of capital continues to be to invest for the long-term growth of the business. We regularly evaluate our cash and capital structure, including the size, pace, and form of capital return to stockholders. / •Repurchases of Class A and Class C shares were $6.5 billion and $38.9 billion, respectively, totaling $45.4 billion for the year ended December 31, 2025. •Operating cash flow was $164.7 billion for the year ended December 31, 2025. •Capital expenditures, which primarily reflected investments in technical infrastructure, were $91.4 billion for the year ended December 31, 2025. | supports_verdict=yes; The filing provides specific 2025 figures for share repurchases and capital expenditures while stating a clear priority for long-term investment. | passed | |
-| TSLA | understandable_business | `9f258ef8b4` | The filing identifies two reportable segments (automotive and energy generation and storage), specifies the products sold (electric vehicles, energy storage products, software, and services), notes that products are sold directly to customers, and describes how revenue is earned through sales, leasing, financing, and service-based models. | We operate as two reportable segments: (i) automotive and (ii) energy generation and storage. The automotive segment includes the design, development, manufacturing, sales and leasing of high-performance fully electric vehicles as well as sales of automotive regulatory credits. Additionally, the automotive segment also includes services and other, which includes sales of used vehicles, non-warranty maintenance services and collision, paid Supercharging sessions, automotive insurance business revenue, part sales and retail merchandise sales. / We generally sell our products directly to custome… | supports_verdict=yes; The filing clearly defines the two business segments, the products sold, and the direct-to-consumer sales model. | passed | |
-| TSLA | durable_competitive_advantage | `01e21df90e` | The filing asserts that the company's brand and product features provide a competitive advantage, but it does not provide concrete, measurable evidence (such as market share figures or quantified cost advantages) to support this claim. | We believe that the specifications and features of our products, our strong brand and the modular, scalable nature of our energy storage products give us a competitive advantage in our markets. | supports_verdict=yes; The filing asserts competitive advantages but provides no measurable evidence, fitting the definition of weak evidence. | passed | |
-| TSLA | candid_management | `1b7fabf310` | Management explicitly acknowledges that its publicly announced guidance has been inaccurate in the past, specifically citing the timing of new product manufacturing ramps as an example. A 10-K is a limited guide to candour, but this statement constitutes an admission of past forecasting errors. | Correctly identifying key factors affecting business conditions and predicting future events is inherently an uncertain process, and our guidance may not ultimately be accurate and has in the past been inaccurate in certain respects, such as the timing of new product manufacturing ramps. | supports_verdict=yes; Management explicitly admits to past inaccuracies in its own guidance regarding manufacturing ramps. | passed | |
-| TSLA | rational_capital_allocation | `b008fc1b9e` | The filing states a priority of focusing on long-term growth through high-value investments and quantifies expected capital expenditures for 2026 at over $20 billion to fund AI initiatives, manufacturing, and infrastructure. However, it does not quantify past capital allocation actions (such as specific amounts spent on acquisitions, buybacks, or debt repayment) during the fiscal year. | As discussed in and subject to the considerations referenced in Part II, Item 7, Management's Discussion and Analysis of Financial Condition and Results of Operations—Management Opportunities, Challenges and Uncertainties and 2026 Outlook—Cash Flow and Capital Expenditure Trends in this Annual Report on Form 10-K, we currently expect our capital expenditures to exceed $20 billion in 2026 driven by our AI initiatives, including investments in compute infrastructure and data centers, the expansion and ramp of our manufacturing and R&D production lines and facilities, and growth in our fleet of … | supports_verdict=yes; The filing provides forward-looking capital expenditure plans but lacks a detailed breakdown of past capital allocation actions. | passed | |
-| DUK | understandable_business | `c2d8b32284` | The filing explains that the company generates, transmits, distributes, and sells electricity and gas to residential, commercial, and industrial customers. It earns revenue through state commission-approved rates designed to cover costs and provide a return on capital. | EU&I owns and operates facilities necessary to generate, transmit, distribute and sell electricity. / Duke Energy Indiana is a regulated public utility primarily engaged in the generation, transmission, distribution and sale of electricity in portions of Indiana. Duke Energy Indiana's service area covers approximately 23,000 square miles and supplies electric service to approximately 930,000 residential, commercial and industrial customers. | supports_verdict=yes; The filing clearly defines the business as a utility provider, identifies its customer base, and explains the revenue model through commission-approved rates. | passed | |
-| DUK | durable_competitive_advantage | `bb4f2142e8` | The filing states that EU&I's businesses operate as the sole supplier of electricity within their service territories (with the exception of Ohio), and that services are priced by state commission-approved rates designed to include the costs of providing these services and a reasonable return on invested capital. This constitutes a regulated exclusive franchise. | EU&I's businesses operate as the sole supplier of electricity within their service territories, with the exception of Ohio, which has a competitive electricity supply market for generation service. EU&I owns and operates facilities necessary to generate, transmit, distribute and sell electricity. Services are priced by state commission-approved rates designed to include the costs of providing these services and a reasonable return on invested capital. | supports_verdict=yes; The filing identifies a regulated exclusive franchise as the source of advantage and specifies the service territory as the scope of this protection. | passed | |
-| DUK | candid_management | `c3067f28b7` | Management acknowledges that progress toward its net-zero carbon emissions target will not be linear, which is a candid admission of potential non-linear performance. However, a 10-K is a limited guide to candour, and the filing otherwise relies on standard risk disclosures. | As we continue to execute on our energy modernization strategy, and target net-zero carbon emissions from electric generation by 2050, our progress will not be linear. | supports_verdict=yes; The quote acknowledges that progress toward a stated goal will not be linear, which fits the definition of a candid admission of uncertainty. | passed | |
-| DUK | rational_capital_allocation | `c116bd7f40` | The filing identifies that management uses cash for capital and investment expenditures, debt repayment, and shareholder dividends. It further provides a quantified breakdown of total capital, investment, and acquisition expenditures. | Duke Energy's capital requirements arise primarily from capital and investment expenditures, repaying long-term debt and paying dividends to shareholders. / Gas Utilities and Infrastructure \| 1,114 \| 1,313 \| (199) Other \| 335 \| 261 \| 74 Total capital, investment and acquisition expenditures, net of return of investment capital \| $ \| 14,002 \| $ \| 12,263 \| $ \| 1,739 | supports_verdict=yes; unsupported: data on debt and equity financing activities; The filing lists capital requirements and provides concrete figures for capital expenditures, satisfying the requirement for both policy a… | passed_after_retry | |
+| KO | understandable_business | `82c610aeb5` | The company generates revenue by selling finished beverages and fountain syrups to retailers, distributors, and wholesalers. These customers then sell the products or use the syrups to produce beverages for immediate consumption. | Our finished product operations generate net operating revenues by selling sparkling soft drinks and a variety of other finished beverages to retailers, or to distributors and wholesalers who in turn sell the beverages to retailers. / In the United States, we manufacture fountain syrups and sell them to fountain retailers, who use the fountain syrups to produce beverages for immediate consumption, or to authorized fountain wholesalers or bottling partners who in turn sell and distribute the fountain syrups to fountain retailers. | supports_verdict=yes; unsupported: direct-to-consumer retail stores; The quotes clearly define the products, customers, and revenue generation methods, though the rationale mentions a retail store channel not present in… | passed_after_retry | |
+| KO | durable_competitive_advantage | `0f7599ec74` | The filing asserts that the company has competitive strengths such as "leading brands" and a "worldwide network of bottlers," but it does not provide concrete, quantified measures (such as specific market share percentages or network size metrics) to substantiate these as durable competitive advantages. The filing also notes that these strengths are subject to competitive challenges and pressures. | Our competitive strengths include leading brands with high levels of consumer recognition and loyalty; a worldwide network of bottlers and distributors of Company products; sophisticated marketing capabilities; and a talented group of dedicated employees. | supports_verdict=yes; The filing asserts competitive strengths without providing quantitative measures, fitting the definition of a weak evidence verdict. | passed | |
+| KO | rational_capital_allocation | `f3dd68704a` | The filing explicitly states the company's capital allocation priorities, which include investing in business operations, growing dividends, pursuing acquisitions, and repurchasing shares. It also provides concrete figures for dividends paid during the 2025 fiscal year. | Our current capital allocation priorities are as follows: investing wisely to support our business operations, continuing to grow our dividend payment, enhancing our beverage portfolio and capabilities through consumer-centric acquisitions, and using excess cash to repurchase shares over time. / The Company paid dividends of $8,779 million and $8,359 million during the years ended December 31, 2025 and 2024, respectively. | supports_verdict=yes; The filing provides both a clear policy on capital allocation and specific, quantified figures for dividend payments. | passed | |
+| JPM | understandable_business | `7ba93f09db` | The company provides banking, lending, investment, and payment services to consumers, small businesses, institutional investors, and high-net-worth clients. It generates revenue through products such as deposits, mortgages, credit cards, auto loans, and asset management solutions. | Consumer & Community Banking offers products and services to consumers and small businesses through bank branches, ATMs, digital (including mobile and online) and telephone banking. CCB is organized into Banking & Wealth Management (including Consumer Banking, Business Banking and J.P. Morgan Wealth Management), Home Lending (including Home Lending Production, Home Lending Servicing and Real Estate Portfolios) and Card Services & Auto. Banking & Wealth Management offers deposit, investment and lending products, cash management, payments and services. Home Lending includes mortgage origination… | supports_verdict=yes; unsupported: Commercial & Investment Bank \| how they earn revenue (through fees, commissions, and net interest income); The quotes identify segments, products, and customer types. However, the rat… | passed_after_retry | |
+| JPM | candid_management | `7e7f0e2cf8` | The filing describes a structured process where the company evaluates its control environment to identify where controls have failed and where remediation is required. However, the 10-K is a limited guide to candour, as it provides these descriptions as part of a standard risk management framework rather than as a candid, retrospective account of specific management-attributed setbacks or mistakes. | The Firm utilizes a structured risk and control self-assessment process that is executed by the LOBs and Corporate. As part of this process, the LOBs and Corporate evaluate the effectiveness of their respective control environment to assess circumstances in which controls have failed, and to determine where remediation efforts may be required. | supports_verdict=yes; The quote describes a general risk management process rather than specific management-attributed setbacks, supporting the 'evidence weak' verdict. | passed | |
+| JPM | rational_capital_allocation | `ca3f2c6b96` | The filing quantifies capital actions including common share repurchases and dividend payments, and explains that these are managed under a governance framework that considers factors such as capital position, organic capital generation, and investment opportunities. | •the impact of capital actions, including net repurchases of common shares and dividend payments on common and preferred stock. / The Board of Directors' authorization to repurchase common shares is utilized at management's discretion. The common share repurchase program approved by the Board of Directors does not establish specific price targets or timetables. Management determines the amount and timing of common share repurchases based on various factors, including market conditions; legal and regulatory considerations affecting the amount and timing of repurchase activity; the Firm's capit… | supports_verdict=overstated; unsupported: quantifies capital actions including common share repurchases and dividend payments; The quotes mention the existence of repurchases and dividends but do not provide the specifi… | warning | |
+| GOOGL | understandable_business | `ce2965bf6f` | The filing explains that Google generates revenue through advertising, consumption-based fees and subscriptions for cloud services, consumer subscriptions (such as YouTube and Google One), app sales, and hardware device sales. It identifies its customers as advertisers, individual consumers, and enterprise/developer users of its cloud and AI infrastructure. | Through our Google Cloud Platform and Google Workspace offerings, Google Cloud generates revenues primarily from consumption-based fees and subscriptions for infrastructure, platform, applications, and other cloud services. / In addition, Google Services generates revenues from products and services beyond advertising, including: •consumer subscriptions, which primarily include revenues from YouTube services, such as YouTube TV, YouTube Music and Premium, and NFL Sunday Ticket, as well as Google One, which offers access to our most capable Gemini models; •platforms, which primarily include re… | supports_verdict=yes; The filing clearly identifies revenue streams from cloud services, advertising, subscriptions, app sales, and hardware, while specifying the customer base. | passed | |
+| GOOGL | durable_competitive_advantage | `9a5769f3e1` | The filing asserts the importance of brands and intellectual property but does not provide concrete, quantified evidence of a durable competitive advantage, such as specific market share figures or exclusive franchise terms. Furthermore, the filing explicitly notes that competitors can readily erode the company's position, as users can switch to other services with a single click. | Any significant impairment of our intellectual property rights could harm our business and ability to compete. Protecting our intellectual property rights is costly and time consuming; any increase in unauthorized use could make it more expensive to do business and harm our financial condition and operating results. Our business depends on strong brands, and failing to maintain and enhance our brands would hurt our ability to expand our base of users, advertisers, customers, content providers, and other partners. / •users, for whom other products and services are literally one click away, on … | supports_verdict=yes; The filing acknowledges the importance of brands and IP but explicitly highlights the ease with which users can switch to competitors, supporting the weak evidence verdict. | passed | |
+| GOOGL | rational_capital_allocation | `9540553b0b` | The filing quantifies specific capital allocation actions in 2025, including $45.4 billion in share repurchases and $91.4 billion in capital expenditures. It also states that the primary use of capital is to invest for long-term growth and that management regularly evaluates the size, pace, and form of capital returns to stockholders. | •Repurchases of Class A and Class C shares were $6.5 billion and $38.9 billion, respectively, totaling $45.4 billion for the year ended December 31, 2025. •Operating cash flow was $164.7 billion for the year ended December 31, 2025. •Capital expenditures, which primarily reflected investments in technical infrastructure, were $91.4 billion for the year ended December 31, 2025. / The primary use of capital continues to be to invest for the long-term growth of the business. We regularly evaluate our cash and capital structure, including the size, pace, and form of capital return to stockholders. | supports_verdict=yes; The filing provides specific dollar amounts for share repurchases and capital expenditures while stating a clear policy of investing for long-term growth. | passed | |
+| TSLA | understandable_business | `62ca5b0906` | The filing clearly defines the company's two reportable segments (automotive and energy generation and storage), the products and services sold within those segments, and states that it generally sells these products directly to customers. | We operate as two reportable segments: (i) automotive and (ii) energy generation and storage. The automotive segment includes the design, development, manufacturing, sales and leasing of high-performance fully electric vehicles as well as sales of automotive regulatory credits. Additionally, the automotive segment also includes services and other, which includes sales of used vehicles, non-warranty maintenance services and collision, paid Supercharging sessions, automotive insurance business revenue, part sales and retail merchandise sales. The energy generation and storage segment includes s… | supports_verdict=yes; The filing explicitly details the two segments, the products within them, and the direct-to-customer sales model. | passed | |
+| TSLA | durable_competitive_advantage | `664447ff98` | The filing asserts that the company's brand and product features provide a competitive advantage, but it does not provide concrete, measurable evidence (such as market share figures or quantified cost positions) to support these claims. | We believe that the specifications and features of our products, our strong brand and the modular, scalable nature of our energy storage products give us a competitive advantage in our markets. | supports_verdict=yes; The filing asserts competitive advantages (brand, product features) without providing measurable evidence, fitting the definition of weak evidence. | passed | |
+| TSLA | candid_management | `1b7fabf310` | Management explicitly acknowledges that its publicly announced guidance has been inaccurate in the past, specifically citing the timing of new product manufacturing ramps as an example. A 10-K is a limited guide to candour, but this statement constitutes an admission of past forecasting errors. | Correctly identifying key factors affecting business conditions and predicting future events is inherently an uncertain process, and our guidance may not ultimately be accurate and has in the past been inaccurate in certain respects, such as the timing of new product manufacturing ramps. | supports_verdict=yes; Management admits to past inaccuracies in its own guidance regarding manufacturing ramps, which constitutes an admission of execution-related error. | passed | |
+| DUK | understandable_business | `3c7168f9c2` | The filing identifies the company's business segments as Electric Utilities and Infrastructure and Gas Utilities and Infrastructure. It explains that the company generates, transmits, distributes, and sells electricity and gas to residential, commercial, and industrial customers, with revenue earned through state commission-approved rates. | Duke Energy Indiana is a regulated public utility primarily engaged in the generation, transmission, distribution and sale of electricity in portions of Indiana. Duke Energy Indiana's service area covers approximately 23,000 square miles and supplies electric service to approximately 930,000 residential, commercial and industrial customers. / EU&I owns and operates facilities necessary to generate, transmit, distribute and sell electricity. Services are priced by state commission-approved rates designed to include the costs of providing these services and a reasonable return on invested capit… | supports_verdict=yes; The quotes clearly define the company's business as a regulated utility, its service area, customer base, and the mechanism for earning revenue through commission-approved rates. | passed | |
+| DUK | durable_competitive_advantage | `539de44064` | The filing states that the company's electric utility businesses operate as the sole supplier of electricity within their service territories, with rates set by state commissions to include costs and a reasonable return on capital. | EU&I's businesses operate as the sole supplier of electricity within their service territories, with the exception of Ohio, which has a competitive electricity supply market for generation service. EU&I owns and operates facilities necessary to generate, transmit, distribute and sell electricity. Services are priced by state commission-approved rates designed to include the costs of providing these services and a reasonable return on invested capital. This regulatory policy is intended to provide safe and reliable electricity at fair prices. | supports_verdict=yes; The filing identifies the regulated service territory as a source of advantage, which functions as a legal barrier to entry for competitors. | passed | |
+| DUK | candid_management | `baf45686b5` | Management explicitly identifies and quantifies specific charges and impairments related to its own business decisions, such as the implementation of a new customer system, joint venture electric transmission projects, and renewable natural gas investments. These are presented as distinct items impacting financial results rather than being obscured by external factors. | •Regulatory Matters primarily represents net impairment charges related to Duke Energy Carolinas' and Duke Energy Progress' 2024 South Carolina rate case orders and charges related to Duke Energy Indiana post-retirement benefits. •System Post-Implementation Costs represents the net impact of charges related to nonrecurring customer billing adjustments as a result of implementation of a new customer system. •Preferred Redemption Costs represents charges related to the redemption of Series B Preferred Stock. •Noncore Asset Sales and Net Impairments primarily represents charges related to certai… | supports_verdict=yes; Management explicitly identifies and discusses specific charges related to internal decisions, such as customer system implementation and investment choices, rather than blaming external factors. | passed | |
+| DUK | rational_capital_allocation | `d1c092eea4` | The filing identifies capital expenditures, debt repayment, and dividends as primary uses of cash, providing specific 2025 expenditure amounts for these categories. It also states a policy of targeting a dividend payout ratio of 60% to 70% of adjusted EPS. | Duke Energy relies primarily upon cash flows from operations, debt and equity issuances and its existing cash and cash equivalents to fund its liquidity and capital requirements. Duke Energy's capital requirements arise primarily from capital and investment expenditures, repaying long-term debt and paying dividends to shareholders. / Duke Energy targets a dividend payout ratio of between 60% and 70%, based upon adjusted EPS. | supports_verdict=overstated; unsupported: providing specific 2025 expenditure amounts for these categories; The quotes state the categories of capital requirements and a dividend policy, but they do not contain the spec… | warning | |
 
 ## Fault injection (model check L1)
 
@@ -84,9 +85,9 @@ Real findings made wrong on purpose and sent through the Critic's model check al
 
 | Fault | supports_verdict | Unsupported claims | Reason | Flagged |
 |---|---|---|---|---|
-| quote swapped in from another criterion (KO understandable_business cites its capital-allocation sentences) | no | The filing explains that the company generates revenue by selling sparkling soft drinks, other finished beverages, and fountain syrups to retailers, distributors, wholesalers, and bottling partners.;… | The provided quotes only discuss capital allocation and dividends. They do not describe the company's products, customers, or revenue model as claimed in the rationale. | yes |
+| quote swapped in from another criterion (KO understandable_business cites its capital-allocation sentences) | no | The filing explains that the company generates revenue by selling sparkling soft drinks and other finished beverages to retailers, distributors, and wholesalers, as well as through direct-to-consumer… | The provided quotes only discuss capital allocation and dividend payments; they do not describe the company's products, customers, or revenue model. | yes |
 | "found" on a generic marketing sentence (TSLA durable advantage, verdict raised from weak to found) | no | The filing shows a durable competitive advantage | The quote only asserts the existence of a brand and product features without providing the required checkable specifics or quantitative measures. | yes |
-| rationale with an added figure (KO capital allocation: a $15.0 billion repurchase that no quote shows) | overstated | The company also repurchased $15.0 billion of its shares in 2025. | The filing provides dividend amounts and priorities, but the rationale includes a share repurchase figure not present in the provided quotes. | yes |
+| rationale with an added figure (KO capital allocation: a $15.0 billion repurchase that no quote shows) | overstated | The company also repurchased $15.0 billion of its shares in 2025. | The filing provides a policy and dividend amounts, but the rationale includes a specific share repurchase figure not found in the provided quotes. | yes |
 
 Rule-check fault injection (wrong placeholder, stray number, altered quote, span outside the passage, wrong sha256, banned phrase, "share buyback" not flagged) is covered by offline tests in `tests/test_critic.py`.
 
@@ -96,12 +97,12 @@ Qualitative loops are the recorded v1.1 run (see `docs/qualitative_report.md`); 
 
 | Company | Explainer calls | Critic calls | Qualitative retry calls | Input tokens | Output tokens | Notional cost | Actual cost |
 |---|---|---|---|---|---|---|---|
-| KO | 1 | 2 | 1 | 6,225 | 1,538 | $0.0039 | $0.0000 |
-| JPM | 1 | 2 | 3 | 11,933 | 1,185 | $0.0048 | $0.0000 |
-| GOOGL | 1 | 1 | 1 | 7,397 | 1,309 | $0.0038 | $0.0000 |
-| TSLA | 1 | 1 | 0 | 5,753 | 1,367 | $0.0035 | $0.0000 |
-| DUK | 1 | 2 | 1 | 6,701 | 1,587 | $0.0041 | $0.0000 |
-| **Mean** | 1.0 | 1.6 | 1.2 | 7,602 | 1,397 | $0.0040 | – |
+| KO | 1 | 2 | 1 | 6,436 | 1,508 | $0.0039 | $0.0000 |
+| JPM | 1 | 2 | 4 | 17,075 | 1,558 | $0.0066 | $0.0000 |
+| GOOGL | 1 | 1 | 1 | 8,190 | 1,402 | $0.0042 | $0.0000 |
+| TSLA | 1 | 1 | 0 | 5,522 | 1,381 | $0.0035 | $0.0000 |
+| DUK | 1 | 2 | 2 | 13,028 | 1,981 | $0.0062 | $0.0000 |
+| **Mean** | 1.0 | 1.6 | 1.6 | 10,050 | 1,566 | $0.0049 | – |
 
 ## KO
 
@@ -109,17 +110,17 @@ Qualitative loops are the recorded v1.1 run (see `docs/qualitative_report.md`); 
 
 | Criterion | Result | Explanation | Critic status |
 |---|---|---|---|
-| G1 | pass | Revenue in 2025 was $47.94 billion, which meets the minimum size requirement (test: revenue >= $1B). | passed |
+| G1 | pass | Revenue in 2025 was $47.94 billion, which is above the minimum size (test: revenue >= $1B). | passed |
 | G2 | fail | The company reported a current ratio of 1.46 and long-term debt of $42.12 billion, which exceeds the net current assets of $9.76 billion (test: current ratio >= 2 and long-term debt <= net current assets). | passed |
-| G3 | pass | Net income was positive in each of the 10 years on record, with none showing a loss (test: net income > 0 in every year of the last 10). | passed |
-| G4 | partial_pass | Dividends were paid in every one of the 15 years on record, which is the full history available for this test (test: dividend paid in every year on record in the last 15). | passed |
+| G3 | pass | Net income was positive in all 10 of the 10 years on record, with 0 loss years (test: net income > 0 in every year of the last 10). | passed |
+| G4 | partial_pass | Dividends were paid in all 15 of the 15 years on record, which is the full history available for this test (test: dividend paid in every year on record in the last 15). | passed |
 | G5 | pass | The 3-year average diluted EPS grew from $1.09 to $2.66, resulting in a ratio of 2.43 (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)). | passed |
 | G6 | data_gap | Cannot be scored: price not available (Finnhub, ADR-007). *(templated)* | passed |
 | G7 | data_gap | Cannot be scored: price not available (Finnhub, ADR-007). *(templated)* | passed |
 | B1 | pass | Return on equity was at or above the threshold in 9 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years). | passed |
 | B2 | pass | Long-term debt of $42.12 billion is below the maximum debt of $45.94 billion, calculated using an average net income of $11.48 billion (test: long-term debt <= 4 x avg net income of the last 3 years). | passed |
-| B3 | pass | Operating margins remained positive throughout the period, with a 3-year average margin that is 1.00 of the 10-year average margin of 25.0% (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg). | passed |
-| B4 | pass | Owner earnings were positive in 10 of the last 10 years, and the 3-year average of $10.56 billion is higher than the initial 3-year average of $4.26 billion (test: net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg). | passed |
+| B3 | pass | Operating margins remained positive, and the last-3-yr avg margin of 24.9% compared to the 10-yr avg of 25.0% results in a ratio of 1.00 (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg). | passed |
+| B4 | pass | Owner earnings were positive in all 10 years, and the last-3-yr avg of $10.56 billion is greater than the first-3-yr avg of $4.26 billion (test: net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg). | passed |
 
 ### Critic checks
 
@@ -155,25 +156,25 @@ Qualitative loops are the recorded v1.1 run (see `docs/qualitative_report.md`); 
 | 0 | R3 | durable_competitive_advantage | pass | – |
 | 0 | R3 | candid_management | pass | – |
 | 0 | R3 | rational_capital_allocation | pass | – |
-| 0 | L1 | understandable_business | fail | supports_verdict=yes; unsupported: It also notes direct-to-consumer sales through Costa retail stores.; The quotes clearly define the products, customers, and revenue generation methods. The rationale includes a claim about Costa stores not present in the provided quotes. |
-| 0 | L1 | durable_competitive_advantage | pass | supports_verdict=yes; The filing provides a specific, checkable measure of market scale (2.2 billion out of 65 billion daily servings) to support the competitive advantage. |
-| 0 | L1 | rational_capital_allocation | pass | supports_verdict=yes; The filing provides both a clear statement of capital allocation priorities and specific, quantified figures for dividends paid during the fiscal year. |
-| 0 | L1 | G1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue figure and compares it against the threshold. |
+| 0 | L1 | understandable_business | fail | supports_verdict=yes; unsupported: direct-to-consumer retail stores; The quotes clearly define the products, customers, and revenue generation methods, though the rationale mentions a retail store channel not present in the provided text. |
+| 0 | L1 | durable_competitive_advantage | pass | supports_verdict=yes; The filing asserts competitive strengths without providing quantitative measures, fitting the definition of a weak evidence verdict. |
+| 0 | L1 | rational_capital_allocation | pass | supports_verdict=yes; The filing provides both a clear policy on capital allocation and specific, quantified figures for dividend payments. |
+| 0 | L1 | G1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue and compares it against the threshold. |
 | 0 | L1 | G2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet both components of the financial strength test. |
-| 0 | L1 | G3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the stability requirement over the 10-year period. |
-| 0 | L1 | G4 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that the record is complete for the available history, justifying the partial pass. |
-| 0 | L1 | G5 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio and compares it to the threshold. |
-| 0 | L1 | B1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the frequency of meeting the ROE threshold. |
-| 0 | L1 | B2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the debt level against the calculated maximum based on average net income. |
-| 0 | L1 | B3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly evaluates the margin stability and the comparison between the 3-year and 10-year averages. |
-| 0 | L1 | B4 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly evaluates both the frequency of positive owner earnings and the growth between the initial and final 3-year periods. |
+| 0 | L1 | G3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year stability requirement. |
+| 0 | L1 | G4 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that the test was met for the available record, justifying the partial pass. |
+| 0 | L1 | G5 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio against the required threshold. |
+| 0 | L1 | B1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the performance over the 10-year period. |
+| 0 | L1 | B2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares debt against the calculated maximum threshold. |
+| 0 | L1 | B3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin to the 10-year average. |
+| 0 | L1 | B4 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the owner earnings averages over the specified periods. |
 | 1 | R2 | understandable_business | pass | – |
 | 1 | R3 | understandable_business | pass | – |
-| 1 | L1 | understandable_business | pass | supports_verdict=yes; The quotes clearly identify the products (beverages, fountain syrups), the customers (retailers, distributors, wholesalers), and the revenue generation model. |
+| 1 | L1 | understandable_business | pass | supports_verdict=yes; The quotes clearly identify the products (beverages, syrups), the customers (retailers, distributors, wholesalers), and the revenue model (selling these products). |
 
 Retried: understandable_business. Final statuses of items not passed first time: understandable_business passed_after_retry.
 
-**KO understandable_business after repair:** found → found. The company generates revenue by selling finished sparkling and other beverages to retailers, distributors, and wholesalers. Additionally, it manufactures and sells fountain syrups to fountain retailers, wholesalers, and bottling partners.
+**KO understandable_business after repair:** found → found. The company generates revenue by selling finished beverages and fountain syrups to retailers, distributors, and wholesalers. These customers then sell the products or use the syrups to produce beverages for immediate consumption.
 
 
 ## JPM
@@ -182,14 +183,14 @@ Retried: understandable_business. Final statuses of items not passed first time:
 
 | Criterion | Result | Explanation | Critic status |
 |---|---|---|---|
-| G1 | pass | Revenue in 2025 was $182.45 billion, which exceeds the minimum size requirement (test: revenue >= $1B). | passed |
+| G1 | pass | Revenue in 2025 was $182.45 billion, which meets the minimum size requirement (test: revenue >= $1B). | passed |
 | G2 | not_applicable | Not applicable to this company: bank (ADR-013). *(templated)* | passed |
-| G3 | pass | Net income remained positive across all 10 years on record, with none years showing a loss (test: net income > 0 in every year of the last 10). | passed |
-| G4 | partial_pass | Dividends were paid in every one of the 15 years on record (test: dividend paid in every year on record in the last 15). | passed |
-| G5 | pass | The 3-year average diluted EPS grew from $7.17 to $18.67, representing a ratio of 2.60 (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)). | passed |
+| G3 | pass | Net income was positive in all 10 years on record, with 0 loss years (test: net income > 0 in every year of the last 10). | passed |
+| G4 | partial_pass | Dividends were paid in all 15 of the 15 years on record, which covers the full history available for this test (test: dividend paid in every year on record in the last 15). | passed |
+| G5 | pass | The 3-year average diluted EPS grew from $7.17 to $18.67, resulting in a ratio of 2.60 (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)). | passed |
 | G6 | data_gap | Cannot be scored: price not available (Finnhub, ADR-007). *(templated)* | passed |
 | G7 | data_gap | Cannot be scored: price not available (Finnhub, ADR-007). *(templated)* | passed |
-| B1 | fail | Return on equity reached at least 15% in 4 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years). | passed |
+| B1 | fail | Return on equity reached the threshold in 4 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years). | passed |
 | B2 | not_applicable | Not applicable to this company: bank (ADR-013). *(templated)* | passed |
 | B3 | not_applicable | Not applicable to this company: bank (ADR-013). *(templated)* | passed |
 | B4 | not_applicable | Not applicable to this company: bank (ADR-013). *(templated)* | passed |
@@ -228,25 +229,24 @@ Retried: understandable_business. Final statuses of items not passed first time:
 | 0 | R3 | durable_competitive_advantage | pass | – |
 | 0 | R3 | candid_management | pass | – |
 | 0 | R3 | rational_capital_allocation | pass | – |
-| 0 | L1 | understandable_business | fail | supports_verdict=yes; unsupported: It also provides revenue data for these segments; The quotes clearly define products, services, and customer segments, meeting the requirements for the claimed verdict. |
-| 0 | L1 | rational_capital_allocation | fail | supports_verdict=overstated; unsupported: The filing confirms the firm engaged in share repurchases and dividend payments during the fiscal year; The quotes mention the impact of capital actions but do not provide specific amounts or confirm that these actions occurred during the fiscal year. |
-| 0 | L1 | G1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue and compares it to the threshold. |
-| 0 | L1 | G3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the positive net income record. |
-| 0 | L1 | G4 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly describes the dividend record over the available 15-year period. |
-| 0 | L1 | G5 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio based on the provided EPS figures. |
-| 0 | L1 | B1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation accurately reflects the failure to meet the ROE threshold. |
+| 0 | L1 | understandable_business | fail | supports_verdict=yes; unsupported: Commercial & Investment Bank \| how they earn revenue (through fees, commissions, and net interest income); The quotes identify segments, products, and customer types. However, the rationale references a segment and revenue sources not present in the provided text. |
+| 0 | L1 | candid_management | pass | supports_verdict=yes; The quote describes a general risk management process rather than specific management-attributed setbacks, supporting the 'evidence weak' verdict. |
+| 0 | L1 | rational_capital_allocation | fail | supports_verdict=overstated; unsupported: quantifies capital actions including common share repurchases and dividend payments; The quotes mention the existence of repurchases and dividends but do not provide the specific amounts or figures required by the definition. |
+| 0 | L1 | G1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation clearly states the revenue figure and confirms it meets the threshold. |
+| 0 | L1 | G3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year positive net income requirement. |
+| 0 | L1 | G4 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that dividends were paid in all available years on record. |
+| 0 | L1 | G5 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the 3-year average growth and the resulting ratio. |
+| 0 | L1 | B1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation accurately states the failure to meet the threshold in the required number of years. |
 | 1 | R2 | understandable_business | pass | – |
 | 1 | R2 | rational_capital_allocation | pass | – |
 | 1 | R3 | understandable_business | pass | – |
 | 1 | R3 | rational_capital_allocation | pass | – |
-| 1 | L1 | understandable_business | pass | supports_verdict=yes; The filing clearly identifies the products, the diverse customer segments, and the delivery channels, meeting the requirements for the claimed verdict. |
-| 1 | L1 | rational_capital_allocation | pass | supports_verdict=yes; The filing provides specific quantitative data on share repurchases and references a governance framework for dividend policy, satisfying both requirements. |
+| 1 | L1 | understandable_business | pass | supports_verdict=yes; The filing clearly identifies the products, the customer segments, and the revenue-generating activities for the business segments described. |
+| 1 | L1 | rational_capital_allocation | fail | supports_verdict=overstated; unsupported: 2025 common stock repurchases; The quotes provide historical data and a policy, but the rationale incorrectly attributes the $31.6 billion figure to 2025, which is not supported by the provided text. |
 
-Retried: rational_capital_allocation, understandable_business. Final statuses of items not passed first time: understandable_business passed_after_retry, rational_capital_allocation passed_after_retry.
+Retried: rational_capital_allocation, understandable_business. Final statuses of items not passed first time: understandable_business passed_after_retry, rational_capital_allocation warning.
 
-**JPM understandable_business after repair:** found → found. The company provides banking, investment, lending, and payment services to a diverse client base ranging from individual consumers and small businesses to large corporations and government entities. It generates revenue by offering these financial products and services through various channels, including digital platforms, branches, and direct client coverage segments.
-
-**JPM rational_capital_allocation after repair:** found → found. The filing states that common stock dividends are planned as part of the Capital Management governance framework in line with capital management objectives, and it provides the aggregate purchase price of common stock repurchases for the fiscal year 2025 ($31,640 million).
+**JPM understandable_business after repair:** found → found. The company provides banking, lending, investment, and payment services to consumers, small businesses, institutional investors, and high-net-worth clients. It generates revenue through products such as deposits, mortgages, credit cards, auto loans, and asset management solutions.
 
 
 ## GOOGL
@@ -255,16 +255,16 @@ Retried: rational_capital_allocation, understandable_business. Final statuses of
 
 | Criterion | Result | Explanation | Critic status |
 |---|---|---|---|
-| G1 | pass | Revenue in 2025 was $402.84 billion, which exceeds the minimum size requirement (test: revenue >= $1B). | passed |
-| G2 | pass | The company maintains a current ratio of 2.01 and long-term debt of $46.55 billion, which is less than the net current assets of $103.29 billion (test: current ratio >= 2 and long-term debt <= net current assets). | passed |
-| G3 | pass | Net income remained positive across all 10 years on record, with none years showing a loss (test: net income > 0 in every year of the last 10). | passed |
-| G4 | fail | Dividends were not paid in the years 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 out of the 13 years on record (test: dividend paid in every year on record in the last 15). | passed |
+| G1 | pass | Revenue in 2025 was $402.84 billion, which is above the minimum size (test: revenue >= $1B). | passed |
+| G2 | pass | The company maintains a current ratio of 2.01 and long-term debt of $46.55 billion, which is less than the $103.29 billion in net current assets (test: current ratio >= 2 and long-term debt <= net current assets). | passed |
+| G3 | pass | Net income was positive in each of the 10 years on record, with 0 loss years (test: net income > 0 in every year of the last 10). | passed |
+| G4 | fail | Dividends were paid in 3 of the 13 years on record and missed in 10 (test: dividend paid in every year on record in the last 15). | passed |
 | G5 | pass | The 3-year average diluted EPS grew from $1.49 to $8.22, representing a ratio of 5.51 (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)). | passed |
 | G6 | data_gap | Cannot be scored: price not available (Finnhub, ADR-007). *(templated)* | passed |
 | G7 | data_gap | Cannot be scored: price not available (Finnhub, ADR-007). *(templated)* | passed |
-| B1 | pass | Return on equity was at or above the threshold in 9 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years). | passed |
-| B2 | pass | Long-term debt of $46.55 billion is well below the maximum debt of $408.11 billion, calculated from an average net income of $102.03 billion (test: long-term debt <= 4 x avg net income of the last 3 years). | passed |
-| B3 | pass | The 3-year average operating margin of 30.5% is 1.16 times the 10-year average of 26.2%, with positive margins maintained throughout (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg). | passed |
+| B1 | pass | Return on equity was at or above 15% in 9 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years). | passed |
+| B2 | pass | Long-term debt of $46.55 billion is well below the maximum debt of $408.11 billion, which is based on the 3-year average net income of $102.03 billion (test: long-term debt <= 4 x avg net income of the last 3 years). | passed |
+| B3 | pass | The operating margin remained positive in every year, and the 3-year average margin of 30.5% is 1.16 times the 10-year average of 26.2% (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg). | passed |
 | B4 | data_gap | Cannot be scored: missing: depreciation_amortization [2016, 2017, 2018, 2019, 2020]. *(templated)* | passed |
 
 ### Critic checks
@@ -301,23 +301,24 @@ Retried: rational_capital_allocation, understandable_business. Final statuses of
 | 0 | R3 | durable_competitive_advantage | pass | – |
 | 0 | R3 | candid_management | pass | – |
 | 0 | R3 | rational_capital_allocation | pass | – |
-| 0 | L1 | understandable_business | pass | supports_verdict=yes; The quotes clearly identify revenue sources (advertising, subscriptions, platforms) and the customer base (advertisers, consumers, developers). |
-| 0 | L1 | candid_management | fail | supports_verdict=overstated; The quote describes potential risks and generic quality issues rather than acknowledging a specific past setback or failure caused by management's own decisions. |
-| 0 | L1 | rational_capital_allocation | pass | supports_verdict=yes; The filing provides specific 2025 figures for share repurchases and capital expenditures while stating a clear priority for long-term investment. |
-| 0 | L1 | G1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the revenue figure to the threshold. |
-| 0 | L1 | G2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the financial strength criteria. |
-| 0 | L1 | G3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the earnings stability requirement. |
+| 0 | L1 | understandable_business | pass | supports_verdict=yes; The filing clearly identifies revenue streams from cloud services, advertising, subscriptions, app sales, and hardware, while specifying the customer base. |
+| 0 | L1 | durable_competitive_advantage | pass | supports_verdict=yes; The filing acknowledges the importance of brands and IP but explicitly highlights the ease with which users can switch to competitors, supporting the weak evidence verdict. |
+| 0 | L1 | candid_management | fail | supports_verdict=overstated; The quote describes potential risks and general quality issues rather than a specific, management-attributed past failure or missed target as required by the definition. |
+| 0 | L1 | rational_capital_allocation | pass | supports_verdict=yes; The filing provides specific dollar amounts for share repurchases and capital expenditures while stating a clear policy of investing for long-term growth. |
+| 0 | L1 | G1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and compares the company's performance against it. |
+| 0 | L1 | G2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the financial strength criteria and provides the relevant figures. |
+| 0 | L1 | G3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation accurately reflects the earnings stability test over the 10-year period. |
 | 0 | L1 | G4 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the dividend record requirement. |
-| 0 | L1 | G5 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly describes the growth calculation. |
-| 0 | L1 | B1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly summarizes the ROE performance. |
-| 0 | L1 | B2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares debt to the calculated maximum. |
+| 0 | L1 | G5 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio based on the 3-year average EPS. |
+| 0 | L1 | B1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation accurately states the ROE performance against the defined threshold. |
+| 0 | L1 | B2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares long-term debt to the calculated maximum debt threshold. |
 | 0 | L1 | B3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin to the 10-year average. |
-| 1 | R2 | candid_management | pass | – |
+| 1 | R2 | candid_management | pass | no citations to check |
 | 1 | R3 | candid_management | pass | – |
 
 Retried: candid_management. Final statuses of items not passed first time: candid_management passed_after_retry.
 
-**GOOGL candid_management after repair:** found → insufficient. The filing discusses risks related to acquisitions and operating results in a generic, forward-looking manner, attributing potential issues to external factors or hypothetical scenarios rather than acknowledging specific past failures or setbacks caused by management's own decisions. A 10-K is a limited guide to candour.
+**GOOGL candid_management after repair:** found → insufficient. The provided 10-K text focuses on potential risks, accounting policies, and external regulatory changes rather than providing a management-attributed account of a specific past failure or missed target. As a 10-K is a limited guide to candour, the evidence is insufficient to meet the criterion.
 
 
 ## TSLA
@@ -327,16 +328,16 @@ Retried: candid_management. Final statuses of items not passed first time: candi
 | Criterion | Result | Explanation | Critic status |
 |---|---|---|---|
 | G1 | pass | Revenue in 2025 was $94.83 billion, which is above the minimum size (test: revenue >= $1B). | passed |
-| G2 | pass | The company maintains a current ratio of 2.16 and long-term debt of $6.58 billion, which is less than the $36.93 billion in net current assets (test: current ratio >= 2 and long-term debt <= net current assets). | passed |
-| G3 | fail | Net income was not positive in every year, with losses recorded in 2016, 2017, 2018, 2019 out of the 10 years on record (test: net income > 0 in every year of the last 10). | passed |
-| G4 | fail | Dividends were not paid in the years 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 out of the 15 years on record (test: dividend paid in every year on record in the last 15). | passed |
-| G5 | not_meaningful | This test is not meaningful because the starting average EPS of -$0.49 is not positive (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)). | passed |
+| G2 | pass | The company maintains a current ratio of 2.16 and long-term debt of $6.58 billion, which is less than the net current assets of $36.93 billion (test: current ratio >= 2 and long-term debt <= net current assets). | passed |
+| G3 | fail | Net income was positive in 6 of the last 10 years, with 4 loss years occurring in 2016, 2017, 2018, 2019 (test: net income > 0 in every year of the last 10). | passed |
+| G4 | fail | Dividends were paid in 0 of the 15 years on record and missed in 15 years, including 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 (test: dividend paid in every year on record in the last 15). | passed |
+| G5 | not_meaningful | This test is not meaningful because the starting average EPS of -$0.49 is not positive, preventing a growth calculation against the ending average EPS of $2.47 (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)). | passed |
 | G6 | data_gap | Cannot be scored: price not available (Finnhub, ADR-007). *(templated)* | passed |
 | G7 | data_gap | Cannot be scored: price not available (Finnhub, ADR-007). *(templated)* | passed |
-| B1 | fail | Return on equity was at or above the threshold in 3 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years). | passed |
-| B2 | pass | Long-term debt of $6.58 billion is well below the maximum debt of $34.51 billion, calculated from the 3-year average net income of $8.63 billion (test: long-term debt <= 4 x avg net income of the last 3 years). | passed |
-| B3 | fail | The 3-year average operating margin of 7.0% is not at least 90% of the 10-year average of 3.1% (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg). | passed |
-| B4 | fail | Owner earnings were positive in 4 of the last 10 years, failing to meet the required frequency (test: net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg). | passed |
+| B1 | fail | Return on equity reached the target in 3 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years). | passed |
+| B2 | pass | Long-term debt of $6.58 billion is well below the maximum allowed debt of $34.51 billion, which is based on an average net income of $8.63 billion (test: long-term debt <= 4 x avg net income of the last 3 years). | passed |
+| B3 | fail | The last-3-yr average operating margin of 7.0% compared to the 10-yr average of 3.1% results in a ratio of 2.28 (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg). | passed |
+| B4 | fail | Owner earnings were positive in 4 of the last 10 years, though the last-3-yr average of $3.20 billion is higher than the first-3-yr average of -$2.66 billion (test: net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg). | passed |
 
 ### Critic checks
 
@@ -372,18 +373,17 @@ Retried: candid_management. Final statuses of items not passed first time: candi
 | 0 | R3 | durable_competitive_advantage | pass | – |
 | 0 | R3 | candid_management | pass | – |
 | 0 | R3 | rational_capital_allocation | pass | – |
-| 0 | L1 | understandable_business | pass | supports_verdict=yes; The filing clearly defines the two business segments, the products sold, and the direct-to-consumer sales model. |
-| 0 | L1 | durable_competitive_advantage | pass | supports_verdict=yes; The filing asserts competitive advantages but provides no measurable evidence, fitting the definition of weak evidence. |
-| 0 | L1 | candid_management | pass | supports_verdict=yes; Management explicitly admits to past inaccuracies in its own guidance regarding manufacturing ramps. |
-| 0 | L1 | rational_capital_allocation | pass | supports_verdict=yes; The filing provides forward-looking capital expenditure plans but lacks a detailed breakdown of past capital allocation actions. |
-| 0 | L1 | G1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and compares it to the reported figure. |
-| 0 | L1 | G2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly cites the current ratio and debt-to-assets comparison. |
-| 0 | L1 | G3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to maintain positive net income over the 10-year period. |
-| 0 | L1 | G4 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the absence of dividend payments over the specified period. |
-| 0 | L1 | G5 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the test is not meaningful due to negative starting earnings. |
-| 0 | L1 | B1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the ROE threshold in the required number of years. |
-| 0 | L1 | B2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares long-term debt against the calculated maximum debt threshold. |
-| 0 | L1 | B3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the margin stability criteria. |
+| 0 | L1 | understandable_business | pass | supports_verdict=yes; The filing explicitly details the two segments, the products within them, and the direct-to-customer sales model. |
+| 0 | L1 | durable_competitive_advantage | pass | supports_verdict=yes; The filing asserts competitive advantages (brand, product features) without providing measurable evidence, fitting the definition of weak evidence. |
+| 0 | L1 | candid_management | pass | supports_verdict=yes; Management admits to past inaccuracies in its own guidance regarding manufacturing ramps, which constitutes an admission of execution-related error. |
+| 0 | L1 | G1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and confirms the company exceeds it. |
+| 0 | L1 | G2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the current ratio and debt levels against the specified criteria. |
+| 0 | L1 | G3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the company failed the 10-year positive net income requirement. |
+| 0 | L1 | G4 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the absence of dividends over the 15-year period. |
+| 0 | L1 | G5 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the test cannot be performed due to negative starting earnings. |
+| 0 | L1 | B1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that the ROE target was not met in enough years. |
+| 0 | L1 | B2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares debt to the calculated average net income threshold. |
+| 0 | L1 | B3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure based on the operating margin criteria. |
 | 0 | L1 | B4 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the frequency requirement for positive owner earnings. |
 
 Retried: none. Final statuses of items not passed first time: none.
@@ -396,16 +396,16 @@ Retried: none. Final statuses of items not passed first time: none.
 | Criterion | Result | Explanation | Critic status |
 |---|---|---|---|
 | G1 | pass | Revenue in 2025 was $31.74 billion, which is above the minimum size (test: revenue >= $1B). | passed |
-| G2 | pass | The company maintains a debt-to-equity ratio of 1.55, with long-term debt of $80.11 billion and stockholders' equity of $51.84 billion (test: long-term debt <= 2 x stockholders' equity (utility variant)). | passed |
-| G3 | pass | Net income was positive in each of the 10 years on record, with none showing a loss (test: net income > 0 in every year of the last 10). | passed |
-| G4 | partial_pass | Dividends were paid in every one of the 15 years on record, which is all the history available for this test (test: dividend paid in every year on record in the last 15). | passed |
-| G5 | pass | The 3-year average diluted EPS grew from $3.74 to $5.19, resulting in a ratio of 1.39 (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)). | passed |
+| G2 | pass | The company reported long-term debt of $80.11 billion and stockholders' equity of $51.84 billion, resulting in a debt-to-equity ratio of 1.55 (test: long-term debt <= 2 x stockholders' equity (utility variant)). | passed |
+| G3 | pass | Net income was positive in all 10 of the last 10 years, with 0 loss years (test: net income > 0 in every year of the last 10). | passed |
+| G4 | partial_pass | Dividends were paid in all 15 of the 15 years on record (test: dividend paid in every year on record in the last 15). | passed |
+| G5 | pass | The 3-year average diluted EPS grew from $3.74 to $5.19, representing a ratio of 1.39 (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)). | passed |
 | G6 | data_gap | Cannot be scored: price not available (Finnhub, ADR-007). *(templated)* | passed |
 | G7 | data_gap | Cannot be scored: price not available (Finnhub, ADR-007). *(templated)* | passed |
-| B1 | fail | The return on equity was at or above the threshold in 0 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years). | passed |
-| B2 | fail | Long-term debt of $80.11 billion exceeds the maximum debt of $16.44 billion, which is based on an average net income of $4.11 billion (test: long-term debt <= 4 x avg net income of the last 3 years). | passed |
-| B3 | pass | The operating margin ratio of 1.13 compares the 3-year average of 26.1% to the 10-year average of 23.1% (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg). | passed |
-| B4 | fail | Owner earnings were positive in 0 of the last 10 years, and the 3-year average of -$2.12 billion is not higher than the first 3-year average of -$1.61 billion (test: net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg). | passed |
+| B1 | fail | The return on equity was at or above 15% in 0 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years). | passed |
+| B2 | fail | Long-term debt of $80.11 billion exceeds the maximum allowed debt of $16.44 billion, which is based on an average net income of $4.11 billion (test: long-term debt <= 4 x avg net income of the last 3 years). | passed |
+| B3 | pass | The 3-year average operating margin of 26.1% is 1.13 times the 10-year average of 23.1% (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg). | passed |
+| B4 | fail | Owner earnings were positive in 0 of the last 10 years, and the 3-year average of -$2.12 billion is lower than the initial 3-year average of -$1.61 billion (test: net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg). | passed |
 
 ### Critic checks
 
@@ -441,24 +441,22 @@ Retried: none. Final statuses of items not passed first time: none.
 | 0 | R3 | durable_competitive_advantage | pass | – |
 | 0 | R3 | candid_management | pass | – |
 | 0 | R3 | rational_capital_allocation | pass | – |
-| 0 | L1 | understandable_business | pass | supports_verdict=yes; The filing clearly defines the business as a utility provider, identifies its customer base, and explains the revenue model through commission-approved rates. |
-| 0 | L1 | durable_competitive_advantage | pass | supports_verdict=yes; The filing identifies a regulated exclusive franchise as the source of advantage and specifies the service territory as the scope of this protection. |
-| 0 | L1 | candid_management | pass | supports_verdict=yes; The quote acknowledges that progress toward a stated goal will not be linear, which fits the definition of a candid admission of uncertainty. |
-| 0 | L1 | rational_capital_allocation | fail | supports_verdict=yes; unsupported: data on debt and equity financing activities; The filing lists capital requirements and provides concrete figures for capital expenditures, satisfying the requirement for both policy and quantification. |
-| 0 | L1 | G1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the revenue figure to the threshold. |
-| 0 | L1 | G2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the ratio and compares it to the utility-specific threshold. |
-| 0 | L1 | G3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year positive net income requirement. |
-| 0 | L1 | G4 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that the record is partial but meets the requirement for the available history. |
-| 0 | L1 | G5 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the growth ratio and compares it to the 1.33 threshold. |
-| 0 | L1 | B1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the failure to meet the ROE threshold over the 10-year period. |
-| 0 | L1 | B2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that debt exceeds the calculated maximum based on average net income. |
-| 0 | L1 | B3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin to the 10-year average. |
-| 0 | L1 | B4 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet both the frequency and growth requirements for owner earnings. |
+| 0 | L1 | understandable_business | pass | supports_verdict=yes; The quotes clearly define the company's business as a regulated utility, its service area, customer base, and the mechanism for earning revenue through commission-approved rates. |
+| 0 | L1 | durable_competitive_advantage | pass | supports_verdict=yes; The filing identifies the regulated service territory as a source of advantage, which functions as a legal barrier to entry for competitors. |
+| 0 | L1 | candid_management | pass | supports_verdict=yes; Management explicitly identifies and discusses specific charges related to internal decisions, such as customer system implementation and investment choices, rather than blaming external factors. |
+| 0 | L1 | rational_capital_allocation | fail | supports_verdict=overstated; unsupported: providing specific 2025 expenditure amounts for these categories; The quotes state the categories of capital requirements and a dividend policy, but they do not contain the specific 2025 expenditure amounts mentioned in the rationale. |
+| 0 | L1 | G1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and confirms the company meets it. |
+| 0 | L1 | G2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly applies the utility-specific debt-to-equity ratio test. |
+| 0 | L1 | G3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the requirement for consistent positive net income. |
+| 0 | L1 | G4 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the partial record and confirms dividends were paid in all years on record. |
+| 0 | L1 | G5 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio based on the 3-year averages. |
+| 0 | L1 | B1 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the ROE threshold. |
+| 0 | L1 | B2 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares long-term debt against the defined multiple of average net income. |
+| 0 | L1 | B3 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin against the 10-year average. |
+| 0 | L1 | B4 | pass | agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the owner earnings criteria. |
 | 1 | R2 | rational_capital_allocation | pass | – |
 | 1 | R3 | rational_capital_allocation | pass | – |
-| 1 | L1 | rational_capital_allocation | pass | supports_verdict=yes; The filing quantifies capital expenditures and explicitly lists the company's priorities for cash usage, satisfying both requirements of the definition. |
+| 1 | L1 | rational_capital_allocation | fail | supports_verdict=overstated; unsupported: 2025 actual expenditure amount \| dividend payout ratio of 60% to 70% of adjusted EPS; The quotes provide a capital expenditure figure but do not contain the dividend payout ratio policy or confirm the fiscal year of the expenditure. |
 
-Retried: rational_capital_allocation. Final statuses of items not passed first time: rational_capital_allocation passed_after_retry.
-
-**DUK rational_capital_allocation after repair:** found → found. The filing identifies that management uses cash for capital and investment expenditures, debt repayment, and shareholder dividends. It further provides a quantified breakdown of total capital, investment, and acquisition expenditures.
+Retried: rational_capital_allocation. Final statuses of items not passed first time: rational_capital_allocation warning.
 

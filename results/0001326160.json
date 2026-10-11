@@ -3,7 +3,7 @@
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "DUK-replay",
-  "engine_commit": "c29ebe8",
+  "engine_commit": "c1a9bc1",
   "model_profile": "gemini-3.1-flash-lite",
   "mode": "replay",
   "generated_at": null,
@@ -181,12 +181,12 @@
     ],
     "explanation": {
      "criterion": "G2",
-     "raw": "The company maintains a debt-to-equity ratio of {debt_to_equity}, with long-term debt of {long_term_debt} and stockholders' equity of {stockholders_equity} (test: {threshold}).",
-     "text": "The company maintains a debt-to-equity ratio of 1.55, with long-term debt of $80.11 billion and stockholders' equity of $51.84 billion (test: long-term debt <= 2 x stockholders' equity (utility variant)).",
+     "raw": "The company reported long-term debt of {long_term_debt} and stockholders' equity of {stockholders_equity}, resulting in a debt-to-equity ratio of {debt_to_equity} (test: {threshold}).",
+     "text": "The company reported long-term debt of $80.11 billion and stockholders' equity of $51.84 billion, resulting in a debt-to-equity ratio of 1.55 (test: long-term debt <= 2 x stockholders' equity (utility variant)).",
      "placeholders_used": [
-      "debt_to_equity",
       "long_term_debt",
       "stockholders_equity",
+      "debt_to_equity",
       "threshold"
      ],
      "templated": false
@@ -243,11 +243,11 @@
     ],
     "explanation": {
      "criterion": "G3",
-     "raw": "Net income was positive in each of the {years_on_record} years on record, with {loss_years} showing a loss (test: {threshold}).",
-     "text": "Net income was positive in each of the 10 years on record, with none showing a loss (test: net income > 0 in every year of the last 10).",
+     "raw": "Net income was positive in all {profit_year_count} of the last 10 years, with {loss_year_count} loss years (test: {threshold}).",
+     "text": "Net income was positive in all 10 of the last 10 years, with 0 loss years (test: net income > 0 in every year of the last 10).",
      "placeholders_used": [
-      "years_on_record",
-      "loss_years",
+      "profit_year_count",
+      "loss_year_count",
       "threshold"
      ],
      "templated": false
@@ -380,9 +380,10 @@
     ],
     "explanation": {
      "criterion": "G4",
-     "raw": "Dividends were paid in every one of the {years_on_record} years on record, which is all the history available for this test (test: {threshold}).",
-     "text": "Dividends were paid in every one of the 15 years on record, which is all the history available for this test (test: dividend paid in every year on record in the last 15).",
+     "raw": "Dividends were paid in all {paid_year_count} of the {years_on_record} years on record (test: {threshold}).",
+     "text": "Dividends were paid in all 15 of the 15 years on record (test: dividend paid in every year on record in the last 15).",
      "placeholders_used": [
+      "paid_year_count",
       "years_on_record",
       "threshold"
      ],
@@ -422,8 +423,8 @@
     ],
     "explanation": {
      "criterion": "G5",
-     "raw": "The 3-year average diluted EPS grew from {avg_eps_start} to {avg_eps_end}, resulting in a ratio of {ratio} (test: {threshold}).",
-     "text": "The 3-year average diluted EPS grew from $3.74 to $5.19, resulting in a ratio of 1.39 (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)).",
+     "raw": "The 3-year average diluted EPS grew from {avg_eps_start} to {avg_eps_end}, representing a ratio of {ratio} (test: {threshold}).",
+     "text": "The 3-year average diluted EPS grew from $3.74 to $5.19, representing a ratio of 1.39 (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)).",
      "placeholders_used": [
       "avg_eps_start",
       "avg_eps_end",
@@ -536,8 +537,8 @@
     ],
     "explanation": {
      "criterion": "B1",
-     "raw": "The return on equity was at or above the threshold in {years_at_or_above_15pct} of the last 10 years (test: {threshold}).",
-     "text": "The return on equity was at or above the threshold in 0 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years).",
+     "raw": "The return on equity was at or above 15% in {years_at_or_above_15pct} of the last 10 years (test: {threshold}).",
+     "text": "The return on equity was at or above 15% in 0 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years).",
      "placeholders_used": [
       "years_at_or_above_15pct",
       "threshold"
@@ -573,8 +574,8 @@
     ],
     "explanation": {
      "criterion": "B2",
-     "raw": "Long-term debt of {long_term_debt} exceeds the maximum debt of {max_debt}, which is based on an average net income of {avg_net_income_3y} (test: {threshold}).",
-     "text": "Long-term debt of $80.11 billion exceeds the maximum debt of $16.44 billion, which is based on an average net income of $4.11 billion (test: long-term debt <= 4 x avg net income of the last 3 years).",
+     "raw": "Long-term debt of {long_term_debt} exceeds the maximum allowed debt of {max_debt}, which is based on an average net income of {avg_net_income_3y} (test: {threshold}).",
+     "text": "Long-term debt of $80.11 billion exceeds the maximum allowed debt of $16.44 billion, which is based on an average net income of $4.11 billion (test: long-term debt <= 4 x avg net income of the last 3 years).",
      "placeholders_used": [
       "long_term_debt",
       "max_debt",
@@ -648,11 +649,11 @@
     ],
     "explanation": {
      "criterion": "B3",
-     "raw": "The operating margin ratio of {ratio} compares the 3-year average of {avg_margin_3y} to the 10-year average of {avg_margin_10y} (test: {threshold}).",
-     "text": "The operating margin ratio of 1.13 compares the 3-year average of 26.1% to the 10-year average of 23.1% (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg).",
+     "raw": "The 3-year average operating margin of {avg_margin_3y} is {ratio} times the 10-year average of {avg_margin_10y} (test: {threshold}).",
+     "text": "The 3-year average operating margin of 26.1% is 1.13 times the 10-year average of 23.1% (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg).",
      "placeholders_used": [
-      "ratio",
       "avg_margin_3y",
+      "ratio",
       "avg_margin_10y",
       "threshold"
      ],
@@ -732,8 +733,8 @@
     ],
     "explanation": {
      "criterion": "B4",
-     "raw": "Owner earnings were positive in {years_positive} of the last 10 years, and the 3-year average of {avg_last_3y} is not higher than the first 3-year average of {avg_first_3y} (test: {threshold}).",
-     "text": "Owner earnings were positive in 0 of the last 10 years, and the 3-year average of -$2.12 billion is not higher than the first 3-year average of -$1.61 billion (test: net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg).",
+     "raw": "Owner earnings were positive in {years_positive} of the last 10 years, and the 3-year average of {avg_last_3y} is lower than the initial 3-year average of {avg_first_3y} (test: {threshold}).",
+     "text": "Owner earnings were positive in 0 of the last 10 years, and the 3-year average of -$2.12 billion is lower than the initial 3-year average of -$1.61 billion (test: net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg).",
      "placeholders_used": [
       "years_positive",
       "avg_last_3y",
@@ -1679,20 +1680,8 @@
    "finding": {
     "criterion": "understandable_business",
     "verdict": "evidence found",
-    "rationale": "The filing explains that the company generates, transmits, distributes, and sells electricity and gas to residential, commercial, and industrial customers. It earns revenue through state commission-approved rates designed to cover costs and provide a return on capital.",
+    "rationale": "The filing identifies the company's business segments as Electric Utilities and Infrastructure and Gas Utilities and Infrastructure. It explains that the company generates, transmits, distributes, and sells electricity and gas to residential, commercial, and industrial customers, with revenue earned through state commission-approved rates.",
     "citations": [
-     {
-      "passage_id": "0001326160-26-000014:1:9",
-      "accession": "0001326160-26-000014",
-      "item": "1",
-      "char_start": 35361,
-      "char_end": 35460,
-      "quote": "EU&I owns and operates facilities necessary to generate, transmit, distribute and sell electricity.",
-      "sentences": [
-       2,
-       2
-      ]
-     },
      {
       "passage_id": "0001326160-26-000014:1:72",
       "accession": "0001326160-26-000014",
@@ -1703,6 +1692,18 @@
       "sentences": [
        4,
        5
+      ]
+     },
+     {
+      "passage_id": "0001326160-26-000014:1:9",
+      "accession": "0001326160-26-000014",
+      "item": "1",
+      "char_start": 35361,
+      "char_end": 35618,
+      "quote": "EU&I owns and operates facilities necessary to generate, transmit, distribute and sell electricity. Services are priced by state commission-approved rates designed to include the costs of providing these services and a reasonable return on invested capital.",
+      "sentences": [
+       2,
+       3
       ]
      }
     ],
@@ -1727,17 +1728,17 @@
       ]
      }
     ],
-    "llm_calls": 1,
-    "tool_calls": 2,
+    "llm_calls": 2,
+    "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2178,
-     "completion_tokens": 152,
-     "total_tokens": 2330,
+     "prompt_tokens": 4614,
+     "completion_tokens": 361,
+     "total_tokens": 4975,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0007725
+    "notional_cost_usd": 0.001695
    },
    "critic_status": "passed"
   },
@@ -1745,18 +1746,18 @@
    "finding": {
     "criterion": "durable_competitive_advantage",
     "verdict": "evidence found",
-    "rationale": "The filing states that EU&I's businesses operate as the sole supplier of electricity within their service territories (with the exception of Ohio), and that services are priced by state commission-approved rates designed to include the costs of providing these services and a reasonable return on invested capital. This constitutes a regulated exclusive franchise.",
+    "rationale": "The filing states that the company's electric utility businesses operate as the sole supplier of electricity within their service territories, with rates set by state commissions to include costs and a reasonable return on capital.",
     "citations": [
      {
       "passage_id": "0001326160-26-000014:1:9",
       "accession": "0001326160-26-000014",
       "item": "1",
       "char_start": 35163,
-      "char_end": 35618,
-      "quote": "EU&I's businesses operate as the sole supplier of electricity within their service territories, with the exception of Ohio, which has a competitive electricity supply market for generation service. EU&I owns and operates facilities necessary to generate, transmit, distribute and sell electricity. Services are priced by state commission-approved rates designed to include the costs of providing these services and a reasonable return on invested capital.",
+      "char_end": 35710,
+      "quote": "EU&I's businesses operate as the sole supplier of electricity within their service territories, with the exception of Ohio, which has a competitive electricity supply market for generation service. EU&I owns and operates facilities necessary to generate, transmit, distribute and sell electricity. Services are priced by state commission-approved rates designed to include the costs of providing these services and a reasonable return on invested capital. This regulatory policy is intended to provide safe and reliable electricity at fair prices.",
       "sentences": [
        1,
-       3
+       4
       ]
      }
     ],
@@ -1789,32 +1790,44 @@
     "tool_calls": 2,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2125,
-     "completion_tokens": 129,
-     "total_tokens": 2254,
+     "prompt_tokens": 2134,
+     "completion_tokens": 105,
+     "total_tokens": 2239,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00072475
+    "notional_cost_usd": 0.000691
    },
    "critic_status": "passed"
   },
   {
    "finding": {
     "criterion": "candid_management",
-    "verdict": "evidence weak",
-    "rationale": "Management acknowledges that progress toward its net-zero carbon emissions target will not be linear, which is a candid admission of potential non-linear performance. However, a 10-K is a limited guide to candour, and the filing otherwise relies on standard risk disclosures.",
+    "verdict": "evidence found",
+    "rationale": "Management explicitly identifies and quantifies specific charges and impairments related to its own business decisions, such as the implementation of a new customer system, joint venture electric transmission projects, and renewable natural gas investments. These are presented as distinct items impacting financial results rather than being obscured by external factors.",
     "citations": [
      {
-      "passage_id": "0001326160-26-000014:7:29",
+      "passage_id": "0001326160-26-000014:7:36",
       "accession": "0001326160-26-000014",
       "item": "7",
-      "char_start": 229194,
-      "char_end": 229361,
-      "quote": "As we continue to execute on our energy modernization strategy, and target net-zero carbon emissions from electric generation by 2050, our progress will not be linear.",
+      "char_start": 236474,
+      "char_end": 237166,
+      "quote": "•Regulatory Matters primarily represents net impairment charges related to Duke Energy Carolinas' and Duke Energy Progress' 2024 South Carolina rate case orders and charges related to Duke Energy Indiana post-retirement benefits.\n•System Post-Implementation Costs represents the net impact of charges related to nonrecurring customer billing adjustments as a result of implementation of a new customer system.\n•Preferred Redemption Costs represents charges related to the redemption of Series B Preferred Stock.\n•Noncore Asset Sales and Net Impairments primarily represents charges related to certain joint venture electric transmission projects and certain renewable natural gas investments.",
       "sentences": [
-       3,
-       3
+       1,
+       4
+      ]
+     },
+     {
+      "passage_id": "0001326160-26-000014:7:38",
+      "accession": "0001326160-26-000014",
+      "item": "7",
+      "char_start": 239619,
+      "char_end": 240008,
+      "quote": "In addition to the drivers below, the increase in GAAP Reported Earnings/EPS was primarily due to impairments related to the 2024 South Carolina rate case and charges related to Duke Energy Indiana post-retirement benefits in the prior year, as well as charges related to certain joint venture electric transmission projects and certain renewable natural gas investments in the prior year.",
+      "sentences": [
+       8,
+       8
       ]
      }
     ],
@@ -1844,19 +1857,34 @@
        "0001326160-26-000014:7:29",
        "0001326160-26-000014:1A:19"
       ]
+     },
+     {
+      "queries": [
+       "impairment charge write-down project failure"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0001326160-26-000014:7:36",
+       "0001326160-26-000014:7:38",
+       "0001326160-26-000014:7:46",
+       "0001326160-26-000014:7:73"
+      ]
      }
     ],
-    "llm_calls": 1,
-    "tool_calls": 2,
+    "llm_calls": 2,
+    "tool_calls": 3,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 2182,
-     "completion_tokens": 122,
-     "total_tokens": 2304,
+     "prompt_tokens": 5605,
+     "completion_tokens": 191,
+     "total_tokens": 5796,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.0007285
+    "notional_cost_usd": 0.00168775
    },
    "critic_status": "passed"
   },
@@ -1864,30 +1892,30 @@
    "finding": {
     "criterion": "rational_capital_allocation",
     "verdict": "evidence found",
-    "rationale": "The filing identifies that management uses cash for capital and investment expenditures, debt repayment, and shareholder dividends. It further provides a quantified breakdown of total capital, investment, and acquisition expenditures.",
+    "rationale": "The filing identifies capital expenditures, debt repayment, and dividends as primary uses of cash, providing specific 2025 expenditure amounts for these categories. It also states a policy of targeting a dividend payout ratio of 60% to 70% of adjusted EPS.",
     "citations": [
      {
       "passage_id": "0001326160-26-000014:7:80",
       "accession": "0001326160-26-000014",
       "item": "7",
-      "char_start": 284809,
+      "char_start": 284630,
       "char_end": 284963,
-      "quote": "Duke Energy's capital requirements arise primarily from capital and investment expenditures, repaying long-term debt and paying dividends to shareholders.",
+      "quote": "Duke Energy relies primarily upon cash flows from operations, debt and equity issuances and its existing cash and cash equivalents to fund its liquidity and capital requirements. Duke Energy's capital requirements arise primarily from capital and investment expenditures, repaying long-term debt and paying dividends to shareholders.",
       "sentences": [
-       2,
+       1,
        2
       ]
      },
      {
-      "passage_id": "0001326160-26-000014:7:101",
+      "passage_id": "0001326160-26-000014:7:90",
       "accession": "0001326160-26-000014",
       "item": "7",
-      "char_start": 307579,
-      "char_end": 307788,
-      "quote": "Gas Utilities and Infrastructure | 1,114 | 1,313 | (199)\nOther | 335 | 261 | 74\nTotal capital, investment and acquisition expenditures, net of return of investment capital | $ | 14,002 | $ | 12,263 | $ | 1,739",
+      "char_start": 295630,
+      "char_end": 295722,
+      "quote": "Duke Energy targets a dividend payout ratio of between 60% and 70%, based upon adjusted EPS.",
       "sentences": [
-       6,
-       8
+       1,
+       1
       ]
      }
     ],
@@ -1911,21 +1939,36 @@
        "0001326160-26-000014:7:95",
        "0001326160-26-000014:7:80"
       ]
+     },
+     {
+      "queries": [
+       "dividend policy rationale"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0001326160-26-000014:7:89",
+       "0001326160-26-000014:7:90",
+       "0001326160-26-000014:7:102",
+       "0001326160-26-000014:7:91"
+      ]
      }
     ],
-    "llm_calls": 3,
-    "tool_calls": 3,
+    "llm_calls": 5,
+    "tool_calls": 7,
     "stop_reason": "submitted",
     "usage": {
-     "prompt_tokens": 5893,
-     "completion_tokens": 364,
-     "total_tokens": 6257,
+     "prompt_tokens": 16656,
+     "completion_tokens": 826,
+     "total_tokens": 17482,
      "reasoning_tokens": 0
     },
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.00201925
+    "notional_cost_usd": 0.005403
    },
-   "critic_status": "passed_after_retry"
+   "critic_status": "warning"
   }
  ],
  "critic": {
@@ -2236,7 +2279,7 @@
     "check": "L1",
     "item": "understandable_business",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing clearly defines the business as a utility provider, identifies its customer base, and explains the revenue model through commission-approved rates.",
+    "detail": "supports_verdict=yes; The quotes clearly define the company's business as a regulated utility, its service area, customer base, and the mechanism for earning revenue through commission-approved rates.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2246,7 +2289,7 @@
     "check": "L1",
     "item": "durable_competitive_advantage",
     "status": "pass",
-    "detail": "supports_verdict=yes; The filing identifies a regulated exclusive franchise as the source of advantage and specifies the service territory as the scope of this protection.",
+    "detail": "supports_verdict=yes; The filing identifies the regulated service territory as a source of advantage, which functions as a legal barrier to entry for competitors.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2256,7 +2299,7 @@
     "check": "L1",
     "item": "candid_management",
     "status": "pass",
-    "detail": "supports_verdict=yes; The quote acknowledges that progress toward a stated goal will not be linear, which fits the definition of a candid admission of uncertainty.",
+    "detail": "supports_verdict=yes; Management explicitly identifies and discusses specific charges related to internal decisions, such as customer system implementation and investment choices, rather than blaming external factors.",
     "owner": "qualitative",
     "attempt": 0,
     "kind": null,
@@ -2266,19 +2309,19 @@
     "check": "L1",
     "item": "rational_capital_allocation",
     "status": "fail",
-    "detail": "supports_verdict=yes; unsupported: data on debt and equity financing activities; The filing lists capital requirements and provides concrete figures for capital expenditures, satisfying the requirement for both policy and quantification.",
+    "detail": "supports_verdict=overstated; unsupported: providing specific 2025 expenditure amounts for these categories; The quotes state the categories of capital requirements and a dividend policy, but they do not contain the specific 2025 expenditure amounts mentioned in the rationale.",
     "owner": "qualitative",
     "attempt": 0,
-    "kind": "rationale",
+    "kind": "verdict",
     "claims": [
-     "data on debt and equity financing activities"
+     "providing specific 2025 expenditure amounts for these categories"
     ]
    },
    {
     "check": "L1",
     "item": "G1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the revenue figure to the threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue threshold and confirms the company meets it.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2288,7 +2331,7 @@
     "check": "L1",
     "item": "G2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the ratio and compares it to the utility-specific threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly applies the utility-specific debt-to-equity ratio test.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2298,7 +2341,7 @@
     "check": "L1",
     "item": "G3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year positive net income requirement.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the requirement for consistent positive net income.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2308,7 +2351,7 @@
     "check": "L1",
     "item": "G4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that the record is partial but meets the requirement for the available history.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes the partial record and confirms dividends were paid in all years on record.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2318,7 +2361,7 @@
     "check": "L1",
     "item": "G5",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the growth ratio and compares it to the 1.33 threshold.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the growth ratio based on the 3-year averages.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2328,7 +2371,7 @@
     "check": "L1",
     "item": "B1",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the failure to meet the ROE threshold over the 10-year period.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the ROE threshold.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2338,7 +2381,7 @@
     "check": "L1",
     "item": "B2",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies that debt exceeds the calculated maximum based on average net income.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares long-term debt against the defined multiple of average net income.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2348,7 +2391,7 @@
     "check": "L1",
     "item": "B3",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin to the 10-year average.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin against the 10-year average.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2358,7 +2401,7 @@
     "check": "L1",
     "item": "B4",
     "status": "pass",
-    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet both the frequency and growth requirements for owner earnings.",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the failure to meet the owner earnings criteria.",
     "owner": "explainer",
     "attempt": 0,
     "kind": null,
@@ -2387,12 +2430,15 @@
    {
     "check": "L1",
     "item": "rational_capital_allocation",
-    "status": "pass",
-    "detail": "supports_verdict=yes; The filing quantifies capital expenditures and explicitly lists the company's priorities for cash usage, satisfying both requirements of the definition.",
+    "status": "fail",
+    "detail": "supports_verdict=overstated; unsupported: 2025 actual expenditure amount | dividend payout ratio of 60% to 70% of adjusted EPS; The quotes provide a capital expenditure figure but do not contain the dividend payout ratio policy or confirm the fiscal year of the expenditure.",
     "owner": "qualitative",
     "attempt": 1,
-    "kind": null,
-    "claims": []
+    "kind": "verdict",
+    "claims": [
+     "2025 actual expenditure amount",
+     "dividend payout ratio of 60% to 70% of adjusted EPS"
+    ]
    }
   ],
   "final": {
@@ -2410,54 +2456,54 @@
    "understandable_business": "passed",
    "durable_competitive_advantage": "passed",
    "candid_management": "passed",
-   "rational_capital_allocation": "passed_after_retry"
+   "rational_capital_allocation": "warning"
   },
   "repairs": [
    {
     "item": "rational_capital_allocation",
-    "path": "rationale_rewrite",
-    "outcome": "accepted",
-    "detail": "",
-    "llm_calls": 1
+    "path": "constrained_retry",
+    "outcome": "rejected_by_recheck",
+    "detail": "supports_verdict=overstated; unsupported: 2025 actual expenditure amount | dividend payout ratio of 60% to 70% of adjusted EPS; The quotes provide a capital expenditure figure but do not contain the dividend payout ratio policy or confirm the fiscal year of the expenditure.",
+    "llm_calls": 2
    }
   ],
   "llm_calls": 2,
   "usage": {
-   "prompt_tokens": 3916,
-   "completion_tokens": 958,
-   "total_tokens": 4874,
+   "prompt_tokens": 4105,
+   "completion_tokens": 1002,
+   "total_tokens": 5107,
    "reasoning_tokens": 0
   },
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.002416
+  "notional_cost_usd": 0.0025292500000000002
  },
  "cost": {
   "actual_cost_usd": 0.0,
-  "notional_cost_usd": 0.008136,
-  "llm_calls": 9,
-  "input_tokens": 18696,
-  "output_tokens": 2308,
+  "notional_cost_usd": 0.01353,
+  "llm_calls": 13,
+  "input_tokens": 35724,
+  "output_tokens": 3066,
   "by_agent": {
    "critic": {
     "calls": 2,
-    "input_tokens": 3916,
-    "output_tokens": 958,
+    "input_tokens": 4105,
+    "output_tokens": 1002,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.002416
+    "notional_cost_usd": 0.002529
    },
    "explainer": {
     "calls": 1,
-    "input_tokens": 2402,
-    "output_tokens": 583,
+    "input_tokens": 2610,
+    "output_tokens": 581,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.001475
+    "notional_cost_usd": 0.001524
    },
    "qualitative": {
-    "calls": 6,
-    "input_tokens": 12378,
-    "output_tokens": 767,
+    "calls": 10,
+    "input_tokens": 29009,
+    "output_tokens": 1483,
     "actual_cost_usd": 0.0,
-    "notional_cost_usd": 0.004245
+    "notional_cost_usd": 0.009477
    }
   }
  },
@@ -2552,5 +2598,10 @@
   "Filings and XBRL data: U.S. Securities and Exchange Commission, EDGAR (public domain)"
  ],
  "trace_path": "results/0001326160.trace.jsonl",
- "warnings": []
+ "warnings": [
+  {
+   "where": "rational_capital_allocation",
+   "message": "the Critic still objects after one repair: supports_verdict=overstated; unsupported: 2025 actual expenditure amount | dividend payout ratio of 60% to 70% of adjusted EPS; The quotes provide a capital expenditure figure but do not contain the dividend payout ratio policy or confirm the fiscal year of the expenditure."
+  }
+ ]
 }

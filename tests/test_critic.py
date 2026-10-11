@@ -149,10 +149,11 @@ class TestModelCheckInput(Fixture):
         self.assertNotIn("candid_management", judged)  # KO's is "insufficient evidence"
 
     def test_payload_has_the_criterion_two_rubric_lines_quotes_and_rationale_and_nothing_else(self):
-        f = self.finding("durable_competitive_advantage")
+        f = self.finding("understandable_business")  # KO: a "found" verdict, so the definitions are those of found and weak
+        self.assertEqual(f.verdict, "evidence found")
         p = llm_payload([f], load_rubric())[0]
         self.assertEqual(sorted(p), ["claimed_verdict", "criterion", "definition_of_claimed_verdict", "definition_of_the_verdict_below", "question", "quotes", "rationale"])
-        rubric = load_rubric()["durable_competitive_advantage"]
+        rubric = load_rubric()["understandable_business"]
         self.assertEqual((p["definition_of_claimed_verdict"], p["definition_of_the_verdict_below"]), (rubric["found_means"], rubric["weak_means"]))
         self.assertEqual(p["quotes"], [c.quote for c in f.citations])
 
