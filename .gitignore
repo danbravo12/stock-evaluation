@@ -11,13 +11,34 @@ __pycache__/
 .venv/
 .DS_Store
 
-# Analysis results: only the 5 test-ticker results and traces are committed (site sample data, ADR-054)
+# Analysis results: only the 5 test-ticker results and traces and the showcase companies below are committed (site data, ADR-054, ADR-070)
 results/*
 !results/0000021344.*
 !results/0000019617.*
 !results/0001652044.*
 !results/0001318605.*
 !results/0001326160.*
+# the showcase companies (config/showcase.json): committed so the site can be rebuilt
+!results/0000006951.*
+!results/0000815556.*
+!results/0000909832.*
+!results/0000789019.*
+!results/0000320193.*
+!results/0001045810.*
+!results/0001326801.*
+!results/0000200406.*
+!results/0000080424.*
+!results/0000063908.*
+!results/0000018230.*
+!results/0002115436.*
+!results/0001067983.*
+!results/0000731766.*
+!results/0001099219.*
+!results/0000886982.*
+!results/0001045609.*
+!results/0000726728.*
+!results/0000753308.*
+!results/0001692819.*
 site/
 site.building/
 docs/screenshots/

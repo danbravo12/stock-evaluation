@@ -14,7 +14,7 @@ from engine.publish import LinkError, SITE_SRC, build_site, check_site
 from engine.report import PublishGateError
 from engine.secrets_scan import redact, scan_history, scan_text, scan_tree
 from engine.settings import Settings
-from tests.test_site import sample_results
+from tests.test_site import sample_rankings, sample_results
 
 GOOGLE = "AIza" + "SyD3x9Qk2LmN8vR4tUwY6zB1cE5fG7hJ0kA"[:35]
 FINN = "cnk3gq9r01qk4f8h2d70cnk3gq9r01qk4f8h2d7g"[:20]
@@ -115,11 +115,12 @@ class DeployCase(unittest.TestCase):
         self.tmp = Path(self._tmp.name)
         self.repo = make_repo(self.tmp / "repo")
         self.results = sample_results(self.tmp / "results")
+        self.rankings = sample_rankings(self.tmp / "rk")
         self.out = self.tmp / "site"
         self.settings = Settings.from_env()
 
     def run_deploy(self, **kw):
-        return deploy(self.repo, self.out, self.settings, results_dir=kw.pop("results_dir", self.results), commit="t", **kw)
+        return deploy(self.repo, self.out, self.settings, results_dir=kw.pop("results_dir", self.results), rankings_path=self.rankings, commit="t", **kw)
 
 
 class TestDryRun(DeployCase):
@@ -164,7 +165,7 @@ class TestDryRun(DeployCase):
         p = src / "index.html"
         p.write_text(p.read_text().replace('href="how-it-works.html"', 'href="gone.html"', 1))
         with self.assertRaises(LinkError):
-            build_site(self.out, results_dir=self.results, settings=self.settings, commit="t", site_src=src)
+            build_site(self.out, results_dir=self.results, rankings_path=self.rankings, settings=self.settings, commit="t", site_src=src)
 
 
 class TestPush(DeployCase):

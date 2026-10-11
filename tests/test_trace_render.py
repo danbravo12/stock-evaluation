@@ -40,6 +40,29 @@ class TestRenderers(unittest.TestCase):
                     self.assertNotIn('{"', d, f"{t} step {s['n']}")
                     self.assertIsNone(re.search(r"\b[a-z_]{3,}=\S", d), f"{t} step {s['n']}: {d}")
 
+    def test_every_committed_trace_renders_without_raw_text(self):
+        """All traces under results/ (the five test companies and the showcase), including the rarer events: a missing 10-K section and pointers rejected twice."""
+        traces = sorted((REPO_ROOT / "results").glob("0*.trace.jsonl"))
+        self.assertGreaterEqual(len(traces), 5)
+        for path in traces:
+            events, res = load(path.name.split(".")[0])
+            for s in render_trace(events, res)["steps"]:
+                self.assertIsNone(RAW.search(s["title"]), f"{path.name} step {s['n']}: {s['title']}")
+                for d in s["details"]:
+                    self.assertNotIn('{"', d, f"{path.name} step {s['n']}")
+                    self.assertIsNone(re.search(r"\b[a-z_]{3,}=\S", d), f"{path.name} step {s['n']}: {d}")
+
+    def test_the_rare_events_have_plain_titles(self):
+        from engine.trace_render import Renderer
+        r = Renderer({})
+        ev = lambda out: {"type": "note", "agent": "qualitative/understandable_business", "input_summary": "", "output": out, "step": 1}  # noqa: E731
+        missing = r.one(ev("section_missing: Item 1 not found in the filing (no 'Item 1' heading gives a section of 2000+ chars (longest 26)); no model call"))
+        self.assertEqual(missing["title"], "Item 1 not found in the filing: understandable business could not be assessed")
+        kept = r.one(ev("rejected pointers kept: '0000726728-26-000011:1:2' sentences 1-4: 124 words; the limit is 120. Cite fewer sentences"))
+        self.assertEqual(kept["title"], "Pointer check failed a second time: a citation was 124 words long, over the limit of 120")
+        for s in (missing, kept):
+            self.assertIsNone(RAW.search(s["title"]))
+
     def test_titles_for_the_main_event_types(self):
         events, res = load(SAMPLES["JPM"])
         steps = {s["n"]: s for s in render_trace(events, res)["steps"]}

@@ -146,3 +146,5 @@ td.sector, th.sector { white-space: nowrap; }
 .tablewrap table.wide { min-width: 1000px; }
 .sub { margin-top: 2.2em; }
 @media (max-width: 900px) { .tr .detail { order: -1; } }
+
+.showlist { list-style: none; padding: 0; margin: 0 0 1.2em; max-width: 78ch; } .showlist li { padding: 8px 0; border-bottom: 1px solid var(--rule); max-width: none; }

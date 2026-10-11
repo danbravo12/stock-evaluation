@@ -303,7 +303,12 @@ class TestSampleResults(unittest.TestCase):
         if not files:
             self.skipTest("sample results not generated yet")
         schema = json.loads(SCHEMA_PATH.read_text())
-        self.assertEqual(len(files), 5)
+        showcase = json.loads((REPO_ROOT / "config" / "showcase.json").read_text())  # the 5 test companies and the 20 showcase companies are committed (ADR-070)
+        from engine.universe import load_universe
+        u = load_universe()
+        expected = {u.row_for(s).cik for s in [e["symbol"] for e in showcase["showcase"]] + [e["symbol"] for e in showcase["test_companies"]]}
+        self.assertEqual({p.stem for p in files}, expected)
+        self.assertEqual(len(files), 25)
         for p in files:
             data = json.loads(p.read_text())
             jsonschema.validate(data, schema)

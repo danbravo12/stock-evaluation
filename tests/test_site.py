@@ -28,6 +28,19 @@ def tree_hash(root: Path) -> str:
     return h.hexdigest()
 
 
+def sample_rankings(dest: Path) -> Path:
+    """The committed rankings with only the five test companies marked as fully analysed, to go with `sample_results` (the 20 showcase results are not copied)."""
+    rk = json.loads((REPO_ROOT / "site_data" / "rankings.json").read_text())
+    for group in ("ranked", "ranked_financials", "insufficient_data"):
+        for row in rk["criteria_ranking"][group]:
+            if row["cik"] not in SAMPLES:
+                row["has_full_analysis"], row["analysis_path"] = False, None
+    dest.mkdir(parents=True, exist_ok=True)
+    path = dest / "rankings.json"
+    path.write_text(json.dumps(rk), encoding="utf-8")
+    return path
+
+
 def sample_results(dest: Path) -> Path:
     """The five committed full results and traces, in a temporary results folder (no score files: those are local)."""
     dest.mkdir(parents=True, exist_ok=True)
@@ -45,7 +58,8 @@ class SiteCase(unittest.TestCase):
         cls.results = sample_results(cls.tmp / "results")
         cls.settings = Settings.from_env()
         cls.out = cls.tmp / "site"
-        cls.manifest = build_site(cls.out, results_dir=cls.results, settings=cls.settings, commit="test")
+        cls.rankings = sample_rankings(cls.tmp / "rk")
+        cls.manifest = build_site(cls.out, results_dir=cls.results, rankings_path=cls.rankings, settings=cls.settings, commit="test")
 
     @classmethod
     def tearDownClass(cls):
@@ -54,9 +68,19 @@ class SiteCase(unittest.TestCase):
 
 class TestBuild(SiteCase):
     def test_deterministic(self):
-        again = build_site(self.tmp / "site2", results_dir=self.results, settings=self.settings, commit="test")
+        again = build_site(self.tmp / "site2", results_dir=self.results, rankings_path=self.rankings, settings=self.settings, commit="test")
         self.assertEqual(tree_hash(self.out), tree_hash(self.tmp / "site2"))
         self.assertEqual(again, self.manifest)
+
+    def test_showcase_list_is_resolved_from_the_config(self):
+        sc = json.loads((self.out / "data/showcase.json").read_text())
+        # this build has only the five test companies' results, so the 20 showcase companies are named as missing and the five are listed
+        self.assertEqual([g["title"] for g in sc["groups"]], ["The five test companies"])
+        self.assertEqual([i["symbol"] for i in sc["groups"][0]["items"]], ["KO", "JPM", "GOOGL", "TSLA", "DUK"])
+        self.assertEqual(len(sc["missing"]), 20)
+        self.assertEqual(self.manifest["showcase_missing"], sc["missing"])
+        first = sc["groups"][0]["items"][0]
+        self.assertEqual((first["name"], first["cik"]), ("The Coca-Cola Company", "0000021344"))
 
     def test_outputs_exist(self):
         for page in PAGES:
@@ -114,13 +138,15 @@ class TestGates(unittest.TestCase):
         self.tmp = Path(self._tmp.name)
         self.addCleanup(self._tmp.cleanup)
         self.results = sample_results(self.tmp / "results")
+        self.sample_rankings = sample_rankings(self.tmp / "rk0")
         self.settings = Settings.from_env()
 
     def build(self, **kw):
+        kw.setdefault("rankings_path", self.sample_rankings)
         return build_site(self.tmp / "site", results_dir=kw.pop("results", self.results), settings=self.settings, commit="t", **kw)
 
     def test_a_planted_finnhub_field_fails_the_build_and_leaves_no_site(self):
-        rk = json.loads((REPO_ROOT / "site_data" / "rankings.json").read_text())
+        rk = json.loads(self.sample_rankings.read_text())
         rk["criteria_ranking"]["ranked"][0]["labels"]["price"] = "12.3"
         path = self.tmp / "rk.json"
         path.write_text(json.dumps(rk))
@@ -221,7 +247,7 @@ class TestLinksAndSchemas(SiteCase):
         for c in SAMPLES:
             jsonschema.validate(json.loads((self.out / "data/results" / f"{c}.json").read_text()), schema)
         m = self.manifest
-        self.assertEqual(set(m), {"build_commit", "data_as_of", "attribution", "counts", "full_analysis", "caveats", "repo_url", "branch", "docs"})
+        self.assertEqual(set(m), {"build_commit", "data_as_of", "attribution", "counts", "full_analysis", "caveats", "repo_url", "branch", "docs", "showcase_missing"})
 
     def test_the_scripts_set_no_inner_html_from_data(self):  # data is always inserted as text nodes
         for js in (self.out / "assets/js").glob("*.js"):

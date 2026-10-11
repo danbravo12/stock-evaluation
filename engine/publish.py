@@ -27,6 +27,7 @@ DOCS = {"evaluation_notes": "docs/evaluation_notes.md", "DECISIONS": "DECISIONS.
         "universe_scorecard_report": "docs/universe_scorecard_report.md", "qualitative_report": "docs/qualitative_report.md", "critic_report": "docs/critic_report.md",
         "coverage_report": "docs/coverage_report.md"}
 SITE_CONFIG = REPO_ROOT / "config" / "site.json"
+SHOWCASE_CONFIG = REPO_ROOT / "config" / "showcase.json"
 SCORE_KEYS = ("ticker", "cik", "name", "gics_sector", "gics_sub_industry", "sector_class", "sector_notes", "source_notes", "fetched_at", "score")
 PAGES = ["index.html", "company.html", "trace.html", "how-it-works.html", "doc.html"]
 SEC_URL = re.compile(r"^https://([a-z]+\.)?sec\.gov/")
@@ -94,21 +95,30 @@ def page_text(path: Path) -> str:
     return text
 
 
-def _retriever(settings: Settings):
-    from engine.fetch.edgar import EdgarClient
-    from engine.retrieve import Retriever
-    return Retriever(EdgarClient("replay", settings))
+def _no_network(url, headers, timeout):
+    raise RuntimeError("the network is not used while publishing")
 
 
-def passages_for(cik: str, result: dict, settings: Settings) -> dict:
-    """The cited passages with their text, from the recorded 10-K (replay), so the page can show the sentences around each quote."""
+def _indexed_retriever(cik: str, settings: Settings):
+    """A retriever whose index for `cik` loads: the recorded fixtures first (the five test companies), then the local cache of 10-K documents fetched in live mode (the showcase
+    companies), never the network. None when the filing is in neither: the page then shows the quote without its surrounding text and the trace lists passage ids only."""
     from engine.fetch.edgar import EdgarClient
     from engine.retrieve import Retriever
+    for client in (EdgarClient("replay", settings), EdgarClient("live", settings, transport=_no_network)):
+        retriever = Retriever(client)
+        try:
+            retriever.index(cik)
+            return retriever
+        except Exception:
+            continue
+    return None
+
+
+def passages_for(cik: str, result: dict, retriever) -> dict:
+    """The cited passages with their text, from the recorded 10-K, so the page can show the sentences around each quote."""
     ids = sorted({c["passage_id"] for q in result["qualitative"] for c in q["finding"]["citations"]})
-    if not ids:
+    if not ids or retriever is None:
         return {}
-    retriever = Retriever(EdgarClient("replay", settings))
-    retriever.index(cik)
     out = {}
     for pid in ids:
         p = retriever.get_passage(pid)
@@ -157,19 +167,14 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
                 res = json.loads((results_dir / f"{r.cik}.json").read_text(encoding="utf-8"))
                 put(f"results/{r.cik}.json", res)
                 trace = [json.loads(l) for l in (results_dir / f"{r.cik}.trace.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
-                retriever = _retriever(settings)
-                try:
-                    if retriever:
-                        retriever.index(r.cik)
-                except Exception:
-                    retriever = None
+                retriever = _indexed_retriever(r.cik, settings)
                 put(f"results/{r.cik}.trace.json", render_trace(trace, res, retriever=retriever, cik=r.cik))
                 notes = critic_notes(res)
                 notes["name"] = r.name
                 put(f"results/{r.cik}.explain.json", notes)
                 for key, text in _strings(notes):
                     scan_text(f"{r.symbol}:explain", text, banned)
-                put(f"results/{r.cik}.passages.json", passages_for(r.cik, res, settings))
+                put(f"results/{r.cik}.passages.json", passages_for(r.cik, res, retriever))
                 scan_result(r.symbol, res, banned)
                 full.append(r.symbol)
         for name, rel in DOCS.items():
@@ -179,9 +184,11 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
         for r in rows:
             for n in r.notes + r.caveats:
                 scan_text(f"{r.symbol}:note", n, banned)
+        showcase = showcase_data(rankings)
+        put("showcase.json", showcase)
         manifest = {"build_commit": commit if commit is not None else git_commit(), "data_as_of": rankings.data_as_of.model_dump(), "attribution": rankings.attribution,
                     "counts": {**rankings.counts.model_dump(), "scored": n_scores, "full_analysis": len(full)}, "full_analysis": sorted(full), "caveats": rankings.caveats,
-                    "repo_url": site_cfg["repo_url"], "branch": site_cfg["branch"], "docs": DOCS}
+                    "repo_url": site_cfg["repo_url"], "branch": site_cfg["branch"], "docs": DOCS, "showcase_missing": showcase["missing"]}
         put("manifest.json", manifest)
 
         # ---- the gates
@@ -207,6 +214,26 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
     except BaseException:
         shutil.rmtree(tmp, ignore_errors=True)
         raise
+
+
+def showcase_data(rankings: Rankings, config_path: Path = SHOWCASE_CONFIG) -> dict:
+    """The showcase list for the rankings page: config/showcase.json resolved against the rankings (name, rank, group), in the configured order. A company without a full
+    analysis is left out and named in `missing`."""
+    cfg = json.loads(Path(config_path).read_text(encoding="utf-8"))
+    cr = rankings.criteria_ranking
+    rows = {r.symbol: r for r in cr.ranked + cr.ranked_financials + cr.insufficient_data}
+    groups: dict[str, list] = {title: [] for title in cfg["groups"]}
+    missing: list[str] = []
+    entries = [(e["symbol"], e["group"], e["why"]) for e in cfg["showcase"]] + [(e["symbol"], "The five test companies", e["why"]) for e in cfg["test_companies"]]
+    for symbol, group, why in entries:
+        r = rows.get(symbol)
+        if r is None or not r.has_full_analysis:
+            missing.append(symbol)
+            continue
+        title, _, tag = group.partition(": ")
+        title = "Edge cases the rules handle" if title == "Edge case" else title
+        groups[title].append({"symbol": symbol, "name": r.name, "cik": r.cik, "tag": tag or None, "why": why, "rank": r.rank, "rank_group": r.group})
+    return {"groups": [{"title": t, "items": items} for t, items in groups.items() if items], "missing": missing}
 
 
 def check_site(out: Path) -> None:

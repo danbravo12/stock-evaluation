@@ -256,6 +256,14 @@ class Renderer:
                     s.update(kind="submit", title=f"Model submission malformed: {reject_reason(text)}", details=["The model was asked to call the tool again with arguments in the right format."])
             elif typ == "tool_call" and text.startswith("Tool error"):
                 s.update(kind="submit", title=f"Model submission malformed: {reject_reason(text)}", details=["The model was asked to call the tool again with arguments in the right format."])
+            elif typ == "note" and text.startswith("section_missing:"):
+                found = re.findall(r"Item (\S+) not found", text)
+                s.update(kind="stop", title=f"{items_text(found)} not found in the filing: {name} could not be assessed",
+                         details=["The part of the 10-K this question needs could not be located, so no model call was made.",
+                                  "The finding is \"not assessed\", which says nothing about the company: the section finder, not the filing, is the limit here."])
+            elif typ == "note" and text.startswith("rejected pointers kept:"):
+                s.update(kind="stop", title=f"Pointer check failed a second time: {reject_reason(text)}",
+                         details=["The agent had one chance to correct its citations and did not, so no finding was recorded.", "The finding is \"not assessed\", which says nothing about the company."])
             elif typ == "note" and text.startswith("stop:"):
                 m = re.match(r"stop: (\w+)(?:; verdict: ([^;]+))?; (\d+) model calls, (\d+) tool calls", text)
                 reason, verdict, mc, tc = m.group(1), m.group(2), int(m.group(3)), int(m.group(4))

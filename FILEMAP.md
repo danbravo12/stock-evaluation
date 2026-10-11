@@ -45,6 +45,7 @@ StockEvaluation/
 | `.env` | Your real values. Read by `engine/settings.py`. **Never committed** (git-ignored, checked with `git check-ignore`). | Local only |
 | `requirements.txt` | Exact pinned dependency list (Pydantic 2.13.5, ADR-029). Install with `pip install -r requirements.txt` in `.venv`. | Built |
 | `LICENSE` | MIT, copyright Daniel Bravo. | Built |
+| `config/showcase.json` | The 20 showcase companies with a group, a one-line reason each, and the five test companies' reasons; resolved against the rankings by `publish` (ADR-070). | Built |
 | `config/site.json` | The one place the repository address is set; `publish` writes it into every page and the manifest. | Built |
 | `config/secret_scan_allow.json` | Regexes the secret scan ignores (empty; each entry needs a stated reason). | Built |
 | `.gitignore` | Keeps `.env`, `data/cache/`, Python caches and `.DS_Store` out of git. | Built |
@@ -164,6 +165,7 @@ The engine is a library, so the batch command, the tests and the future live app
 | `tests/test_revenue_guard.py` | Component guard logic and recorded General Mills, Fifth Third, Goldman Sachs (ADR-061). | Built |
 | `tests/test_decisions.py` | Financial classes and notes, G4 unknown years (synthetic and Federal Realty's recorded facts), Exxon successor (true accessions, note, evidence in the successor's own history), `no_annual_report` in the numeric batch and the full path (ADR-057, ADR-012, ADR-063). | Built |
 | `tests/test_coverage.py` | Validated derived difference (same filing and period, overlap proof, forward only), Boston Properties, Public Storage, Chevron and Ford on recorded facts, Camden lease revenue, capex concepts stay totals (ADR-064). | Built |
+| `tests/test_showcase.py` | The showcase config is valid and every reason shown on the page is checked against the committed rankings (ADR-070). | Built |
 | `tests/test_figures_copy.py` | Runs the page's figure formatting with node: an empty list is a sentence, never a label followed by "none". | Built |
 | `tests/test_deploy.py` | Scanner patterns and redaction, history scan (deleted secret, gzip fixture, commit message, `.env` value, this repository clean), dry run, planted secret / gate / broken link refuse, push to a local bare remote (ADR-068). | Built |
 | `tests/test_trace_render.py` | Every event of the 5 recorded traces renders; no raw JSON or key=value text; titles, hand-offs, group summaries, running totals, Critic sentences, plurals, display names (ADR-067). | Built |
@@ -193,7 +195,7 @@ The engine is a library, so the batch command, the tests and the future live app
 | Path | Function | Status |
 |---|---|---|
 | `results/scores/<CIK>.json` | Numeric-only results of the whole index (git-ignored, local). | Built |
-| `results/<CIK>.json`, `results/<CIK>.trace.jsonl` | One `Result` (schema 1.0) and its trace per analysed company. Git-ignored except the 5 test tickers (KO, JPM, GOOGL, TSLA, DUK), committed as site sample data (ADR-054). | Built |
+| `results/<CIK>.json`, `results/<CIK>.trace.jsonl` | One `Result` (schema 1.1) and its trace per analysed company. Git-ignored except the 5 test tickers and the 20 showcase companies, which are committed so the site can be rebuilt (ADR-054, ADR-070). | Built |
 | `site_data/rankings.json` | The criteria ranking of the index (and the empty analyst section), built by `python -m engine.cli rankings`; committed as the input of the static site (ADR-062). | Built |
 | `schema/rankings.schema.json` | JSON Schema of `Rankings`, exported by `python -m engine.cli schema`; a test fails if it is stale. | Built |
 | `schema/result.schema.json` | JSON Schema of `Result`, exported by `python -m engine.cli schema`; a test fails if it is stale. | Built |

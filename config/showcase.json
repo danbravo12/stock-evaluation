@@ -1,0 +1,133 @@
+{
+ "_notes": "Companies given a full agent analysis for the site's showcase (ADR-070). `why` is shown on the rankings page and each line is checked against the scores by tests/test_showcase.py. The five test companies (KO, JPM, GOOGL, TSLA, DUK) are analysed as well and listed after these.",
+ "showcase": [
+  {
+   "symbol": "AMAT",
+   "group": "Top of the ranking",
+   "why": "Ranked first: meets all nine decided tests."
+  },
+  {
+   "symbol": "FAST",
+   "group": "Top of the ranking",
+   "why": "Also meets all nine decided tests, with an unbroken dividend record."
+  },
+  {
+   "symbol": "COST",
+   "group": "Top of the ranking",
+   "why": "Meets eight of nine decided tests; only financial strength (the current ratio) fails."
+  },
+  {
+   "symbol": "MSFT",
+   "group": "Large and familiar",
+   "why": "Passes every decided test except financial strength."
+  },
+  {
+   "symbol": "AAPL",
+   "group": "Large and familiar",
+   "why": "Fails the dividend record (2011 was unpaid) and financial strength; passes the other decided tests."
+  },
+  {
+   "symbol": "NVDA",
+   "group": "Large and familiar",
+   "why": "Strong growth and returns, but the dividend record fails (2012 was unpaid) and owner earnings is a data gap."
+  },
+  {
+   "symbol": "META",
+   "group": "Large and familiar",
+   "why": "Began paying a dividend in 2024, so the dividend record fails; every other decided test passes."
+  },
+  {
+   "symbol": "JNJ",
+   "group": "Large and familiar",
+   "why": "A long dividend record; the margin test is a data gap because the filings tag no operating income."
+  },
+  {
+   "symbol": "PG",
+   "group": "Large and familiar",
+   "why": "Consumer staples with a long dividend record, a counterpart to Coca-Cola."
+  },
+  {
+   "symbol": "MCD",
+   "group": "Large and familiar",
+   "why": "Negative shareholders' equity: the return-on-equity test is marked not meaningful and the debt test fails."
+  },
+  {
+   "symbol": "CAT",
+   "group": "Large and familiar",
+   "why": "A cyclical industrial: the earnings-stability test fails because of one loss year, 2016."
+  },
+  {
+   "symbol": "XOM",
+   "group": "Edge case: registrant successor",
+   "why": "A new holding company took over the registration in 2026; the figures come from its predecessor, Exxon Mobil Corp, and the page says so."
+  },
+  {
+   "symbol": "BRK-B",
+   "group": "Edge case: conglomerate",
+   "why": "Large insurance operations inside an industrial group, so its consolidated figures carry a note, and too few tests are decided to rank it."
+  },
+  {
+   "symbol": "UNH",
+   "group": "Edge case: managed care",
+   "why": "Classed by GICS as an ordinary company, not an insurer, so every test applies."
+  },
+  {
+   "symbol": "MET",
+   "group": "Edge case: insurer",
+   "why": "Insurer rules: four tests do not apply, and the page says why."
+  },
+  {
+   "symbol": "GS",
+   "group": "Edge case: broker-dealer",
+   "why": "Treated as a bank (no current assets or operating income) by a rule for the broker-dealer sub-industry."
+  },
+  {
+   "symbol": "PLD",
+   "group": "Edge case: real estate trust",
+   "why": "A REIT: the rules are unchanged, with a note that its debt is structural; its dividend record depends on reading the right per-share tag."
+  },
+  {
+   "symbol": "O",
+   "group": "Edge case: real estate trust",
+   "why": "A monthly-dividend REIT: several tests are data gaps, so too few are decided to rank it."
+  },
+  {
+   "symbol": "NEE",
+   "group": "Edge case: utility",
+   "why": "The debt test uses Graham's utility variant (debt up to twice equity)."
+  },
+  {
+   "symbol": "VST",
+   "group": "Edge case: power producer",
+   "why": "Not rate-regulated, so the utility variant does not apply; a note says so."
+  }
+ ],
+ "test_companies": [
+  {
+   "symbol": "KO",
+   "why": "One of the five companies the rules were built and checked on: an ordinary company with a long, unbroken dividend record."
+  },
+  {
+   "symbol": "JPM",
+   "why": "The bank among them: four tests do not apply, and the page says why."
+  },
+  {
+   "symbol": "GOOGL",
+   "why": "Two share classes analysed once, and a dividend that began only in 2024."
+  },
+  {
+   "symbol": "TSLA",
+   "why": "Loss years and no dividend, so several tests fail for plain reasons."
+  },
+  {
+   "symbol": "DUK",
+   "why": "The utility: the debt test uses Graham's variant (debt up to twice equity)."
+  }
+ ],
+ "groups": [
+  "Top of the ranking",
+  "Large and familiar",
+  "Edge cases the rules handle",
+  "The five test companies"
+ ]
+}

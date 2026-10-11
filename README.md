@@ -68,6 +68,10 @@ Fixtures for the test tickers (KO, JPM, GOOGL, TSLA, DUK) are written to `fixtur
 
 Data: U.S. Securities and Exchange Commission, EDGAR (public domain).
 
+## The showcase
+
+`config/showcase.json` lists the companies with a full agent analysis beyond the five test companies, with a one-line reason each (the rankings page shows them): the top of the ranking (AMAT, FAST, COST), large familiar companies (MSFT, AAPL, NVDA, META, JNJ, PG, MCD, CAT) and the cases the rules handle (XOM predecessor registrant, BRK-B conglomerate, UNH managed care, MET insurer, GS broker-dealer as bank, PLD and O REITs, NEE utility variant, VST power producer). To add one: add it to the file, run `python -m engine.cli batch --tickers <SYMBOL> --mode live` (free tier; resumes after midnight Pacific if the daily limit is reached; never enable paid mode for this), `python -m engine.cli rankings`, add `!results/<CIK>.*` to `.gitignore`, then `publish`.
+
 ## Deploying the site (GitHub Pages)
 
 The site is static and every URL is relative, so it works as a project site at `https://<your-user>.github.io/stock-evaluation/`. `deploy` publishes only the built `site/` folder to a `gh-pages` branch; the code and the recorded data go to GitHub only when you push `main`. Steps for Daniel, once:
