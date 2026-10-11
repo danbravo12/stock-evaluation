@@ -1,0 +1,5 @@
+{
+  "_notes": "The one place the repository address is set. publish.py writes it into every built page (replacing the placeholder __REPO_URL__ in site_src) and into data/manifest.json, which the scripts read for the footer and the document links.",
+  "repo_url": "https://github.com/danbravo12/stock-evaluation",
+  "branch": "main"
+}

@@ -26,6 +26,7 @@ SITE_OUT = REPO_ROOT / "site"
 DOCS = {"evaluation_notes": "docs/evaluation_notes.md", "DECISIONS": "DECISIONS.md", "PROCESS": "PROCESS.md", "ARCHITECTURE": "ARCHITECTURE.md",
         "universe_scorecard_report": "docs/universe_scorecard_report.md", "qualitative_report": "docs/qualitative_report.md", "critic_report": "docs/critic_report.md",
         "coverage_report": "docs/coverage_report.md"}
+SITE_CONFIG = REPO_ROOT / "config" / "site.json"
 SCORE_KEYS = ("ticker", "cik", "name", "gics_sector", "gics_sub_industry", "sector_class", "sector_notes", "source_notes", "fetched_at", "score")
 PAGES = ["index.html", "company.html", "trace.html", "how-it-works.html", "doc.html"]
 SEC_URL = re.compile(r"^https://([a-z]+\.)?sec\.gov/")
@@ -128,6 +129,9 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
         shutil.rmtree(tmp)
     try:
         shutil.copytree(site_src, tmp)
+        site_cfg = json.loads(SITE_CONFIG.read_text(encoding="utf-8"))
+        for page in tmp.glob("*.html"):  # the repository address is set in config/site.json only
+            page.write_text(page.read_text(encoding="utf-8").replace("__REPO_URL__", site_cfg["repo_url"]), encoding="utf-8")
         data = tmp / "data"
         written: list[tuple[str, object]] = []
 
@@ -176,7 +180,8 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
             for n in r.notes + r.caveats:
                 scan_text(f"{r.symbol}:note", n, banned)
         manifest = {"build_commit": commit if commit is not None else git_commit(), "data_as_of": rankings.data_as_of.model_dump(), "attribution": rankings.attribution,
-                    "counts": {**rankings.counts.model_dump(), "scored": n_scores, "full_analysis": len(full)}, "full_analysis": sorted(full), "caveats": rankings.caveats}
+                    "counts": {**rankings.counts.model_dump(), "scored": n_scores, "full_analysis": len(full)}, "full_analysis": sorted(full), "caveats": rankings.caveats,
+                    "repo_url": site_cfg["repo_url"], "branch": site_cfg["branch"], "docs": DOCS}
         put("manifest.json", manifest)
 
         # ---- the gates

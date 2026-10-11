@@ -221,7 +221,7 @@ class TestLinksAndSchemas(SiteCase):
         for c in SAMPLES:
             jsonschema.validate(json.loads((self.out / "data/results" / f"{c}.json").read_text()), schema)
         m = self.manifest
-        self.assertEqual(set(m), {"build_commit", "data_as_of", "attribution", "counts", "full_analysis", "caveats"})
+        self.assertEqual(set(m), {"build_commit", "data_as_of", "attribution", "counts", "full_analysis", "caveats", "repo_url", "branch", "docs"})
 
     def test_the_scripts_set_no_inner_html_from_data(self):  # data is always inserted as text nodes
         for js in (self.out / "assets/js").glob("*.js"):
@@ -239,11 +239,28 @@ class TestLinksAndSchemas(SiteCase):
         self.assertRegex((self.out / "assets/site.css").read_text(), r"\.nowrap \{ white-space: nowrap; \}")
         self.assertIn('id="ranking"', (self.out / "how-it-works.html").read_text())  # the long explanation of the score lives there, not on the rankings page
 
+    def test_the_repository_link_comes_from_one_config_value(self):
+        cfg = json.loads((REPO_ROOT / "config" / "site.json").read_text())
+        self.assertEqual(self.manifest["repo_url"], cfg["repo_url"])
+        self.assertEqual(self.manifest["docs"], DOCS)
+        for page in PAGES:
+            html = (self.out / page).read_text()
+            self.assertNotIn("__REPO_URL__", html, page)
+            nav = html[html.index('<nav aria-label="Main">'):html.index("</nav>")]
+            self.assertIn(f'<a href="{cfg["repo_url"]}" rel="noopener">Code on GitHub</a>', nav, page)
+            self.assertIn(f'href="{cfg["repo_url"]}"', html[html.index("<footer"):], page)
+        self.assertIn(f'href="{cfg["repo_url"]}"', (self.out / "how-it-works.html").read_text().split("<h2>Project documents</h2>")[1])
+        for p in list((SITE_SRC).glob("*.html")) + list((SITE_SRC / "assets/js").glob("*.js")):  # no address is written into a page or a script
+            self.assertNotIn("github.com", p.read_text(), p.name)
+        doc_js = (self.out / "assets/js/doc.js").read_text()
+        self.assertIn("View this file on GitHub", doc_js)
+        self.assertIn("m.repo_url", doc_js)
+
     def test_no_third_party_requests(self):
         for p in list(self.out.glob("*.html")) + list((self.out / "assets").rglob("*.js")) + [self.out / "assets/site.css"]:
             text = p.read_text(encoding="utf-8")
             hosts = set(re.findall(r'(?:src|href)="(https?://[^"/]+)', text)) | set(re.findall(r'url\((https?://[^)/]+)', text))
-            hosts = {h for h in hosts if "sec.gov" not in h and "w3.org" not in h}
+            hosts = {h for h in hosts if "sec.gov" not in h and "w3.org" not in h and h != "https://github.com"}  # the one link to the repository (config/site.json)
             self.assertEqual(hosts, set(), p.name)
             self.assertNotIn("fetch(\"http", text)
 

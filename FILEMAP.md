@@ -45,6 +45,7 @@ StockEvaluation/
 | `.env` | Your real values. Read by `engine/settings.py`. **Never committed** (git-ignored, checked with `git check-ignore`). | Local only |
 | `requirements.txt` | Exact pinned dependency list (Pydantic 2.13.5, ADR-029). Install with `pip install -r requirements.txt` in `.venv`. | Built |
 | `LICENSE` | MIT, copyright Daniel Bravo. | Built |
+| `config/site.json` | The one place the repository address is set; `publish` writes it into every page and the manifest. | Built |
 | `config/secret_scan_allow.json` | Regexes the secret scan ignores (empty; each entry needs a stated reason). | Built |
 | `.gitignore` | Keeps `.env`, `data/cache/`, Python caches and `.DS_Store` out of git. | Built |
 | `config/concept_map.json` | Per measure: unit, period type, ordered XBRL concepts (with explicit derived sums) and a short reason. Read by the normaliser; reviewable without reading code (ADR-028). | Built |
@@ -163,6 +164,7 @@ The engine is a library, so the batch command, the tests and the future live app
 | `tests/test_revenue_guard.py` | Component guard logic and recorded General Mills, Fifth Third, Goldman Sachs (ADR-061). | Built |
 | `tests/test_decisions.py` | Financial classes and notes, G4 unknown years (synthetic and Federal Realty's recorded facts), Exxon successor (true accessions, note, evidence in the successor's own history), `no_annual_report` in the numeric batch and the full path (ADR-057, ADR-012, ADR-063). | Built |
 | `tests/test_coverage.py` | Validated derived difference (same filing and period, overlap proof, forward only), Boston Properties, Public Storage, Chevron and Ford on recorded facts, Camden lease revenue, capex concepts stay totals (ADR-064). | Built |
+| `tests/test_figures_copy.py` | Runs the page's figure formatting with node: an empty list is a sentence, never a label followed by "none". | Built |
 | `tests/test_deploy.py` | Scanner patterns and redaction, history scan (deleted secret, gzip fixture, commit message, `.env` value, this repository clean), dry run, planted secret / gate / broken link refuse, push to a local bare remote (ADR-068). | Built |
 | `tests/test_trace_render.py` | Every event of the 5 recorded traces renders; no raw JSON or key=value text; titles, hand-offs, group summaries, running totals, Critic sentences, plurals, display names (ADR-067). | Built |
 | `tests/test_site.py` | Publish output deterministic, disclaimer on every page, planted Finnhub field / banned word / non-SEC link fail the build, links and data paths resolve, JSON validates against the schemas, no third-party requests, no `innerHTML` from data, index size (ADR-065). | Built |

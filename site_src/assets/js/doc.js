@@ -37,13 +37,15 @@ function render(md) {
   return root;
 }
 async function main() {
-  footer(await manifest());
   const f = new URLSearchParams(location.search).get("f");
   if (!ALLOWED.includes(f)) throw new Error("That document is not part of this site.");
+  const m = await manifest();
+  const path = m && m.docs && m.docs[f];
   const r = await fetch(`data/docs/${f}.md`);
   if (!r.ok) throw new Error(`The document could not be loaded (HTTP ${r.status}).`);
   document.title = `${f.replaceAll("_", " ")} (repository document)`;
-  $doc.replaceChildren(el("p", { class: "muted small", text: `Shown as plain text from the project repository: ${f}.md` }), render(await r.text()));
+  footer(m);
+  $doc.replaceChildren(el("p", { class: "muted small" }, `Shown as plain text from the project repository (${f}.md). `, path && m.repo_url ? el("a", { href: `${m.repo_url}/blob/${m.branch || "main"}/${path}`, rel: "noopener", text: "View this file on GitHub" }) : null), render(await r.text()));
 }
 const $doc = document.getElementById("doc");
 main().catch((e) => fail(e.message, "Go back to how it works and choose another link."));

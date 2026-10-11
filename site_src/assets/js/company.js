@@ -1,4 +1,4 @@
-import { el, getJSON, tryJSON, fail, manifest, footer, mark, status, effectiveLabel, WORD, CRITERIA, NAMES, QUAL, usd, perShare, pct, figures, plainReason, secLink, secOk, measureName } from "./common.js";
+import { el, getJSON, tryJSON, fail, manifest, footer, mark, status, effectiveLabel, figureSummary, WORD, CRITERIA, NAMES, QUAL, usd, perShare, pct, figures, plainReason, secLink, secOk, measureName } from "./common.js";
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -39,8 +39,8 @@ async function load() {
 function lineOf(c, cls) {
   if (c.label === "data_gap" || c.label === "pending" || c.label === "not_applicable") return plainReason(c, cls);
   if (c.explanation && c.explanation.text) return c.explanation.text;
-  const figs = figures(c).filter(([k]) => !/^Years (on record|without|with)/.test(k)).slice(0, 3).map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1).toLowerCase()} ${v}`);
-  return (plainReason(c, cls) || `Test: ${c.threshold}.`) + (figs.length && !plainReason(c, cls) ? ` ${figs.join("; ")}.` : "");
+  const sum = figureSummary(c);
+  return (plainReason(c, cls) || `Test: ${c.threshold}.`) + (sum && !plainReason(c, cls) ? ` ${sum}.` : "");
 }
 
 function critRow(id, name, label, line, warn, qual) {
@@ -131,7 +131,8 @@ function numericPane(c) {
   if (c.explanation || c.label === "data_gap" || c.label === "pending" || c.label === "not_applicable") pane.push(el("p", { text: line }));
   pane.push(el("p", { class: "small muted", text: `The test: ${c.threshold}.` + (c.year_label ? ` Record: ${c.year_label}.` : "") }));
   const figs = figures(c);
-  if (figs.length) pane.push(el("h3", { text: "What the filings show" }), el("dl", { class: "fig" }, figs.flatMap(([k, v]) => [el("dt", { text: k }), el("dd", { text: v })])));
+  if (figs.length) pane.push(el("h3", { text: "What the filings show" }), el("dl", { class: "fig" }, figs.filter((r) => r.length === 2).flatMap(([k, v]) => [el("dt", { text: k }), el("dd", { text: v })])),
+    ...figs.filter((r) => r.length === 1).map(([sentence]) => el("p", { text: sentence })));
   const ch = chart(c);
   if (ch) pane.push(el("h3", { text: { G3: "Net income by year", G4: "Dividends per share by year", B1: "Return on average equity by year", B3: "Operating margin by year", B4: "Owner earnings by year" }[c.id] || "By year" }), ch);
   const ins = inputsTable(c.inputs || []);
