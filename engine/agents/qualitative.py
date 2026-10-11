@@ -19,6 +19,7 @@ from dataclasses import dataclass, field
 
 from engine.contracts import (QUAL_CRITERIA, Citation, LLMCall, Passage, QualFinding, QualFindings, QualTotals, SearchHit,
                               SearchRecord, Usage)
+from engine import prompts
 from engine.prompts import active as active_prompt
 from engine.retrieve import FilingIndex, Retriever
 from engine.settings import REPO_ROOT
@@ -87,7 +88,7 @@ SUBMIT_ONLY_V2 = [TOOLS_V2[2]]
 def prompt_parts(version: str | None = None) -> tuple[str, list, list, int | None]:
     """(system prompt, tools, submit-only tools, max sentences per citation) for the active prompt version."""
     v = version or active_prompt("qualitative")
-    return (SYSTEM_PROMPT_V2, TOOLS_V2, SUBMIT_ONLY_V2, None) if v == "v2" else (SYSTEM_PROMPT, TOOLS, SUBMIT_ONLY, MAX_SPAN_SENTENCES)
+    return (SYSTEM_PROMPT, TOOLS, SUBMIT_ONLY, MAX_SPAN_SENTENCES) if v == "v1" else (SYSTEM_PROMPT_V2, TOOLS_V2, SUBMIT_ONLY_V2, None)
 
 
 def load_criteria() -> dict:
@@ -102,7 +103,8 @@ def render_passage(p: Passage, document: str) -> str:
     return "\n".join(lines)
 
 
-def check_citations(raw: list[dict], retrieved: dict[str, Passage], document: str, max_sentences: int | None = MAX_SPAN_SENTENCES) -> tuple[list[Citation], list[str]]:
+def check_citations(raw: list[dict], retrieved: dict[str, Passage], document: str, max_sentences: int | None = MAX_SPAN_SENTENCES,
+                    word_counts: bool = False) -> tuple[list[Citation], list[str]]:
     """Turn {passage_id, first, last} pointers into Citations, or say what is wrong with each bad one.
 
     The quote is `document[start of first sentence:end of last sentence]`, so it matches the document by construction.
@@ -124,7 +126,11 @@ def check_citations(raw: list[dict], retrieved: dict[str, Passage], document: st
         else:
             a, b = p.sentences[first - 1][0], p.sentences[last - 1][1]
             if len(document[a:b].split()) > MAX_SPAN_WORDS:
-                problems.append(f"{label}: {len(document[a:b].split())} words; the limit is {MAX_SPAN_WORDS}. Cite fewer sentences")
+                if word_counts:  # prompt v2.1: tell the model where the words are, so it can drop the right sentence
+                    counts = ", ".join(f"[{first + k}] {len(document[x:y].split())} words" for k, (x, y) in enumerate(p.sentences[first - 1:last]))
+                    problems.append(f"{label}: {len(document[a:b].split())} words; the limit is {MAX_SPAN_WORDS}. Words per sentence: {counts}. Cite a shorter range")
+                else:
+                    problems.append(f"{label}: {len(document[a:b].split())} words; the limit is {MAX_SPAN_WORDS}. Cite fewer sentences")
             else:
                 ok.append(Citation(passage_id=pid, accession=p.accession, item=p.item, char_start=a, char_end=b, quote=document[a:b], sentences=[first, last]))
     return ok, problems
@@ -248,6 +254,8 @@ class _CriterionLoop:
                  f"You have up to {self.max_turns} turns, including this one."]
         if s.get("rationale_note"):
             lines.append(s["rationale_note"])
+        if s.get("year_rule") and prompts.at_least("qualitative", "v2.1"):
+            lines.append(s["year_rule"])
         if self.constraint:
             f = self.constraint.finding
             cited = "\n".join(f"- {c.passage_id} sentences {c.sentences[0]}-{c.sentences[1]}: {c.quote}" for c in f.citations) or "- (none)"
@@ -336,7 +344,7 @@ class _CriterionLoop:
             raise _BadArgs("give at most 2 citations")
         if verdict != "insufficient evidence" and not raw:
             raise _BadArgs(f"verdict {verdict!r} needs 1 or 2 citations")
-        citations, problems = check_citations(raw, self.run.retrieved, self.idx.text, self.max_sentences)
+        citations, problems = check_citations(raw, self.run.retrieved, self.idx.text, self.max_sentences, word_counts=prompts.at_least("qualitative", "v2.1"))
         outcome = ("rejected: " + " | ".join(problems)) if problems else ("verified: " + "; ".join(
             f"{c.passage_id} sentences {c.sentences[0]}-{c.sentences[1]} [{c.char_start}:{c.char_end}] \"{c.quote[:80]}\"" for c in citations)
             if citations else "no citations to check")

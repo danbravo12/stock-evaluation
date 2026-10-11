@@ -1,4 +1,8 @@
 {
-  "_notes": "Which prompt text each LLM agent uses (ADR-046 amendment, ADR-048). v2 is active since the re-record of 2026-10-12: citations are contiguous ranges of at most 120 words (qualitative), and the Explainer's examples teach count placeholders. v1 stays in the code because the synthetic tests exercise it and a replay of old fixtures needs it; a different prompt is a different request hash, so switching versions needs a re-record (scripts/qualitative_report.py record, scripts/review_report.py record, prune orphans, update the gold agent_verdicts).",
-  "active": {"qualitative": "v2", "explainer": "v2"}
+  "_notes": "Which prompt text each LLM agent uses (ADR-046 amendment, ADR-048). v2 is active since the re-record of 2026-10-12: citations are contiguous ranges of at most 120 words (qualitative), and the Explainer's examples teach count placeholders. v1 stays in the code because the synthetic tests exercise it and a replay of old fixtures needs it; a different prompt is a different request hash, so switching versions needs a re-record (scripts/qualitative_report.py record, scripts/review_report.py record, prune orphans, update the gold agent_verdicts). Build 4a adds v2.1 for the qualitative agent and the Critic (latest-fiscal-year rule, per-sentence word counts in the citation cap error); the Critic had no version before and is v2, which matches every recorded fixture. v2.1 is switched on by the refresh run in commit 3.",
+  "active": {
+    "qualitative": "v2",
+    "explainer": "v2",
+    "critic": "v2"
+  }
 }

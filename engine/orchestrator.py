@@ -20,7 +20,7 @@ from engine.llm.budget import BudgetExceeded, QuotaReached
 from engine.llm.client import LLMClient, LLMFixtureMissing
 from engine.normalise import normalise_from_store
 from engine.planner import PRICE_GAP, STEPS, plan_for
-from engine.report import (Result, ResultWarning, QualItem, RunInfo, StepRecord, build_scorecard, build_sources, cost_from_trace, write_result)
+from engine.report import (Result, ResultWarning, QualItem, RunInfo, StepRecord, build_scorecard, build_sources, cited_passages, cost_from_trace, write_result)
 from engine.retrieve import Retriever
 from engine.score import score_company
 from engine.score.common import load_sector_rules
@@ -54,8 +54,13 @@ def git_commit() -> str | None:
 
 def analyse(ticker: str, *, mode: str = "replay", settings: Settings | None = None, universe: Universe | None = None, edgar: EdgarClient | None = None,
             llm: LLMClient | None = None, results_dir: Path | None = None, run_id: str | None = None, clock: Callable[[], float] | None = None,
-            now: Callable[[], datetime] | None = None, commit: str | None = None, write: bool = True) -> Result:
-    """Analyse one ticker end to end and (by default) write `results/<CIK>.json` and its trace. Inject `clock`, `now` and `run_id` for determinism."""
+            now: Callable[[], datetime] | None = None, commit: str | None = None, write: bool = True, criteria: dict | None = None,
+            explanations=None) -> Result:
+    """Analyse one ticker end to end and (by default) write `results/<CIK>.json` and its trace. Inject `clock`, `now` and `run_id` for determinism.
+
+    `criteria` replaces the rubric (question and verdict wording) for the agent and the Critic: the stability runs use it for the paraphrases (ADR-070).
+    `explanations` (an Explanations object from an earlier run of the same scores) is reviewed instead of calling the Explainer again.
+    """
     settings = settings or Settings.from_env()
     edgar = edgar or EdgarClient(mode, settings)
     universe = universe or load_universe(sec_tickers=edgar.company_tickers())
@@ -161,8 +166,8 @@ def analyse(ticker: str, *, mode: str = "replay", settings: Settings | None = No
             bundle = run("fetch", fetch)
             outputs["bundle"] = bundle
             score: ScoreSet | None = run("score", lambda: score_company(bundle.facts, symbol, sic, load_sector_rules(), None, sector=plan.sector_class, sector_notes_=plan.sector_notes))
-            qual = run("qualitative", lambda: assess_qualitative(cik, symbol, outputs["retriever"], llm, trace))
-            review = run("explain_and_verify", lambda: explain_and_verify(score, qual, retriever=outputs["retriever"], llm=llm, trace=trace))
+            qual = run("qualitative", lambda: assess_qualitative(cik, symbol, outputs["retriever"], llm, trace, criteria=criteria))
+            review = run("explain_and_verify", lambda: explain_and_verify(score, qual, retriever=outputs["retriever"], llm=llm, trace=trace, criteria=criteria, explanations=explanations))
             outputs.update(score=score, qual=qual, review=review)
     finally:
         llm.trace = previous_trace
@@ -181,12 +186,14 @@ def analyse(ticker: str, *, mode: str = "replay", settings: Settings | None = No
     for f in (final_qual.findings if final_qual else []):
         if f.verdict == "not assessed":
             warnings.append(ResultWarning(where=f.criterion, message=f"not assessed ({f.stop_reason}): {f.rationale}"))
+    qual_items = [QualItem(finding=f, critic_status=status.get(f.criterion)) for f in (final_qual.findings if final_qual else [])]
     result = Result(
         run=RunInfo(run_id=run_id, engine_commit=commit if commit is not None else git_commit(), model_profile=llm.profile_name, mode=mode,
                     generated_at=None if replay else wall().replace(microsecond=0).isoformat(), timings=timings),
         plan=plan, steps=steps, data=bundle,
         scorecard=build_scorecard(score, {e.criterion: e for e in review.explanations.items} if review else {}, status) if score else None,
-        qualitative=[QualItem(finding=f, critic_status=status.get(f.criterion)) for f in (final_qual.findings if final_qual else [])],
+        qualitative=qual_items,
+        passages=cited_passages(qual_items, outputs["retriever"]) if qual_items and "retriever" in outputs else {},
         critic=review.critic if review else None,
         cost=cost_from_trace([e for e in trace.events]), sources=build_sources(plan.cik or "", bundle, score),
         attribution=[universe.attribution, "Filings and XBRL data: U.S. Securities and Exchange Commission, EDGAR (public domain)"],

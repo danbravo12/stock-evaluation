@@ -23,7 +23,7 @@ HARD_CAP_WORDS = 350
 
 # item -> (title pattern for the fallback, labels of the headings that end it)
 SECTIONS = {
-    "1": (r"business", {"1A", "1B", "1C", "2"}),
+    "1": (r"business(?: summary| overview)?", {"1A", "1B", "1C", "2"}),
     "1A": (r"risk factors", {"1B", "1C", "2"}),
     "7": (r"management's discussion and analysis(?: of financial condition and results of operations)?", {"7A", "8"}),
 }
@@ -75,10 +75,11 @@ def extract_sections(text: str, accession: str = "", sha256: str = "") -> dict[s
     out = {}
     for item, (title, end_labels) in SECTIONS.items():
         base = dict(item=item, accession=accession, sha256=sha256)
+        other_titles = re.compile("|".join(f"(?:{t})\\s*[.:]?" for k, (t, _) in SECTIONS.items() if k not in (item, "1")), re.I)  # never "Business": it is a common sub-heading
         attempts = [
             ("item_heading", [i for i, lb in headings.items() if item in lb], lambda ln, e=end_labels: bool(_heading_labels(ln) & e)),
             ("title_fallback", [i for i, ln in enumerate(lines) if re.fullmatch(rf"{title}\s*[.:]?", ln.text, re.I)],
-             lambda ln, e=end_labels: bool(_heading_labels(ln) & e) or bool(END_TITLE.match(ln.text))),
+             lambda ln, e=end_labels, o=other_titles: bool(_heading_labels(ln) & e) or bool(END_TITLE.match(ln.text)) or bool(o.fullmatch(ln.text.strip()))),
         ]
         longest = {}
         for method, candidates, is_end in attempts:

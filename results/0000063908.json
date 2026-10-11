@@ -1,5 +1,5 @@
 {
- "schema_version": "1.1",
+ "schema_version": "1.2",
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "MCD-live",
@@ -1690,7 +1690,8 @@
     "actual_cost_usd": 0.0,
     "notional_cost_usd": 0.0
    },
-   "critic_status": "passed"
+   "critic_status": "passed",
+   "stability": null
   },
   {
    "finding": {
@@ -1748,7 +1749,8 @@
     "actual_cost_usd": 0.0,
     "notional_cost_usd": 0.000709
    },
-   "critic_status": "passed"
+   "critic_status": "passed",
+   "stability": null
   },
   {
    "finding": {
@@ -1824,7 +1826,8 @@
     "actual_cost_usd": 0.0,
     "notional_cost_usd": 0.0016405
    },
-   "critic_status": "passed"
+   "critic_status": "passed",
+   "stability": null
   },
   {
    "finding": {
@@ -1891,9 +1894,40 @@
     "actual_cost_usd": 0.0,
     "notional_cost_usd": 0.0018644999999999998
    },
-   "critic_status": "passed"
+   "critic_status": "passed",
+   "stability": null
   }
  ],
+ "passages": {
+  "0000063908-26-000035:1A:2": {
+   "text": "SEC. The risks described below are not the only risks we face. Additional risks not currently known to us or that we currently deem to be immaterial may also significantly adversely affect our business. If any of these risks were to materialize or intensify, our expectations (or the underlying assumptions) may change and our performance may be adversely affected.\nSTRATEGY AND BRAND\nIf we do not successfully evolve and execute against our business strategies, we may not be able to drive business growth.\nTo drive Systemwide sales, operating income and free cash flow growth, our business strategies – including the components of our Accelerating the Arches growth strategy – must be effective in maintaining and strengthening customer appeal and capturing additional market share. Whether these strategies are successful depends mainly on our System's continued ability to:\n•capitalize on our global scale, iconic brand and local market presence to build upon our historic strengths and competitive advantages, including by maximizing our marketing, committing to our core menu items, and doubling down on digital, delivery, drive thru and restaurant development;",
+   "item": "1A",
+   "accession": "0000063908-26-000035",
+   "char_start": 96389,
+   "char_end": 97556
+  },
+  "0000063908-26-000035:7:16": {
+   "text": "•Restaurant: The Company is building the easiest and most efficient restaurant operating platform which enables the Company and franchisees to run restaurants more efficiently and utilize the latest cloud-based technology to make it easier for restaurant crew to deliver exceptional customer service. The Company intends to deploy new, universal software that all McDonald's restaurants will run on, enabling restaurants to roll out innovation even faster, with less complexity and more reliability; and customers will enjoy a more familiar, consistent experience.\n•Company: The Company is building a modern company platform, through our Global Business Services (GBS) organization, that unlocks speed and innovation throughout the organization, to enable further growth as it modernizes the way it works by focusing on becoming faster, more innovative and more efficient at solving problems for its customers and people.\nOur Strategy is aligned with the Company's capital allocation philosophy of: (i) invest in opportunities to grow the business and drive strong returns, including both capital expenditures as well as investments in technology, digital, and our GBS organization, (ii) prioritize our dividend and (iii) repurchase shares with remaining free cash flow over time.",
+   "item": "7",
+   "accession": "0000063908-26-000035",
+   "char_start": 44564,
+   "char_end": 45844
+  },
+  "0000063908-26-000035:7:39": {
+   "text": "Other (income) expense | (45) | (42) | (31)\nTotal | $ | (87) | $ | (139) | $ | (236)\nIn 2025, Interest income decreased due to lower average cash balances and lower average interest rates.\nPROVISION FOR INCOME TAXES\nIn 2025 and 2024, the reported effective income tax rates were 21.4% and 20.5%, respectively.\nResults for 2024 reflected discrete income tax benefits related to restructuring initiatives.\nConsolidated deferred tax assets, net of valuation allowance, were $7.4 billion in 2025 and $7.0 billion in 2024. Substantially all of the net deferred tax assets are expected to be realized in the U.S. and other profitable markets.\nRECENTLY ISSUED ACCOUNTING PRONOUNCEMENTS\nRecently issued accounting pronouncements are included on page 45 of this Form 10-K.\nCASH FLOWS\nThe Company has a long history of generating significant cash from operations and has substantial credit capacity to fund operating and discretionary spending to invest in opportunities to grow the business, such as restaurant development, in addition to funding debt service payments, dividends and share repurchases.",
+   "item": "7",
+   "accession": "0000063908-26-000035",
+   "char_start": 68242,
+   "char_end": 69335
+  },
+  "0000063908-26-000035:7:6": {
+   "text": "•Operating margin, defined as operating income as a percent of total revenues, increased from 45.2% in 2024 to 46.1% in 2025.\n•Diluted earnings per share of $11.95 increased 5% (4% in constant currencies).\n•Cash provided by operations was $10.6 billion, a 12% increase from the prior year.\n•Capital expenditures of $3.4 billion were mainly allocated to new restaurant openings and, to a lesser extent, to reinvestment in existing restaurants.\n•Free cash flow was $7.2 billion, an 8% increase from the prior year.\n•Across the System, nearly 2,300 new restaurants (including those in our developmental licensee and affiliated markets) were opened.\n•The Company increased its quarterly cash dividend per share by 5% to $1.86 for the fourth quarter, equivalent to an annual dividend of $7.44 per share. The Company returned a total of $7.1 billion to shareholders through dividends and share repurchases in 2025.\nMcDonald's Corporation 2025 Annual Report 8\nSTRATEGIC DIRECTION",
+   "item": "7",
+   "accession": "0000063908-26-000035",
+   "char_start": 36037,
+   "char_end": 37009
+  }
+ },
  "critic": {
   "cik": "0000063908",
   "ticker": "MCD",

@@ -62,7 +62,7 @@ def absorb(base: QualFinding, other: QualFinding | None = None, calls=()) -> Qua
 def explain_and_verify(scoreset: ScoreSet, qual: QualFindings, *, retriever, llm, trace: TraceRecorder, criteria: dict | None = None,
                        explanations: Explanations | None = None) -> ReviewResult:
     """`explanations` may be passed to review ones produced elsewhere (tests inject faults this way); otherwise the Explainer runs."""
-    critic = Critic(retriever, llm, trace)
+    critic = Critic(retriever, llm, trace, rubric=criteria)  # a reworded rubric (stability runs) is read by the Critic too
     expl = explanations or explain(scoreset, llm, trace)
     critic_calls, checks, repairs = [], [], []
 

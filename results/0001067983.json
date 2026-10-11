@@ -1,5 +1,5 @@
 {
- "schema_version": "1.1",
+ "schema_version": "1.2",
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "BRK-B-live",
@@ -1195,7 +1195,8 @@
     "actual_cost_usd": 0.0,
     "notional_cost_usd": 0.00076125
    },
-   "critic_status": "passed"
+   "critic_status": "passed",
+   "stability": null
   },
   {
    "finding": {
@@ -1253,7 +1254,8 @@
     "actual_cost_usd": 0.0,
     "notional_cost_usd": 0.000704
    },
-   "critic_status": "passed"
+   "critic_status": "passed",
+   "stability": null
   },
   {
    "finding": {
@@ -1314,7 +1316,8 @@
     "actual_cost_usd": 0.0,
     "notional_cost_usd": 0.000838
    },
-   "critic_status": "passed_after_retry"
+   "critic_status": "passed_after_retry",
+   "stability": null
   },
   {
    "finding": {
@@ -1381,9 +1384,47 @@
     "actual_cost_usd": 0.0,
     "notional_cost_usd": 0.00174
    },
-   "critic_status": "passed"
+   "critic_status": "passed",
+   "stability": null
   }
  ],
+ "passages": {
+  "0001193125-26-083899:1:15": {
+   "text": "GEICO competes for private passenger automobile insurance customers in the preferred, standard and non-standard risk markets with other companies that sell directly to the customer and with companies that use agency sales forces, including State Farm, Progressive, Allstate and USAA. According to the A.M. Best data for 2024 published in 2025, the five largest private passenger automobile insurers had a combined market share of approximately 63.6% based on written premiums, with GEICO's market share being the third largest at approximately 11.6%.\nSeasonal variations in GEICO's insurance business are not significant. However, extraordinary weather conditions or other events and factors may have a significant effect upon the frequency or severity of automobile claims.\nGEICO's insurance policies are written on an admitted basis. State insurance departments stringently regulate private passenger auto insurance policies and rates. Competition for private passenger automobile insurance tends to focus on price and level of customer service provided. GEICO's cost-efficient direct response marketing methods and emphasis on customer satisfaction enable it to offer competitive rates and value to its customers. GEICO primarily uses its own claims staff to manage and settle claims. GEICO's name and other trademarks are considered material assets and are protected through appropriate registrations.\nK-3",
+   "item": "1",
+   "accession": "0001193125-26-083899",
+   "char_start": 21539,
+   "char_end": 22948
+  },
+  "0001193125-26-083899:1:94": {
+   "text": "TTI services a variety of industries including telecommunications, medical devices, computers and office equipment, military/aerospace, automotive and industrial electronics. TTI's core businesses serve customers in the design through production stages in the electronic component supply chain, which supports high-volume customers. Its Mouser subsidiary supports a broader base of customers with lower volume purchases through internet-based marketing, and its XTG division services customers with specialty semiconductors and design services.\nMcLane\nMcLane Company, Inc. (\"McLane\") provides wholesale distribution services in all 50 states to customers that include convenience stores, discount retailers, wholesale clubs, drug stores, military bases, quick service restaurants and casual dining restaurants. McLane's major customers during 2025 included Walmart (approximately 17.2% of revenues); 7-Eleven (approximately 13.3% of revenues); and Yum! Brands (approximately 13.3% of revenues). McLane's business model is based on a high volume of sales, rapid inventory turnover and stringent expense controls. Operations are divided into three business units: retail distribution, restaurant distribution and beverage distribution.",
+   "item": "1",
+   "accession": "0001193125-26-083899",
+   "char_start": 114844,
+   "char_end": 116077
+  },
+  "0001193125-26-083899:7:111": {
+   "text": "As of December 31, 2025, we concluded that more-likely-than not, the goodwill recorded in our Consolidated Balance Sheet was not impaired. However, the fair value estimates of the reporting units and assets are subject to change based on market and economic conditions, as well as events affecting our businesses or the industries in which they operate, which we cannot reliably predict. It is reasonably possible that adverse changes in such conditions or events could result in the recognition of impairment losses in our Consolidated Financial Statements.\nK-60\nManagement's Discussion and Analysis\nCritical Accounting Estimates\nOther Critical Accounting Estimates\nIn connection with the annual goodwill impairment review conducted in the fourth quarter of 2025, our estimated fair values of four reporting units did not exceed our carrying values by at least 20%. The largest unit was Pilot, which had an estimated fair value of approximately $20.2 billion and a carrying value of $18.7 billion, including goodwill of $6.5 billion. The remaining three other reporting units had an aggregate estimated fair value of approximately $7.5 billion, which approximated our carrying values, including goodwill of $2.7 billion at December 31, 2025.\nMarket Risk Disclosures",
+   "item": "7",
+   "accession": "0001193125-26-083899",
+   "char_start": 287547,
+   "char_end": 288813
+  },
+  "0001193125-26-083899:7:86": {
+   "text": "Our Consolidated Balance Sheet continues to reflect significant liquidity and a very strong capital base. Berkshire's shareholders' equity at December 31, 2025 was $717.4 billion, an increase of $68.1 billion since December 31, 2024. Net earnings attributable to Berkshire shareholders were $67.0 billion for 2025 and included after-tax investment gains of approximately $30.7 billion and after-tax impairment losses of $8.3 billion on our equity method investments. Investment gains and losses from changes in the market prices of our investments in equity securities usually produce significant volatility in our earnings.\nBerkshire's common stock repurchase program permits Berkshire to repurchase its Class A and Class B shares at prices below Berkshire's intrinsic value, as conservatively determined by Berkshire's Chief Executive Officer after consultation with the Chairman of the Board. We are not committed to a minimum or subject to a maximum repurchase amount. We will not repurchase our stock if it reduces our consolidated cash, cash equivalents and U.S. Treasury Bills holdings to below $30 billion. Financial strength and redundant liquidity will always be of paramount importance at Berkshire. There were no share repurchases in 2025.",
+   "item": "7",
+   "accession": "0001193125-26-083899",
+   "char_start": 261464,
+   "char_end": 262715
+  },
+  "0001193125-26-083899:7:90": {
+   "text": "In 2025, our diverse group of businesses generated net operating cash flows of $46.0 billion. Our consolidated capital expenditures for property, plant and equipment and equipment held for lease were $20.9 billion in 2025, which included capital expenditures of $14.4 billion by BNSF and BHE. BNSF and BHE maintain very large investments in capital assets (property, plant and equipment) and regularly make significant capital expenditures in the normal course of business. BHE and BNSF forecast capital expenditures in 2026 of approximately $15 billion. On January 2, 2026, Berkshire acquired Occidental's chemicals business (\"OxyChem\") for approximately $9.5 billion.\nContractual Obligations",
+   "item": "7",
+   "accession": "0001193125-26-083899",
+   "char_start": 265369,
+   "char_end": 266062
+  }
+ },
  "critic": {
   "cik": "0001067983",
   "ticker": "BRK-B",

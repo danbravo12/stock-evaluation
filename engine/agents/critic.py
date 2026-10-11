@@ -18,6 +18,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+from engine import prompts
 from engine.agents.explainer import PLACEHOLDER, load_formats, render, templated_line, usable_keys
 from engine.contracts import CheckResult, CriterionResult, Explanation, Explanations, Passage, QualFinding, ScoreSet, Usage, FilingSection
 from engine.filing_text import html_to_text
@@ -44,6 +45,11 @@ not_meaningful = the test cannot be interpreted. Return, in "explanation_checks"
 - reason: at most 30 words.
 Reply with only a JSON object: {"checks": [{"criterion": "<name>", "supports_verdict": "...", "unsupported_claims": [], "reason": "..."}], \
 "explanation_checks": [{"criterion": "<id>", "agrees_with_label": "yes", "reads_correctly": "yes", "reason": "..."}]}. Use empty lists for a job with nothing to review."""
+
+
+# v2.1 (build 4a): a finding may carry a "year_rule", which is part of the criterion. Used only once the refresh run switches the Critic to v2.1.
+SYSTEM_PROMPT_V21 = SYSTEM_PROMPT.replace("- reason: at most 30 words.\n\nJob 2", "- reason: at most 30 words.\n"
+    "If a finding has a \"year_rule\", it is part of the criterion: quotes that describe only the prior-year comparative cannot support \"yes\".\n\nJob 2")
 
 
 class FindingCheck(BaseModel):
@@ -158,7 +164,8 @@ def llm_payload(findings: list[QualFinding], rubric: dict) -> list[dict]:
         claimed, below = rubric_lines(f.criterion, f.verdict, rubric)
         out.append({"criterion": f.criterion, "question": rubric[f.criterion]["question"], "claimed_verdict": f.verdict,
                     "definition_of_claimed_verdict": claimed, "definition_of_the_verdict_below": below,
-                    "quotes": [c.quote for c in f.citations], "rationale": f.rationale})
+                    "quotes": [c.quote for c in f.citations], "rationale": f.rationale,
+                    **({"year_rule": rubric[f.criterion]["year_rule"]} if rubric[f.criterion].get("year_rule") and prompts.at_least("critic", "v2.1") else {})})
     return out
 
 
@@ -171,7 +178,7 @@ def llm_review(findings: list[QualFinding], explanations: list[tuple[CriterionRe
     """The Critic's one model call per company: found/weak findings and the written explanations together."""
     rubric = rubric or load_rubric()
     body = {"findings": llm_payload(findings, rubric), "explanations": explanation_payload(explanations)}
-    return llm.complete_json([{"role": "system", "content": SYSTEM_PROMPT},
+    return llm.complete_json([{"role": "system", "content": SYSTEM_PROMPT_V21 if prompts.at_least("critic", "v2.1") else SYSTEM_PROMPT},
                               {"role": "user", "content": "To review:\n" + json.dumps(body, indent=1, ensure_ascii=False)}],
                              CriticVerdicts, agent="critic", company=ticker, temperature=0.0)
 

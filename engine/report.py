@@ -16,7 +16,7 @@ from engine.contracts import (SEC_SOURCE, CriticReport, DataBundle, Explanation,
 from engine.settings import REPO_ROOT
 from engine.successors import NO_ANNUAL_REPORT
 
-SCHEMA_VERSION = "1.1"  # 1.1: sector notes and sector basis (ADR-058); additive over 1.0
+SCHEMA_VERSION = "1.2"  # 1.1: sector notes and sector basis (ADR-058). 1.2: cited passage texts and per-finding stability (ADR-069, ADR-070); both additive
 DISCLAIMER = ("Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. "
               "Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.")
 SCHEMA_PATH = REPO_ROOT / "schema" / "result.schema.json"
@@ -64,9 +64,27 @@ class Scorecard(BaseModel):
     sector_notes: list[str] = Field(default_factory=list)  # e.g. the REIT flag (ADR-058)
 
 
+class Stability(BaseModel):
+    """How the verdict held up when the question and rubric were reworded (ADR-070): the verdict of the main run and of paraphrases A and B."""
+
+    status: Literal["stable", "borderline"]
+    verdicts: dict[str, str]  # keys main, a, b
+
+
 class QualItem(BaseModel):
     finding: QualFinding
     critic_status: str | None = None
+    stability: Stability | None = None
+
+
+class CitedPassage(BaseModel):
+    """The text of a cited passage as it was in the normalised 10-K, so the evidence pane needs no local copy of the filing (ADR-069 amendment)."""
+
+    text: str
+    item: str
+    accession: str
+    char_start: int
+    char_end: int
 
 
 class AgentCost(BaseModel):
@@ -107,6 +125,7 @@ class Result(BaseModel):
     data: DataBundle | None = None
     scorecard: Scorecard | None = None
     qualitative: list[QualItem] = Field(default_factory=list)
+    passages: dict[str, CitedPassage] = Field(default_factory=dict)  # every passage a final citation points into, by passage id
     critic: CriticReport | None = None
     cost: Cost = Field(default_factory=Cost)
     sources: list[Source] = Field(default_factory=list)
@@ -208,4 +227,13 @@ def export_schema(path: Path = SCHEMA_PATH) -> Path:
     return path
 
 
-__all__ = ["Result", "SCHEMA_VERSION", "DISCLAIMER", "SEC_SOURCE", "write_result", "export_schema", "build_scorecard", "build_sources", "cost_from_trace", "finnhub_fields"]
+def cited_passages(qualitative: list[QualItem], retriever) -> dict[str, CitedPassage]:
+    """The text of every passage the final citations point into. Raises if a cited passage cannot be loaded: a result must never cite what it cannot show."""
+    out: dict[str, CitedPassage] = {}
+    for pid in sorted({c.passage_id for q in qualitative for c in q.finding.citations}):
+        p = retriever.get_passage(pid)
+        out[pid] = CitedPassage(text=p.text, item=p.item, accession=p.accession, char_start=p.char_start, char_end=p.char_end)
+    return out
+
+
+__all__ = ["Result", "Stability", "CitedPassage", "cited_passages", "SCHEMA_VERSION", "DISCLAIMER", "SEC_SOURCE", "write_result", "export_schema", "build_scorecard", "build_sources", "cost_from_trace", "finnhub_fields"]

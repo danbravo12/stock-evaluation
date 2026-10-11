@@ -114,16 +114,21 @@ def _indexed_retriever(cik: str, settings: Settings):
     return None
 
 
-def passages_for(cik: str, result: dict, retriever) -> dict:
-    """The cited passages with their text, from the recorded 10-K, so the page can show the sentences around each quote."""
+class MissingPassageError(RuntimeError):
+    pass
+
+
+def passages_for(cik: str, result: dict) -> dict:
+    """The cited passages with their text, read from the result itself (schema 1.2), so the page can show the sentences around each quote.
+
+    A result is self-contained: publishing never reads the 10-K. A cited passage whose text is missing from the result fails the build."""
     ids = sorted({c["passage_id"] for q in result["qualitative"] for c in q["finding"]["citations"]})
-    if not ids or retriever is None:
-        return {}
-    out = {}
-    for pid in ids:
-        p = retriever.get_passage(pid)
-        out[pid] = {"text": p.text, "char_start": p.char_start, "char_end": p.char_end, "item": p.item, "accession": p.accession}
-    return out
+    stored = result.get("passages") or {}
+    missing = [i for i in ids if i not in stored or not stored[i].get("text")]
+    if missing:
+        raise MissingPassageError(f"{cik}: the result cites passages whose text it does not carry: {missing[:3]}"
+                                  + (" ..." if len(missing) > 3 else "") + " (re-run the analysis or `scripts/backfill_passages.py`)")
+    return {pid: {k: stored[pid][k] for k in ("text", "char_start", "char_end", "item", "accession")} for pid in ids}
 
 
 def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, rankings_path: Path = OUTPUT_PATH, settings: Settings | None = None,
@@ -174,7 +179,7 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
                 put(f"results/{r.cik}.explain.json", notes)
                 for key, text in _strings(notes):
                     scan_text(f"{r.symbol}:explain", text, banned)
-                put(f"results/{r.cik}.passages.json", passages_for(r.cik, res, retriever))
+                put(f"results/{r.cik}.passages.json", passages_for(r.cik, res))
                 scan_result(r.symbol, res, banned)
                 full.append(r.symbol)
         for name, rel in DOCS.items():

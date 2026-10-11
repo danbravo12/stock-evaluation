@@ -299,6 +299,40 @@
    "title": "Citation",
    "type": "object"
   },
+  "CitedPassage": {
+   "description": "The text of a cited passage as it was in the normalised 10-K, so the evidence pane needs no local copy of the filing (ADR-069 amendment).",
+   "properties": {
+    "accession": {
+     "title": "Accession",
+     "type": "string"
+    },
+    "char_end": {
+     "title": "Char End",
+     "type": "integer"
+    },
+    "char_start": {
+     "title": "Char Start",
+     "type": "integer"
+    },
+    "item": {
+     "title": "Item",
+     "type": "string"
+    },
+    "text": {
+     "title": "Text",
+     "type": "string"
+    }
+   },
+   "required": [
+    "text",
+    "item",
+    "accession",
+    "char_start",
+    "char_end"
+   ],
+   "title": "CitedPassage",
+   "type": "object"
+  },
   "Cost": {
    "properties": {
     "actual_cost_usd": {
@@ -795,6 +829,17 @@
     },
     "finding": {
      "$ref": "#/$defs/QualFinding"
+    },
+    "stability": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/Stability"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
     }
    },
    "required": [
@@ -1326,6 +1371,32 @@
    "title": "Source",
    "type": "object"
   },
+  "Stability": {
+   "description": "How the verdict held up when the question and rubric were reworded (ADR-070): the verdict of the main run and of paraphrases A and B.",
+   "properties": {
+    "status": {
+     "enum": [
+      "stable",
+      "borderline"
+     ],
+     "title": "Status",
+     "type": "string"
+    },
+    "verdicts": {
+     "additionalProperties": {
+      "type": "string"
+     },
+     "title": "Verdicts",
+     "type": "object"
+    }
+   },
+   "required": [
+    "status",
+    "verdicts"
+   ],
+   "title": "Stability",
+   "type": "object"
+  },
   "StepRecord": {
    "properties": {
     "reason": {
@@ -1486,6 +1557,13 @@
    "title": "Disclaimer",
    "type": "string"
   },
+  "passages": {
+   "additionalProperties": {
+    "$ref": "#/$defs/CitedPassage"
+   },
+   "title": "Passages",
+   "type": "object"
+  },
   "plan": {
    "$ref": "#/$defs/RunPlan"
   },
@@ -1500,7 +1578,7 @@
    "$ref": "#/$defs/RunInfo"
   },
   "schema_version": {
-   "default": "1.1",
+   "default": "1.2",
    "title": "Schema Version",
    "type": "string"
   },

@@ -101,6 +101,22 @@ class TestSections(unittest.TestCase):
         self.assertIn("MDA", text[s.char_start:s.char_end])
         self.assertNotIn("AUDIT", text[s.char_start:s.char_end])
 
+    def test_cross_reference_filer_without_item_headings(self):
+        # McDonald's pattern (build 4a): no "Item" headings in the body, only titles; the index at the end is "Item 1 | Business | Page 3".
+        index = ("<div>Form 10-K Cross-Reference Index</div><div><table><tr><td>Item 1</td><td>Business</td><td>Page 3</td></tr>"
+                 "<tr><td>Item 1A</td><td>Risk Factors</td><td>Page 27</td></tr><tr><td>Item 7</td><td>Management's Discussion and Analysis</td><td>Page 7</td></tr></table></div>")
+        body = ("<div>BUSINESS SUMMARY</div>" + filler("BIZ", 500) + "<div>MANAGEMENT'S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS</div>"
+                + filler("MDA", 500) + "<div>RISK FACTORS</div>" + filler("RISK", 500) + "<div>Financial Statements and Supplementary Data</div><p>f</p>" + index)
+        text = html_to_text("<html><body>" + body + "</body></html>")
+        sections = extract_sections(text)
+        for item, tag, others in (("1", "BIZ", ("MDA", "RISK")), ("7", "MDA", ("BIZ", "RISK")), ("1A", "RISK", ("BIZ", "MDA"))):
+            s = sections[item]
+            self.assertEqual((s.status, s.method), ("found", "title_fallback"), item)
+            part = text[s.char_start:s.char_end]
+            self.assertIn(tag, part)
+            for other in others:  # each section ends at the next section's title: MD&A no longer swallows Risk Factors
+                self.assertNotIn(other, part, f"Item {item} runs into {other}")
+
 
 class TestPassages(unittest.TestCase):
     def setUp(self):

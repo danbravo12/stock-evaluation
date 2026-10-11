@@ -1,5 +1,5 @@
 {
- "schema_version": "1.1",
+ "schema_version": "1.2",
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "DUK-replay",
@@ -1740,7 +1740,8 @@
     "actual_cost_usd": 0.0,
     "notional_cost_usd": 0.001695
    },
-   "critic_status": "passed"
+   "critic_status": "passed",
+   "stability": null
   },
   {
    "finding": {
@@ -1798,7 +1799,8 @@
     "actual_cost_usd": 0.0,
     "notional_cost_usd": 0.000691
    },
-   "critic_status": "passed"
+   "critic_status": "passed",
+   "stability": null
   },
   {
    "finding": {
@@ -1886,7 +1888,8 @@
     "actual_cost_usd": 0.0,
     "notional_cost_usd": 0.00168775
    },
-   "critic_status": "passed"
+   "critic_status": "passed",
+   "stability": null
   },
   {
    "finding": {
@@ -1968,9 +1971,54 @@
     "actual_cost_usd": 0.0,
     "notional_cost_usd": 0.005403
    },
-   "critic_status": "warning"
+   "critic_status": "warning",
+   "stability": null
   }
  ],
+ "passages": {
+  "0001326160-26-000014:1:72": {
+   "text": "Substantially all of Duke Energy Ohio's operations are regulated and qualify for regulatory accounting. Duke Energy Ohio has two reportable segments, EU&I and GU&I. For additional information on these business segments, including financial information, see Note 3 to the Consolidated Financial Statements, \"Business Segments.\"\nDUKE ENERGY INDIANA\nDuke Energy Indiana is a regulated public utility primarily engaged in the generation, transmission, distribution and sale of electricity in portions of Indiana. Duke Energy Indiana's service area covers approximately 23,000 square miles and supplies electric service to approximately 930,000 residential, commercial and industrial customers. For information about Duke Energy Indiana's generating facilities, see Item 2, \"Properties.\" Duke Energy Indiana is subject to the regulatory provisions of the IURC and FERC.\nDuke Energy owns 80.1% of Duke Energy Indiana Holdco, LLC, the holding company of Duke Energy Indiana. The remaining 19.9% minority interest investment is owned by GIC.\nSubstantially all of Duke Energy Indiana's operations are regulated and qualify for regulatory accounting. Duke Energy Indiana operates one reportable business segment, EU&I. For additional information regarding this business segment, including financial information, see Note 3 to the Consolidated Financial Statements, \"Business Segments.\"\nPIEDMONT",
+   "item": "1",
+   "accession": "0001326160-26-000014",
+   "char_start": 99870,
+   "char_end": 101254
+  },
+  "0001326160-26-000014:1:9": {
+   "text": "EU&I's businesses operate as the sole supplier of electricity within their service territories, with the exception of Ohio, which has a competitive electricity supply market for generation service. EU&I owns and operates facilities necessary to generate, transmit, distribute and sell electricity. Services are priced by state commission-approved rates designed to include the costs of providing these services and a reasonable return on invested capital. This regulatory policy is intended to provide safe and reliable electricity at fair prices.\nIn Ohio, EU&I conducts competitive auctions for electricity supply. The cost of energy purchased through these auctions is recovered from retail customers. EU&I earns retail margin in Ohio on the transmission and distribution of electricity, but not on the cost of the underlying energy.\nCompetition in the regulated electric distribution business is primarily from the development and deployment of alternative energy sources including on-site generation from commercial or industrial customers and distributed generation, such as private solar, at residential, commercial and/or industrial customer sites.\nWholesale",
+   "item": "1",
+   "accession": "0001326160-26-000014",
+   "char_start": 35163,
+   "char_end": 36328
+  },
+  "0001326160-26-000014:7:36": {
+   "text": "•Regulatory Matters primarily represents net impairment charges related to Duke Energy Carolinas' and Duke Energy Progress' 2024 South Carolina rate case orders and charges related to Duke Energy Indiana post-retirement benefits.\n•System Post-Implementation Costs represents the net impact of charges related to nonrecurring customer billing adjustments as a result of implementation of a new customer system.\n•Preferred Redemption Costs represents charges related to the redemption of Series B Preferred Stock.\n•Noncore Asset Sales and Net Impairments primarily represents charges related to certain joint venture electric transmission projects and certain renewable natural gas investments.\n•Captive Storm Deductible represents charges related to an insurance deductible for Hurricane Helene property losses.\nDiscontinued operations primarily represents the results from Duke Energy's Commercial Renewables Disposal Groups.\nDuke Energy's adjusted earnings and adjusted EPS may not be comparable to similarly titled measures of another company because other companies may not calculate the measures in the same manner.\n44\nMD&A | DUKE ENERGY\nReconciliation of GAAP Reported Amounts to Adjusted Amounts\nThe following table presents a reconciliation of adjusted earnings and adjusted EPS to the most directly comparable GAAP measures.\nYears Ended December 31,\n2025 | 2024",
+   "item": "7",
+   "accession": "0001326160-26-000014",
+   "char_start": 236474,
+   "char_end": 237843
+  },
+  "0001326160-26-000014:7:38": {
+   "text": "(b) Net of tax benefit of $5 million. $17 million recorded within Operating Revenues, $1 million recorded within Operation, maintenance and other, and $3 million recorded within Other income and expenses.\n(c) Recorded within Preferred Redemption Costs.\n(d) Net of $11 million tax benefit. $69 million recorded within Equity in (losses) earnings of unconsolidated affiliates and $4 million recorded within Gains on sales of other assets and other, net.\n(e) Net of $5 million tax benefit. $23 million recorded within Operation, maintenance and other.\n(f) Recorded in Income (Loss) from Discontinued Operations, net of tax, and Net Income Attributable to NCI.\nYear Ended December 31, 2025, as compared to 2024\nGAAP Reported EPS was $6.31 for the year ended December 31, 2025, compared to $5.71 for the year ended December 31, 2024. In addition to the drivers below, the increase in GAAP Reported Earnings/EPS was primarily due to impairments related to the 2024 South Carolina rate case and charges related to Duke Energy Indiana post-retirement benefits in the prior year, as well as charges related to certain joint venture electric transmission projects and certain renewable natural gas investments in the prior year.",
+   "item": "7",
+   "accession": "0001326160-26-000014",
+   "char_start": 238790,
+   "char_end": 240008
+  },
+  "0001326160-26-000014:7:80": {
+   "text": "Duke Energy relies primarily upon cash flows from operations, debt and equity issuances and its existing cash and cash equivalents to fund its liquidity and capital requirements. Duke Energy's capital requirements arise primarily from capital and investment expenditures, repaying long-term debt and paying dividends to shareholders. Additionally, due to its existing tax attributes and projected tax credits to be generated, Duke Energy does not expect to be a significant federal cash taxpayer until around 2030. Duke Energy Carolinas, Duke Energy Progress and Duke Energy Florida are monetizing tax credits in the transferability markets established by the IRA and are working with the state utility commissions on the appropriate regulatory process to pass the net realizable value back to customers over time. See Note 24 to the Consolidated Financial Statements, \"Income Taxes,\" for further information.\nIn 2025, Duke Energy executed several equity forward sales agreements as part of the prior ATM program. Settlement of the forward sales agreements is expected to occur by December 31, 2026. See Note 20 to the Consolidated Financial Statements, \"Stockholders' Equity,\" for further details.",
+   "item": "7",
+   "accession": "0001326160-26-000014",
+   "char_start": 284630,
+   "char_end": 285828
+  },
+  "0001326160-26-000014:7:90": {
+   "text": "Duke Energy targets a dividend payout ratio of between 60% and 70%, based upon adjusted EPS. Duke Energy increased the dividend by approximately 2% annually in both 2025 and 2024, and the Company remains committed to continued growth of the dividend.\n59\nMD&A | LIQUIDITY AND CAPITAL RESOURCES\nDividend and Other Funding Restrictions of Duke Energy Subsidiaries",
+   "item": "7",
+   "accession": "0001326160-26-000014",
+   "char_start": 295630,
+   "char_end": 295990
+  }
+ },
  "critic": {
   "cik": "0001326160",
   "ticker": "DUK",
