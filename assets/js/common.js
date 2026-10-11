@@ -36,6 +36,20 @@ const KIND = { pending: "pending", pass: "pass", partial_pass: "partial", fail: 
 export const WORD = { pending: "Pending", pass: "Pass", partial_pass: "Partial pass", fail: "Fail", data_gap: "Data gap", not_applicable: "Not applicable", not_meaningful: "Not meaningful",
   "evidence found": "Evidence found", "evidence weak": "Evidence weak", "insufficient evidence": "Insufficient evidence", "not assessed": "Not assessed" };
 
+// A verdict that changed when the question was reworded (ADR-072). `st` is a result's `stability`: { status, verdicts: { main, a, b } }.
+const SHORT_VERDICT = { "evidence found": "found", "evidence weak": "weak", "insufficient evidence": "insufficient", "not assessed": "not assessed" };
+export function isBorderline(st) { return !!st && st.status === "borderline"; }
+export function borderlineSentence(st) {
+  if (!isBorderline(st)) return null;
+  const [x, y] = [st.verdicts.a, st.verdicts.b].map((v) => SHORT_VERDICT[v] || v);
+  return x === y ? `When the question was reworded, the verdict came out as ${x} in both other runs.`
+    : `When the question was reworded, the verdict came out as ${x} and ${y} in two other runs.`;
+}
+export function stabilityRows(st) {
+  const w = (v) => WORD[v] || v;
+  return [["Main run", w(st.verdicts.main)], ["Question reworded, version A", w(st.verdicts.a)], ["Question reworded, version B", w(st.verdicts.b)]];
+}
+
 function defs() {
   if (document.getElementById("mark-defs")) return;
   const svg = document.createElementNS(NS, "svg");

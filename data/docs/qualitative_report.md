@@ -6,13 +6,13 @@
 
 | Company | understandable_business | durable_competitive_advantage | candid_management | rational_capital_allocation |
 |---|---|---|---|---|
-| KO | found | weak | insufficient | found |
-| JPM | found | insufficient | weak | found |
-| GOOGL | found | weak | found | found |
-| TSLA | found | weak | found | insufficient |
-| DUK | found | found | found | found |
+| KO | found | weak | found | found |
+| JPM | found | insufficient | insufficient | found |
+| GOOGL | found | weak | weak | found |
+| TSLA | found | weak | found | found |
+| DUK | found | found | weak | found |
 
-Of 20 findings: 13 found, 4 weak, 3 insufficient, 0 not assessed.
+Of 20 findings: 13 found, 5 weak, 2 insufficient, 0 not assessed.
 
 ## Calls and tokens per company
 
@@ -20,17 +20,17 @@ Model calls are the requests that count against the free-tier quota; tool calls 
 
 | Company | Model calls | Tool calls | Input tokens | Output tokens | Total tokens | Notional cost | Actual cost |
 |---|---|---|---|---|---|---|---|
-| KO | 7 | 11 | 18,324 | 803 | 19,127 | $0.0058 | $0.0000 |
-| JPM | 9 | 13 | 27,451 | 916 | 28,367 | $0.0082 | $0.0000 |
-| GOOGL | 6 | 10 | 16,402 | 842 | 17,244 | $0.0054 | $0.0000 |
-| TSLA | 7 | 11 | 20,879 | 570 | 21,449 | $0.0061 | $0.0000 |
-| DUK | 8 | 12 | 22,696 | 1,085 | 23,781 | $0.0073 | $0.0000 |
-| **Mean** | 7.4 | 11.4 | 21,150 | 843 | 21,994 | $0.0066 | $0.0000 |
-| **Total** | 37 | 57 | 105,752 | 4,216 | 109,968 | $0.0328 | $0.0000 |
+| KO | 7 | 11 | 18,700 | 784 | 19,484 | $0.0059 | $0.0000 |
+| JPM | 9 | 13 | 29,012 | 956 | 29,968 | $0.0087 | $0.0000 |
+| GOOGL | 7 | 11 | 19,327 | 1,059 | 20,386 | $0.0064 | $0.0000 |
+| TSLA | 7 | 11 | 21,542 | 624 | 22,166 | $0.0063 | $0.0000 |
+| DUK | 5 | 9 | 11,650 | 764 | 12,414 | $0.0041 | $0.0000 |
+| **Mean** | 7.0 | 11.0 | 20,046 | 837 | 20,884 | $0.0063 | $0.0000 |
+| **Total** | 35 | 55 | 100,231 | 4,187 | 104,418 | $0.0313 | $0.0000 |
 
 ## KO
 
-10-K accession `0001628280-26-010047` · 7 model calls, 11 tool calls, 19,127 tokens, notional $0.0058, actual $0.0000
+10-K accession `0001628280-26-010047` · 7 model calls, 11 tool calls, 19,484 tokens, notional $0.0059, actual $0.0000
 
 ### KO · understandable_business: **evidence found**
 
@@ -57,20 +57,20 @@ Searches: seeded "competition competitive, brand, market share, pricing power pr
 
 Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,913 in / 159 out · notional $0.0017
 
-### KO · candid_management: **insufficient evidence**
+### KO · candid_management: **evidence found**
 
-The filing discusses the possibility of recording impairment charges as a risk factor, but does not provide a candid account of specific past mistakes or setbacks attributed to management's own decisions. A 10-K is a limited guide to candour.
+Management explicitly acknowledges that an impairment charge for the BodyArmor trademark was triggered by lower expectations of future performance compared to the original forecasts, indicating a shortfall in the company's own projections.
 
-> We have recorded in the past, and we may be required to record in the future, significant impairment charges or our proportionate share of significant impairment charges recorded by equity method investees in the future and, if we do so, our net income could be materially adversely affected.
-> — accession `0001628280-26-010047`, Item 1A, passage `0001628280-26-010047:1A:67`, sentences 5–5, characters 131858–132150
+> During the three months ended December 31, 2025, the operating results related to the trademark, combined with lower expectations of future performance compared to the original forecasts, triggered the need to update the Company's impairment analysis, including a reassessment of the business projections for the trademark. Based on this assessment, the Company concluded that the fair value of the trademark was less than its carrying value and recorded an additional impairment charge of
+> — accession `0001628280-26-010047`, Item 7, passage `0001628280-26-010047:7:24`, sentences 3–4, characters 225343–225832
 
-Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits; "impairment charge write-down failure mistake" in items 1A → 4 hits
+Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits; "impairment charges 2025 10-K" in items all → 4 hits
 
-Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,360 in / 147 out · notional $0.0016
+Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,673 in / 131 out · notional $0.0016
 
 ### KO · rational_capital_allocation: **evidence found**
 
-The filing explicitly states the company's capital allocation priorities, which include investing in business operations, growing dividends, pursuing acquisitions, and repurchasing shares. It also provides concrete figures for dividends paid during the 2025 fiscal year.
+The filing explicitly states the company's capital allocation priorities (investing in operations, growing dividends, acquisitions, and share repurchases) and provides the concrete amount of dividends paid during the 2025 fiscal year.
 
 > Our current capital allocation priorities are as follows: investing wisely to support our business operations, continuing to grow our dividend payment, enhancing our beverage portfolio and capabilities through consumer-centric acquisitions, and using excess cash to repurchase shares over time.
 > — accession `0001628280-26-010047`, Item 7, passage `0001628280-26-010047:7:77`, sentences 7–7, characters 281045–281339
@@ -80,11 +80,11 @@ The filing explicitly states the company's capital allocation priorities, which 
 
 Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits
 
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,207 in / 156 out · notional $0.0008
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,270 in / 153 out · notional $0.0008
 
 ## JPM
 
-10-K accession `0001628280-26-008131` · 9 model calls, 13 tool calls, 28,367 tokens, notional $0.0082, actual $0.0000
+10-K accession `0001628280-26-008131` · 9 model calls, 13 tool calls, 29,968 tokens, notional $0.0087, actual $0.0000
 
 ### JPM · understandable_business: **evidence found**
 
@@ -108,34 +108,37 @@ Searches: seeded "competition competitive, brand, market share, pricing power pr
 
 Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,696 in / 141 out · notional $0.0016
 
-### JPM · candid_management: **evidence weak**
+### JPM · candid_management: **insufficient evidence**
 
-The filing describes a structured process where the company evaluates its control environment to identify where controls have failed and where remediation is required. However, the 10-K is a limited guide to candour, as it provides these descriptions as part of a standard risk management framework rather than as a candid, retrospective account of specific management-attributed setbacks or mistakes.
+The filing acknowledges that the company's earnings could decline if management makes incorrect strategic choices or fails to execute effectively, and it notes the possibility of material weaknesses in internal controls. However, these are generic risk disclosures rather than specific accounts of past setbacks or mistakes, and a 10-K is a limited guide to candour.
 
-> The Firm utilizes a structured risk and control self-assessment process that is executed by the LOBs and Corporate. As part of this process, the LOBs and Corporate evaluate the effectiveness of their respective control environment to assess circumstances in which controls have failed, and to determine where remediation efforts may be required.
-> — accession `0001628280-26-008131`, Item 7, passage `0001628280-26-008131:7:313`, sentences 1–2, characters 542291–542636
+> The values and growth prospects of JPMorganChase's businesses could suffer and its earnings could decline if management makes strategic choices that prove to be incorrect, are based on incomplete, inaccurate or fraudulent information, do not accurately assess the competitive landscape and industry trends, or fail to address changing regulatory and market environments or the expectations of clients, customers, investors, employees and other stakeholders.
+> — accession `0001628280-26-008131`, Item 1A, passage `0001628280-26-008131:1A:72`, sentences 1–1, characters 138225–138682
 
-Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits; ""we" "our" "mistake" "setback" "failed" "inaccurate" "error"" in items 7 → 4 hits
+> JPMorganChase's disclosure and financial reporting controls may not always be effective, and a material weakness or significant deficiency in internal control over financial reporting could occur.
+> — accession `0001628280-26-008131`, Item 1A, passage `0001628280-26-008131:1A:70`, sentences 7–7, characters 136653–136849
 
-Stop: `submitted` · model calls 2 · tool calls 3 · tokens 6,171 in / 182 out · notional $0.0018
+Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits
+
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,571 in / 177 out · notional $0.0009
 
 ### JPM · rational_capital_allocation: **evidence found**
 
-The filing quantifies capital actions including common share repurchases and dividend payments, and explains that these are managed under a governance framework that considers factors such as capital position, organic capital generation, and investment opportunities.
+The filing quantifies share repurchases ($31.64 billion in 2025) and explains that management determines the amount and timing of these actions based on factors including capital position, organic capital generation, and investment opportunities.
 
-> •the impact of capital actions, including net repurchases of common shares and dividend payments on common and preferred stock.
-> — accession `0001628280-26-008131`, Item 7, passage `0001628280-26-008131:7:35`, sentences 7–7, characters 240020–240147
+> Aggregate purchase price of common stock repurchases(a) | $ | 31,640 | $ | 18,841 | $ | 9,898
+> — accession `0001628280-26-008131`, Item 7, passage `0001628280-26-008131:7:159`, sentences 6–6, characters 374993–375086
 
-> The Board of Directors' authorization to repurchase common shares is utilized at management's discretion. The common share repurchase program approved by the Board of Directors does not establish specific price targets or timetables. Management determines the amount and timing of common share repurchases based on various factors, including market conditions; legal and regulatory considerations affecting the amount and timing of repurchase activity; the Firm's capital position (taking into account goodwill and intangibles); organic capital generation; current and proposed future capital requirements; and other investment opportunities.
-> — accession `0001628280-26-008131`, Item 7, passage `0001628280-26-008131:7:160`, sentences 1–3, characters 375127–375769
+> Management determines the amount and timing of common share repurchases based on various factors, including market conditions; legal and regulatory considerations affecting the amount and timing of repurchase activity; the Firm's capital position (taking into account goodwill and intangibles); organic capital generation; current and proposed future capital requirements; and other investment opportunities.
+> — accession `0001628280-26-008131`, Item 7, passage `0001628280-26-008131:7:160`, sentences 3–3, characters 375361–375769
 
-Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits
+Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits; "common stock repurchases amount 2025" in items all → 4 hits
 
-Stop: `submitted` · model calls 2 · tool calls 3 · tokens 4,997 in / 341 out · notional $0.0018
+Stop: `submitted` · model calls 3 · tool calls 4 · tokens 10,158 in / 386 out · notional $0.0031
 
 ## GOOGL
 
-10-K accession `0001652044-26-000018` · 6 model calls, 10 tool calls, 17,244 tokens, notional $0.0054, actual $0.0000
+10-K accession `0001652044-26-000018` · 7 model calls, 11 tool calls, 20,386 tokens, notional $0.0064, actual $0.0000
 
 ### GOOGL · understandable_business: **evidence found**
 
@@ -155,30 +158,30 @@ Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,267 in / 167 out 
 
 The filing asserts the importance of brands and intellectual property but does not provide concrete, quantified evidence of a durable competitive advantage, such as specific market share figures or exclusive franchise terms. Furthermore, the filing explicitly notes that competitors can readily erode the company's position, as users can switch to other services with a single click.
 
-> Any significant impairment of our intellectual property rights could harm our business and ability to compete. Protecting our intellectual property rights is costly and time consuming; any increase in unauthorized use could make it more expensive to do business and harm our financial condition and operating results. Our business depends on strong brands, and failing to maintain and enhance our brands would hurt our ability to expand our base of users, advertisers, customers, content providers, and other partners.
-> — accession `0001652044-26-000018`, Item 1A, passage `0001652044-26-000018:1A:15`, sentences 7–9, characters 51201–51719
+> Protecting our intellectual property rights is costly and time consuming; any increase in unauthorized use could make it more expensive to do business and harm our financial condition and operating results. Our business depends on strong brands, and failing to maintain and enhance our brands would hurt our ability to expand our base of users, advertisers, customers, content providers, and other partners.
+> — accession `0001652044-26-000018`, Item 1A, passage `0001652044-26-000018:1A:15`, sentences 8–9, characters 51312–51719
 
-> •users, for whom other products and services are literally one click away, on the basis of the relevance of our advertising, as well as the general usefulness, security, and availability of our products and services; •advertisers, primarily based on our ability to generate sales leads, and ultimately customers, and to deliver their advertisements in an efficient and effective manner across a variety of distribution channels even as trends in advertising mediums and user preferences change; and •content providers, primarily based on the quality of our advertiser base, our ability to help these partners generate revenues from advertising, and the terms of our agreements with them.
-> — accession `0001652044-26-000018`, Item 1, passage `0001652044-26-000018:1:15`, sentences 8–10, characters 27481–28168
+> •users, for whom other products and services are literally one click away, on the basis of the relevance of our advertising, as well as the general usefulness, security, and availability of our products and services; •advertisers, primarily based on our ability to generate sales leads, and ultimately customers, and to deliver their advertisements in an efficient and effective manner across a variety of distribution channels even as trends in advertising mediums and user preferences change; and
+> — accession `0001652044-26-000018`, Item 1, passage `0001652044-26-000018:1:15`, sentences 8–9, characters 27481–27979
 
 Searches: seeded "competition competitive, brand, market share, pricing power price increases, switching costs, patents intellectual property, scale cost advantage, network" in items 1, 1A → 4 hits; "market share rank users advertisers" in items 1 → 4 hits
 
-Stop: `submitted` · model calls 3 · tool calls 4 · tokens 9,493 in / 370 out · notional $0.0029
+Stop: `submitted` · model calls 3 · tool calls 4 · tokens 9,615 in / 369 out · notional $0.0030
 
-### GOOGL · candid_management: **evidence found**
+### GOOGL · candid_management: **evidence weak**
 
-Management acknowledges that its devices have had and may have quality issues resulting from design, manufacturing, or operations, which could harm the company's business and reputation. A 10-K is a limited guide to candour, but this statement identifies specific operational risks and past occurrences.
+The filing acknowledges that the company's devices have experienced and may continue to experience quality issues resulting from design, manufacturing, or operations, which could harm the business. A 10-K is a limited guide to candour, as these disclosures are standard risk factors.
 
 > Our devices have had, and in the future may have, quality issues resulting from design, manufacturing, or operations. Sometimes, these issues may be caused by components we purchase from other manufacturers or suppliers. In addition, quality issues with equipment used in our technical infrastructure could constrain our capacity to support the delivery and continued development of our products and services. If the quality of our products and services does not meet expectations, we lack the capacity to deliver them, or our products or services are defective or require a corrective action or recall, it could harm our business, reputation, financial condition, and operating results.
 > — accession `0001652044-26-000018`, Item 1A, passage `0001652044-26-000018:1A:22`, sentences 1–4, characters 56728–57415
 
 Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits
 
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,288 in / 125 out · notional $0.0008
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,351 in / 123 out · notional $0.0008
 
 ### GOOGL · rational_capital_allocation: **evidence found**
 
-The filing quantifies specific capital allocation actions in 2025, including $45.4 billion in share repurchases and $91.4 billion in capital expenditures. It also states that the primary use of capital is to invest for long-term growth and that management regularly evaluates the size, pace, and form of capital returns to stockholders.
+The filing quantifies specific capital allocation actions for 2025, including $45.4 billion in share repurchases and $91.4 billion in capital expenditures. It also states that the primary use of capital is to invest for long-term growth and that management regularly evaluates the size, pace, and form of capital returns to stockholders.
 
 > •Repurchases of Class A and Class C shares were $6.5 billion and $38.9 billion, respectively, totaling $45.4 billion for the year ended December 31, 2025. •Operating cash flow was $164.7 billion for the year ended December 31, 2025. •Capital expenditures, which primarily reflected investments in technical infrastructure, were $91.4 billion for the year ended December 31, 2025.
 > — accession `0001652044-26-000018`, Item 7, passage `0001652044-26-000018:7:20`, sentences 2–4, characters 150578–150957
@@ -188,11 +191,11 @@ The filing quantifies specific capital allocation actions in 2025, including $45
 
 Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits
 
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,354 in / 180 out · notional $0.0009
+Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,094 in / 400 out · notional $0.0019
 
 ## TSLA
 
-10-K accession `0001628280-26-003952` · 7 model calls, 11 tool calls, 21,449 tokens, notional $0.0061, actual $0.0000
+10-K accession `0001628280-26-003952` · 7 model calls, 11 tool calls, 22,166 tokens, notional $0.0063, actual $0.0000
 
 ### TSLA · understandable_business: **evidence found**
 
@@ -221,26 +224,32 @@ Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,019 in / 109 out 
 
 ### TSLA · candid_management: **evidence found**
 
-Management explicitly acknowledges that its publicly announced guidance has been inaccurate in the past, specifically citing the timing of new product manufacturing ramps as an example. A 10-K is a limited guide to candour, but this statement constitutes an admission of past forecasting errors.
+Management acknowledges that its guidance has been inaccurate in the past, specifically regarding the timing of new product manufacturing ramps, which demonstrates an admission of past execution challenges. However, a 10-K is a limited guide to candour as it is heavily reviewed by legal counsel.
 
 > Correctly identifying key factors affecting business conditions and predicting future events is inherently an uncertain process, and our guidance may not ultimately be accurate and has in the past been inaccurate in certain respects, such as the timing of new product manufacturing ramps.
 > — accession `0001628280-26-003952`, Item 1A, passage `0001628280-26-003952:1A:77`, sentences 3–3, characters 132909–133197
 
 Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits
 
-Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,380 in / 121 out · notional $0.0008
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,443 in / 123 out · notional $0.0008
 
-### TSLA · rational_capital_allocation: **insufficient evidence**
+### TSLA · rational_capital_allocation: **evidence found**
 
-The filing discusses future capital expenditure expectations and general priorities for growth, but it does not quantify past capital allocation actions (such as specific amounts spent on acquisitions, buybacks, or debt repayment) during the fiscal year.
+The filing quantifies capital expenditures ($8.53 billion) and debt repayments for the 2025 fiscal year, and states a policy of funding the business through its own growth while making critical high-value investments and maintaining a strong balance sheet.
 
-Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits; "capital expenditures 2025 amount" in items 7 → 4 hits; "capital expenditures 2025 actual amount" in items 7 → 4 hits; "capital expenditures 2025 actual" in items 7 → 4 hits
+> We ended 2025 with $44.06 billion in cash and cash equivalents and investments, representing an increase of $7.50 billion from the end of 2024. Our cash flows provided by operating activities were $14.75 billion in 2025 compared to $14.92 billion in 2024, representing a decrease of $176 million. Capital expenditures amounted to $8.53 billion in 2025 compared to $11.34 billion in 2024, representing a decrease of $2.82 billion. Overall growth has allowed our business to generally fund itself, and we will continue to make critical high-value investments while maintaining a strong balance sheet.
+> — accession `0001628280-26-003952`, Item 7, passage `0001628280-26-003952:7:4`, sentences 4–7, characters 151309–151907
 
-Stop: `submitted` · model calls 4 · tool calls 5 · tokens 14,368 in / 193 out · notional $0.0039
+> Net cash flows from investing activities and their variability across each period related primarily to capital expenditures, which were $8.53 billion and $11.34 billion for the years ended December 31, 2025 and 2024, respectively, mainly for global AI and operational infrastructure and factory expansion, as well as machinery and equipment as we expand and enhance our product roadmap.
+> — accession `0001628280-26-003952`, Item 7, passage `0001628280-26-003952:7:53`, sentences 4–4, characters 202134–202520
+
+Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits; "capital expenditures 2025 actual amount" in items 7 → 4 hits; "capital expenditures 2025 amount" in items 7 → 4 hits; "capital expenditures 2025 "million" "billion"" in items 7 → 4 hits
+
+Stop: `submitted` · model calls 4 · tool calls 5 · tokens 14,968 in / 245 out · notional $0.0041
 
 ## DUK
 
-10-K accession `0001326160-26-000014` · 8 model calls, 12 tool calls, 23,781 tokens, notional $0.0073, actual $0.0000
+10-K accession `0001326160-26-000014` · 5 model calls, 9 tool calls, 12,414 tokens, notional $0.0041, actual $0.0000
 
 ### DUK · understandable_business: **evidence found**
 
@@ -267,31 +276,28 @@ Searches: seeded "competition competitive, brand, market share, pricing power pr
 
 Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,134 in / 105 out · notional $0.0007
 
-### DUK · candid_management: **evidence found**
+### DUK · candid_management: **evidence weak**
 
-Management explicitly identifies and quantifies specific charges and impairments related to its own business decisions, such as the implementation of a new customer system, joint venture electric transmission projects, and renewable natural gas investments. These are presented as distinct items impacting financial results rather than being obscured by external factors.
+The filing acknowledges that progress toward the company's energy modernization strategy and net-zero carbon emissions target "will not be linear," but this is a general statement rather than an account of a specific setback or mistake. A 10-K is a limited guide to candour, and the provided text does not contain the specific, candid admissions of management-driven errors or missed targets required for an "evidence found" verdict.
 
-> •Regulatory Matters primarily represents net impairment charges related to Duke Energy Carolinas' and Duke Energy Progress' 2024 South Carolina rate case orders and charges related to Duke Energy Indiana post-retirement benefits. •System Post-Implementation Costs represents the net impact of charges related to nonrecurring customer billing adjustments as a result of implementation of a new customer system. •Preferred Redemption Costs represents charges related to the redemption of Series B Preferred Stock. •Noncore Asset Sales and Net Impairments primarily represents charges related to certain joint venture electric transmission projects and certain renewable natural gas investments.
-> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:36`, sentences 1–4, characters 236474–237166
+> As we continue to execute on our energy modernization strategy, and target net-zero carbon emissions from electric generation by 2050, our progress will not be linear.
+> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:29`, sentences 3–3, characters 229194–229361
 
-> In addition to the drivers below, the increase in GAAP Reported Earnings/EPS was primarily due to impairments related to the 2024 South Carolina rate case and charges related to Duke Energy Indiana post-retirement benefits in the prior year, as well as charges related to certain joint venture electric transmission projects and certain renewable natural gas investments in the prior year.
-> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:38`, sentences 8–8, characters 239619–240008
+Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits
 
-Searches: seeded "challenges, did not meet, below our expectations, we did not achieve, lessons, write-down of our investment, impairment, material weakness, restatement, decline decreased, we expect headwinds" in items 7, 1A → 4 hits; "impairment charge write-down project failure" in items 7 → 4 hits
-
-Stop: `submitted` · model calls 2 · tool calls 3 · tokens 5,605 in / 191 out · notional $0.0017
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,254 in / 153 out · notional $0.0008
 
 ### DUK · rational_capital_allocation: **evidence found**
 
-The filing identifies capital expenditures, debt repayment, and dividends as primary uses of cash, providing specific 2025 expenditure amounts for these categories. It also states a policy of targeting a dividend payout ratio of 60% to 70% of adjusted EPS.
+The filing identifies the company's primary capital requirements as capital expenditures, debt repayment, and dividend payments, and provides concrete figures for 2025 capital expenditures and financing activities.
 
 > Duke Energy relies primarily upon cash flows from operations, debt and equity issuances and its existing cash and cash equivalents to fund its liquidity and capital requirements. Duke Energy's capital requirements arise primarily from capital and investment expenditures, repaying long-term debt and paying dividends to shareholders.
 > — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:80`, sentences 1–2, characters 284630–284963
 
-> Duke Energy targets a dividend payout ratio of between 60% and 70%, based upon adjusted EPS.
-> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:90`, sentences 1–1, characters 295630–295722
+> Capital, investment and acquisition expenditures, net of return of investment capital | $ | (14,002) | $ | (12,263) | $ | (1,739)
+> — accession `0001326160-26-000014`, Item 7, passage `0001326160-26-000014:7:100`, sentences 6–6, characters 306564–306693
 
-Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits; "dividend policy rationale" in items 7 → 4 hits
+Searches: seeded "share repurchases buyback, dividends, acquisitions, capital expenditures, return on invested capital, debt reduction" in items 7 → 4 hits
 
-Stop: `submitted` · model calls 3 · tool calls 4 · tokens 10,343 in / 428 out · notional $0.0032
+Stop: `submitted` · model calls 1 · tool calls 2 · tokens 2,648 in / 145 out · notional $0.0009
 

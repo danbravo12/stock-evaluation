@@ -190,15 +190,17 @@ Each arrow carries a typed object (Pydantic models). These are what the trace re
 
 ## 4. Run economics
 
-Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). Measured over **all 25 analysed companies** (the 5 test companies re-recorded with prompt v2 and the 20 showcase companies, 2026-10-12; ADR-069, ADR-070), free tier, 100% from the traces and results.
+Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). Measured over **all 25 analysed companies** (prompt v2.1, the main run of build 4a, 2026-10-12; ADR-069 and ADR-070 amendments), free tier, 100% from the traces and results.
 
 | Step | LLM calls per company | Notes |
 |---|---|---|
-| Qualitative agent, first loops | 6.8 (range 5 to 9) | One loop per criterion, seeded first search; tool calls to the retriever are local and free |
-| Explainer | 1.0 | All numeric criteria in one call; no retries |
-| Critic (LLM part) | 1.7 | One review, which also checks the explanations, plus a re-check when something is sent back; rule checks cost nothing |
-| Repairs (rationale rewrites 1 call, constrained retries up to 3 turns) | 1.5 | Only items the Critic flagged, once (ADR-052): 27 items flagged over 25 companies, 21 repaired, 6 left as warnings |
-| **Total** | **10.9 (range 7 to 16)** | Mean 27.1k input + 2.4k output tokens, **notional $0.0104 per company** ($0.26 for the 25), actual $0.00. By agent family (repairs count under the qualitative agent): qualitative 8.2 calls and $0.0070, Explainer 1.0 and $0.0013, Critic 1.7 and $0.0021 |
+| Qualitative agent, first loops | 7.2 (range 5 to 9) | One loop per criterion, seeded first search; tool calls to the retriever are local and free |
+| Explainer | 1.1 | All numeric criteria in one call, plus 2 retries over the 25 companies |
+| Critic (LLM part) | 1.6 | One review, which also checks the explanations, plus a re-check when something is sent back; rule checks cost nothing |
+| Repairs (rationale rewrites 1 call, constrained retries up to 3 turns) | 1.1 | Only items the Critic flagged, once (ADR-052): 24 items flagged over 25 companies, 18 repaired, 6 left as warnings |
+| **Total** | **11.0 (range 7 to 16)** | Mean 28.2k input + 2.4k output tokens, **notional $0.0106 per company** ($0.26 for the 25), actual $0.00. By agent family (repairs count under the qualitative agent): qualitative 8.2 calls and $0.0071, Explainer 1.1 and $0.0014, Critic 1.6 and $0.0021 |
+
+**Stability runs (ADR-072) are separate from these figures.** A paraphrase run (the qualitative agent and the Critic with the question and verdict definitions reworded; the Explainer's output is reused) costs 9.1 requests per company (227 for the 25), notional $0.0084; two paraphrases make the qualitative part of a refresh about three times as large. They run once per refresh and may be skipped; a refresh with both costs about 25 + 2 × 9.1 = 29 requests for a company.
 
 | Mode | Cost per company | Full S&P 500 | Time |
 |---|---|---|---|
@@ -211,18 +213,18 @@ Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). Measured over **
 - **Demo shows both:** "actual $0.00x (free tier + paid) · notional $0.0xx at paid rates", from the ledger, recorded at run time.
 
 - **Actual cost:** $0.00 per analysis on the Gemini Flash-Lite free tier.
-- **Throughput:** at about 490 requests a day (500 less the safety margin), 25 companies took 286 requests including the re-record, so roughly 45 companies a day at 10.9 requests each; the full S&P 500 in about 11 days. The numeric scorecard for all 500 companies needs no LLM and runs in minutes.
+- **Throughput:** at about 490 requests a day (500 less the safety margin), 25 companies took 199 requests for the v2.1 refresh and re-record (some answered from the response cache, because unchanged prompts give the same request), so roughly 45 companies a day at 11.0 requests each; the full S&P 500 in about 11 days. With both paraphrase runs a day covers about 17 companies. The numeric scorecard for all 500 companies needs no LLM and runs in minutes.
 
 ---
 
-## 5. Where the agentic behaviour is (interview framing)
+## 5. Where the agentic behaviour is
 
-| Behaviour | Where it lives | Why here |
+| Behaviour | Where it lives | Why it's designed this way |
 |---|---|---|
 | Planning | Planner builds a per-company `RunPlan` (sector exceptions, gaps, skipped steps) | Plans genuinely differ by company; rules make them reproducible |
 | Tool use | Data fetcher; qualitative agent choosing what to search in the 10-K | The agent decides which sections and queries to use, and when it has enough evidence |
 | Verification | Critic: rules for facts, LLM for judgement, retry routed to the step that failed | Cheap checks first; the LLM is used only where rules can't decide |
-| Traceability | Typed contracts at every hand-off, replayed on the site | A reviewer can see each step's inputs and outputs |
+| Traceability | Typed contracts at every hand-off, replayed on the site | Each step's inputs and outputs are recorded and can be replayed on the site |
 
 ---
 

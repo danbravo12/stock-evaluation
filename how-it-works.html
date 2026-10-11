@@ -17,7 +17,7 @@
 <div class="disclaimer"><div class="wrap"><p><strong>This is a research tool, not financial advice.</strong> It reports what public SEC filings say and which published Graham and Buffett tests a company meets. It does not tell anyone to buy, sell or hold anything.</p></div></div>
 <main id="main" class="wrap">
 <h1>How it works</h1>
-<p class="lede">This is a research tool that turns SEC filings into a scorecard for each S&amp;P 500 company, shows its working, and says where it is unsure. It is written for someone who wants to check the method in five minutes.</p>
+<p class="lede">This is a research tool that turns SEC filings into a scorecard for each S&amp;P 500 company, shows its working, and says where it is unsure. It is written for readers who want to check the method quickly.</p>
 
 <h2>The process</h2>
 <ol>
@@ -47,8 +47,9 @@
 
 <h2>How it was tested</h2>
 <ul>
-<li><b>Gold set for the judgement tests.</b> The agents' verdicts on the five sample companies were reviewed by hand against the 10-K; they agree with the reviewer on 19 of 20, and the one difference is over-generous. See the <a href="doc.html?f=qualitative_report">qualitative report</a>.</li>
-<li><b>The Critic against known errors.</b> It caught all three disagreements with the gold set and all three faults that were injected on purpose; its repairs fixed five of five findings it flagged. See the <a href="doc.html?f=critic_report">Critic report</a>.</li>
+<li><b>Gold set for the judgement tests.</b> The agents' verdicts on the five sample companies were checked by hand against the 10-K: the final verdicts agree with the reviewer on 15 of 20 (16 of 20 before the Critic), and every difference is one level apart (found against weak, or weak against insufficient). Those five companies are also where the rubric was written and corrected, so this figure overstates accuracy; the first version of the wording agreed on 19 of 20 and the next one on 14 of 20 without any change of substance. A second, held-out set of 24 judgements on six other companies is labelled blind, before the labeller looks at the agent's answers, and will be reported separately. See the <a href="doc.html?f=qualitative_report">qualitative report</a> and the <a href="doc.html?f=evaluation_notes">evaluation notes</a>.</li>
+<li><b>Does the wording matter?</b> Each judgement was asked three times, with the question and the definitions of the verdicts worded three ways that mean the same. A verdict that changes with the wording is marked <b>Borderline</b> on the company page and the three answers are shown. See the <a href="doc.html?f=stability_report">stability report</a>.</li>
+<li><b>The Critic against known errors.</b> It flagged one of the four disagreements with the gold set, all three faults that were injected on purpose, and three of the fourteen correct judgements; its repairs left agreement at 15 of 20. It is a second reader, not a guarantee. See the <a href="doc.html?f=critic_report">Critic report</a>.</li>
 <li><b>The whole index.</b> Scores for 498 companies were checked for anomalies (revenue jumps, odd signs, restatements, split adjustments), and the fixes are written up in the <a href="doc.html?f=universe_scorecard_report">universe report</a>. The count of every label is frozen, so a rule change that moves hundreds of results shows up in the tests.</li>
 <li><b>Offline tests.</b> Close to 400 automated tests run without a network connection, on recorded SEC data and recorded model responses.</li>
 </ul>
