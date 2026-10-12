@@ -1,0 +1,2415 @@
+{
+ "schema_version": "1.3",
+ "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
+ "run": {
+  "run_id": "NEE-live-b",
+  "engine_commit": "2ba8e91",
+  "model_profile": "gemini-3.1-flash-lite",
+  "mode": "live",
+  "generated_at": "2026-10-12T13:00:05+00:00",
+  "timings": {
+   "fetch": 0.086,
+   "score": 0.001,
+   "qualitative": 71.981,
+   "explain_and_verify": 49.464
+  }
+ },
+ "plan": {
+  "ticker": "NEE",
+  "cik": "0000753308",
+  "name": "NextEra Energy",
+  "gics_sector": "Utilities",
+  "sector_class": "utility",
+  "in_scope": true,
+  "out_of_scope_reason": null,
+  "universe_snapshot": "2026-10-10",
+  "steps": [
+   "fetch",
+   "score",
+   "qualitative",
+   "explain_and_verify",
+   "report"
+  ],
+  "skipped": [
+   {
+    "step": "price",
+    "reason": "price: Finnhub not yet integrated (publish gate, ADR-021)"
+   },
+   {
+    "step": "criteria G6, G7",
+    "reason": "need a price (Finnhub not yet integrated)"
+   }
+  ],
+  "sector_basis": "gics:Multi-Utilities",
+  "sector_notes": [],
+  "applicable": [
+   "G1",
+   "G2",
+   "G3",
+   "G4",
+   "G5",
+   "G6",
+   "G7",
+   "B1",
+   "B2",
+   "B3",
+   "B4"
+  ],
+  "not_applicable": [],
+  "notes": [
+   "G2 uses the utility variant: long-term debt <= 2x equity (ADR-013)"
+  ]
+ },
+ "steps": [
+  {
+   "step": "fetch",
+   "status": "done",
+   "seconds": 0.086,
+   "reason": null
+  },
+  {
+   "step": "score",
+   "status": "done",
+   "seconds": 0.001,
+   "reason": null
+  },
+  {
+   "step": "qualitative",
+   "status": "done",
+   "seconds": 71.981,
+   "reason": null
+  },
+  {
+   "step": "explain_and_verify",
+   "status": "done",
+   "seconds": 49.464,
+   "reason": null
+  },
+  {
+   "step": "report",
+   "status": "done",
+   "seconds": 0.074,
+   "reason": null
+  }
+ ],
+ "data": {
+  "cik": "0000753308",
+  "ticker": "NEE",
+  "entity_name": "NEXTERA ENERGY INC",
+  "sic": "4911",
+  "filing": {
+   "accession": "0000753308-26-000015",
+   "form": "10-K",
+   "filing_date": "2026-02-13",
+   "report_date": "2025-12-31",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/nee-20251231.htm"
+  },
+  "price": null,
+  "gaps": [
+   "price: Finnhub not yet integrated (publish gate, ADR-021)"
+  ],
+  "as_of": {
+   "companyfacts": "2026-10-10",
+   "submissions": "2026-10-09",
+   "10-K": "2026-02-13"
+  }
+ },
+ "scorecard": {
+  "as_of_year": 2025,
+  "sector_class": "utility",
+  "summary": {
+   "graham_met": 4,
+   "graham_applicable": 5,
+   "buffett_met": 1,
+   "buffett_applicable": 3,
+   "data_gaps": 3,
+   "not_meaningful": 0,
+   "not_applicable": 0,
+   "percent_met": 0.625
+  },
+  "criteria": [
+   {
+    "id": "G1",
+    "name": "Size",
+    "label": "pass",
+    "threshold": "revenue >= $1B",
+    "figures": {
+     "revenue": 25800000000.0
+    },
+    "by_year": {},
+    "years": [
+     2025
+    ],
+    "year_label": null,
+    "reason": null,
+    "flags": [],
+    "input_keys": [
+     "revenue:2025"
+    ],
+    "explanation": {
+     "criterion": "G1",
+     "raw": "Revenue in 2025 was {revenue}, which is above the minimum size (test: {threshold}).",
+     "text": "Revenue in 2025 was $25.80 billion, which is above the minimum size (test: revenue >= $1B).",
+     "placeholders_used": [
+      "revenue",
+      "threshold"
+     ],
+     "templated": false
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "G2",
+    "name": "Financial strength",
+    "label": "pass",
+    "threshold": "long-term debt <= 2 x stockholders' equity (utility variant)",
+    "figures": {
+     "long_term_debt": 89556000000.0,
+     "stockholders_equity": 54608000000.0,
+     "debt_to_equity": 1.6399794901845883
+    },
+    "by_year": {},
+    "years": [
+     2025
+    ],
+    "year_label": null,
+    "reason": null,
+    "flags": [],
+    "input_keys": [
+     "long_term_debt:2025",
+     "stockholders_equity:2025"
+    ],
+    "explanation": {
+     "criterion": "G2",
+     "raw": "The company has long-term debt of {long_term_debt} and stockholders' equity of {stockholders_equity}, resulting in a debt-to-equity ratio of {debt_to_equity} (test: {threshold}).",
+     "text": "The company has long-term debt of $89.56 billion and stockholders' equity of $54.61 billion, resulting in a debt-to-equity ratio of 1.64 (test: long-term debt <= 2 x stockholders' equity (utility variant)).",
+     "placeholders_used": [
+      "long_term_debt",
+      "stockholders_equity",
+      "debt_to_equity",
+      "threshold"
+     ],
+     "templated": false
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "G3",
+    "name": "Earnings stability",
+    "label": "pass",
+    "threshold": "net income > 0 in every year of the last 10",
+    "figures": {
+     "years_on_record": 10,
+     "loss_years": []
+    },
+    "by_year": {
+     "2016": 2906000000.0,
+     "2017": 5380000000.0,
+     "2018": 6638000000.0,
+     "2019": 3769000000.0,
+     "2020": 2919000000.0,
+     "2021": 3573000000.0,
+     "2022": 4147000000.0,
+     "2023": 7310000000.0,
+     "2024": 6946000000.0,
+     "2025": 6835000000.0
+    },
+    "years": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024,
+     2025
+    ],
+    "year_label": null,
+    "reason": null,
+    "flags": [],
+    "input_keys": [
+     "net_income:2016",
+     "net_income:2017",
+     "net_income:2018",
+     "net_income:2019",
+     "net_income:2020",
+     "net_income:2021",
+     "net_income:2022",
+     "net_income:2023",
+     "net_income:2024",
+     "net_income:2025"
+    ],
+    "explanation": {
+     "criterion": "G3",
+     "raw": "Net income was positive in each of the {years_on_record} years on record, with {loss_year_count} loss years (test: {threshold}).",
+     "text": "Net income was positive in each of the 10 years on record, with 0 loss years (test: net income > 0 in every year of the last 10).",
+     "placeholders_used": [
+      "years_on_record",
+      "loss_year_count",
+      "threshold"
+     ],
+     "templated": false
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "G4",
+    "name": "Dividend record",
+    "label": "partial_pass",
+    "threshold": "dividend paid in every year on record in the last 15",
+    "figures": {
+     "years_on_record": 15
+    },
+    "by_year": {
+     "2011": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 0.55
+     },
+     "2012": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 0.6
+     },
+     "2013": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 0.66
+     },
+     "2014": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 0.725
+     },
+     "2015": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 0.77
+     },
+     "2016": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 0.87
+     },
+     "2017": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 0.9825
+     },
+     "2018": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 1.11
+     },
+     "2019": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 1.25
+     },
+     "2020": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 1.4
+     },
+     "2021": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 1.54
+     },
+     "2022": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 1.7
+     },
+     "2023": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 1.87
+     },
+     "2024": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 2.06
+     },
+     "2025": {
+      "paid": true,
+      "source": "dividends_per_share",
+      "value": 2.27
+     }
+    },
+    "years": [
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024,
+     2025
+    ],
+    "year_label": "partial (15 of 20 yrs)",
+    "reason": null,
+    "flags": [
+     "restated",
+     "split_adjusted"
+    ],
+    "input_keys": [
+     "dividends_per_share:2011",
+     "dividends_per_share:2012",
+     "dividends_per_share:2013",
+     "dividends_per_share:2014",
+     "dividends_per_share:2015",
+     "dividends_per_share:2016",
+     "dividends_per_share:2017",
+     "dividends_per_share:2018",
+     "dividends_per_share:2019",
+     "dividends_per_share:2020",
+     "dividends_per_share:2021",
+     "dividends_per_share:2022",
+     "dividends_per_share:2023",
+     "dividends_per_share:2024",
+     "dividends_per_share:2025"
+    ],
+    "explanation": {
+     "criterion": "G4",
+     "raw": "Dividends were paid in every one of the {years_on_record} years on record, which is all the history available for this test (test: {threshold}).",
+     "text": "Dividends were paid in every one of the 15 years on record, which is all the history available for this test (test: dividend paid in every year on record in the last 15).",
+     "placeholders_used": [
+      "years_on_record",
+      "threshold"
+     ],
+     "templated": false
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "G5",
+    "name": "Earnings growth",
+    "label": "fail",
+    "threshold": "3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)",
+    "figures": {
+     "avg_eps_start": 2.625833333333334,
+     "avg_eps_end": 3.4233333333333333,
+     "ratio": 1.3037131069501742
+    },
+    "by_year": {},
+    "years": [
+     2016,
+     2017,
+     2018,
+     2023,
+     2024,
+     2025
+    ],
+    "year_label": null,
+    "reason": null,
+    "flags": [
+     "restated",
+     "split_adjusted"
+    ],
+    "input_keys": [
+     "eps_diluted:2016",
+     "eps_diluted:2017",
+     "eps_diluted:2018",
+     "eps_diluted:2023",
+     "eps_diluted:2024",
+     "eps_diluted:2025"
+    ],
+    "explanation": {
+     "criterion": "G5",
+     "raw": "The 3-year average diluted EPS grew from {avg_eps_start} to {avg_eps_end}, representing a ratio of {ratio} (test: {threshold}).",
+     "text": "The 3-year average diluted EPS grew from $2.63 to $3.42, representing a ratio of 1.30 (test: 3-yr avg diluted EPS (end) >= 1.33 x 3-yr avg (start of the 10-yr window)).",
+     "placeholders_used": [
+      "avg_eps_start",
+      "avg_eps_end",
+      "ratio",
+      "threshold"
+     ],
+     "templated": false
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "G6",
+    "name": "Moderate P/E",
+    "label": "data_gap",
+    "threshold": "price <= 15 x avg diluted EPS of the last 3 years",
+    "figures": {},
+    "by_year": {},
+    "years": [],
+    "year_label": null,
+    "reason": "price not available (Finnhub, ADR-007)",
+    "flags": [],
+    "input_keys": [],
+    "explanation": {
+     "criterion": "G6",
+     "raw": "Cannot be scored: price not available (Finnhub, ADR-007).",
+     "text": "Cannot be scored: price not available (Finnhub, ADR-007).",
+     "placeholders_used": [],
+     "templated": true
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "G7",
+    "name": "Price vs assets",
+    "label": "data_gap",
+    "threshold": "P/E x P/B <= 22.5",
+    "figures": {},
+    "by_year": {},
+    "years": [],
+    "year_label": null,
+    "reason": "price not available (Finnhub, ADR-007)",
+    "flags": [],
+    "input_keys": [],
+    "explanation": {
+     "criterion": "G7",
+     "raw": "Cannot be scored: price not available (Finnhub, ADR-007).",
+     "text": "Cannot be scored: price not available (Finnhub, ADR-007).",
+     "placeholders_used": [],
+     "templated": true
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "B1",
+    "name": "Return on equity",
+    "label": "fail",
+    "threshold": "ROE >= 15% in at least 7 of the last 10 years",
+    "figures": {
+     "years_at_or_above_15pct": 3
+    },
+    "by_year": {
+     "2016": 0.12388361931152084,
+     "2017": 0.20465222435665786,
+     "2018": 0.21282462327669124,
+     "2019": 0.1059466752870736,
+     "2020": 0.07940912429609075,
+     "2021": 0.09694092111510548,
+     "2022": 0.10851617799060591,
+     "2023": 0.16863328604219294,
+     "2024": 0.14238128913896833,
+     "2025": 0.13055229254409842
+    },
+    "years": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024,
+     2025
+    ],
+    "year_label": null,
+    "reason": null,
+    "flags": [],
+    "input_keys": [
+     "net_income:2016",
+     "net_income:2017",
+     "net_income:2018",
+     "net_income:2019",
+     "net_income:2020",
+     "net_income:2021",
+     "net_income:2022",
+     "net_income:2023",
+     "net_income:2024",
+     "net_income:2025",
+     "stockholders_equity:2015",
+     "stockholders_equity:2016",
+     "stockholders_equity:2017",
+     "stockholders_equity:2018",
+     "stockholders_equity:2019",
+     "stockholders_equity:2020",
+     "stockholders_equity:2021",
+     "stockholders_equity:2022",
+     "stockholders_equity:2023",
+     "stockholders_equity:2024",
+     "stockholders_equity:2025"
+    ],
+    "explanation": {
+     "criterion": "B1",
+     "raw": "Return on equity was at or above the threshold in {years_at_or_above_15pct} of the last 10 years (test: {threshold}).",
+     "text": "Return on equity was at or above the threshold in 3 of the last 10 years (test: ROE >= 15% in at least 7 of the last 10 years).",
+     "placeholders_used": [
+      "years_at_or_above_15pct",
+      "threshold"
+     ],
+     "templated": false
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "B2",
+    "name": "Conservative debt",
+    "label": "fail",
+    "threshold": "long-term debt <= 4 x avg net income of the last 3 years",
+    "figures": {
+     "long_term_debt": 89556000000.0,
+     "avg_net_income_3y": 7030333333.333333,
+     "max_debt": 28121333333.333332
+    },
+    "by_year": {},
+    "years": [
+     2023,
+     2024,
+     2025
+    ],
+    "year_label": null,
+    "reason": null,
+    "flags": [],
+    "input_keys": [
+     "long_term_debt:2025",
+     "net_income:2023",
+     "net_income:2024",
+     "net_income:2025"
+    ],
+    "explanation": {
+     "criterion": "B2",
+     "raw": "Long-term debt of {long_term_debt} exceeds the maximum debt of {max_debt}, which is calculated from the 3-year average net income of {avg_net_income_3y} (test: {threshold}).",
+     "text": "Long-term debt of $89.56 billion exceeds the maximum debt of $28.12 billion, which is calculated from the 3-year average net income of $7.03 billion (test: long-term debt <= 4 x avg net income of the last 3 years).",
+     "placeholders_used": [
+      "long_term_debt",
+      "max_debt",
+      "avg_net_income_3y",
+      "threshold"
+     ],
+     "templated": false
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "B3",
+    "name": "Stable margins",
+    "label": "pass",
+    "threshold": "operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg",
+    "figures": {
+     "avg_margin_10y": 0.2846631417253723,
+     "avg_margin_3y": 0.3506559365905306,
+     "ratio": 1.2318276769699414
+    },
+    "by_year": {
+     "2016": 0.2763043747676292,
+     "2017": 0.30122867291678795,
+     "2018": 0.2779220779220779,
+     "2019": 0.30588571428571426,
+     "2020": 0.3009411764705882,
+     "2021": 0.1549468085106383,
+     "2022": 0.17743478260869566,
+     "2023": 0.4127822580645161,
+     "2024": 0.3182553191489362,
+     "2025": 0.3209302325581395
+    },
+    "years": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024,
+     2025
+    ],
+    "year_label": null,
+    "reason": null,
+    "flags": [
+     "restated"
+    ],
+    "input_keys": [
+     "operating_income:2016",
+     "operating_income:2017",
+     "operating_income:2018",
+     "operating_income:2019",
+     "operating_income:2020",
+     "operating_income:2021",
+     "operating_income:2022",
+     "operating_income:2023",
+     "operating_income:2024",
+     "operating_income:2025",
+     "revenue:2016",
+     "revenue:2017",
+     "revenue:2018",
+     "revenue:2019",
+     "revenue:2020",
+     "revenue:2021",
+     "revenue:2022",
+     "revenue:2023",
+     "revenue:2024",
+     "revenue:2025"
+    ],
+    "explanation": {
+     "criterion": "B3",
+     "raw": "The 3-year average operating margin of {avg_margin_3y} compared to the 10-year average of {avg_margin_10y} results in a ratio of {ratio} (test: {threshold}).",
+     "text": "The 3-year average operating margin of 35.1% compared to the 10-year average of 28.5% results in a ratio of 1.23 (test: operating margin > 0 every year and last-3-yr avg >= 90% of the 10-yr avg).",
+     "placeholders_used": [
+      "avg_margin_3y",
+      "avg_margin_10y",
+      "ratio",
+      "threshold"
+     ],
+     "templated": false
+    },
+    "critic_status": "passed"
+   },
+   {
+    "id": "B4",
+    "name": "Owner earnings",
+    "label": "data_gap",
+    "threshold": "net income + D&A - capex > 0 in >= 8 of 10 years and last-3-yr avg > first-3-yr avg",
+    "figures": {},
+    "by_year": {},
+    "years": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024,
+     2025
+    ],
+    "year_label": null,
+    "reason": "missing: capex [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]",
+    "flags": [],
+    "input_keys": [],
+    "explanation": {
+     "criterion": "B4",
+     "raw": "Cannot be scored: missing: capex [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025].",
+     "text": "Cannot be scored: missing: capex [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025].",
+     "placeholders_used": [],
+     "templated": true
+    },
+    "critic_status": "passed"
+   }
+  ],
+  "inputs": [
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2011,
+    "fiscal_year_end": "2011-12-31",
+    "value": 0.55,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-14-000025",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330814000025/",
+    "flags": [
+     "split_adjusted"
+    ]
+   },
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2012,
+    "fiscal_year_end": "2012-12-31",
+    "value": 0.6,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-15-000079",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330815000079/",
+    "flags": [
+     "split_adjusted"
+    ]
+   },
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2013,
+    "fiscal_year_end": "2013-12-31",
+    "value": 0.66,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-16-000337",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330816000337/",
+    "flags": [
+     "split_adjusted"
+    ]
+   },
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2014,
+    "fiscal_year_end": "2014-12-31",
+    "value": 0.725,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-17-000060",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330817000060/",
+    "flags": [
+     "split_adjusted"
+    ]
+   },
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2015,
+    "fiscal_year_end": "2015-12-31",
+    "value": 0.77,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-18-000013",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330818000013/",
+    "flags": [
+     "split_adjusted"
+    ]
+   },
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2016,
+    "fiscal_year_end": "2016-12-31",
+    "value": 0.87,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-19-000039",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330819000039/",
+    "flags": [
+     "split_adjusted"
+    ]
+   },
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2017,
+    "fiscal_year_end": "2017-12-31",
+    "value": 0.9825,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-20-000021",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330820000021/",
+    "flags": [
+     "split_adjusted"
+    ]
+   },
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2018,
+    "fiscal_year_end": "2018-12-31",
+    "value": 1.11,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-21-000014",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330821000014/",
+    "flags": [
+     "restated"
+    ]
+   },
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2019,
+    "fiscal_year_end": "2019-12-31",
+    "value": 1.25,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-22-000014",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330822000014/",
+    "flags": [
+     "restated"
+    ]
+   },
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2020,
+    "fiscal_year_end": "2020-12-31",
+    "value": 1.4,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-23-000019",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330823000019/",
+    "flags": []
+   },
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2021,
+    "fiscal_year_end": "2021-12-31",
+    "value": 1.54,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-24-000008",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330824000008/",
+    "flags": []
+   },
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2022,
+    "fiscal_year_end": "2022-12-31",
+    "value": 1.7,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-25-000011",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330825000011/",
+    "flags": []
+   },
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2023,
+    "fiscal_year_end": "2023-12-31",
+    "value": 1.87,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2024,
+    "fiscal_year_end": "2024-12-31",
+    "value": 2.06,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "dividends_per_share",
+    "fiscal_year": 2025,
+    "fiscal_year_end": "2025-12-31",
+    "value": 2.27,
+    "unit": "USD/shares",
+    "concept": "CommonStockDividendsPerShareCashPaid",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "eps_diluted",
+    "fiscal_year": 2016,
+    "fiscal_year_end": "2016-12-31",
+    "value": 1.56,
+    "unit": "USD/shares",
+    "concept": "EarningsPerShareDiluted",
+    "accession": "0000753308-19-000039",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330819000039/",
+    "flags": [
+     "split_adjusted"
+    ]
+   },
+   {
+    "measure": "eps_diluted",
+    "fiscal_year": 2017,
+    "fiscal_year_end": "2017-12-31",
+    "value": 2.8475,
+    "unit": "USD/shares",
+    "concept": "EarningsPerShareDiluted",
+    "accession": "0000753308-20-000021",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330820000021/",
+    "flags": [
+     "split_adjusted"
+    ]
+   },
+   {
+    "measure": "eps_diluted",
+    "fiscal_year": 2018,
+    "fiscal_year_end": "2018-12-31",
+    "value": 3.47,
+    "unit": "USD/shares",
+    "concept": "EarningsPerShareDiluted",
+    "accession": "0000753308-21-000014",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330821000014/",
+    "flags": [
+     "restated"
+    ]
+   },
+   {
+    "measure": "eps_diluted",
+    "fiscal_year": 2023,
+    "fiscal_year_end": "2023-12-31",
+    "value": 3.6,
+    "unit": "USD/shares",
+    "concept": "EarningsPerShareDiluted",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "eps_diluted",
+    "fiscal_year": 2024,
+    "fiscal_year_end": "2024-12-31",
+    "value": 3.37,
+    "unit": "USD/shares",
+    "concept": "EarningsPerShareDiluted",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "eps_diluted",
+    "fiscal_year": 2025,
+    "fiscal_year_end": "2025-12-31",
+    "value": 3.3,
+    "unit": "USD/shares",
+    "concept": "EarningsPerShareDiluted",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "long_term_debt",
+    "fiscal_year": 2025,
+    "fiscal_year_end": "2025-12-31",
+    "value": 89556000000.0,
+    "unit": "USD",
+    "concept": "LongTermDebtNoncurrent",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2016,
+    "fiscal_year_end": "2016-12-31",
+    "value": 2906000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0000753308-19-000039",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330819000039/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2017,
+    "fiscal_year_end": "2017-12-31",
+    "value": 5380000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0000753308-20-000021",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330820000021/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2018,
+    "fiscal_year_end": "2018-12-31",
+    "value": 6638000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0000753308-21-000014",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330821000014/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2019,
+    "fiscal_year_end": "2019-12-31",
+    "value": 3769000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0000753308-22-000014",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330822000014/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2020,
+    "fiscal_year_end": "2020-12-31",
+    "value": 2919000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0000753308-23-000019",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330823000019/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2021,
+    "fiscal_year_end": "2021-12-31",
+    "value": 3573000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0000753308-24-000008",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330824000008/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2022,
+    "fiscal_year_end": "2022-12-31",
+    "value": 4147000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0000753308-25-000011",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330825000011/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2023,
+    "fiscal_year_end": "2023-12-31",
+    "value": 7310000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2024,
+    "fiscal_year_end": "2024-12-31",
+    "value": 6946000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "net_income",
+    "fiscal_year": 2025,
+    "fiscal_year_end": "2025-12-31",
+    "value": 6835000000.0,
+    "unit": "USD",
+    "concept": "NetIncomeLoss",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "operating_income",
+    "fiscal_year": 2016,
+    "fiscal_year_end": "2016-12-31",
+    "value": 4459000000.0,
+    "unit": "USD",
+    "concept": "OperatingIncomeLoss",
+    "accession": "0000753308-19-000039",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330819000039/",
+    "flags": [
+     "restated"
+    ]
+   },
+   {
+    "measure": "operating_income",
+    "fiscal_year": 2017,
+    "fiscal_year_end": "2017-12-31",
+    "value": 5173000000.0,
+    "unit": "USD",
+    "concept": "OperatingIncomeLoss",
+    "accession": "0000753308-20-000021",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330820000021/",
+    "flags": [
+     "restated"
+    ]
+   },
+   {
+    "measure": "operating_income",
+    "fiscal_year": 2018,
+    "fiscal_year_end": "2018-12-31",
+    "value": 4280000000.0,
+    "unit": "USD",
+    "concept": "OperatingIncomeLoss",
+    "accession": "0000753308-21-000014",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330821000014/",
+    "flags": []
+   },
+   {
+    "measure": "operating_income",
+    "fiscal_year": 2019,
+    "fiscal_year_end": "2019-12-31",
+    "value": 5353000000.0,
+    "unit": "USD",
+    "concept": "OperatingIncomeLoss",
+    "accession": "0000753308-22-000014",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330822000014/",
+    "flags": []
+   },
+   {
+    "measure": "operating_income",
+    "fiscal_year": 2020,
+    "fiscal_year_end": "2020-12-31",
+    "value": 5116000000.0,
+    "unit": "USD",
+    "concept": "OperatingIncomeLoss",
+    "accession": "0000753308-23-000019",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330823000019/",
+    "flags": []
+   },
+   {
+    "measure": "operating_income",
+    "fiscal_year": 2021,
+    "fiscal_year_end": "2021-12-31",
+    "value": 2913000000.0,
+    "unit": "USD",
+    "concept": "OperatingIncomeLoss",
+    "accession": "0000753308-24-000008",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330824000008/",
+    "flags": []
+   },
+   {
+    "measure": "operating_income",
+    "fiscal_year": 2022,
+    "fiscal_year_end": "2022-12-31",
+    "value": 4081000000.0,
+    "unit": "USD",
+    "concept": "OperatingIncomeLoss",
+    "accession": "0000753308-25-000011",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330825000011/",
+    "flags": []
+   },
+   {
+    "measure": "operating_income",
+    "fiscal_year": 2023,
+    "fiscal_year_end": "2023-12-31",
+    "value": 10237000000.0,
+    "unit": "USD",
+    "concept": "OperatingIncomeLoss",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "operating_income",
+    "fiscal_year": 2024,
+    "fiscal_year_end": "2024-12-31",
+    "value": 7479000000.0,
+    "unit": "USD",
+    "concept": "OperatingIncomeLoss",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "operating_income",
+    "fiscal_year": 2025,
+    "fiscal_year_end": "2025-12-31",
+    "value": 8280000000.0,
+    "unit": "USD",
+    "concept": "OperatingIncomeLoss",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "revenue",
+    "fiscal_year": 2016,
+    "fiscal_year_end": "2016-12-31",
+    "value": 16138000000.0,
+    "unit": "USD",
+    "concept": "RegulatedAndUnregulatedOperatingRevenue",
+    "accession": "0000753308-19-000039",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330819000039/",
+    "flags": []
+   },
+   {
+    "measure": "revenue",
+    "fiscal_year": 2017,
+    "fiscal_year_end": "2017-12-31",
+    "value": 17173000000.0,
+    "unit": "USD",
+    "concept": "RegulatedAndUnregulatedOperatingRevenue",
+    "accession": "0000753308-20-000021",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330820000021/",
+    "flags": []
+   },
+   {
+    "measure": "revenue",
+    "fiscal_year": 2018,
+    "fiscal_year_end": "2018-12-31",
+    "value": 15400000000.0,
+    "unit": "USD",
+    "concept": "RevenueFromContractWithCustomerIncludingAssessedTax",
+    "accession": "0000753308-21-000014",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330821000014/",
+    "flags": []
+   },
+   {
+    "measure": "revenue",
+    "fiscal_year": 2019,
+    "fiscal_year_end": "2019-12-31",
+    "value": 17500000000.0,
+    "unit": "USD",
+    "concept": "RevenueFromContractWithCustomerIncludingAssessedTax",
+    "accession": "0000753308-22-000014",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330822000014/",
+    "flags": []
+   },
+   {
+    "measure": "revenue",
+    "fiscal_year": 2020,
+    "fiscal_year_end": "2020-12-31",
+    "value": 17000000000.0,
+    "unit": "USD",
+    "concept": "RevenueFromContractWithCustomerIncludingAssessedTax",
+    "accession": "0000753308-23-000019",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330823000019/",
+    "flags": []
+   },
+   {
+    "measure": "revenue",
+    "fiscal_year": 2021,
+    "fiscal_year_end": "2021-12-31",
+    "value": 18800000000.0,
+    "unit": "USD",
+    "concept": "RevenueFromContractWithCustomerIncludingAssessedTax",
+    "accession": "0000753308-24-000008",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330824000008/",
+    "flags": []
+   },
+   {
+    "measure": "revenue",
+    "fiscal_year": 2022,
+    "fiscal_year_end": "2022-12-31",
+    "value": 23000000000.0,
+    "unit": "USD",
+    "concept": "RevenueFromContractWithCustomerIncludingAssessedTax",
+    "accession": "0000753308-25-000011",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330825000011/",
+    "flags": []
+   },
+   {
+    "measure": "revenue",
+    "fiscal_year": 2023,
+    "fiscal_year_end": "2023-12-31",
+    "value": 24800000000.0,
+    "unit": "USD",
+    "concept": "RevenueFromContractWithCustomerIncludingAssessedTax",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "revenue",
+    "fiscal_year": 2024,
+    "fiscal_year_end": "2024-12-31",
+    "value": 23500000000.0,
+    "unit": "USD",
+    "concept": "RevenueFromContractWithCustomerIncludingAssessedTax",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "revenue",
+    "fiscal_year": 2025,
+    "fiscal_year_end": "2025-12-31",
+    "value": 25800000000.0,
+    "unit": "USD",
+    "concept": "RevenueFromContractWithCustomerIncludingAssessedTax",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2015,
+    "fiscal_year_end": "2015-12-31",
+    "value": 22574000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000753308-17-000060",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330817000060/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2016,
+    "fiscal_year_end": "2016-12-31",
+    "value": 24341000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000753308-18-000013",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330818000013/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2017,
+    "fiscal_year_end": "2017-12-31",
+    "value": 28236000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000753308-19-000039",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330819000039/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2018,
+    "fiscal_year_end": "2018-12-31",
+    "value": 34144000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000753308-20-000021",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330820000021/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2019,
+    "fiscal_year_end": "2019-12-31",
+    "value": 37005000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000753308-21-000014",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330821000014/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2020,
+    "fiscal_year_end": "2020-12-31",
+    "value": 36513000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000753308-22-000014",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330822000014/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2021,
+    "fiscal_year_end": "2021-12-31",
+    "value": 37202000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000753308-23-000019",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330823000019/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2022,
+    "fiscal_year_end": "2022-12-31",
+    "value": 39229000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000753308-24-000008",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330824000008/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2023,
+    "fiscal_year_end": "2023-12-31",
+    "value": 47468000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000753308-25-000011",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330825000011/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2024,
+    "fiscal_year_end": "2024-12-31",
+    "value": 50101000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   },
+   {
+    "measure": "stockholders_equity",
+    "fiscal_year": 2025,
+    "fiscal_year_end": "2025-12-31",
+    "value": 54608000000.0,
+    "unit": "USD",
+    "concept": "StockholdersEquity",
+    "accession": "0000753308-26-000015",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+    "flags": []
+   }
+  ],
+  "sector_notes": []
+ },
+ "qualitative": [
+  {
+   "finding": {
+    "criterion": "understandable_business",
+    "verdict": "evidence found",
+    "rationale": "The filing explains that the company generates revenue by selling energy, capacity, credits, and ancillary products from its generation and battery storage facilities. These products are sold under long-term power purchase agreements to customers in wholesale electricity markets.",
+    "citations": [
+     {
+      "passage_id": "0000753308-26-000015:1:47",
+      "accession": "0000753308-26-000015",
+      "item": "1",
+      "char_start": 61955,
+      "char_end": 62135,
+      "quote": "A majority of NEER's revenues are derived from sales of energy, capacity, credits and ancillary products under long-term PPAs to customers located in wholesale electricity markets.",
+      "sentences": [
+       2,
+       2
+      ]
+     },
+     {
+      "passage_id": "0000753308-26-000015:1:30",
+      "accession": "0000753308-26-000015",
+      "item": "1",
+      "char_start": 44265,
+      "char_end": 44464,
+      "quote": "NEER sells products associated with its generation and battery storage facilities (energy, capacity, RECs and ancillary services) in competitive markets in regions where those facilities are located.",
+      "sentences": [
+       9,
+       9
+      ]
+     }
+    ],
+    "searches": [
+     {
+      "queries": [
+       "principal products services",
+       "how we generate revenue",
+       "segments",
+       "customers",
+       "business model"
+      ],
+      "items": [
+       "1"
+      ],
+      "seeded": true,
+      "passage_ids": [
+       "0000753308-26-000015:1:52",
+       "0000753308-26-000015:1:47",
+       "0000753308-26-000015:1:30",
+       "0000753308-26-000015:1:45"
+      ]
+     }
+    ],
+    "llm_calls": 4,
+    "tool_calls": 4,
+    "stop_reason": "submitted",
+    "usage": {
+     "prompt_tokens": 7962,
+     "completion_tokens": 596,
+     "total_tokens": 8558,
+     "reasoning_tokens": 0
+    },
+    "actual_cost_usd": 0.0,
+    "notional_cost_usd": 0.0028845
+   },
+   "critic_status": "passed_after_retry",
+   "stability": null,
+   "reliability": null,
+   "reliability_basis": null
+  },
+  {
+   "finding": {
+    "criterion": "durable_competitive_advantage",
+    "verdict": "evidence found",
+    "rationale": "The filing states that FPL provides service to its retail customers primarily under 226 franchise agreements, which typically last 30 years and include provisions where municipalities or counties agree not to form their own utility. These agreements cover the vast majority of FPL's retail customer base in Florida.",
+    "citations": [
+     {
+      "passage_id": "0000753308-26-000015:1:6",
+      "accession": "0000753308-26-000015",
+      "item": "1",
+      "char_start": 17882,
+      "char_end": 18465,
+      "quote": "FPL's service to its electric retail customers is provided primarily under franchise agreements negotiated with municipalities or counties. During the term of a franchise agreement, which is typically 30 years, the municipality or county agrees not to form its own utility, and FPL has the right to offer electric service to residents. As of December 31, 2025, FPL held 226 franchise agreements with various municipalities and counties in Florida with varying expiration dates through 2055. These franchise agreements cover the vast majority of FPL's retail customer base in Florida.",
+      "sentences": [
+       1,
+       4
+      ]
+     }
+    ],
+    "searches": [
+     {
+      "queries": [
+       "competition competitive",
+       "brand",
+       "market share",
+       "pricing power price increases",
+       "switching costs",
+       "patents intellectual property",
+       "scale cost advantage",
+       "network"
+      ],
+      "items": [
+       "1",
+       "1A"
+      ],
+      "seeded": true,
+      "passage_ids": [
+       "0000753308-26-000015:1:47",
+       "0000753308-26-000015:1:46",
+       "0000753308-26-000015:1:53",
+       "0000753308-26-000015:1A:31"
+      ]
+     },
+     {
+      "queries": [
+       "FPL regulated franchise service territory"
+      ],
+      "items": [
+       "1"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0000753308-26-000015:1:6",
+       "0000753308-26-000015:1:5",
+       "0000753308-26-000015:1:4",
+       "0000753308-26-000015:1:55"
+      ]
+     }
+    ],
+    "llm_calls": 3,
+    "tool_calls": 4,
+    "stop_reason": "submitted",
+    "usage": {
+     "prompt_tokens": 8263,
+     "completion_tokens": 279,
+     "total_tokens": 8542,
+     "reasoning_tokens": 0
+    },
+    "actual_cost_usd": 0.0,
+    "notional_cost_usd": 0.00248425
+   },
+   "critic_status": "passed",
+   "stability": null,
+   "reliability": null,
+   "reliability_basis": null
+  },
+  {
+   "finding": {
+    "criterion": "candid_management",
+    "verdict": "insufficient evidence",
+    "rationale": "The filing reports a significant impairment charge related to an investment in XPLR, but it attributes the charge to the investment itself rather than management's own decisions or execution. A 10-K is a limited guide to candour, and the provided text does not demonstrate management's openness about its own mistakes or setbacks.",
+    "citations": [
+     {
+      "passage_id": "0000753308-26-000015:7:20",
+      "accession": "0000753308-26-000015",
+      "item": "7",
+      "char_start": 196023,
+      "char_end": 196315,
+      "quote": "The change in 2025 primarily reflects the impact of an impairment charge of approximately $0.7 billion ($0.5 billion after tax) compared to a 2024 impairment charge of $0.8 billion ($0.6 billion after tax) related to the investment in XPLR (see Note 4 – Nonrecurring Fair Value Measurements).",
+      "sentences": [
+       9,
+       9
+      ]
+     }
+    ],
+    "searches": [
+     {
+      "queries": [
+       "challenges",
+       "did not meet",
+       "below our expectations",
+       "we did not achieve",
+       "lessons",
+       "write-down of our investment",
+       "impairment",
+       "material weakness",
+       "restatement",
+       "decline decreased",
+       "we expect headwinds"
+      ],
+      "items": [
+       "7",
+       "1A"
+      ],
+      "seeded": true,
+      "passage_ids": [
+       "0000753308-26-000015:7:61",
+       "0000753308-26-000015:7:58",
+       "0000753308-26-000015:1A:70",
+       "0000753308-26-000015:1A:1"
+      ]
+     },
+     {
+      "queries": [
+       "impairment loss write-down charge 2025"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": false,
+      "passage_ids": [
+       "0000753308-26-000015:7:61",
+       "0000753308-26-000015:7:4",
+       "0000753308-26-000015:7:20",
+       "0000753308-26-000015:7:59"
+      ]
+     }
+    ],
+    "llm_calls": 4,
+    "tool_calls": 5,
+    "stop_reason": "submitted",
+    "usage": {
+     "prompt_tokens": 13998,
+     "completion_tokens": 250,
+     "total_tokens": 14248,
+     "reasoning_tokens": 0
+    },
+    "actual_cost_usd": 0.0,
+    "notional_cost_usd": 0.0038745000000000003
+   },
+   "critic_status": "passed",
+   "stability": null,
+   "reliability": null,
+   "reliability_basis": null
+  },
+  {
+   "finding": {
+    "criterion": "rational_capital_allocation",
+    "verdict": "evidence found",
+    "rationale": "The filing documents the payment of dividends on common stock over three years. It also states that the company manages its capital structure to maintain a strong investment-grade credit rating.",
+    "citations": [
+     {
+      "passage_id": "0000753308-26-000015:7:26",
+      "accession": "0000753308-26-000015",
+      "item": "7",
+      "char_start": 202595,
+      "char_end": 202650,
+      "quote": "Dividends on common stock | (4,680) | (4,235) | (3,782)",
+      "sentences": [
+       4,
+       4
+      ]
+     },
+     {
+      "passage_id": "0000753308-26-000015:7:23",
+      "accession": "0000753308-26-000015",
+      "item": "7",
+      "char_start": 199321,
+      "char_end": 199539,
+      "quote": "in assets/businesses (see Note 1 – Disposal of Businesses), consistent with NEE's and FPL's objective of maintaining, on a long-term basis, a capital structure that will support a strong investment grade credit rating.",
+      "sentences": [
+       4,
+       4
+      ]
+     }
+    ],
+    "searches": [
+     {
+      "queries": [
+       "share repurchases buyback",
+       "dividends",
+       "acquisitions",
+       "capital expenditures",
+       "return on invested capital",
+       "debt reduction"
+      ],
+      "items": [
+       "7"
+      ],
+      "seeded": true,
+      "passage_ids": [
+       "0000753308-26-000015:7:23",
+       "0000753308-26-000015:7:26",
+       "0000753308-26-000015:7:42",
+       "0000753308-26-000015:7:45"
+      ]
+     }
+    ],
+    "llm_calls": 3,
+    "tool_calls": 3,
+    "stop_reason": "submitted",
+    "usage": {
+     "prompt_tokens": 5985,
+     "completion_tokens": 418,
+     "total_tokens": 6403,
+     "reasoning_tokens": 0
+    },
+    "actual_cost_usd": 0.0,
+    "notional_cost_usd": 0.0021232499999999997
+   },
+   "critic_status": "passed_after_retry",
+   "stability": null,
+   "reliability": null,
+   "reliability_basis": null
+  }
+ ],
+ "passages": {
+  "0000753308-26-000015:1:30": {
+   "text": "Through its customer supply business, NEER engages in energy-related commodity marketing and trading activities, including entering into financial and physical contracts. These contracts primarily involve power and fuel commodities and their related products for the purpose of providing full energy and capacity requirements services, primarily to distribution utilities in certain markets. They are also used to offer customized power and fuel and related risk management services to wholesale customers, including services provided under natural gas asset management agreements, as well as to hedge the production from NEER's generation assets that is not sold under long-term power supply agreements. In addition, NEER participates in natural gas, natural gas liquids and oil production through operating and non-operating ownership interests. NEER hedges the expected output from its natural gas and oil production assets to protect against price movements.\n11\nTable of Contents\nOPERATIONS\nNEER sells products associated with its generation and battery storage facilities (energy, capacity, RECs and ancillary services) in competitive markets in regions where those facilities are located. Customer transactions may be supplied from NEER generation and battery storage facilities or from purchases in the wholesale markets, or from a combination thereof. See Markets and Competition below.",
+   "item": "1",
+   "accession": "0000753308-26-000015",
+   "char_start": 43270,
+   "char_end": 44664
+  },
+  "0000753308-26-000015:1:47": {
+   "text": "The degree and nature of competition is different in wholesale markets than in retail markets. A majority of NEER's revenues are derived from sales of energy, capacity, credits and ancillary products under long-term PPAs to customers located in wholesale electricity markets. Wholesale power generation is a capital-intensive, commodity-driven business with numerous industry participants. NEER primarily competes on the basis of price, but believes that its track record of completing projects on schedule, creditworthiness, operating scale and ability to offer and manage reliable customized risk solutions to wholesale customers are competitive advantages. Wholesale power generation is a regional business that is highly fragmented relative to many other commodity industries and diverse in terms of industry structure. As such, there is a wide variation in terms of the capabilities, resources, nature and identity of the companies NEER competes with depending on the market. In wholesale markets, customers' needs are met through a variety of means, including long-term bilateral contracts, standardized bilateral products such as full requirements service and customized supply and risk management services.",
+   "item": "1",
+   "accession": "0000753308-26-000015",
+   "char_start": 61860,
+   "char_end": 63074
+  },
+  "0000753308-26-000015:1:6": {
+   "text": "FPL's service to its electric retail customers is provided primarily under franchise agreements negotiated with municipalities or counties. During the term of a franchise agreement, which is typically 30 years, the municipality or county agrees not to form its own utility, and FPL has the right to offer electric service to residents. As of December 31, 2025, FPL held 226 franchise agreements with various municipalities and counties in Florida with varying expiration dates through 2055. These franchise agreements cover the vast majority of FPL's retail customer base in Florida. As of December 31, 2025, FPL also provided service to customers in 10 other municipalities and to 27 unincorporated areas within its service area without franchise agreements, pursuant to the general obligation to serve as a public utility. FPL relies upon Florida law for access to public rights-of-way.",
+   "item": "1",
+   "accession": "0000753308-26-000015",
+   "char_start": 17882,
+   "char_end": 18770
+  },
+  "0000753308-26-000015:7:20": {
+   "text": "In 2025, the change in gains on disposal of businesses/assets – net is the result of lower disposal gains in the current year as compared to the prior year. See Note 1 – Disposal of Businesses for a discussion of gains related to the September 2024 sales of ownership interests in connection with the pipeline joint venture and the renewable assets joint venture.\nInterest Expense\nNEER's interest expense for 2025 increased $569 million primarily reflecting approximately $351 million of unfavorable impacts related to changes in the fair value of interest rate derivative instruments as well as higher average debt balances driven by growth in the business.\n43\nTable of Contents\nEquity in Losses of Equity Method Investees\nNEER recognized $193 million and $267 million of equity in losses of equity method investees in 2025 and 2024, respectively. The change in 2025 primarily reflects the impact of an impairment charge of approximately $0.7 billion ($0.5 billion after tax) compared to a 2024 impairment charge of $0.8 billion ($0.6 billion after tax) related to the investment in XPLR (see Note 4 – Nonrecurring Fair Value Measurements).\nIncome Taxes",
+   "item": "7",
+   "accession": "0000753308-26-000015",
+   "char_start": 195174,
+   "char_end": 196328
+  },
+  "0000753308-26-000015:7:23": {
+   "text": "NEE and its subsidiaries require funds to support and grow their businesses. These funds are used for, among other things, working capital, capital expenditures (see Note 15 – Commitments), investments in or acquisitions of assets and businesses (see Note 6), payment of maturing debt and related derivative obligations (see Note 13 and Note 3) and, from time to time, redemption or repurchase of outstanding debt or equity securities. It is anticipated that these requirements will be satisfied through a combination of cash flows from operations, short- and long-term borrowings, the issuance of short- and long-term debt (see Note 13) and, from time to time, equity securities, proceeds from differential membership investors, sales of clean energy tax credits (see Note 1 – Income Taxes) and sales of ownership interests in assets/businesses (see Note 1 – Disposal of Businesses), consistent with NEE's and FPL's objective of maintaining, on a long-term basis, a capital structure that will support a strong investment grade credit rating. NEE, FPL and NEECH rely on access to credit and capital markets as significant sources of liquidity for capital requirements and other operations that are not satisfied by operating cash flows. The inability of NEE, FPL and NEECH to maintain their current credit ratings could affect their ability to raise short- and long-term capital, their cost of capital and the execution of their respective financing strategies, and could require the posting of additional collateral under certain agreements.",
+   "item": "7",
+   "accession": "0000753308-26-000015",
+   "char_start": 198496,
+   "char_end": 200039
+  },
+  "0000753308-26-000015:7:26": {
+   "text": "Net decrease in commercial paper and other short-term debt | — | (3,018) | —\nPayments to differential membership investors | (516) | (740) | (75)\nRepayments of cash swept to related parties – net | (131) | (1,371) | —\nDividends on common stock | (4,680) | (4,235) | (3,782)\nOther uses – net | (1,223) | (791) | (1,814)\nTotal uses of cash | (41,503) | (44,997) | (38,762)\nEffects of currency translation on cash, cash equivalents and restricted cash | 5 | (14) | (4)\nNet increase (decrease) in cash, cash equivalents and restricted cash | $ | 1,604 | $ | (2,018) | $ | (21)\nFor significant financing activity that occurred subsequent to December 31, 2025, see Note 13.\nNEE's primary capital requirements are for expanding and enhancing FPL's electric system and generation facilities to continue to provide reliable service to meet customer electricity demands and for funding NEER's investments in independent power and other projects. See Note 15 – Commitments for estimated capital expenditures in 2026 through 2030.\nThe following table provides a summary of capital investments for 2025, 2024 and 2023.\nYears Ended December 31,\n2025 | 2024 | 2023\n(millions)\nFPL:\nGeneration:",
+   "item": "7",
+   "accession": "0000753308-26-000015",
+   "char_start": 202377,
+   "char_end": 203554
+  }
+ },
+ "critic": {
+  "cik": "0000753308",
+  "ticker": "NEE",
+  "checks": [
+   {
+    "check": "R1",
+    "item": "G1",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "G2",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "G3",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "G4",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "G5",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "G6",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "G7",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "B1",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "B2",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "B3",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R1",
+    "item": "B4",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R2",
+    "item": "understandable_business",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R2",
+    "item": "durable_competitive_advantage",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R2",
+    "item": "candid_management",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R2",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "G1",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "G2",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "G3",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "G4",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "G5",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "G6",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "G7",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "B1",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "B2",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "B3",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "B4",
+    "status": "pass",
+    "detail": "",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "understandable_business",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "durable_competitive_advantage",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "candid_management",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "understandable_business",
+    "status": "fail",
+    "detail": "supports_verdict=yes; unsupported: fuel and risk management services | municipal utilities and cooperatives; The quotes identify the products (energy, capacity, credits) and the market context (wholesale electricity markets), satisfying the requirement for specific products and revenue sources.",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": "rationale",
+    "claims": [
+     "fuel and risk management services",
+     "municipal utilities and cooperatives"
+    ]
+   },
+   {
+    "check": "L1",
+    "item": "durable_competitive_advantage",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The filing provides a specific count of franchise agreements (226) and their duration (30 years), which constitutes a measurable, regulated exclusive service territory.",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "rational_capital_allocation",
+    "status": "fail",
+    "detail": "supports_verdict=yes; unsupported: identifies primary capital requirements for expanding FPL's electric system and funding NEER's investments; The filing quantifies 2025 dividends and states a clear policy objective regarding capital structure and investment-grade credit ratings.",
+    "owner": "qualitative",
+    "attempt": 0,
+    "kind": "rationale",
+    "claims": [
+     "identifies primary capital requirements for expanding FPL's electric system and funding NEER's investments"
+    ]
+   },
+   {
+    "check": "L1",
+    "item": "G1",
+    "status": "pass",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the revenue and compares it against the threshold.",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "G2",
+    "status": "pass",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the ratio and compares it to the utility-specific threshold.",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "G3",
+    "status": "pass",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly interprets the 10-year stability requirement.",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "G4",
+    "status": "pass",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly notes that the dividend record is consistent for the entire available history.",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "G5",
+    "status": "pass",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly identifies the growth ratio and compares it to the required threshold.",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "B1",
+    "status": "pass",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly states the failure to meet the ROE frequency threshold.",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "B2",
+    "status": "pass",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly calculates the debt-to-income limit and compares it to actual debt.",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "B3",
+    "status": "pass",
+    "detail": "agrees_with_label=yes; reads_correctly=yes; The explanation correctly compares the 3-year average margin to the 10-year average.",
+    "owner": "explainer",
+    "attempt": 0,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R2",
+    "item": "understandable_business",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R2",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "understandable_business",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "R3",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "understandable_business",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The quotes clearly identify the products sold, the customer base (wholesale electricity markets), and the revenue model (long-term PPAs).",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
+   },
+   {
+    "check": "L1",
+    "item": "rational_capital_allocation",
+    "status": "pass",
+    "detail": "supports_verdict=yes; The filing provides a quantified dividend amount for the latest year and explicitly states the rationale of maintaining a strong investment-grade credit rating.",
+    "owner": "qualitative",
+    "attempt": 1,
+    "kind": null,
+    "claims": []
+   }
+  ],
+  "final": {
+   "G1": "passed",
+   "G2": "passed",
+   "G3": "passed",
+   "G4": "passed",
+   "G5": "passed",
+   "G6": "passed",
+   "G7": "passed",
+   "B1": "passed",
+   "B2": "passed",
+   "B3": "passed",
+   "B4": "passed",
+   "understandable_business": "passed_after_retry",
+   "durable_competitive_advantage": "passed",
+   "candid_management": "passed",
+   "rational_capital_allocation": "passed_after_retry"
+  },
+  "repairs": [
+   {
+    "item": "understandable_business",
+    "path": "rationale_rewrite",
+    "outcome": "accepted",
+    "detail": "",
+    "llm_calls": 1
+   },
+   {
+    "item": "rational_capital_allocation",
+    "path": "rationale_rewrite",
+    "outcome": "accepted",
+    "detail": "",
+    "llm_calls": 1
+   }
+  ],
+  "llm_calls": 2,
+  "usage": {
+   "prompt_tokens": 3939,
+   "completion_tokens": 937,
+   "total_tokens": 4876,
+   "reasoning_tokens": 0
+  },
+  "actual_cost_usd": 0.0,
+  "notional_cost_usd": 0.00239025
+ },
+ "cost": {
+  "actual_cost_usd": 0.0,
+  "notional_cost_usd": 0.013757,
+  "llm_calls": 16,
+  "input_tokens": 40147,
+  "output_tokens": 2480,
+  "by_agent": {
+   "critic": {
+    "calls": 2,
+    "input_tokens": 3939,
+    "output_tokens": 937,
+    "actual_cost_usd": 0.0,
+    "notional_cost_usd": 0.00239
+   },
+   "qualitative": {
+    "calls": 14,
+    "input_tokens": 36208,
+    "output_tokens": 1543,
+    "actual_cost_usd": 0.0,
+    "notional_cost_usd": 0.011366
+   }
+  }
+ },
+ "sources": [
+  {
+   "kind": "sec_filing",
+   "label": "Form 10-K 0000753308-26-000015",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/nee-20251231.htm",
+   "as_of": "2026-02-13"
+  },
+  {
+   "kind": "sec_xbrl",
+   "label": "XBRL company facts",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000753308.json",
+   "as_of": "2026-10-10"
+  },
+  {
+   "kind": "sec_submissions",
+   "label": "Filing history",
+   "url": "https://data.sec.gov/submissions/CIK0000753308.json",
+   "as_of": "2026-10-09"
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for dividends_per_share 2011",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330814000025/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for dividends_per_share 2012",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330815000079/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for dividends_per_share 2013",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330816000337/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for dividends_per_share 2014",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330817000060/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for dividends_per_share 2015",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330818000013/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for dividends_per_share 2016",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330819000039/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for dividends_per_share 2017",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330820000021/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for dividends_per_share 2018",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330821000014/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for dividends_per_share 2019",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330822000014/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for dividends_per_share 2020",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330823000019/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for dividends_per_share 2021",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330824000008/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for dividends_per_share 2022",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330825000011/",
+   "as_of": null
+  },
+  {
+   "kind": "sec_filing",
+   "label": "Filing used for dividends_per_share 2023",
+   "url": "https://www.sec.gov/Archives/edgar/data/753308/000075330826000015/",
+   "as_of": null
+  }
+ ],
+ "attribution": [
+  "Constituents: Wikipedia, as of 2026-10-10 (CC BY-SA)",
+  "Filings and XBRL data: U.S. Securities and Exchange Commission, EDGAR (public domain)"
+ ],
+ "trace_path": "results/stability/b/0000753308.trace.jsonl",
+ "warnings": []
+}

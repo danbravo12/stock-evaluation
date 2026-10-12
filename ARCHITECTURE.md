@@ -200,7 +200,7 @@ Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). Measured over **
 | Repairs (rationale rewrites 1 call, constrained retries up to 3 turns) | 1.1 | Only items the Critic flagged, once (ADR-052): 24 items flagged over 25 companies, 18 repaired, 6 left as warnings |
 | **Total** | **11.0 (range 7 to 16)** | Mean 28.2k input + 2.4k output tokens, **notional $0.0106 per company** ($0.26 for the 25), actual $0.00. By agent family (repairs count under the qualitative agent): qualitative 8.2 calls and $0.0071, Explainer 1.1 and $0.0014, Critic 1.6 and $0.0021 |
 
-**Stability runs (ADR-072) are separate from these figures.** A paraphrase run (the qualitative agent and the Critic with the question and verdict definitions reworded; the Explainer's output is reused) costs 9.1 requests per company (227 for the 25), notional $0.0084; two paraphrases make the qualitative part of a refresh about three times as large. They run once per refresh and may be skipped; a refresh with both costs about 25 + 2 × 9.1 = 29 requests for a company.
+**Stability runs (ADR-072) are separate from these figures.** A paraphrase run (the qualitative agent and the Critic with the question and verdict definitions reworded; the Explainer's output is reused) costs 9 to 10 requests per company (227 and 250 for the 25), notional $0.0084 and $0.0092; two paraphrases make the qualitative part of a refresh about three times as large. They run once per refresh and may be skipped; a refresh with both costs about 11 + 2 × 9.5 = 30 requests for a company.
 
 | Mode | Cost per company | Full S&P 500 | Time |
 |---|---|---|---|
@@ -213,7 +213,7 @@ Model: Gemini 3.1 Flash-Lite for all runs (ADR-015 as amended). Measured over **
 - **Demo shows both:** "actual $0.00x (free tier + paid) · notional $0.0xx at paid rates", from the ledger, recorded at run time.
 
 - **Actual cost:** $0.00 per analysis on the Gemini Flash-Lite free tier.
-- **Throughput:** at about 490 requests a day (500 less the safety margin), 25 companies took 199 requests for the v2.1 refresh and re-record (some answered from the response cache, because unchanged prompts give the same request), so roughly 45 companies a day at 11.0 requests each; the full S&P 500 in about 11 days. With both paraphrase runs a day covers about 17 companies. The numeric scorecard for all 500 companies needs no LLM and runs in minutes.
+- **Throughput:** at about 490 requests a day (500 less the safety margin), 25 companies took 199 requests for the v2.1 refresh and re-record (some answered from the response cache, because unchanged prompts give the same request), so roughly 45 companies a day at 11.0 requests each; the full S&P 500 in about 11 days. With both paraphrase runs a day covers about 16 companies. The numeric scorecard for all 500 companies needs no LLM and runs in minutes.
 
 ---
 

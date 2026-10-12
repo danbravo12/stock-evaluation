@@ -1,5 +1,5 @@
 {
- "schema_version": "1.2",
+ "schema_version": "1.3",
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "MSFT-live",
@@ -1787,7 +1787,16 @@
     "notional_cost_usd": 0.00178125
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence found",
+     "a": "evidence found",
+     "b": "evidence found"
+    }
+   },
+   "reliability": null,
+   "reliability_basis": null
   },
   {
    "finding": {
@@ -1873,7 +1882,19 @@
     "notional_cost_usd": 0.0016810000000000002
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "borderline",
+    "verdicts": {
+     "main": "evidence weak",
+     "a": "insufficient evidence",
+     "b": "evidence weak"
+    }
+   },
+   "reliability": "low",
+   "reliability_basis": {
+    "changed": 11,
+    "compared": 25
+   }
   },
   {
    "finding": {
@@ -1935,7 +1956,19 @@
     "notional_cost_usd": 0.0017274999999999999
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence weak",
+     "a": "evidence weak",
+     "b": "evidence weak"
+    }
+   },
+   "reliability": "low",
+   "reliability_basis": {
+    "changed": 18,
+    "compared": 25
+   }
   },
   {
    "finding": {
@@ -1978,7 +2011,9 @@
     "notional_cost_usd": 0.0030612499999999997
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": null,
+   "reliability": null,
+   "reliability_basis": null
   }
  ],
  "passages": {

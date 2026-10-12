@@ -1,5 +1,5 @@
 {
- "schema_version": "1.2",
+ "schema_version": "1.3",
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "JPM-replay",
@@ -1186,7 +1186,9 @@
      "a": "evidence found",
      "b": "evidence found"
     }
-   }
+   },
+   "reliability": null,
+   "reliability_basis": null
   },
   {
    "finding": {
@@ -1254,6 +1256,11 @@
      "a": "insufficient evidence",
      "b": "insufficient evidence"
     }
+   },
+   "reliability": "low",
+   "reliability_basis": {
+    "changed": 11,
+    "compared": 25
    }
   },
   {
@@ -1335,6 +1342,11 @@
      "a": "insufficient evidence",
      "b": "evidence weak"
     }
+   },
+   "reliability": "low",
+   "reliability_basis": {
+    "changed": 18,
+    "compared": 25
    }
   },
   {
@@ -1423,7 +1435,9 @@
      "a": "evidence found",
      "b": "evidence found"
     }
-   }
+   },
+   "reliability": null,
+   "reliability_basis": null
   }
  ],
  "passages": {

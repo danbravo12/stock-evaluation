@@ -1,5 +1,5 @@
 {
- "schema_version": "1.2",
+ "schema_version": "1.3",
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "AMAT-live",
@@ -1791,7 +1791,16 @@
     "notional_cost_usd": 0.002657
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence found",
+     "a": "evidence found",
+     "b": "evidence found"
+    }
+   },
+   "reliability": null,
+   "reliability_basis": null
   },
   {
    "finding": {
@@ -1850,7 +1859,19 @@
     "notional_cost_usd": 0.0007115
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence weak",
+     "a": "evidence weak",
+     "b": "evidence weak"
+    }
+   },
+   "reliability": "low",
+   "reliability_basis": {
+    "changed": 11,
+    "compared": 25
+   }
   },
   {
    "finding": {
@@ -1912,7 +1933,19 @@
     "notional_cost_usd": 0.00082125
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence found",
+     "a": "evidence found",
+     "b": "evidence found"
+    }
+   },
+   "reliability": "low",
+   "reliability_basis": {
+    "changed": 18,
+    "compared": 25
+   }
   },
   {
    "finding": {
@@ -2000,7 +2033,16 @@
     "notional_cost_usd": 0.004398249999999999
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "not assessed",
+     "a": "evidence weak",
+     "b": "evidence weak"
+    }
+   },
+   "reliability": null,
+   "reliability_basis": null
   }
  ],
  "passages": {

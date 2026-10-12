@@ -1,5 +1,5 @@
 {
- "schema_version": "1.2",
+ "schema_version": "1.3",
  "disclaimer": "Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.",
  "run": {
   "run_id": "O-live",
@@ -1167,7 +1167,9 @@
     "notional_cost_usd": 0.0029792499999999997
    },
    "critic_status": "passed_after_retry",
-   "stability": null
+   "stability": null,
+   "reliability": null,
+   "reliability_basis": null
   },
   {
    "finding": {
@@ -1238,7 +1240,19 @@
     "notional_cost_usd": 0.0007165
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence weak",
+     "a": "evidence weak",
+     "b": "evidence weak"
+    }
+   },
+   "reliability": "low",
+   "reliability_basis": {
+    "changed": 11,
+    "compared": 25
+   }
   },
   {
    "finding": {
@@ -1300,7 +1314,19 @@
     "notional_cost_usd": 0.00081225
    },
    "critic_status": "passed",
-   "stability": null
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence weak",
+     "a": "evidence weak",
+     "b": "evidence weak"
+    }
+   },
+   "reliability": "low",
+   "reliability_basis": {
+    "changed": 18,
+    "compared": 25
+   }
   },
   {
    "finding": {
@@ -1381,7 +1407,16 @@
     "notional_cost_usd": 0.0020092499999999998
    },
    "critic_status": "passed_after_retry",
-   "stability": null
+   "stability": {
+    "status": "stable",
+    "verdicts": {
+     "main": "evidence found",
+     "a": "evidence found",
+     "b": "evidence found"
+    }
+   },
+   "reliability": null,
+   "reliability_basis": null
   }
  ],
  "passages": {

@@ -8,26 +8,26 @@ Research output, not financial advice. The qualitative agent and the Critic were
 |---|---|---|---|---|---|
 | main (v2.1) | 25 | 274 | 703,974 | 59,136 | $0.265 |
 | paraphrase A | 25 | 227 | 571,773 | 44,728 | $0.210 |
-| paraphrase B | 5 | 47 | 126,111 | 8,704 | $0.045 |
+| paraphrase B | 25 | 250 | 637,717 | 46,638 | $0.229 |
 
 ## Flip rate
 
-5 of 25 companies have all three runs (KO, JPM, GOOGL, TSLA, DUK); variant B stops at the free-tier daily limit and continues after midnight Pacific with `scripts/stability_run.py b`, after which this report is regenerated. 20 findings from them; 20 have a status (0 do not: fewer than two assessed verdicts). **8 of 20 are borderline (40%).** Of the borderline findings, 6 move one level (found, weak and insufficient are the levels) and 2 move two levels between runs.
+25 of 25 companies have all three runs (KO, JPM, GOOGL, TSLA, DUK, AMAT, FAST, COST, MSFT, AAPL, NVDA, META, JNJ, PG, MCD, CAT, XOM, BRK-B, UNH, MET, GS, PLD, O, NEE, VST). 100 findings from them; 96 have a status (4 do not: fewer than two assessed verdicts). **33 of 96 are borderline (34%).** Of the borderline findings, 25 move one level (found, weak and insufficient are the levels) and 8 move two levels between runs.
 
 | Criterion | Findings | Borderline | Flip rate |
 |---|---|---|---|
-| Understandable business | 5 | 0 | 0% |
-| Durable competitive advantage | 5 | 2 | 40% |
-| Candid management | 5 | 5 | 100% |
-| Rational capital allocation | 5 | 1 | 20% |
+| Understandable business | 23 | 0 | 0% |
+| Durable competitive advantage | 25 | 11 | 44% |
+| Candid management | 25 | 18 | 72% |
+| Rational capital allocation | 23 | 4 | 17% |
 
 Pairwise: how often two runs give different verdicts for the same finding (findings both assessed).
 
 | Pair | Compared | Different |
 |---|---|---|
-| main vs A | 20 | 5 (25%) |
-| main vs B | 20 | 5 (25%) |
-| A vs B | 20 | 6 (30%) |
+| main vs A | 94 | 22 (23%) |
+| main vs B | 94 | 22 (23%) |
+| A vs B | 94 | 24 (26%) |
 
 **Main against paraphrase A over all 25 companies** (the two runs that exist everywhere): 22 of 94 findings differ (23%).
 
@@ -38,7 +38,7 @@ Pairwise: how often two runs give different verdicts for the same finding (findi
 | Candid management | 25 | 13 (52%) |
 | Rational capital allocation | 22 | 2 (9%) |
 
-Verdicts of "not assessed" across the three runs: 0 of 60.
+Verdicts of "not assessed" across the three runs: 11 of 300.
 
 ## Borderline findings
 
@@ -52,6 +52,31 @@ Verdicts of "not assessed" across the three runs: 0 of 60.
 | TSLA | Candid management | weak | found | weak |
 | TSLA | Rational capital allocation | found | found | insufficient |
 | DUK | Candid management | weak | weak | insufficient |
+| FAST | Durable competitive advantage | insufficient | insufficient | weak |
+| FAST | Candid management | weak | insufficient | found |
+| FAST | Rational capital allocation | weak | found | found |
+| COST | Durable competitive advantage | weak | weak | insufficient |
+| COST | Candid management | insufficient | insufficient | found |
+| MSFT | Durable competitive advantage | weak | insufficient | weak |
+| AAPL | Candid management | insufficient | insufficient | weak |
+| NVDA | Candid management | found | weak | found |
+| META | Durable competitive advantage | insufficient | found | found |
+| META | Candid management | found | weak | found |
+| PG | Candid management | weak | insufficient | found |
+| MCD | Durable competitive advantage | found | insufficient | found |
+| MCD | Candid management | weak | insufficient | insufficient |
+| CAT | Durable competitive advantage | weak | found | found |
+| CAT | Candid management | insufficient | weak | insufficient |
+| XOM | Durable competitive advantage | weak | insufficient | insufficient |
+| XOM | Rational capital allocation | found | found | weak |
+| BRK-B | Candid management | insufficient | weak | insufficient |
+| UNH | Durable competitive advantage | insufficient | insufficient | weak |
+| UNH | Rational capital allocation | weak | found | found |
+| MET | Candid management | weak | insufficient | weak |
+| GS | Candid management | insufficient | found | found |
+| PLD | Candid management | weak | weak | insufficient |
+| NEE | Candid management | insufficient | weak | insufficient |
+| VST | Durable competitive advantage | weak | weak | insufficient |
 
 ## Are the dev-set disagreements the borderline findings?
 
@@ -80,10 +105,10 @@ A criterion whose flip rate (findings whose verdict changed, of those with at le
 
 | Criterion | Compared | Changed | Flip rate | Marked |
 |---|---|---|---|---|
-| Understandable business | 5 | 0 | 0% | no |
-| Durable competitive advantage | 5 | 2 | 40% | low reliability |
-| Candid management | 5 | 5 | 100% | low reliability |
-| Rational capital allocation | 5 | 1 | 20% | no |
+| Understandable business | 23 | 0 | 0% | no |
+| Durable competitive advantage | 25 | 11 | 44% | low reliability |
+| Candid management | 25 | 18 | 72% | low reliability |
+| Rational capital allocation | 23 | 4 | 17% | no |
 
 The six differences under prompt v2 (ADR-069), looked up in these runs:
 
