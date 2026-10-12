@@ -45,6 +45,12 @@ export function borderlineSentence(st) {
   return x === y ? `When the question was reworded, the verdict came out as ${x} in both other runs.`
     : `When the question was reworded, the verdict came out as ${x} and ${y} in two other runs.`;
 }
+// A criterion whose verdicts often change with the wording (config/reliability.json): `q` is a result's qualitative item.
+export function reliabilityNote(q) {
+  if (!q || q.reliability !== "low" || !q.reliability_basis) return null;
+  const b = q.reliability_basis;
+  return `Low reliability: across all analysed companies, this verdict changed when the question was reworded for ${b.changed} of ${b.compared} companies.`;
+}
 export function stabilityRows(st) {
   const w = (v) => WORD[v] || v;
   return [["Main run", w(st.verdicts.main)], ["Question reworded, version A", w(st.verdicts.a)], ["Question reworded, version B", w(st.verdicts.b)]];

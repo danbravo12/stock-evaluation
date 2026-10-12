@@ -1,6 +1,6 @@
 import { el, fail, manifest, footer } from "./common.js";
 // A small, safe Markdown viewer for the repository documents linked from "How it works". It builds DOM nodes and never parses HTML.
-const ALLOWED = ["evaluation_notes", "DECISIONS", "PROCESS", "ARCHITECTURE", "universe_scorecard_report", "qualitative_report", "critic_report", "coverage_report"];
+const ALLOWED = ["evaluation_notes", "DECISIONS", "PROCESS", "ARCHITECTURE", "universe_scorecard_report", "qualitative_report", "critic_report", "coverage_report", "stability_report"];
 function inline(text) {
   const out = [];
   const re = /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^)]+\))/g;

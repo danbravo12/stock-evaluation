@@ -54,6 +54,11 @@
 <li><b>Offline tests.</b> Close to 400 automated tests run without a network connection, on recorded SEC data and recorded model responses.</li>
 </ul>
 
+<h2 id="wording">How often does a verdict depend on the wording?</h2>
+<p>Each of the four judgement questions was asked three times about every analysed company, with the question and the definitions of the verdicts worded three ways that mean the same. The table shows, for each question, how often the verdict changed. A question at or above the threshold is marked <b>Low reliability</b> on every company page.</p>
+<div id="wording-table" class="tablewrap" tabindex="0" role="region" aria-label="Flip rate per question"><p class="muted">Loading the figures…</p></div>
+<p class="small muted" id="wording-note"></p>
+
 <h2>What it gets wrong</h2>
 <ol>
 <li><b>The judgement verdicts lean generous.</b> Where the reviewer disagreed with the agent, the agent had been too positive; the Critic catches most but not all of these.</li>
@@ -93,6 +98,17 @@
 </ul>
 </main>
 <footer class="site"><div class="wrap"><p>Data sources: U.S. Securities and Exchange Commission (EDGAR) and a Wikipedia constituents list.</p><p><a href="https://github.com/danbravo12/stock-evaluation" rel="noopener">Code and recorded data on GitHub</a></p></div></footer>
-<script type="module">import { manifest, footer } from "./assets/js/common.js"; manifest().then(footer);</script>
+<script type="module">
+import { el, tryJSON, manifest, footer, QUAL } from "./assets/js/common.js";
+manifest().then(footer);
+tryJSON("data/stability.json").then((st) => {
+  const box = document.getElementById("wording-table");
+  if (!st || !st.companies) { box.replaceChildren(el("p", { class: "muted", text: "These figures are not published yet." })); return; }
+  const rows = Object.entries(st.criteria).map(([c, v]) => el("tr", {}, el("td", { text: QUAL[c] || c }), el("td", { text: String(v.compared) }), el("td", { text: String(v.changed) }),
+    el("td", { text: v.rate === null ? "n/a" : Math.round(v.rate * 100) + "%" }), el("td", { text: v.low ? "Low reliability" : "No note" })));
+  box.replaceChildren(el("table", {}, el("thead", {}, el("tr", {}, ["Question", "Companies compared", "Verdict changed", "Share", "On the company page"].map((h) => el("th", { text: h })))), el("tbody", {}, rows)));
+  document.getElementById("wording-note").textContent = `Threshold for the note: ${Math.round(st.threshold * 100)}% or more. ${st.companies} companies have all three runs.`;
+});
+</script>
 </body>
 </html>

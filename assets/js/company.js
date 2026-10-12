@@ -1,4 +1,4 @@
-import { el, getJSON, tryJSON, fail, manifest, footer, mark, status, borderlineSentence, isBorderline, stabilityRows, effectiveLabel, figureSummary, WORD, CRITERIA, NAMES, QUAL, usd, perShare, pct, figures, plainReason, secLink, secOk, measureName } from "./common.js";
+import { el, getJSON, tryJSON, fail, manifest, footer, mark, status, borderlineSentence, isBorderline, reliabilityNote, stabilityRows, effectiveLabel, figureSummary, WORD, CRITERIA, NAMES, QUAL, usd, perShare, pct, figures, plainReason, secLink, secOk, measureName } from "./common.js";
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -52,11 +52,13 @@ function lineOf(c, cls) {
   return (plainReason(c, cls) || `Test: ${c.threshold}.`) + (sum && !plainReason(c, cls) ? ` ${sum}.` : "");
 }
 
-function critRow(id, name, label, line, warn, qual, borderline) {
+function critRow(id, name, label, line, warn, qual, borderline, reliability) {
   const b = el("button", { class: "crit", "data-q": qual ? "1" : false, type: "button", "aria-expanded": "false", "aria-controls": "pane", "data-id": id, onclick: () => select(id, true) },
     el("span", {}, el("span", { class: "t" }, id.length <= 3 ? el("span", { class: "id", text: id }) : null, name), el("br"), status(label),
-      borderline ? el("span", { class: "borderline", text: "Borderline", title: borderline }) : null),
+      borderline ? el("span", { class: "borderline", text: "Borderline", title: borderline }) : null,
+      reliability ? el("span", { class: "borderline low", text: "Low reliability", title: reliability }) : null),
     el("span", { class: "line", text: line }),
+    reliability ? el("span", { class: "warn rel", text: reliability }) : null,
     warn ? el("span", { class: "warn", text: warn }) : null);
   return el("li", { id: `row-${id}` }, b);
 }
@@ -80,7 +82,7 @@ function renderList() {
     ul.append(el("li", { id: "analysis" }, el("h3", { text: "Buffett's four judgement tests, read from the annual report by the agent" })));
     for (const q of model.qual) {
       const f = q.finding, st = q.critic_status;
-      ul.append(critRow(f.criterion, QUAL[f.criterion] || f.criterion, f.verdict, findingText(f), st === "warning" ? "The Critic still objects to this rationale. Open it to see why." : null, true, borderlineSentence(q.stability)));
+      ul.append(critRow(f.criterion, QUAL[f.criterion] || f.criterion, f.verdict, findingText(f), st === "warning" ? "The Critic still objects to this rationale. Open it to see why." : null, true, borderlineSentence(q.stability), reliabilityNote(q)));
     }
   }
 }
@@ -170,6 +172,7 @@ function passageView(cit) {
 function qualPane(q) {
   const f = q.finding, pane = [];
   pane.push(el("h2", { text: QUAL[f.criterion] || f.criterion }), el("p", {}, status(f.verdict)));
+  if (reliabilityNote(q)) pane.push(el("p", { class: "notebox" }, el("span", { class: "borderline low", text: "Low reliability" }), " ", reliabilityNote(q).replace(/^Low reliability: /, "")));
   pane.push(el("p", { text: findingText(f) }));
   if (f.verdict !== "not assessed") {
     if (!f.citations.length) pane.push(el("p", { class: "muted", text: "No sentence in the annual report is cited for this verdict: the filing, as searched, does not show it." }));

@@ -81,6 +81,8 @@ details.fold summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 .crit .t { font-weight: 600; } .crit .id { color: var(--muted); font-weight: 400; margin-right: 6px; }
 .crit .line { grid-column: 2; }
 .borderline { display: inline-block; margin-left: 8px; padding: 0 7px; border: 1px solid var(--muted); border-radius: 10px; font-size: 0.78rem; font-weight: 600; color: var(--muted); vertical-align: 1px; }
+.borderline.low { border-color: var(--fail); color: var(--fail); }
+.crit .warn.rel { color: var(--muted); }
 .crit .warn { grid-column: 2; color: var(--fail); font-size: 0.9rem; }
 .pane { background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--blue); padding: 18px 20px 22px; position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow: auto; animation: open 140ms ease-out; }
 .pane h2 { margin: 0 0 6px; font-size: var(--s1); } .pane h3 { font-size: 1rem; margin: 1.3em 0 0.4em; }
