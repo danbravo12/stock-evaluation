@@ -94,9 +94,11 @@ def criterion_stats(per_company: list[dict], threshold: float | None = None) -> 
     return out
 
 
-def attach(ciks: list[str], results_dir: Path | None = None, stability_dir: Path | None = None, threshold: float | None = None) -> dict[str, dict]:
+def attach(ciks: list[str], results_dir: Path | None = None, stability_dir: Path | None = None, threshold: float | None = None,
+           human: dict[str, tuple[int, int]] | None = None) -> dict[str, dict]:
     """Write `stability` onto every qualitative item of each main result whose two variant results exist, then the criterion reliability (computed over all those
-    companies) onto the items of every given result. Companies with a missing variant keep no stability record. Returns the stability per company."""
+    companies) onto the items of every given result. Companies with a missing variant keep no stability record. `human` maps a criterion to
+    (held-out findings the agent got right, held-out findings labelled) and is stored in the reliability basis. Returns the stability per company."""
     out = {cik: st for cik in ciks if (st := stability_for(cik, results_dir, stability_dir)) is not None}
     stats = criterion_stats(list(out.values()), threshold)
     for cik in ciks:
@@ -111,7 +113,8 @@ def attach(ciks: list[str], results_dir: Path | None = None, stability_dir: Path
                 q.stability = out[cik].get(c)
             low = stats[c]["low"]
             q.reliability = "low" if low else None
-            q.reliability_basis = ReliabilityBasis(changed=stats[c]["changed"], compared=stats[c]["compared"]) if low else None
+            q.reliability_basis = ReliabilityBasis(changed=stats[c]["changed"], compared=stats[c]["compared"], human_agreed=(human or {}).get(c, (None, None))[0],
+                                                   human_of=(human or {}).get(c, (None, None))[1]) if low else None
         path.write_text(result_json(res), encoding="utf-8")
     return out
 

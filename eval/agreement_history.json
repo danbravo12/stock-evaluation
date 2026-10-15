@@ -1,0 +1,8 @@
+{
+ "_notes": "Agreement of the qualitative agent with the human labels on the five dev companies (20 items) at each prompt version. Typed once from the recorded runs (ADR-050, ADR-069, ADR-069 amendment); `current` is recomputed from the results by eval/agreement.py.",
+ "steps": [
+  {"version": "v1.1", "agree": 19, "of": 20, "what": "the wording the rubric was tuned on", "source": "ADR-050"},
+  {"version": "v2", "agree": 14, "of": 20, "what": "a citation-length rule and the Explainer's examples changed; nothing about judgement", "source": "ADR-069"},
+  {"version": "v2.1", "agree": 15, "of": 20, "what": "a latest-fiscal-year rule and clearer citation errors; final verdicts after the Critic", "source": "ADR-069 amendment"}
+ ]
+}

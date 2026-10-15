@@ -17,6 +17,7 @@ from pathlib import Path
 
 from engine.agents.critic import banned_hits, load_banned
 from engine.rankings import OUTPUT_PATH, Rankings
+from engine.evaluation import evaluation_data
 from engine.stability import criterion_stats, load_threshold
 from engine.trace_render import critic_notes, render_trace
 from engine.report import PublishGateError, finnhub_fields
@@ -30,7 +31,7 @@ DOCS = {"evaluation_notes": "docs/evaluation_notes.md", "DECISIONS": "DECISIONS.
 SITE_CONFIG = REPO_ROOT / "config" / "site.json"
 SHOWCASE_CONFIG = REPO_ROOT / "config" / "showcase.json"
 SCORE_KEYS = ("ticker", "cik", "name", "gics_sector", "gics_sub_industry", "sector_class", "sector_notes", "source_notes", "fetched_at", "score")
-PAGES = ["index.html", "company.html", "trace.html", "how-it-works.html", "doc.html"]
+PAGES = ["index.html", "company.html", "trace.html", "how-it-works.html", "evaluation.html", "doc.html"]
 SEC_URL = re.compile(r"^https://([a-z]+\.)?sec\.gov/")
 
 
@@ -194,6 +195,7 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
         threshold = load_threshold()
         put("stability.json", {"threshold": threshold, "companies": sum(any(v for v in row.values()) for row in stability_rows),
                               "criteria": criterion_stats(stability_rows, threshold)})
+        put("evaluation.json", evaluation_data(stability_rows))
         showcase = showcase_data(rankings)
         put("showcase.json", showcase)
         manifest = {"build_commit": commit if commit is not None else git_commit(), "data_as_of": rankings.data_as_of.model_dump(), "attribution": rankings.attribution,
@@ -265,7 +267,7 @@ def check_site(out: Path) -> None:
                 raise LinkError(f"{page.name}: {ref} does not exist in the built site")
     for js in sorted((out / "assets/js").glob("*.js")):
         text = js.read_text(encoding="utf-8")
-        for ref in set(re.findall(r'["`](data/[A-Za-z0-9_./-]+\.json)["`]', text)) | set(re.findall(r'["`]((?:index|company|trace|how-it-works|doc)\.html)', text)):
+        for ref in set(re.findall(r'["`](data/[A-Za-z0-9_./-]+\.json)["`]', text)) | set(re.findall(r'["`]((?:index|company|trace|how-it-works|evaluation|doc)\.html)', text)):
             if not (out / ref).exists():
                 raise LinkError(f"{js.name}: {ref} does not exist in the built site")
 

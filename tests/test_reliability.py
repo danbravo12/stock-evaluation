@@ -25,7 +25,7 @@ class TestThreshold(unittest.TestCase):
     def test_the_threshold_lives_in_config(self):
         self.assertEqual(load_threshold(), 0.30)
         self.assertEqual(json.loads((REPO_ROOT / "config/reliability.json").read_text())["low_flip_rate_threshold"], 0.30)
-        self.assertEqual(SCHEMA_VERSION, "1.3")
+        self.assertEqual(SCHEMA_VERSION, "1.4")
 
     def test_computation_counts_only_findings_with_a_status(self):
         companies = [{C0: st("stable"), C1: st("borderline"), C2: st("borderline"), C3: None},
@@ -67,14 +67,14 @@ class TestAttachWritesReliability(Dirs):
         self.variant("a", {C2: other})
         self.variant("b", {})
         self.second_company()
-        attach(["0000021344", "0000099999"], self.main, self.stab, 0.30)
+        attach(["0000021344", "0000099999"], self.main, self.stab, 0.30, human={C2: (0, 6)})
         for cik in ("0000021344", "0000099999"):
             res = json.loads((self.main / f"{cik}.json").read_text())
             Result.model_validate(res)
-            self.assertEqual(res["schema_version"], "1.3")
+            self.assertEqual(res["schema_version"], "1.4")
             for q in res["qualitative"]:
                 if q["finding"]["criterion"] == C2:
-                    self.assertEqual((q["reliability"], q["reliability_basis"]), ("low", {"changed": 1, "compared": 1}))
+                    self.assertEqual((q["reliability"], q["reliability_basis"]), ("low", {"changed": 1, "compared": 1, "human_agreed": 0, "human_of": 6}))
                 else:
                     self.assertIsNone(q["reliability"])
                     self.assertIsNone(q["reliability_basis"])
@@ -107,20 +107,22 @@ class TestCommitted(unittest.TestCase):
         stats = criterion_stats(rows)
         for r in results:
             for q in r["qualitative"]:
-                if r["schema_version"] == "1.3":
+                if r["schema_version"] in ("1.3", "1.4"):
                     low = stats[q["finding"]["criterion"]]["low"]
                     self.assertEqual(q["reliability"], "low" if low else None, r["plan"]["ticker"])
                     if low:
                         b = stats[q["finding"]["criterion"]]
-                        self.assertEqual(q["reliability_basis"], {"changed": b["changed"], "compared": b["compared"]})
+                        self.assertEqual({k: q["reliability_basis"][k] for k in ("changed", "compared")}, {"changed": b["changed"], "compared": b["compared"]})
+                        self.assertIsNotNone(q["reliability_basis"]["human_of"])
 
 
 @unittest.skipUnless(NODE, "node is not installed")
 class TestNoteRenders(unittest.TestCase):
     def test_only_low_items_get_the_note(self):
-        out = run_node_note([{"reliability": "low", "reliability_basis": {"changed": 13, "compared": 25}}, {"reliability": None, "reliability_basis": None}, {}, {"reliability": "low"}])
-        self.assertEqual(out[0], "Low reliability: across all analysed companies, this verdict changed when the question was reworded for 13 of 25 companies.")
-        self.assertEqual(out[1:], [None, None, None])  # not low, empty, or low without its basis
+        out = run_node_note([{"reliability": "low", "reliability_basis": {"changed": 13, "compared": 25}}, {"reliability": "low", "reliability_basis": {"changed": 13, "compared": 25, "human_agreed": 2, "human_of": 6}}, {"reliability": None, "reliability_basis": None}, {}, {"reliability": "low"}])
+        self.assertEqual(out[0], "Low reliability: this verdict changed with the question's wording for 13 of 25 companies.")
+        self.assertEqual(out[1], "Low reliability: this verdict changed with the question's wording for 13 of 25 companies, and agreed with a human reviewer on 2 of 6 held-out companies.")
+        self.assertEqual(out[2:], [None, None, None])  # not low, empty, or low without its basis
 
 
 class TestPublishedFigures(unittest.TestCase):

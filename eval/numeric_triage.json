@@ -1,0 +1,26 @@
+{
+ "_notes": "What the whole-index numeric run found and what was fixed (docs/evaluation_notes.md items 19 and 20, ADR-059 to ADR-064). Typed once from those notes; the label counts (including the data gaps that remain) and the remaining flags on the page are computed from eval/universe_label_counts.json and eval/universe_diagnostics.json.",
+ "fixed": [
+  {
+   "what": "revenue taken from a component for some years",
+   "metric": "companies with a revenue jump of 3x or more",
+   "before": 35,
+   "after": 30,
+   "adr": "ADR-061"
+  },
+  {
+   "what": "banks and brokers without a revenue tag",
+   "metric": "companies whose G1 changed from data gap to pass",
+   "before": 7,
+   "after": 0,
+   "adr": "ADR-061"
+  },
+  {
+   "what": "Prologis and Dow dividends read from the wrong concept",
+   "metric": "G4 labels corrected from fail to partial pass",
+   "before": 2,
+   "after": 0,
+   "adr": "ADR-060"
+  }
+ ]
+}

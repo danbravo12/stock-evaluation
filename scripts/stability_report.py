@@ -121,7 +121,8 @@ def main() -> None:
     tickers = json.loads((REPO_ROOT / "config" / "test_tickers.json").read_text())["tickers"] + [e["symbol"] for e in json.loads((REPO_ROOT / "config" / "showcase.json").read_text())["showcase"]]
     companies = [(t, universe.primary_of(universe.row_for(t)).cik) for t in tickers]
     if a.attach:
-        done = attach([c for _, c in companies])
+        agreement = json.loads((REPO_ROOT / "eval" / "agreement_results.json").read_text())["heldout"]["per_criterion"]
+        done = attach([c for _, c in companies], human={c: (v["exact"], v["n"]) for c, v in agreement.items()})
         print(f"stability attached to {len(done)} results")
     OUT.write_text(render(companies), encoding="utf-8")
     print(f"wrote {OUT.relative_to(REPO_ROOT)}")

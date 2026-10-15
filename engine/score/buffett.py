@@ -4,6 +4,7 @@ from __future__ import annotations
 from engine.contracts import CriterionResult
 from engine.score.common import Facts, avg, gap, missing_text, not_applicable, result, window
 from engine.score.graham import FINANCIAL
+from engine.score.thresholds import T
 
 
 def b1_return_on_equity(f: Facts, as_of: int) -> CriterionResult:
@@ -17,8 +18,8 @@ def b1_return_on_equity(f: Facts, as_of: int) -> CriterionResult:
     if any(v.value <= 0 for v in equity.values()):
         return result("B1", name, "not_meaningful", thr, years=w, reason="stockholders' equity is zero or negative in the window", inputs=inputs)
     roe = {y: ni[y].value / avg([equity[y - 1].value, equity[y].value]) for y in w}  # on average equity
-    years_ok = [y for y in w if roe[y] >= 0.15]
-    return result("B1", name, "pass" if len(years_ok) >= 7 else "fail", thr, figures={"years_at_or_above_15pct": len(years_ok)},
+    years_ok = [y for y in w if roe[y] >= T().b1_roe]
+    return result("B1", name, "pass" if len(years_ok) >= T().b1_min_years else "fail", thr, figures={"years_at_or_above_15pct": len(years_ok)},
                   by_year=roe, years=w, inputs=inputs)
 
 
@@ -31,8 +32,8 @@ def b2_conservative_debt(f: Facts, as_of: int, sector: str) -> CriterionResult:
     if debt is None or len(ni) < 3:
         return gap("B2", name, thr, missing_text({"long_term_debt": [] if debt else [as_of], "net_income": [y for y in last3 if y not in ni]}), [as_of])
     avg_ni = avg(v.value for v in ni.values())
-    ok = avg_ni > 0 and debt.value <= 4 * avg_ni  # no positive earnings: fail, figures shown
-    return result("B2", name, "pass" if ok else "fail", thr, figures={"long_term_debt": debt.value, "avg_net_income_3y": avg_ni, "max_debt": 4 * avg_ni},
+    ok = avg_ni > 0 and debt.value <= T().b2_debt_multiple * avg_ni  # no positive earnings: fail, figures shown
+    return result("B2", name, "pass" if ok else "fail", thr, figures={"long_term_debt": debt.value, "avg_net_income_3y": avg_ni, "max_debt": T().b2_debt_multiple * avg_ni},
                   years=last3, inputs=[("long_term_debt", debt)] + [("net_income", ni[y]) for y in last3])
 
 
@@ -47,7 +48,7 @@ def b3_stable_margins(f: Facts, as_of: int, sector: str) -> CriterionResult:
         return gap("B3", name, thr, missing_text({"operating_income": miss_op, "revenue": miss_rev}), sorted(set(miss_op + miss_rev)))
     margin = {y: op[y].value / rev[y].value for y in w}
     avg10, avg3 = avg(margin.values()), avg(margin[y] for y in w[-3:])
-    ok = all(m > 0 for m in margin.values()) and avg3 >= 0.9 * avg10
+    ok = all(m > 0 for m in margin.values()) and avg3 >= T().b3_margin_ratio * avg10
     return result("B3", name, "pass" if ok else "fail", thr, figures={"avg_margin_10y": avg10, "avg_margin_3y": avg3, "ratio": avg3 / avg10 if avg10 else None},
                   by_year=margin, years=w, inputs=[(m, d[y]) for y in w for m, d in (("operating_income", op), ("revenue", rev))])
 
@@ -65,7 +66,7 @@ def b4_owner_earnings(f: Facts, as_of: int, sector: str) -> CriterionResult:
     positive = sum(v > 0 for v in oe.values())
     first3, last3 = avg(oe[y] for y in w[:3]), avg(oe[y] for y in w[-3:])
     dep_only = [y for y in w if parts["depreciation_amortization"][0][y].source_concepts == ["us-gaap:Depreciation"]]
-    r = result("B4", name, "pass" if positive >= 8 and last3 > first3 else "fail", thr,
+    r = result("B4", name, "pass" if positive >= T().b4_min_positive_years and last3 > first3 else "fail", thr,
                figures={"years_positive": positive, "avg_first_3y": first3, "avg_last_3y": last3, "years_with_depreciation_only": dep_only},
                by_year=oe, years=w, inputs=[(m, p[0][y]) for y in w for m, p in parts.items()])
     if dep_only:

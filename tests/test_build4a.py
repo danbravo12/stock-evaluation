@@ -140,7 +140,7 @@ class TestSelfContainedResults(unittest.TestCase):
     def test_every_committed_result_carries_the_text_of_each_cited_passage(self):
         for f in sorted((REPO_ROOT / "results").glob("[0-9]*[0-9].json")):
             res = json.loads(f.read_text())
-            self.assertIn(res["schema_version"], ("1.2", "1.3"), f.name)  # 1.3 once the stability attach has written the criterion reliability
+            self.assertIn(res["schema_version"], ("1.2", "1.3", "1.4"), f.name)  # 1.3 once the stability attach has written the criterion reliability
             for q in res["qualitative"]:
                 for c in q["finding"]["citations"]:
                     p = res["passages"][c["passage_id"]]

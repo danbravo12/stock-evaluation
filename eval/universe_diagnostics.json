@@ -1,0 +1,10 @@
+{
+ "scored": 498,
+ "companies_with": {
+  "revenue_jump": 28,
+  "eps_sign_mismatch": 12,
+  "restatement_over_10pct": 283,
+  "g4_fail_with_13_or_more_paid_years": 32,
+  "a_data_gap_outside_g6_g7": 211
+ }
+}

@@ -16,7 +16,7 @@ from engine.contracts import (SEC_SOURCE, CriticReport, DataBundle, Explanation,
 from engine.settings import REPO_ROOT
 from engine.successors import NO_ANNUAL_REPORT
 
-SCHEMA_VERSION = "1.3"  # 1.1: sector notes and sector basis (ADR-058). 1.2: cited passage texts and per-finding stability (ADR-069, ADR-070). 1.3: criterion reliability (ADR-072 amendment). All additive
+SCHEMA_VERSION = "1.4"  # 1.1: sector notes and sector basis (ADR-058). 1.2: cited passage texts and per-finding stability (ADR-069, ADR-070). 1.3: criterion reliability (ADR-072 amendment). 1.4: held-out human agreement in the reliability basis (ADR-073). All additive
 DISCLAIMER = ("Research tool, not financial advice. Scores and findings describe public filings; they are not recommendations to buy, sell or hold any security. "
               "Qualitative findings are produced by a language model, checked by code and a second model pass, and can be wrong.")
 SCHEMA_PATH = REPO_ROOT / "schema" / "result.schema.json"
@@ -76,6 +76,8 @@ class ReliabilityBasis(BaseModel):
 
     changed: int
     compared: int
+    human_agreed: int | None = None  # held-out findings of this criterion where the agent agreed with the human label ...
+    human_of: int | None = None      # ... out of this many labelled (eval/heldout_labels.json)
 
 
 class QualItem(BaseModel):

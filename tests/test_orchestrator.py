@@ -106,7 +106,7 @@ class TestOrchestrator(Replay):
         self.assertEqual(sum(a.calls for a in r.cost.by_agent.values()), r.cost.llm_calls)
         self.assertEqual(r.data.price, None)
         self.assertIn(PRICE_GAP, r.data.gaps)
-        self.assertEqual((r.run.mode, r.run.generated_at, r.schema_version), ("replay", None, "1.3"))
+        self.assertEqual((r.run.mode, r.run.generated_at, r.schema_version), ("replay", None, "1.4"))
         self.assertIn("not financial advice", r.disclaimer)
         self.assertTrue(any("Wikipedia" in a and "CC BY-SA" in a for a in r.attribution))
         self.assertTrue(any(s.kind == "sec_filing" and s.url for s in r.sources))

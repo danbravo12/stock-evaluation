@@ -1,0 +1,40 @@
+{
+ "companies": 25,
+ "items": 375,
+ "flagged_first_pass": 24,
+ "flagged_by": {
+  "explanation": 2,
+  "finding": 22
+ },
+ "final": {
+  "passed": 351,
+  "passed_after_retry": 18,
+  "warning": 6
+ },
+ "repairs": {
+  "rationale_rewrite": {
+   "accepted": 8,
+   "rejected_by_recheck": 2
+  },
+  "constrained_retry": {
+   "rejected_by_recheck": 4,
+   "accepted": 8
+  },
+  "explanation_retry": {
+   "accepted": 2
+  }
+ },
+ "findings": 100,
+ "insufficient_evidence": 16,
+ "not_assessed": 3,
+ "dev_repair_made_worse": [
+  {
+   "ticker": "TSLA",
+   "criterion": "candid_management",
+   "before": "evidence found",
+   "after": "evidence weak",
+   "human": "evidence found"
+  }
+ ],
+ "dev_repair_fixed": []
+}

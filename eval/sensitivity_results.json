@@ -1,0 +1,289 @@
+{
+ "delta": 0.2,
+ "companies": 498,
+ "baseline_decided": {
+  "G1": 496,
+  "G2": 371,
+  "G3": 497,
+  "G4": 493,
+  "G5": 405,
+  "B1": 388,
+  "B2": 393,
+  "B3": 341,
+  "B4": 357
+ },
+ "thresholds": [
+  {
+   "name": "g1_min_revenue",
+   "criterion": "G1",
+   "default": 1000000000.0,
+   "testable": true,
+   "minus": {
+    "value": 800000000.0,
+    "changed": 0,
+    "to_fail": 0,
+    "to_pass": 0
+   },
+   "plus": {
+    "value": 1200000000.0,
+    "changed": 0,
+    "to_fail": 0,
+    "to_pass": 0
+   }
+  },
+  {
+   "name": "g2_current_ratio",
+   "criterion": "G2",
+   "default": 2.0,
+   "testable": true,
+   "minus": {
+    "value": 1.6,
+    "changed": 7,
+    "to_fail": 0,
+    "to_pass": 7
+   },
+   "plus": {
+    "value": 2.4,
+    "changed": 10,
+    "to_fail": 10,
+    "to_pass": 0
+   }
+  },
+  {
+   "name": "g2_debt_to_net_current",
+   "criterion": "G2",
+   "default": 1.0,
+   "testable": true,
+   "minus": {
+    "value": 0.8,
+    "changed": 8,
+    "to_fail": 8,
+    "to_pass": 0
+   },
+   "plus": {
+    "value": 1.2,
+    "changed": 6,
+    "to_fail": 0,
+    "to_pass": 6
+   }
+  },
+  {
+   "name": "g2_utility_debt_equity",
+   "criterion": "G2",
+   "default": 2.0,
+   "testable": true,
+   "minus": {
+    "value": 1.6,
+    "changed": 10,
+    "to_fail": 10,
+    "to_pass": 0
+   },
+   "plus": {
+    "value": 2.4,
+    "changed": 2,
+    "to_fail": 0,
+    "to_pass": 2
+   }
+  },
+  {
+   "name": "g5_growth_ratio",
+   "criterion": "G5",
+   "default": 1.33,
+   "testable": true,
+   "minus": {
+    "value": 1.064,
+    "changed": 40,
+    "to_fail": 0,
+    "to_pass": 40
+   },
+   "plus": {
+    "value": 1.596,
+    "changed": 52,
+    "to_fail": 52,
+    "to_pass": 0
+   }
+  },
+  {
+   "name": "g6_max_pe",
+   "criterion": "G6",
+   "default": 15.0,
+   "testable": false,
+   "minus": {
+    "value": 12.0,
+    "changed": 0,
+    "to_fail": 0,
+    "to_pass": 0
+   },
+   "plus": {
+    "value": 18.0,
+    "changed": 0,
+    "to_fail": 0,
+    "to_pass": 0
+   }
+  },
+  {
+   "name": "g7_max_pe_x_pb",
+   "criterion": "G7",
+   "default": 22.5,
+   "testable": false,
+   "minus": {
+    "value": 18.0,
+    "changed": 0,
+    "to_fail": 0,
+    "to_pass": 0
+   },
+   "plus": {
+    "value": 27.0,
+    "changed": 0,
+    "to_fail": 0,
+    "to_pass": 0
+   }
+  },
+  {
+   "name": "b1_roe",
+   "criterion": "B1",
+   "default": 0.15,
+   "testable": true,
+   "minus": {
+    "value": 0.12,
+    "changed": 40,
+    "to_fail": 0,
+    "to_pass": 40
+   },
+   "plus": {
+    "value": 0.18,
+    "changed": 37,
+    "to_fail": 37,
+    "to_pass": 0
+   }
+  },
+  {
+   "name": "b1_min_years",
+   "criterion": "B1",
+   "default": 7,
+   "testable": true,
+   "minus": {
+    "value": 6,
+    "changed": 25,
+    "to_fail": 0,
+    "to_pass": 25
+   },
+   "plus": {
+    "value": 8,
+    "changed": 30,
+    "to_fail": 30,
+    "to_pass": 0
+   }
+  },
+  {
+   "name": "b2_debt_multiple",
+   "criterion": "B2",
+   "default": 4.0,
+   "testable": true,
+   "minus": {
+    "value": 3.2,
+    "changed": 34,
+    "to_fail": 34,
+    "to_pass": 0
+   },
+   "plus": {
+    "value": 4.8,
+    "changed": 34,
+    "to_fail": 0,
+    "to_pass": 34
+   }
+  },
+  {
+   "name": "b3_margin_ratio",
+   "criterion": "B3",
+   "default": 0.9,
+   "testable": true,
+   "minus": {
+    "value": 0.72,
+    "changed": 41,
+    "to_fail": 0,
+    "to_pass": 41
+   },
+   "plus": {
+    "value": 1.08,
+    "changed": 96,
+    "to_fail": 96,
+    "to_pass": 0
+   }
+  },
+  {
+   "name": "b4_min_positive_years",
+   "criterion": "B4",
+   "default": 8,
+   "testable": true,
+   "minus": {
+    "value": 6,
+    "changed": 9,
+    "to_fail": 0,
+    "to_pass": 9
+   },
+   "plus": {
+    "value": 10,
+    "changed": 52,
+    "to_fail": 52,
+    "to_pass": 0
+   }
+  }
+ ],
+ "by_criterion": {
+  "B1": {
+   "decided": 388,
+   "thresholds": 2,
+   "worst_changed": 40,
+   "worst_share": 0.10309278350515463
+  },
+  "B2": {
+   "decided": 393,
+   "thresholds": 1,
+   "worst_changed": 34,
+   "worst_share": 0.08651399491094147
+  },
+  "B3": {
+   "decided": 341,
+   "thresholds": 1,
+   "worst_changed": 96,
+   "worst_share": 0.28152492668621704
+  },
+  "B4": {
+   "decided": 357,
+   "thresholds": 1,
+   "worst_changed": 52,
+   "worst_share": 0.14565826330532214
+  },
+  "G1": {
+   "decided": 496,
+   "thresholds": 1,
+   "worst_changed": 0,
+   "worst_share": 0.0
+  },
+  "G2": {
+   "decided": 371,
+   "thresholds": 3,
+   "worst_changed": 10,
+   "worst_share": 0.026954177897574125
+  },
+  "G3": {
+   "decided": 497,
+   "thresholds": 0,
+   "worst_changed": null,
+   "worst_share": null
+  },
+  "G4": {
+   "decided": 493,
+   "thresholds": 0,
+   "worst_changed": null,
+   "worst_share": null
+  },
+  "G5": {
+   "decided": 405,
+   "thresholds": 1,
+   "worst_changed": 52,
+   "worst_share": 0.12839506172839507
+  }
+ }
+}

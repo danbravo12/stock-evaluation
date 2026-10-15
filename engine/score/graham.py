@@ -2,10 +2,10 @@
 from __future__ import annotations
 
 from engine.contracts import CriterionResult
+from engine.score.thresholds import T
 from engine.score.common import (DIVIDEND_WINDOW_YEARS, Facts, avg, gap, missing_text, not_applicable, result, window)
 
 FINANCIAL = ("bank", "insurer")
-MIN_REVENUE = 1e9
 
 
 def g1_size(f: Facts, as_of: int) -> CriterionResult:
@@ -13,7 +13,7 @@ def g1_size(f: Facts, as_of: int) -> CriterionResult:
     v = f.get("revenue", as_of)
     if v is None:
         return gap("G1", name, thr, f"no revenue for {as_of}", [as_of])
-    return result("G1", name, "pass" if v.value >= MIN_REVENUE else "fail", thr,
+    return result("G1", name, "pass" if v.value >= T().g1_min_revenue else "fail", thr,
                   figures={"revenue": v.value}, years=[as_of], inputs=[("revenue", v)])
 
 
@@ -27,7 +27,7 @@ def g2_financial_strength(f: Facts, as_of: int, sector: str) -> CriterionResult:
         equity = f.get("stockholders_equity", as_of)
         if debt is None or equity is None:
             return gap("G2", name, thr, missing_text({"long_term_debt": [] if debt else [as_of], "stockholders_equity": [] if equity else [as_of]}), [as_of])
-        ok = debt.value <= 2 * equity.value
+        ok = debt.value <= T().g2_utility_debt_equity * equity.value
         return result("G2", name, "pass" if ok else "fail", thr,
                       figures={"long_term_debt": debt.value, "stockholders_equity": equity.value, "debt_to_equity": debt.value / equity.value if equity.value else None},
                       years=[as_of], inputs=[("long_term_debt", debt), ("stockholders_equity", equity)])
@@ -38,7 +38,7 @@ def g2_financial_strength(f: Facts, as_of: int, sector: str) -> CriterionResult:
                                                   "long_term_debt": [] if debt else [as_of]}), [as_of])
     net_current = ca.value - cl.value
     ratio = ca.value / cl.value if cl.value else None
-    ok = ratio is not None and ratio >= 2 and debt.value <= net_current
+    ok = ratio is not None and ratio >= T().g2_current_ratio and debt.value <= T().g2_debt_to_net_current * net_current
     return result("G2", name, "pass" if ok else "fail", thr,
                   figures={"current_ratio": ratio, "long_term_debt": debt.value, "net_current_assets": net_current},
                   years=[as_of], inputs=[("current_assets", ca), ("current_liabilities", cl), ("long_term_debt", debt)])
@@ -117,7 +117,7 @@ def g5_earnings_growth(f: Facts, as_of: int) -> CriterionResult:
     inputs = [("eps_diluted", eps[y]) for y in first + last]
     if start <= 0:
         return result("G5", name, "not_meaningful", thr, figures=figures, years=first + last, reason="starting average EPS is not positive", inputs=inputs)
-    return result("G5", name, "pass" if end >= 1.33 * start else "fail", thr, figures=figures, years=first + last, inputs=inputs)
+    return result("G5", name, "pass" if end >= T().g5_growth_ratio * start else "fail", thr, figures=figures, years=first + last, inputs=inputs)
 
 
 def _price_test(cid, name, thr, f, as_of, price, build):
@@ -134,9 +134,9 @@ def g6_moderate_pe(f: Facts, as_of: int, price: float | None) -> CriterionResult
     name, thr = "Moderate P/E", "price <= 15 x avg diluted EPS of the last 3 years"
 
     def build(price, avg_eps, inputs, years):
-        ok = avg_eps > 0 and price <= 15 * avg_eps  # no positive earnings to support a price: fail
+        ok = avg_eps > 0 and price <= T().g6_max_pe * avg_eps  # no positive earnings to support a price: fail
         return result("G6", name, "pass" if ok else "fail", thr,
-                      figures={"price": price, "avg_eps_3y": avg_eps, "max_price": 15 * avg_eps}, years=years, inputs=inputs)
+                      figures={"price": price, "avg_eps_3y": avg_eps, "max_price": T().g6_max_pe * avg_eps}, years=years, inputs=inputs)
     return _price_test("G6", name, thr, f, as_of, price, build)
 
 
@@ -148,7 +148,7 @@ def g7_price_vs_assets(f: Facts, as_of: int, price: float | None) -> CriterionRe
         if equity is None or shares is None:
             return gap("G7", name, thr, missing_text({"stockholders_equity": [] if equity else [as_of], "diluted_shares": [] if shares else [as_of]}), [as_of])
         bvps = equity.value / shares.value  # book value per share proxy (ADR-034)
-        ok = avg_eps > 0 and bvps > 0 and (price / avg_eps) * (price / bvps) <= 22.5
+        ok = avg_eps > 0 and bvps > 0 and (price / avg_eps) * (price / bvps) <= T().g7_max_pe_x_pb
         return result("G7", name, "pass" if ok else "fail", thr,
                       figures={"price": price, "avg_eps_3y": avg_eps, "book_value_per_share": bvps,
                                "pe": price / avg_eps if avg_eps else None, "pb": price / bvps if bvps else None,

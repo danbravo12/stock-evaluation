@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evaluation</title>
+<meta name="description" content="How well the judgements and scores hold up: agreement with a human reviewer, wording sensitivity, the Critic and threshold sensitivity.">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="preload" href="assets/fonts/public-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site"><div class="wrap">
+  <a class="name" href="index.html">Graham and Buffett research tool</a>
+  <nav aria-label="Main"><a href="index.html">Rankings</a><a href="how-it-works.html">How it works</a><a href="evaluation.html" aria-current="page">Evaluation</a><a href="__REPO_URL__" rel="noopener">Code on GitHub</a></nav>
+</div></header>
+<div class="disclaimer"><div class="wrap"><p><strong>This is a research tool, not financial advice.</strong> It reports what public SEC filings say and which published Graham and Buffett tests a company meets. It does not tell anyone to buy, sell or hold anything.</p></div></div>
+<main id="main" class="wrap">
+<h1>Evaluation</h1>
+<p class="lede">How well do the tool's judgements and scores hold up? This page reports what was measured, including where the tool is weak. Every figure is computed when the site is built from the frozen evaluation files in the repository; none is typed into the page.</p>
+<div id="ev"><p class="muted">Loading the figures…</p></div>
+</main>
+<footer class="site"><div class="wrap"><p>Data sources: U.S. Securities and Exchange Commission (EDGAR) and a Wikipedia constituents list.</p><p><a href="__REPO_URL__" rel="noopener">Code and recorded data on GitHub</a></p></div></footer>
+<script type="module">
+import { el, tryJSON, manifest, footer } from "./assets/js/common.js";
+import { render } from "./assets/js/evaluation.js";
+manifest().then(footer);
+tryJSON("data/evaluation.json").then((d) => document.getElementById("ev").replaceChildren(...(d ? render(d) : [el("p", { class: "muted", text: "The evaluation figures are not published yet." })])));
+</script>
+</body>
+</html>
