@@ -27,6 +27,7 @@ from engine.universe import load_universe
 LEVEL = {"insufficient evidence": 0, "evidence weak": 1, "evidence found": 2}
 DEV_PATH = REPO_ROOT / "eval" / "expected_qualitative.json"
 HELDOUT_PATH = REPO_ROOT / "eval" / "heldout_labels.json"
+FROZEN_PATH = REPO_ROOT / "eval" / "agreement_results.json"
 
 
 def weighted_kappa(pairs: list[tuple[int, int]], levels: int = 3) -> float | None:
@@ -96,9 +97,40 @@ def load_agent_verdicts(tickers, results_dir: Path) -> dict[str, dict[str, str]]
     return out
 
 
+def load_agent_items(tickers, results_dir: Path) -> dict[str, dict[str, dict]]:
+    """Per ticker and criterion: the final verdict, the criterion's reliability mark and the finding's stability status, from `<results_dir>/<CIK>.json`."""
+    universe = load_universe()
+    out = {}
+    for t in tickers:
+        path = Path(results_dir) / f"{universe.row_for(t).cik}.json"
+        if path.exists():
+            out[t] = {q["finding"]["criterion"]: {"verdict": q["finding"]["verdict"], "reliability": "low" if q.get("reliability") == "low" else "normal",
+                                                  "stability": (q.get("stability") or {}).get("status")} for q in json.loads(path.read_text(encoding="utf-8"))["qualitative"]}
+    return out
+
+
+def split_agreement(items: dict, human: dict) -> dict:
+    """Exact agreement by group: criteria marked low reliability against the rest (ADR-072 amendment), and findings that were stable against borderline under rewording.
+    A finding without a stability status (fewer than two assessed verdicts) is in neither stability group."""
+    def group(key, value):
+        rows = [(items[t][c], h) for t, crits in human.items() for c, h in crits.items() if h is not None and t in items and c in items[t]]
+        sel = [(i, h) for i, h in rows if i[key] == value]
+        return {"n": len(sel), "exact": sum(i["verdict"] == h for i, h in sel)}
+    return {"criterion_reliability": {"normal": group("reliability", "normal"), "low": group("reliability", "low")},
+            "finding_stability": {"stable": group("stability", "stable"), "borderline": group("stability", "borderline")}}
+
+
 def report(results_dir: Path = REPO_ROOT / "results") -> dict:
     dev, held = load_human_dev(), load_human_heldout()
-    return {"dev": compare(load_agent_verdicts(dev, results_dir), dev), "heldout": compare(load_agent_verdicts(held, results_dir), held)}
+    rep = {"dev": compare(load_agent_verdicts(dev, results_dir), dev), "heldout": compare(load_agent_verdicts(held, results_dir), held)}
+    rep["dev"]["split"] = split_agreement(load_agent_items(dev, results_dir), dev)
+    rep["heldout"]["split"] = split_agreement(load_agent_items(held, results_dir), held)
+    both = {**{("dev", t): v for t, v in dev.items()}, **{("heldout", t): v for t, v in held.items()}}
+    items = {**{("dev", t): v for t, v in load_agent_items(dev, results_dir).items()}, **{("heldout", t): v for t, v in load_agent_items(held, results_dir).items()}}
+    rep["combined_split"] = split_agreement(items, both)
+    h = [v for crits in held.values() for v in crits.values() if v is not None]
+    rep["heldout"]["human_label_counts"] = {k: h.count(k) for k in LEVEL}
+    return rep
 
 
 def render(rep: dict) -> str:
@@ -118,6 +150,8 @@ def render(rep: dict) -> str:
                   "- weighted kappa (linear): " + ("undefined" if k is None else f"{k:.2f}") + f" on {r['kappa']['n']} items ({r['kappa']['excluded_not_assessed']} not assessed left out)", "",
                   "| criterion | exact | within one |", "|---|---|---|"]
         lines += [f"| {c} | {v['exact']}/{v['n']} | {v['within_one']}/{v['n']} |" for c, v in r["per_criterion"].items()]
+        sp = r["split"]
+        lines += ["", "Agreement by group (exact): " + "; ".join(f"{name} {v['exact']}/{v['n']}" for grp in sp.values() for name, v in grp.items())]
         lines += [""] + [f"- {d['ticker']} {d['criterion']}: agent {d['agent']}, human {d['human']}" for d in r["disagreements"]] + [""]
     return "\n".join(lines)
 
@@ -126,6 +160,9 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--results-dir", default=str(REPO_ROOT / "results"))
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--freeze", action="store_true", help="write eval/agreement_results.json")
     a = ap.parse_args()
     rep = report(Path(a.results_dir))
+    if a.freeze:
+        FROZEN_PATH.write_text(json.dumps(rep, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps(rep, indent=1) if a.json else render(rep))

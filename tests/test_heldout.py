@@ -106,6 +106,38 @@ class TestAgreementMaths(unittest.TestCase):
         self.assertEqual(rep["heldout"]["labelled"], 0 if all(v["human_verdict"] is None for c in json.loads((REPO_ROOT / "eval/heldout_labels.json").read_text())["labels"].values() for v in c.values()) else rep["heldout"]["labelled"])
 
 
+class TestFrozenAgreement(unittest.TestCase):
+    def test_the_frozen_file_is_what_the_code_computes_from_the_labels_and_results(self):
+        frozen = json.loads((REPO_ROOT / "eval/agreement_results.json").read_text())
+        self.assertEqual(agreement.report(), frozen)
+
+    def test_the_labels_are_complete_and_the_headline_figures_hold(self):
+        frozen = json.loads((REPO_ROOT / "eval/agreement_results.json").read_text())
+        h = frozen["heldout"]
+        self.assertEqual((h["items"], h["labelled"], h["unlabelled"]), (24, 24, 0))
+        self.assertEqual((h["exact"], h["within_one"]), (13, 17))
+        self.assertEqual(h["direction"], {"agent_more_generous": 2, "agent_stricter": 8, "not_assessed": 1})
+        self.assertEqual({c: v["exact"] for c, v in h["per_criterion"].items()}, {"understandable_business": 6, "durable_competitive_advantage": 0, "candid_management": 2, "rational_capital_allocation": 5})
+        self.assertEqual(h["human_label_counts"], {"insufficient evidence": 2, "evidence weak": 1, "evidence found": 21})
+        self.assertEqual((h["kappa"]["n"], round(h["kappa"]["weighted_linear"], 2)), (23, 0.03))
+        self.assertEqual(h["split"]["criterion_reliability"], {"normal": {"n": 12, "exact": 11}, "low": {"n": 12, "exact": 2}})
+        self.assertEqual(h["split"]["finding_stability"], {"stable": {"n": 17, "exact": 12}, "borderline": {"n": 6, "exact": 1}})
+
+    def test_the_labelled_packet_holds_only_filing_text_and_verdicts(self):
+        text = (REPO_ROOT / "eval/heldout_packet_labelled.md").read_text()
+        labels = json.loads((REPO_ROOT / "eval/heldout_labels.json").read_text())["labels"]
+        parsed, problems = packet.parse_filled_packet(text)
+        self.assertEqual(problems, [])
+        self.assertEqual({t: {c: v["human_verdict"] for c, v in cs.items()} for t, cs in parsed.items()}, {t: {c: v["human_verdict"] for c, v in cs.items()} for t, cs in labels.items()})
+
+    def test_split_agreement_on_synthetic_items(self):
+        items = {"A": {c: {"verdict": F, "reliability": "low" if i < 2 else "normal", "stability": "borderline" if i == 0 else "stable" if i < 3 else None} for i, c in enumerate(QUAL_CRITERIA)}}
+        human = {"A": dict(zip(QUAL_CRITERIA, [F, W, F, W]))}
+        r = agreement.split_agreement(items, human)
+        self.assertEqual(r["criterion_reliability"], {"normal": {"n": 2, "exact": 1}, "low": {"n": 2, "exact": 1}})
+        self.assertEqual(r["finding_stability"], {"stable": {"n": 2, "exact": 1}, "borderline": {"n": 1, "exact": 1}})  # the fourth finding has no status
+
+
 class TestPacket(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

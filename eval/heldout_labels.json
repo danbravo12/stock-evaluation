@@ -1,116 +1,117 @@
 {
  "_notes": "Human labels for the held-out set (eval/heldout.json). Fill in with `python scripts/label_packet.py --ingest <filled packet>` or by hand: human_verdict is 'evidence found', 'evidence weak' or 'insufficient evidence'. Blind: made before looking at the agent's verdicts (ADR-071).",
- "reviewer": null,
+ "reviewer": "Daniel Bravo",
  "labelled": null,
  "saw_site_verdicts_before_labelling": null,
  "labels": {
   "AAPL": {
    "understandable_business": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "durable_competitive_advantage": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "candid_management": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "rational_capital_allocation": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    }
   },
   "MSFT": {
    "understandable_business": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "durable_competitive_advantage": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "candid_management": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "rational_capital_allocation": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    }
   },
   "PG": {
    "understandable_business": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "durable_competitive_advantage": {
-    "human_verdict": null,
+    "human_verdict": "insufficient evidence",
     "note": ""
    },
    "candid_management": {
-    "human_verdict": null,
+    "human_verdict": "evidence weak",
     "note": ""
    },
    "rational_capital_allocation": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    }
   },
   "NEE": {
    "understandable_business": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "durable_competitive_advantage": {
-    "human_verdict": null,
+    "human_verdict": "insufficient evidence",
     "note": ""
    },
    "candid_management": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "rational_capital_allocation": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    }
   },
   "CAT": {
    "understandable_business": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "durable_competitive_advantage": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "candid_management": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "rational_capital_allocation": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    }
   },
   "JNJ": {
    "understandable_business": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "durable_competitive_advantage": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "candid_management": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    },
    "rational_capital_allocation": {
-    "human_verdict": null,
+    "human_verdict": "evidence found",
     "note": ""
    }
   }
- }
+ },
+ "ingested": "2026-10-16"
 }

@@ -1,0 +1,253 @@
+{
+ "dev": {
+  "items": 20,
+  "labelled": 20,
+  "unlabelled": 0,
+  "n": 20,
+  "exact": 15,
+  "within_one": 19,
+  "direction": {
+   "agent_more_generous": 3,
+   "agent_stricter": 2,
+   "not_assessed": 0
+  },
+  "per_criterion": {
+   "understandable_business": {
+    "n": 5,
+    "exact": 5,
+    "within_one": 5
+   },
+   "durable_competitive_advantage": {
+    "n": 5,
+    "exact": 3,
+    "within_one": 5
+   },
+   "candid_management": {
+    "n": 5,
+    "exact": 3,
+    "within_one": 4
+   },
+   "rational_capital_allocation": {
+    "n": 5,
+    "exact": 4,
+    "within_one": 5
+   }
+  },
+  "kappa": {
+   "weighted_linear": 0.5945945945945946,
+   "n": 20,
+   "excluded_not_assessed": 0
+  },
+  "disagreements": [
+   {
+    "ticker": "KO",
+    "criterion": "durable_competitive_advantage",
+    "agent": "evidence weak",
+    "human": "evidence found"
+   },
+   {
+    "ticker": "KO",
+    "criterion": "candid_management",
+    "agent": "evidence found",
+    "human": "insufficient evidence"
+   },
+   {
+    "ticker": "GOOGL",
+    "criterion": "durable_competitive_advantage",
+    "agent": "evidence weak",
+    "human": "insufficient evidence"
+   },
+   {
+    "ticker": "TSLA",
+    "criterion": "candid_management",
+    "agent": "evidence weak",
+    "human": "evidence found"
+   },
+   {
+    "ticker": "TSLA",
+    "criterion": "rational_capital_allocation",
+    "agent": "evidence found",
+    "human": "evidence weak"
+   }
+  ],
+  "split": {
+   "criterion_reliability": {
+    "normal": {
+     "n": 10,
+     "exact": 9
+    },
+    "low": {
+     "n": 10,
+     "exact": 6
+    }
+   },
+   "finding_stability": {
+    "stable": {
+     "n": 12,
+     "exact": 12
+    },
+    "borderline": {
+     "n": 8,
+     "exact": 3
+    }
+   }
+  }
+ },
+ "heldout": {
+  "items": 24,
+  "labelled": 24,
+  "unlabelled": 0,
+  "n": 24,
+  "exact": 13,
+  "within_one": 17,
+  "direction": {
+   "agent_more_generous": 2,
+   "agent_stricter": 8,
+   "not_assessed": 1
+  },
+  "per_criterion": {
+   "understandable_business": {
+    "n": 6,
+    "exact": 6,
+    "within_one": 6
+   },
+   "durable_competitive_advantage": {
+    "n": 6,
+    "exact": 0,
+    "within_one": 3
+   },
+   "candid_management": {
+    "n": 6,
+    "exact": 2,
+    "within_one": 3
+   },
+   "rational_capital_allocation": {
+    "n": 6,
+    "exact": 5,
+    "within_one": 5
+   }
+  },
+  "kappa": {
+   "weighted_linear": 0.03157894736842093,
+   "n": 23,
+   "excluded_not_assessed": 1
+  },
+  "disagreements": [
+   {
+    "ticker": "AAPL",
+    "criterion": "durable_competitive_advantage",
+    "agent": "insufficient evidence",
+    "human": "evidence found"
+   },
+   {
+    "ticker": "AAPL",
+    "criterion": "candid_management",
+    "agent": "insufficient evidence",
+    "human": "evidence found"
+   },
+   {
+    "ticker": "MSFT",
+    "criterion": "durable_competitive_advantage",
+    "agent": "evidence weak",
+    "human": "evidence found"
+   },
+   {
+    "ticker": "MSFT",
+    "criterion": "candid_management",
+    "agent": "evidence weak",
+    "human": "evidence found"
+   },
+   {
+    "ticker": "MSFT",
+    "criterion": "rational_capital_allocation",
+    "agent": "not assessed",
+    "human": "evidence found"
+   },
+   {
+    "ticker": "PG",
+    "criterion": "durable_competitive_advantage",
+    "agent": "evidence weak",
+    "human": "insufficient evidence"
+   },
+   {
+    "ticker": "NEE",
+    "criterion": "durable_competitive_advantage",
+    "agent": "evidence found",
+    "human": "insufficient evidence"
+   },
+   {
+    "ticker": "NEE",
+    "criterion": "candid_management",
+    "agent": "insufficient evidence",
+    "human": "evidence found"
+   },
+   {
+    "ticker": "CAT",
+    "criterion": "durable_competitive_advantage",
+    "agent": "evidence weak",
+    "human": "evidence found"
+   },
+   {
+    "ticker": "CAT",
+    "criterion": "candid_management",
+    "agent": "insufficient evidence",
+    "human": "evidence found"
+   },
+   {
+    "ticker": "JNJ",
+    "criterion": "durable_competitive_advantage",
+    "agent": "insufficient evidence",
+    "human": "evidence found"
+   }
+  ],
+  "split": {
+   "criterion_reliability": {
+    "normal": {
+     "n": 12,
+     "exact": 11
+    },
+    "low": {
+     "n": 12,
+     "exact": 2
+    }
+   },
+   "finding_stability": {
+    "stable": {
+     "n": 17,
+     "exact": 12
+    },
+    "borderline": {
+     "n": 6,
+     "exact": 1
+    }
+   }
+  },
+  "human_label_counts": {
+   "insufficient evidence": 2,
+   "evidence weak": 1,
+   "evidence found": 21
+  }
+ },
+ "combined_split": {
+  "criterion_reliability": {
+   "normal": {
+    "n": 22,
+    "exact": 20
+   },
+   "low": {
+    "n": 22,
+    "exact": 8
+   }
+  },
+  "finding_stability": {
+   "stable": {
+    "n": 29,
+    "exact": 24
+   },
+   "borderline": {
+    "n": 14,
+    "exact": 4
+   }
+  }
+ }
+}
