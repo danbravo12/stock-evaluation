@@ -2,10 +2,12 @@
 
 > **Numeric path (ADR-059):** `engine.cli batch --universe --numeric-only` runs fetch → normalise → split-adjust → classify (GICS) → score for every constituent with no 10-K and no model; it writes `results/scores/<CIK>.json` and is the basis of a first criteria ranking (~35 s from the cache, ~5 min with the SEC download). The model path (qualitative agent, Explainer, Critic) is the expensive per-company step, run separately.
 >
-> **Built so far (2026-10-11):** everything on the laptop side of §1 except Finnhub and the static site: universe, planner, fetcher (with registrant successors, ADR-063), normaliser, scorers, retriever, qualitative agent, Explainer, Critic, orchestrator, reporter, batch ledger, CLI and the rankings builder (`python -m engine.cli rankings` → `site_data/rankings.json`, ADR-062). The static site is built too (`site_src/` → `python -m engine.cli publish` → `site/`, ADR-065, ADR-066). Next: deploy it, Finnhub.
+>  **Status (v1.0, 2026-10-16):** everything in §1 is built except the Finnhub price and analyst path (waiting for written permission, ADR-007) and the milestone-2 live app (ADR-017). Beyond the first design the build added: the Critic's two repair paths (ADR-052), stability runs with Borderline and Low reliability marks (ADR-072), the evaluation harness with a blind held-out set, agreement metrics and threshold sensitivity (ADR-071, ADR-073, ADR-074), results that carry their cited passages (schema 1.4, ADR-065 amendment) and a publish pipeline with gates and a secret scan of the site and the git history (ADR-065, ADR-068). The sections below are kept current with that; the original 2026-10-08 design is in the git history.
+>
+> **Built earlier (2026-10-11):** everything on the laptop side of §1 except Finnhub and the static site: universe, planner, fetcher (with registrant successors, ADR-063), normaliser, scorers, retriever, qualitative agent, Explainer, Critic, orchestrator, reporter, batch ledger, CLI and the rankings builder (`python -m engine.cli rankings` → `site_data/rankings.json`, ADR-062). The static site is built too (`site_src/` → `python -m engine.cli publish` → `site/`, ADR-065, ADR-066). Next: deploy it, Finnhub.
 
 > Research and analysis tool. **Not financial advice.**
-> Version: v1 draft · 2026-10-08 · Consistent with ADR-001 to ADR-023 (ADR-018 to ADR-023 introduced with this view, see §7).
+> Version: v1.0 · updated 2026-10-16 · Consistent with ADR-001 to ADR-074 (ADR-018 to ADR-023 introduced with the first version of this view, see §7).
 
 This document has four views:
 
@@ -51,7 +53,8 @@ flowchart LR
             TRACE["Trace recorder"]
         end
         OUT[("results/<br/>one JSON per CIK<br/>+ rankings.json")]
-        EVAL["Evaluation harness"]
+        STAB["Stability runs<br/>question reworded twice<br/>Borderline / Low reliability"]
+        EVAL["Evaluation harness<br/>human labels, agreement,<br/>threshold sensitivity"]
     end
 
     subgraph PUB["Public — $0, no keys, no server"]
@@ -82,8 +85,10 @@ flowchart LR
     CRIT -.-> LLM
     LLM -.-> METER
     ORCH -.-> TRACE
-    EVAL --> ORCH
-    OUT -->|"publish gate:<br/>strip Finnhub fields<br/>unless permitted"| GH --> SITE
+    EVAL -.->|reads| OUT
+    STAB -->|re-runs agent + Critic, writes marks| OUT
+    STAB -.-> QUAL
+    OUT -->|"publish gates: Finnhub fields,<br/>banned phrases, SEC links, schemas,<br/>secret scan of site and git history"| GH --> SITE
     VIS(["Visitor"]) --> SITE
     REV(["Reviewer + code"]) -.-> LIVE
     LIVE -.->|imports| ENGINE
@@ -138,9 +143,10 @@ sequenceDiagram
     CR->>CR: LLM check: does each quote support its verdict?
     alt any check fails
         CR-->>ORC: CriticReport (failed items, routed to owner)
-        ORC->>EX: retry once (failed explanations only)
-        ORC->>QA: retry once (failed findings only)
-        ORC->>CR: verify again
+        ORC->>EX: re-run once for the failed explanations, with the Critic's message
+        ORC->>QA: rationale-only failure: rewrite the rationale from the quotes (one call)
+        ORC->>QA: verdict failure: constrained retry (cite something new, or lower the verdict; 3 turns)
+        ORC->>CR: re-check the repaired items (a repair that still fails is dropped and the original stays with a warning)
     end
     CR-->>ORC: CriticReport (pass, or fail + warning)
     ORC->>RP: assemble(all of the above, trace, cost)
@@ -158,8 +164,8 @@ Each arrow carries a typed object (Pydantic models). These are what the trace re
 | `ScoreSet` | Scorers | per criterion: result label, figure, threshold, years covered, source URL, as-of |
 | `QualFindings` | Qualitative agent | per criterion: verdict, rationale, 0–2 citations (accession, section, passage, sentence numbers, quote and offsets built by code), searches and tool calls made, stop reason |
 | `Explanations` | Explainer | per criterion: one plain-English line, figures referenced |
-| `CriticReport` | Critic | per check: pass/fail, failing item, owner to retry, attempt number |
-| `Result` | Reporter | all of the above + scorecard + trace + `cost` + `schema_version` + disclaimer |
+| `CriticReport` | Critic | per check: pass/fail, failing item, owner, attempt number; the repairs made (path, outcome) and the final status per item (passed, passed after retry, warning) |
+| `Result` (schema 1.4) | Reporter | all of the above + scorecard + the text of every cited passage + trace + `cost` + `schema_version` + disclaimer; per qualitative finding the optional `stability` (stable or borderline, the verdicts of the three runs) and `reliability` (low, with its basis, when the criterion's flip rate is at or above the threshold) |
 
 ---
 
@@ -183,8 +189,10 @@ Each arrow carries a typed object (Pydantic models). These are what the trace re
 | Cost meter + budget guard | Python | Count tokens, calls and $ per company, per day and in total; check projected cost before every call against the free-tier daily quota and the paid cap (ADR-023) | Stops the batch cleanly; resumes from the ledger |
 | Run ledger + `status` | Python (`engine/batch.py`, `engine/cli.py`, built: `data/ledger/companies.json`, `PROGRESS.md`) | One row per company (status, model, calls, tokens, actual and notional $); writes `PROGRESS.md` and the site coverage line | — |
 | Trace recorder | Python | Record every step's input/output contract, timings and critic findings | — |
-| Evaluation harness | Python | Same engine against fixtures: expected checks, failure cases, ±20% threshold sensitivity (ADR-011), model comparison (ADR-015) | Report what the tool gets wrong |
-| Static site | HTML/JS | Discovery page, company page, trace replay, "data as of" banner, disclaimer | Shows whatever the JSON says, including warnings |
+| Stability runner | Python (`engine/stability.py`, `scripts/stability_run.py`, `stability_report.py`) | Two paraphrases of each question and verdict definition; the agent and the Critic run again live per variant, results in `results/stability/`; classifies each finding stable or borderline and each criterion's flip rate against the threshold in `config/reliability.json` | Resumable across Pacific days; never replaces the main results |
+| Evaluation harness | Python (`eval/`) | Frozen human-reviewed dev set and a blind held-out set with a packet that holds no agent output; agreement (exact, within one level, direction, weighted kappa), agreement by reliability mark, the Critic's record, and threshold sensitivity (each numeric threshold moved 20%, ADR-074) | Report what the tool gets wrong; a test recomputes every frozen file |
+| Publish and deploy | Python (`engine/publish.py`, `engine/deploy.py`, `engine/secrets_scan.py`) | Build `site/` from results and the frozen eval files; Finnhub gate, banned-phrase scan, SEC-link and schema checks; deploy refuses unless a secret scan of the site and every commit in the history finds nothing; pushes only `site/` to `gh-pages` | Any failed check deletes the half-built folder |
+| Static site | HTML/JS | Rankings, company page with the evidence pane, trace replay, how it works, evaluation page, document viewer, "data as of" banner, disclaimer | Shows whatever the JSON says, including warnings |
 
 ---
 

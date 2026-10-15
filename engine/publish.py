@@ -148,7 +148,10 @@ def build_site(out: Path = SITE_OUT, *, results_dir: Path | None = None, ranking
         shutil.copytree(site_src, tmp)
         site_cfg = json.loads(SITE_CONFIG.read_text(encoding="utf-8"))
         for page in tmp.glob("*.html"):  # the repository address is set in config/site.json only
-            page.write_text(page.read_text(encoding="utf-8").replace("__REPO_URL__", site_cfg["repo_url"]), encoding="utf-8")
+            text = page.read_text(encoding="utf-8").replace("__REPO_URL__", site_cfg["repo_url"])
+            if "__ARCHITECTURE_SVG__" in text:  # the drawing lives in one file (scripts/architecture_svg.py) and is inlined so it follows the page theme
+                text = text.replace("__ARCHITECTURE_SVG__", (tmp / "assets/img/architecture.svg").read_text(encoding="utf-8").strip())
+            page.write_text(text, encoding="utf-8")
         data = tmp / "data"
         written: list[tuple[str, object]] = []
 

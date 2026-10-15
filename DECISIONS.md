@@ -1,6 +1,90 @@
 # Decision Log (ADRs)
 
-Each entry: context → decision → trade-off. Status: **Accepted**, **Pending** (waiting on an external answer) or **Superseded**. Agreed v2 ideas sit in **Planned for v2** at the end of this file, outside the ADR numbering; each becomes a numbered ADR when it is built.
+Each entry: context → decision → trade-off. Status: **Accepted**, **Pending** (waiting on an external answer), **Planned** or **Superseded** (always with a link to what replaced it). Agreed v2 ideas sit in **Planned for v2** at the end of this file, outside the ADR numbering; each becomes a numbered ADR when it is built.
+
+## Index
+
+Every decision, with its status, the date it was made and the dates of any later amendments (the amendments are written in the entries themselves). Superseded entries stay in the log and point to what replaced them.
+
+| ADR | Title | Status | Date | Amended |
+|---|---|---|---|---|
+| [ADR-001](#adr-001--theme-evaluate-stocks-against-graham-and-buffett-criteria) | Theme: evaluate stocks against Graham and Buffett criteria | Accepted | 2026-10-07 |  |
+| [ADR-002](#adr-002--universe-sp-500-only) | Universe: S&P 500 only | Accepted | 2026-10-07 |  |
+| [ADR-003](#adr-003--output-is-an-explained-scorecard-never-a-verdict) | Output is an explained scorecard, never a verdict | Accepted | 2026-10-07 |  |
+| [ADR-004](#adr-004--the-platform-does-not-adjudicate-between-criteria-and-analysts) | The platform does not adjudicate between criteria and analysts | Accepted | 2026-10-07 |  |
+| [ADR-005](#adr-005--deterministic-scoring-in-python-llm-for-explanation-and-qualitative-judgement-only) | Deterministic scoring in Python; LLM for explanation and qualitative judgement only | Accepted | 2026-10-07 |  |
+| [ADR-006](#adr-006--two-modes-discovery-and-ticker-entry) | Two modes: discovery and ticker entry | Accepted | 2026-10-07 |  |
+| [ADR-007](#adr-007--data-sources-edgar-for-fundamentals-finnhub-for-price-and-analyst-consensus) | Data sources: EDGAR for fundamentals, Finnhub for price and analyst consensus | Pending | 2026-10-07 |  |
+| [ADR-008](#adr-008--no-price-charts-or-alpaca-in-v1) | No price charts or Alpaca in v1 | Accepted | 2026-10-07 |  |
+| [ADR-009](#adr-009--evaluated-against-principles-not-impersonation) | "Evaluated against principles", not impersonation | Accepted | 2026-10-07 |  |
+| [ADR-010](#adr-010--critic-step-as-a-verification-gate) | Critic step as a verification gate | Accepted | 2026-10-07 |  |
+| [ADR-011](#adr-011--criteria-thresholds) | Criteria thresholds | Accepted | 2026-10-07 |  |
+| [ADR-012](#adr-012--g4-dividend-record-15-year-window-always-partial) | G4 dividend record: 15-year window, always "partial" | Accepted | 2026-10-07 | 2026-10-08, 2026-10-11, 2026-10-12 |
+| [ADR-013](#adr-013--sector-exceptions-and-ranking-basis) | Sector exceptions and ranking basis | Accepted | 2026-10-07 | 2026-10-08 |
+| [ADR-014](#adr-014--sp-500-constituents-from-a-wikipedia-snapshot) | S&P 500 constituents from a Wikipedia snapshot | Accepted | 2026-10-07 |  |
+| [ADR-015](#adr-015--models-gemini-flash-lite-for-runs-small-local-gemma-4-for-development) | Models: Gemini Flash-Lite for runs, small local Gemma 4 for development | Accepted | 2026-10-07 | 2026-10-08 |
+| [ADR-016](#adr-016--static-website--engine-run-in-batches-on-the-laptop) | Static website + engine run in batches on the laptop | Accepted | 2026-10-07 |  |
+| [ADR-017](#adr-017--live-mode-behind-access-codes-milestone-2) | Live mode behind access codes (milestone 2) | Accepted (milestone 2) | 2026-10-07 |  |
+| [ADR-018](#adr-018--rule-based-planner-agent-reserved-for-llm-steps) | Rule-based planner; "agent" reserved for LLM steps | Accepted | 2026-10-08 |  |
+| [ADR-019](#adr-019--critic-rule-checks-first-llm-only-for-judgement) | Critic: rule checks first, LLM only for judgement | Accepted | 2026-10-08 |  |
+| [ADR-020](#adr-020--typed-hand-off-contracts-and-a-versioned-results-schema) | Typed hand-off contracts and a versioned results schema | Accepted | 2026-10-08 |  |
+| [ADR-021](#adr-021--finnhub-publish-gate-enforced-in-code) | Finnhub publish gate enforced in code | Accepted | 2026-10-08 |  |
+| [ADR-022](#adr-022--keyword-search-over-10-k-sections-no-embeddings-or-vector-store-in-v1) | Keyword search over 10-K sections; no embeddings or vector store in v1 | Accepted | 2026-10-08 |  |
+| [ADR-023](#adr-023--progress-ledger-and-a-hard-capped-paid-budget-to-finish-the-sp-500-faster) | Progress ledger and a hard-capped paid budget to finish the S&P 500 faster | Accepted | 2026-10-08 | 2026-10-10 |
+| [ADR-024](#adr-024--test-tickers-ko-jpm-googl-tsla-duk) | Test tickers: KO, JPM, GOOGL, TSLA, DUK | Accepted | 2026-10-08 |  |
+| [ADR-025](#adr-025--one-checksummed-response-store-behind-three-fetch-modes-replay--live--record) | One checksummed response store behind three fetch modes (replay / live / record) | Accepted | 2026-10-08 |  |
+| [ADR-026](#adr-026--annual-period-selection-and-fiscal-year-labelling) | Annual period selection and fiscal-year labelling | Accepted | 2026-10-08 |  |
+| [ADR-027](#adr-027--restatements-latest-filed-value-flagged-original-kept) | Restatements: latest filed value, flagged, original kept | Accepted | 2026-10-08 |  |
+| [ADR-028](#adr-028--concept-map-as-reviewable-config-per-year-fallback-explicit-derived-values-never-guess) | Concept map as reviewable config; per-year fallback; explicit derived values; never guess | Accepted | 2026-10-08 |  |
+| [ADR-029](#adr-029--pydantic-v2-as-the-first-dependency) | Pydantic v2 as the first dependency | Accepted | 2026-10-08 |  |
+| [ADR-030](#adr-030--depreciation-alone-as-a-flagged-conservative-da-fallback) | Depreciation alone as a flagged, conservative D&A fallback | Accepted | 2026-10-08 |  |
+| [ADR-031](#adr-031--scoring-windows-and-the-as-of-year) | Scoring windows and the as-of year | Accepted | 2026-10-08 |  |
+| [ADR-032](#adr-032--stock-split-adjustment-of-per-share-values) | Stock-split adjustment of per-share values | Accepted | 2026-10-08 |  |
+| [ADR-033](#adr-033--sector-class-from-the-sic-code-until-gics-is-available) | Sector class from the SIC code until GICS is available | Accepted; SIC part superseded by [ADR-057](#adr-057--sector-class-from-gics-sub-industry-with-per-cik-overrides-supersedes-the-sic-part-of-adr-033) | 2026-10-08 |  |
+| [ADR-034](#adr-034--edge-case-rules-in-the-scorers) | Edge-case rules in the scorers | Accepted | 2026-10-08 |  |
+| [ADR-035](#adr-035--10-k-text-normalisation-is-the-citation-text) | 10-K text normalisation is the citation text | Accepted | 2026-10-09 |  |
+| [ADR-036](#adr-036--section-extraction-longest-candidate-title-fallback-explicit-not_found) | Section extraction: longest candidate, title fallback, explicit not_found | Accepted | 2026-10-09 | 2026-10-12 |
+| [ADR-037](#adr-037--passages-bm25-retrieval-and-search-terms-as-config) | Passages, BM25 retrieval and search terms as config | Accepted | 2026-10-09 |  |
+| [ADR-038](#adr-038--llm-recordreplay-the-same-pattern-as-the-sec-data) | LLM record/replay, the same pattern as the SEC data | Accepted | 2026-10-09 |  |
+| [ADR-039](#adr-039--budget-guard-and-run-ledger-pacific-day-quota-safety-margin-paid-mode-switch-caps) | Budget guard and run ledger: Pacific-day quota, safety margin, paid-mode switch, caps | Accepted | 2026-10-09 |  |
+| [ADR-040](#adr-040--provider-agnostic-client-over-openai-compatible-http-with-model-profiles) | Provider-agnostic client over OpenAI-compatible HTTP, with model profiles | Accepted | 2026-10-09 |  |
+| [ADR-041](#adr-041--qualitative-agent-one-loop-per-criterion-seeded-first-search-in-code-4-turn-cap) | Qualitative agent: one loop per criterion, seeded first search in code, 4-turn cap | Accepted | 2026-10-09 |  |
+| [ADR-042](#adr-042--citation-self-check-inside-the-agent-the-critic-still-re-checks-independently) | Citation self-check inside the agent; the Critic still re-checks independently | Accepted; checking mechanics replaced by [ADR-046](#adr-046--citations-are-sentence-pointers-not-free-text-quotes-supersedes-adr-045) | 2026-10-09 |  |
+| [ADR-043](#adr-043--rubric-as-config-the-companys-marketing-language-is-a-claim-not-evidence) | Rubric as config; the company's marketing language is a claim, not evidence | Accepted | 2026-10-09 |  |
+| [ADR-044](#adr-044--quota-and-budget-errors-propagate-they-are-never-turned-into-insufficient-evidence) | Quota and budget errors propagate; they are never turned into "insufficient evidence" | Accepted | 2026-10-09 |  |
+| [ADR-045](#adr-045--rejections-say-what-to-change-quotes-are-asked-at-about-40-words-accepted-to-60) | Rejections say what to change; quotes are asked at about 40 words, accepted to 60 | Superseded by [ADR-046](#adr-046--citations-are-sentence-pointers-not-free-text-quotes-supersedes-adr-045) | 2026-10-09 |  |
+| [ADR-046](#adr-046--citations-are-sentence-pointers-not-free-text-quotes-supersedes-adr-045) | Citations are sentence pointers, not free-text quotes (supersedes ADR-045) | Accepted; supersedes [ADR-045](#adr-045--rejections-say-what-to-change-quotes-are-asked-at-about-40-words-accepted-to-60) | 2026-10-09 | 2026-10-10, 2026-10-12 |
+| [ADR-047](#adr-047--rubric-tightened-not-assessed-is-a-separate-outcome-from-insufficient-evidence) | Rubric tightened; "not assessed" is a separate outcome from "insufficient evidence" | Accepted | 2026-10-09 |  |
+| [ADR-048](#adr-048--explainer-writes-placeholders-code-writes-the-numbers-amends-adr-019-check-1) | Explainer writes placeholders, code writes the numbers (amends ADR-019 check 1) | Accepted | 2026-10-10 | 2026-10-10 |
+| [ADR-049](#adr-049--critic-routing-failed-items-only-one-retry-to-the-owner-then-a-warning-it-gates-it-does-not-author) | Critic routing: failed items only, one retry to the owner, then a warning; it gates, it does not author | Accepted | 2026-10-10 |  |
+| [ADR-050](#adr-050--gold-set-and-agreement-as-the-qualitative-evaluation) | Gold set and agreement as the qualitative evaluation | Accepted | 2026-10-10 | 2026-10-10 |
+| [ADR-051](#adr-051--the-critic-uses-the-same-model-as-the-agents-for-now) | The Critic uses the same model as the agents, for now | Accepted | 2026-10-10 |  |
+| [ADR-052](#adr-052--two-repair-paths-for-the-critics-findings-a-failed-repair-keeps-the-original-amends-adr-049) | Two repair paths for the Critic's findings; a failed repair keeps the original (amends ADR-049) | Accepted | 2026-10-10 | 2026-10-12 |
+| [ADR-053](#adr-053--sp-500-universe-one-recorded-wikipedia-snapshot-validated-one-analysis-per-cik-completes-adr-014) | S&P 500 universe: one recorded Wikipedia snapshot, validated, one analysis per CIK (completes ADR-014) | Accepted | 2026-10-10 |  |
+| [ADR-054](#adr-054--result-schema-10-and-the-results-layout) | Result schema 1.0 and the results layout | Accepted | 2026-10-10 |  |
+| [ADR-055](#adr-055--step-degradation-policy) | Step degradation policy | Accepted | 2026-10-10 |  |
+| [ADR-056](#adr-056--batch-company-ledger-and-progressmd-implements-adr-023-sections-1-and-2) | Batch, company ledger and PROGRESS.md (implements ADR-023 sections 1 and 2) | Accepted | 2026-10-10 |  |
+| [ADR-057](#adr-057--sector-class-from-gics-sub-industry-with-per-cik-overrides-supersedes-the-sic-part-of-adr-033) | Sector class from GICS sub-industry, with per-CIK overrides (supersedes the SIC part of ADR-033) | Accepted; supersedes the SIC part of [ADR-033](#adr-033--sector-class-from-the-sic-code-until-gics-is-available) | 2026-10-11 | 2026-10-11, 2026-10-12 |
+| [ADR-058](#adr-058--reits-are-flagged-not-exempted) | REITs are flagged, not exempted | Accepted | 2026-10-11 |  |
+| [ADR-059](#adr-059--whole-universe-numeric-run-and-the-frozen-label-counts) | Whole-universe numeric run and the frozen label counts | Accepted | 2026-10-11 |  |
+| [ADR-060](#adr-060--dividends-per-share-cash-paid-first-declared-as-the-fallback) | Dividends per share: cash paid first, declared as the fallback | Accepted | 2026-10-10 |  |
+| [ADR-061](#adr-061--revenue-and-dividends-skip-a-candidate-that-is-a-component-of-another) | Revenue and dividends: skip a candidate that is a component of another | Accepted | 2026-10-11 |  |
+| [ADR-062](#adr-062--rankings-builder-the-criteria-ranking-its-threshold-and-its-caveat) | Rankings builder: the criteria ranking, its threshold and its caveat | Accepted | 2026-10-11 | 2026-10-12 |
+| [ADR-063](#adr-063--registrant-successors-and-companies-without-an-annual-report) | Registrant successors and companies without an annual report | Accepted | 2026-10-11 |  |
+| [ADR-064](#adr-064--coverage-recovery-validated-derived-operating-income-reit-lease-revenue-and-the-capex-concepts-that-were-not-added) | Coverage recovery: validated derived operating income, REIT lease revenue, and the capex concepts that were not added | Accepted | 2026-10-11 |  |
+| [ADR-065](#adr-065--static-site-stack-and-the-publish-pipeline) | Static site stack and the publish pipeline | Accepted | 2026-10-12 | 2026-10-12 |
+| [ADR-066](#adr-066--design-tokens-and-the-evidence-pane-as-the-core-interaction) | Design tokens, and the evidence pane as the core interaction | Accepted | 2026-10-12 |  |
+| [ADR-067](#adr-067--trace-rendering-every-event-in-plain-language-and-a-swimlane-overview) | Trace rendering: every event in plain language, and a swimlane overview | Accepted | 2026-10-12 |  |
+| [ADR-068](#adr-068--deploy-pipeline-to-github-pages-and-the-secret-scan) | Deploy pipeline to GitHub Pages and the secret scan | Accepted | 2026-10-12 |  |
+| [ADR-069](#adr-069--prompt-v2-is-active-the-five-test-companies-re-recorded) | Prompt v2 is active; the five test companies re-recorded | Accepted | 2026-10-12 | 2026-10-12 |
+| [ADR-070](#adr-070--showcase-full-agent-analysis-for-20-more-companies) | Showcase: full agent analysis for 20 more companies | Accepted | 2026-10-12 | 2026-10-12 |
+| [ADR-071](#adr-071--held-out-set-and-blind-labelling-build-4a) | Held-out set and blind labelling (build 4a) | Accepted | 2026-10-12 |  |
+| [ADR-072](#adr-072--prompt-perturbation-stability-and-the-borderline-mark-build-4a) | Prompt-perturbation stability and the borderline mark (build 4a) | Accepted | 2026-10-12 | 2026-10-12 |
+| [ADR-073](#adr-073--the-evaluation-page-and-how-its-figures-are-computed-build-4b) | The evaluation page, and how its figures are computed (build 4b) | Accepted | 2026-10-16 |  |
+| [ADR-074](#adr-074--threshold-sensitivity-method-build-4b-completes-the-20-test-promised-in-adr-011) | Threshold sensitivity method (build 4b; completes the ±20% test promised in ADR-011) | Accepted | 2026-10-16 |  |
+| [V2-1](#v2-1--read-only-mcp-server-over-the-published-results) | Read-only MCP server over the published results | Planned | 2026-10-09 |  |
+| [V2-2](#v2-2--cross-provider-model-comparison-on-amazon-bedrock) | Cross-provider model comparison on Amazon Bedrock | Planned | 2026-10-09 |  |
+| [V2-3](#v2-3--cross-company-ask-the-filings-hybrid-retrieval-over-a-vector-index-of-sp-500-10-k-passages) | Cross-company "Ask the filings": hybrid retrieval over a vector index of S&P 500 10-K passages | Planned | 2026-10-09 |  |
 
 ---
 
@@ -215,7 +299,7 @@ Each entry: context → decision → trade-off. Status: **Accepted**, **Pending*
 **Trade-off:** A split that no 10-K ever restated would go unadjusted (and noted). Gains: all per-share history on today's basis with the evidence in the trace, no external split table to maintain.
 
 ### ADR-033 — Sector class from the SIC code until GICS is available
-**Status:** Accepted · 2026-10-08; the SIC part is superseded by ADR-057 (SIC remains the fallback for tickers outside the snapshot)
+**Status:** Accepted · 2026-10-08; the SIC part is superseded by [ADR-057](#adr-057--sector-class-from-gics-sub-industry-with-per-cik-overrides-supersedes-the-sic-part-of-adr-033) (SIC remains the fallback for tickers outside the snapshot)
 **Context:** ADR-013's exceptions need to know whether a company is a bank, insurer or utility. The GICS sector from the S&P 500 snapshot (ADR-014) is not built yet; the SEC SIC code is in every `submissions.json`.
 **Decision:** `config/sector_rules.json` maps SIC ranges to bank (6021, 6022, 6029, 6035, 6036), insurer (6311-6411) and utility (4911, 4931, 4932, 4991), with a reason per rule; everything else is "other". The GICS sector will confirm or override this when the constituents snapshot is added.
 **Trade-off:** SIC codes are coarse and company-chosen (a few insurers or utilities will be classed "other"). Gains: no dependency on a source we do not have yet, and the rule is reviewable data.
@@ -278,7 +362,7 @@ Each entry: context → decision → trade-off. Status: **Accepted**, **Pending*
 **Trade-off:** The model does not choose its first search, so the model shows less autonomy on turn 1; against that, the seeded search saves about one request per criterion (roughly half the calls) and is reproducible. The agent still searches freely afterwards, and did in 8 of the 20 recorded loops; `get_passage` was never used because the search results already carry the full passage text. A tool-using loop on a free tier with a small model also means some criteria end in `insufficient evidence` for mechanical reasons (see ADR-042 and `docs/evaluation_notes.md`).
 
 ### ADR-042 — Citation self-check inside the agent; the Critic still re-checks independently
-**Status:** Accepted · 2026-10-09 (the checking mechanics were replaced by sentence pointers in ADR-046; the principle and the Critic's independent re-check stand)
+**Status:** Accepted · 2026-10-09 (the checking mechanics were replaced by sentence pointers in [ADR-046](#adr-046--citations-are-sentence-pointers-not-free-text-quotes-supersedes-adr-045); the principle and the Critic's independent re-check stand)
 **Context:** Every verdict except "insufficient evidence" must quote and cite the filing (ADR-005, ADR-010). ADR-019 gives the Critic a rule check that quotes exist verbatim. A model asked for a quote paraphrases, splices sentences or adds punctuation often enough to matter (13 rejected submissions, in 8 of the 20 loops of the recorded run).
 **Decision:** Before accepting `submit_finding`, code checks each quote: at most 60 words; contained, after collapsing whitespace only, in a passage retrieved during that criterion's loop (seeded, search or `get_passage`; a quote from a passage never retrieved is rejected even if it exists in the filing); starting and ending on a word edge; exact offsets computed in the normalised document text and `document[start:end]` round-trip checked. The stored quote is the document's own text, so whitespace differences vanish. A failed check returns a tool error that lists the bad quotes and why; one more submission is allowed (it may exceed the turn cap by one). Still invalid: "insufficient evidence", `invalid_citation`, rejected quotes kept in the trace. Malformed tool arguments get one corrective tool error, then `llm_output_error`. The Critic (ADR-019) still re-checks every quote independently: defence in depth, not duplication. The agent repairs; the Critic gates.
 **Trade-off:** Strictness costs findings: when the repair fails, a perfectly sensible verdict is dropped (5 of 20 findings in the recorded run). Gains: nothing reaches the Critic or the site with a quote that is not in the filing, and the offsets are exact.
@@ -296,7 +380,7 @@ Each entry: context → decision → trade-off. Status: **Accepted**, **Pending*
 **Trade-off:** A quota error mid-company wastes the calls already made for that company (replayed for free if recorded). Gains: a batch result never confuses "not analysed" with "no evidence".
 
 ### ADR-045 — Rejections say what to change; quotes are asked at about 40 words, accepted to 60
-**Status:** Superseded by ADR-046 · 2026-10-09
+**Status:** Superseded by [ADR-046](#adr-046--citations-are-sentence-pointers-not-free-text-quotes-supersedes-adr-045) · 2026-10-09
 **Context:** The first recording had 5 of 20 findings end in `invalid_citation`. The rejected quotes were mostly 61–74 words (the model cannot count words) or spliced two non-adjacent sentences; the model often resubmitted the identical text after a plain "not found".
 **Decision:** The prompt asks for about 40 words, one contiguous stretch, and forbids joining sentences or changing punctuation; the limit stays 60. A rejection now says what to change: for an over-long quote that is real, a ready-made shorter contiguous quote from the same passage; for a quote that is not in the text, the longest leading part of it that is (a verified quote the model may submit as it stands) and what the text says next. Two prompt revisions cost three recordings (113 free-tier requests on 2026-10-09 in all; only the last, 35 requests, is kept in `fixtures/llm/`).
 **Trade-off:** Feedback did not clearly help: findings ending in `invalid_citation` went 5, 4, 5 over the three recordings (the first before any change), so run-to-run variability is real and not yet measured. A model that ignores the offered fix still fails; a bigger model or a stricter output format would be the next step, not more prompting.
