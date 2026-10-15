@@ -12,7 +12,7 @@
 <a class="skip" href="#main">Skip to the content</a>
 <header class="site"><div class="wrap">
   <a class="name" href="index.html">Graham and Buffett research tool</a>
-  <nav aria-label="Main"><a href="index.html">Rankings</a><a href="how-it-works.html" aria-current="page">How it works</a><a href="https://github.com/danbravo12/stock-evaluation" rel="noopener">Code on GitHub</a></nav>
+  <nav aria-label="Main"><a href="index.html">Rankings</a><a href="how-it-works.html" aria-current="page">How it works</a><a href="evaluation.html">Evaluation</a><a href="https://github.com/danbravo12/stock-evaluation" rel="noopener">Code on GitHub</a></nav>
 </div></header>
 <div class="disclaimer"><div class="wrap"><p><strong>This is a research tool, not financial advice.</strong> It reports what public SEC filings say and which published Graham and Buffett tests a company meets. It does not tell anyone to buy, sell or hold anything.</p></div></div>
 <main id="main" class="wrap">
@@ -46,16 +46,17 @@
 <p>Measured on the five sample companies: about 10 model calls and 24,000 tokens per company, which would cost about one cent (under $0.01) at paid rates and cost nothing on the free tier used here. Scoring the whole index needs no model and no 10-K download: it took about 35 seconds from cached SEC data, and about five minutes to download it the first time. A full agent analysis of all 500 companies would cost roughly $5 at paid rates.</p>
 
 <h2>How it was tested</h2>
+<p>The full results, with every figure computed from the repository's frozen evaluation files, are on the <a href="evaluation.html">evaluation page</a>. In short:</p>
 <ul>
-<li><b>Gold set for the judgement tests.</b> The agents' verdicts on the five sample companies were checked by hand against the 10-K: the final verdicts agree with the reviewer on 15 of 20 (16 of 20 before the Critic), and every difference is one level apart (found against weak, or weak against insufficient). Those five companies are also where the rubric was written and corrected, so this figure overstates accuracy; the first version of the wording agreed on 19 of 20 and the next one on 14 of 20 without any change of substance. A second, held-out set of 24 judgements on six other companies is labelled blind, before the labeller looks at the agent's answers, and will be reported separately. See the <a href="doc.html?f=qualitative_report">qualitative report</a> and the <a href="doc.html?f=evaluation_notes">evaluation notes</a>.</li>
-<li><b>Does the wording matter?</b> Each judgement was asked three times, with the question and the definitions of the verdicts worded three ways that mean the same. A verdict that changes with the wording is marked <b>Borderline</b> on the company page and the three answers are shown. See the <a href="doc.html?f=stability_report">stability report</a>.</li>
-<li><b>The Critic against known errors.</b> It flagged one of the four disagreements with the gold set, all three faults that were injected on purpose, and three of the fourteen correct judgements; its repairs left agreement at 15 of 20. It is a second reader, not a guarantee. See the <a href="doc.html?f=critic_report">Critic report</a>.</li>
-<li><b>The whole index.</b> Scores for 498 companies were checked for anomalies (revenue jumps, odd signs, restatements, split adjustments), and the fixes are written up in the <a href="doc.html?f=universe_scorecard_report">universe report</a>. The count of every label is frozen, so a rule change that moves hundreds of results shows up in the tests.</li>
-<li><b>Offline tests.</b> Close to 400 automated tests run without a network connection, on recorded SEC data and recorded model responses.</li>
+<li><b>The judgement questions</b> were compared with a human reviewer on two sets of companies: one the rubric was tuned on, which flatters the tool, and a held-out set labelled blind. On the held-out set the tool is mostly stricter than the reviewer and clearly weaker on two of the four questions; the figures are on the evaluation page.</li>
+<li><b>Does the wording matter?</b> Each judgement was asked three ways with the same meaning. A verdict that changes with the wording is marked <b>Borderline</b> on the company page, and a question where that happens often is marked <b>Low reliability</b>. The marks turned out to predict where the tool and the reviewer disagree.</li>
+<li><b>The Critic</b> is a second reader, not a guarantee: it catches some errors, sometimes makes a finding worse, and never looks at an "insufficient evidence" verdict.</li>
+<li><b>The numbers</b> are plain arithmetic. Results for a set of test companies are checked by hand and frozen, the whole index was scored and checked for anomalies, and every numeric threshold was moved by twenty percent to see how many labels change.</li>
+<li><b>Offline tests.</b> Hundreds of automated tests run without a network connection, on recorded SEC data and recorded model responses.</li>
 </ul>
 
 <h2 id="wording">How often does a verdict depend on the wording?</h2>
-<p>Each of the four judgement questions was asked three times about every analysed company, with the question and the definitions of the verdicts worded three ways that mean the same. The table shows, for each question, how often the verdict changed. A question at or above the threshold is marked <b>Low reliability</b> on every company page.</p>
+<p>Each of the four judgement questions was asked three times about every analysed company, with the question and the definitions of the verdicts worded three ways that mean the same. The table shows, for each question, how often the verdict changed. A question at or above the threshold is marked <b>Low reliability</b> on every company page. More on the <a href="evaluation.html">evaluation page</a>.</p>
 <div id="wording-table" class="tablewrap" tabindex="0" role="region" aria-label="Flip rate per question"><p class="muted">Loading the figures…</p></div>
 <p class="small muted" id="wording-note"></p>
 

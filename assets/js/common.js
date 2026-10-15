@@ -49,7 +49,8 @@ export function borderlineSentence(st) {
 export function reliabilityNote(q) {
   if (!q || q.reliability !== "low" || !q.reliability_basis) return null;
   const b = q.reliability_basis;
-  return `Low reliability: across all analysed companies, this verdict changed when the question was reworded for ${b.changed} of ${b.compared} companies.`;
+  const human = b.human_of ? `, and agreed with a human reviewer on ${b.human_agreed} of ${b.human_of} held-out companies` : "";
+  return `Low reliability: this verdict changed with the question's wording for ${b.changed} of ${b.compared} companies${human}.`;
 }
 export function stabilityRows(st) {
   const w = (v) => WORD[v] || v;
