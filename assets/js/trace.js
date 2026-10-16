@@ -11,14 +11,17 @@ const laneName = (id) => data.lanes.find((l) => l.id === id).name;
 // ---------- swimlane overview ----------
 function swimlane() {
   const lanes = data.lanes, steps = data.steps;
-  const dx = Math.max(11, Math.min(18, Math.floor(900 / steps.length))), left = 168, top = 16, rowH = 30;
+  const dx = Math.max(11, Math.min(18, Math.floor(900 / steps.length))), left = 16, labelW = 160, top = 16, rowH = 30;  // the agent names sit in their own column that does not scroll
   const W = left + steps.length * dx + 24, H = top + lanes.length * rowH + 10;
   const svg = document.createElementNS(NS, "svg");
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("width", W); svg.setAttribute("height", H); svg.setAttribute("class", "swimsvg");
   const add = (parent, tag, attrs, text) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); if (text != null) e.textContent = text; parent.append(e); return e; };
   const y = (lane) => top + lanes.findIndex((l) => l.id === lane) * rowH + rowH / 2;
   const x = (n) => left + (n - 1) * dx + dx / 2;
-  lanes.forEach((l) => { add(svg, "line", { x1: left - 8, x2: W - 8, y1: y(l.id), y2: y(l.id), class: "lane" }); add(svg, "text", { x: 6, y: y(l.id) + 4, class: "lanelabel" }, l.name); });
+  lanes.forEach((l) => add(svg, "line", { x1: 0, x2: W - 8, y1: y(l.id), y2: y(l.id), class: "lane" }));
+  const labels = document.createElementNS(NS, "svg");
+  labels.setAttribute("width", labelW); labels.setAttribute("height", H); labels.setAttribute("class", "swimlabels"); labels.setAttribute("aria-hidden", "true");
+  lanes.forEach((l) => { add(labels, "line", { x1: 0, x2: labelW, y1: y(l.id), y2: y(l.id), class: "lane" }); add(labels, "text", { x: 6, y: y(l.id) + 4, class: "lanelabel" }, l.name); });
   steps.forEach((s, i) => {
     if (i === 0) return;
     const p = steps[i - 1], hand = p.lane !== s.lane;
@@ -31,6 +34,11 @@ function swimlane() {
     g.addEventListener("click", () => go(s.n - 1, true));
     g.addEventListener("keydown", (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); go(s.n - 1, true); } });
   });
+  const fig = $("swimfig");
+  let wrap = fig.querySelector(".swimwrap");
+  if (!wrap) { wrap = document.createElement("div"); wrap.className = "swimwrap"; fig.insertBefore(wrap, $("swim")); wrap.append($("swim")); }
+  wrap.querySelector(".swimlabels")?.remove();
+  wrap.insertBefore(labels, $("swim"));
   $("swim").replaceChildren(svg);
 }
 
@@ -63,7 +71,7 @@ function go(i, user) {
   document.querySelectorAll(".step").forEach((b) => (Number(b.dataset.i) === at ? b.setAttribute("aria-current", "step") : b.removeAttribute("aria-current")));
   document.querySelectorAll(".tick").forEach((t) => t.classList.toggle("active", Number(t.dataset.n) === s.n));
   const sw = $("swim"), tick = document.querySelector(`.tick[data-n="${s.n}"] circle`);
-  if (tick) { const cx = Number(tick.getAttribute("cx")); if (cx < sw.scrollLeft + 180 || cx > sw.scrollLeft + sw.clientWidth - 30) sw.scrollLeft = Math.max(0, cx - sw.clientWidth / 2); } // keep the active mark in view in the sideways-scrolling overview
+  if (tick) { const cx = Number(tick.getAttribute("cx")); if (cx < sw.scrollLeft + 20 || cx > sw.scrollLeft + sw.clientWidth - 30) sw.scrollLeft = Math.max(0, cx - sw.clientWidth / 2); } // keep the active mark in view in the sideways-scrolling overview
   const det = document.querySelector(`details.grp[data-id="${g.id}"]`);
   if (det && !det.open) det.open = true; // playing expands the group it enters
   const btn = document.querySelector(`.step[data-i="${at}"]`);

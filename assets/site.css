@@ -33,7 +33,7 @@ header.site nav a[aria-current="page"] { color: var(--ink); font-weight: 600; te
 .disclaimer strong { font-weight: 600; }
 main.wrap { padding-top: 28px; padding-bottom: 48px; }
 h1, h2, h3 { font-weight: 600; line-height: 1.25; margin: 0 0 0.5em; }
-h1 { font-size: var(--s3); } h2 { font-size: var(--s2); margin-top: 2em; } h3 { font-size: var(--s1); margin-top: 1.6em; }
+h1 { font-size: var(--s3); } h2.grp { font-size: var(--s1); margin-top: 1.6em; } h2 { font-size: var(--s2); margin-top: 2em; } h3 { font-size: var(--s1); margin-top: 1.6em; }
 p, ul, ol { margin: 0 0 1em; } p, li { max-width: 70ch; }
 .lede { font-size: var(--s1); max-width: 62ch; }
 .muted { color: var(--muted); } .small { font-size: 0.9rem; }
@@ -72,7 +72,7 @@ details.fold summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 .notebox { border-left: 3px solid var(--muted); padding: 2px 0 2px 12px; margin: 0 0 10px; max-width: 70ch; }
 .cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 32px; align-items: start; }
 .crits { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
-.crits h3 { font-size: 0.9rem; color: var(--muted); font-weight: 600; margin: 24px 0 6px; }
+.crits h2 { font-size: 0.9rem; color: var(--muted); font-weight: 600; margin: 24px 0 6px; }
 .crits li { border-bottom: 1px solid var(--rule); max-width: none; }
 .crit { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 2px 14px; width: 100%; padding: 12px 8px; cursor: pointer; }
 .crit:hover { background: var(--surface); }
@@ -120,7 +120,8 @@ details.grp > summary:focus-visible { outline: 3px solid var(--blue); outline-of
 .detail { background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--blue); padding: 16px 20px 20px; position: sticky; top: 84px; max-height: calc(100vh - 100px); overflow: auto; }
 .detail h2 { font-size: var(--s1); margin: 0 0 6px; } .detail h3 { font-size: 1rem; margin: 1.2em 0 0.3em; } .detail .out { margin: 0 0 0.7em; max-width: 70ch; }
 .totals { display: flex; flex-wrap: wrap; gap: 4px 24px; }
-figure.swim { margin: 16px 0 0; } figure.swim .scroll { overflow-x: auto; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); background: var(--surface); }
+figure.swim { margin: 16px 0 0; } figure.swim .swimwrap { display: flex; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); background: var(--surface); } figure.swim .scroll { overflow-x: auto; flex: 1; min-width: 0; }
+svg.swimlabels { display: block; flex: none; max-width: 40vw; } svg.swimlabels text { font: 400 12.5px var(--sans); fill: var(--ink); } svg.swimlabels .lane { stroke: var(--rule); stroke-width: 1; }
 svg.swimsvg { display: block; } svg.swimsvg text { font: 400 12.5px var(--sans); fill: var(--ink); }
 svg.swimsvg .lane { stroke: var(--rule); stroke-width: 1; } svg.swimsvg .run { stroke: var(--muted); stroke-width: 1; fill: none; } svg.swimsvg .hand { stroke: var(--blue); stroke-width: 2; fill: none; }
 svg.swimsvg .tick { cursor: pointer; outline: none; } svg.swimsvg .tick circle { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; }
