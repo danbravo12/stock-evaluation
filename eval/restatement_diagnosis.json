@@ -1,0 +1,7 @@
+{
+ "scored": 498,
+ "companies_with_true_restatement": 283,
+ "true_restatement_values": 1376,
+ "flagged_values_that_are_not_true_restatements": 0,
+ "companies_with_concept_switch": 473
+}

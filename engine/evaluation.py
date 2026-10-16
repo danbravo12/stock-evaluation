@@ -81,7 +81,7 @@ def evaluation_data(stability_rows: list[dict]) -> dict:
         "history": _load("agreement_history.json")["steps"],
         "critic": _load("critic_summary.json"),
         "numbers": {"frozen_companies": len(expected), "frozen_criteria": len(NUMERIC), "frozen_labels": len(frozen_labels), "universe_scored": labels["scored"],
-                    "universe_no_report": labels["no_annual_report"], "criteria": decided, "diagnostics": _load("universe_diagnostics.json"), "triage": _load("numeric_triage.json")},
+                    "universe_no_report": labels["no_annual_report"], "criteria": decided, "diagnostics": _load("universe_diagnostics.json"), "triage": _load("numeric_triage.json"), "restatements": _load("restatement_diagnosis.json")},
         "sensitivity": {"delta": sens["delta"], "companies": sens["companies"], "thresholds": [{**t, "label": LABEL[t["name"]], "default_display": display(t["name"], t["default"]), "minus_display": display(t["name"], t["minus"]["value"]),
                                                   "plus_display": display(t["name"], t["plus"]["value"])} for t in sens["thresholds"]], "by_criterion": sens["by_criterion"], "ranking": [c for c, _ in ranked]},
     }
