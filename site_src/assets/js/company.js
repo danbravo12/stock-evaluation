@@ -69,7 +69,7 @@ function renderList() {
   const cls = model.row.sector_class, status_ = model.result ? model.result.critic.final : {};
   const byId = Object.fromEntries(model.criteria.map((c) => [c.id, c]));
   const group = (title, ids) => {
-    ul.append(el("li", {}, el("h3", { text: title })));
+    ul.append(el("li", {}, el("h2", { text: title })));
     for (const id of ids) {
       const c = byId[id]; if (!c) continue;
       const warn = status_[id] === "warning" ? "The Critic still objects to this explanation. Open it to see why." : null;
@@ -79,7 +79,7 @@ function renderList() {
   group("Graham's seven tests", CRITERIA.slice(0, 7));
   group("Buffett's four numeric tests", CRITERIA.slice(7));
   if (model.qual.length) {
-    ul.append(el("li", { id: "analysis" }, el("h3", { text: "Buffett's four judgement tests, read from the annual report by the agent" })));
+    ul.append(el("li", { id: "analysis" }, el("h2", { text: "Buffett's four judgement tests, read from the annual report by the agent" })));
     for (const q of model.qual) {
       const f = q.finding, st = q.critic_status;
       ul.append(critRow(f.criterion, QUAL[f.criterion] || f.criterion, f.verdict, findingText(f), st === "warning" ? "The Critic still objects to this rationale. Open it to see why." : null, true, borderlineSentence(q.stability), reliabilityNote(q)));

@@ -38,7 +38,7 @@ async function main() {
   if (sc && sc.groups.length) {
     $("showcase").hidden = false;
     $("show-sum").textContent = `Showcase: ${sc.groups.reduce((n, g) => n + g.items.length, 0)} companies with a full agent analysis`;
-    $("show-groups").replaceChildren(...sc.groups.flatMap((g) => [el("h3", { text: g.title }),
+    $("show-groups").replaceChildren(...sc.groups.flatMap((g) => [el("h2", { class: "grp", text: g.title }),
       el("ul", { class: "showlist" }, g.items.map((i) => el("li", {}, el("a", { href: `company.html?cik=${i.cik}`, text: `${i.name} (${i.symbol})` }), i.tag ? el("span", { class: "muted", text: `  ${i.tag}` }) : null,
         el("br"), i.why, i.rank ? el("span", { class: "muted", text: ` Rank ${i.rank}${i.rank_group === "financials" ? " among banks and insurers" : ""}.` }) : null)))]));
   }

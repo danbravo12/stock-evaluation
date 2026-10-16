@@ -23,7 +23,7 @@ function render(md) {
     const l = lines[i];
     if (!l.trim()) { i++; continue; }
     const h = l.match(/^(#{1,4})\s+(.*)$/);
-    if (h) { root.append(el("h" + Math.min(h[1].length + 1, 4), { text: h[2].replace(/[`*]/g, "") })); i++; continue; }
+    if (h) { root.append(el("h" + Math.min(h[1].length, 4), { text: h[2].replace(/[`*]/g, "") })); i++; continue; }
     if (l.startsWith("|")) {
       const rows = []; while (i < lines.length && lines[i].startsWith("|")) { if (!/^\|[\s:|-]+\|?$/.test(lines[i])) rows.push(lines[i].replace(/^\||\|$/g, "").split("|")); i++; }
       const t = el("table", {}, el("tbody", {}, rows.map((r, ri) => el("tr", {}, r.map((c) => el(ri === 0 ? "th" : "td", {}, inline(c.trim())))))));

@@ -1,7 +1,7 @@
 # File Map
 
 What every file in this repo is for, and where planned files will go.
-Updated 2026-10-12 · after build 4a (evaluation harness, stability runs). **Rule:** update this file in the same commit as any file you add, move or delete.
+Updated 2026-10-16 · after build 5 (v1.0). **Rule:** update this file in the same commit as any file you add, move or delete.
 
 Status: **Built** = exists and tested · **Planned** = designed in `ARCHITECTURE.md`, not yet created.
 
@@ -142,6 +142,8 @@ The engine is a library, so the batch command, the tests and the future live app
 | `scripts/universe_report.py` | `--fetch-sic` (live, once) records each company's SIC code to `data/universe/sic_<date>.csv`; writes `docs/universe_report.md`: SIC against GICS sector classes. | Built |
 | `scripts/review_report.py` | Runs Explainer + Critic on the 5 tickers against the recorded qualitative run, injects 3 faults into the model check, and writes `docs/critic_report.md` (explanations, every check, retries, gold-set table, Critic scorecard, cost). `record` (free tier only) or `replay` (offline, identical). | Built |
 | `scripts/qualitative_variability.py` | Runs the 5 tickers N extra times live with the response store bypassed (`use_store=False`), compares with the recorded run and writes `docs/qualitative_variability.md`. Free tier only; stops if today's ledger count would pass 400. | Built |
+| `scripts/site_audit.mjs` | Node and headless Chrome: screenshots at 1280 and 390 px and an audit (overflow, heading order, accessible names, contrast, keyboard focus) in light and dark, plus the mobile swimlane check; `--shots --audit --swimlane` (build 5). | Built |
+| `scripts/link_check.py` | Checks the live site: every built file is served, every internal link and data path resolves, every repository link resolves, a sample of SEC links answers. | Built |
 | `scripts/architecture_svg.py` | Writes the architecture drawing `site_src/assets/img/architecture.svg` (own style, light and dark); publish inlines it into how-it-works (build 5). | Built |
 | `scripts/sections_audit.py` | Offline: runs the section extractor over every analysed company's 10-K (fixtures, then the local cache) and prints found / not_found per item; `--save` / `--compare` give a before → after (build 4a). | Built |
 | `scripts/stability_run.py` | `refresh` (the 20 showcase companies with the active prompts), `a` and `b` (paraphrase runs over the 25 analysed companies, results in `results/stability/<variant>/`); resumable across Pacific days, free tier only (ADR-072). | Built |
@@ -198,6 +200,7 @@ The engine is a library, so the batch command, the tests and the future live app
 | `tests/test_qualitative.py` | 29 offline tests of the agent with scripted model replies through the real client (fake transport) on a synthetic 10-K: seeded search, search / get_passage / submit, unchanged assistant messages and tool-call ids, turn cap and last-turn tools, pointer citations (exact quote from sentence numbers, out-of-range, last before first, over 3 sentences, over 120 words, never-retrieved passage, one correction then `invalid_citation`, one extra turn), verdict per stop reason, malformed arguments, section_missing, quota and budget propagation, totals and trace order. | Built |
 | `tests/test_qualitative_fixtures.py` | Replay of all 5 real runs with zero network: four findings each, every cited span equals `document_text[start:end]` and its sentence offsets, no mechanical citation failures, no advice words, totals add up. Structural only; verdicts not frozen. | Built |
 | `tests/test_evaluation_page.py` | The page renders from the data (run with node), follows changed data, has no digit or numeric literal of its own, Wilson interval, the built site carries it and links it. | Built |
+| `tests/test_polish.py` | README structure and no audience wording, the decision index (one row per entry, links resolve, superseded entries link to their replacement, amendments dated), the drawing equals its generator, the swimlane labels, heading levels. | Built |
 | `tests/test_restatements.py` | A true restatement is flagged, a concept switch is not, a quarter filed in a 10-K is ignored; the frozen diagnosis and its recomputation from the cache. | Built |
 | `tests/test_sensitivity.py` | Thresholds module (defaults, scaling, override restores), the method on the five fixtures, determinism, the frozen file and its recomputation from the cache. | Built |
 | `tests/test_reliability.py` | The threshold and the per-criterion computation on synthetic data (at, below, above), attach writing and clearing `reliability`, the note rendering only for low criteria, schema 1.2 results still valid. | Built |
